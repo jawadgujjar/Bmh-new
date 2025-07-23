@@ -1,0 +1,80 @@
+/* Global styles - these should be in your global.css */
+:global(html), :global(body) {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Background container for video */
+.back {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Text Styling */
+.affordableText {
+    color: white;
+    font-size: 3rem;
+    font-weight: bold;
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: 
+        typing 3.5s steps(30, end) 1s infinite, 
+        blinkCaret 0.75s step-end infinite;
+    border-right: 2px solid white; /* Added for the caret effect */
+}
+
+/* Typewriter animation */
+@keyframes typing {
+    0% { width: 0; }
+    50% { width: 100%; }
+    100% { width: 0; }
+}
+
+/* Caret blinking effect */
+@keyframes blinkCaret {
+    50% { border-color: transparent; }
+    100% { border-color: white; }
+}
+
+/* Video styling */
+.video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+    z-index: -1;
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 1024px) {
+    .affordableText {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .affordableText {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .affordableText {
+        font-size: 1.8rem;
+    }
+}

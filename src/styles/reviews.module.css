@@ -1,0 +1,29 @@
+.reviewImages {
+    margin-top: 3rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.reviewImageCol {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.reviewImageSize {
+    width: 12rem;
+    height: auto;
+}
+
+@media screen and (max-width: 768px) {
+    .reviewImages {
+        margin-top: 2rem;
+    }
+}
+
+@media screen and (max-width: 425px) {
+    .reviewImageSize {
+        width: 8rem;
+    }
+}
