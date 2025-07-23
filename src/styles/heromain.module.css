@@ -1,8 +1,9 @@
 /* Global styles - these should be in your global.css */
-:global(html), :global(body) {
-    height: 100%;
-    margin: 0;
-    padding: 0;
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 /* Background container for video */
