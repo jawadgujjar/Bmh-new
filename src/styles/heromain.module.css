@@ -1,10 +1,4 @@
 /* Global styles - these should be in your global.css */
-html,
-body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
 
 /* Background container for video */
 .back {
