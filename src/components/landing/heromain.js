@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import styles from '../styles/heromain.module.css';
+import styles from '../../styles/heromain.module.css';
 
 function HeroMain() {
     return (

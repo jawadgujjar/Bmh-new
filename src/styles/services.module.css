@@ -1,0 +1,96 @@
+.featuresContainer {
+    padding: 0 2rem;
+    text-align: center;
+}
+
+.antCards {
+    border-radius: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    margin-bottom: 1.5rem;
+    text-align: left;
+    background: white;
+    color: black;
+    padding: 1.5rem;
+    border: 1px solid #ff8c00;
+}
+
+.antCards:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(45deg, rgba(255, 126, 0, 0.3), rgba(255, 180, 0, 0.3), rgba(255, 95, 0, 0.3), rgba(255, 154, 0, 0.3));
+    color: black;
+}
+
+.learnmore {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.learnmore a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border: 1px solid #ff8c00;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    background-color: #333;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.learnmore a:hover {
+    background-color: #d57a0a;
+    color: #fff;
+}
+
+.additionalText {
+    font-size: 1.5rem;
+    color: #666;
+}
+
+.howText {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.discoverButton {
+    background-color: rgb(253, 126, 20);
+    color: white;
+    border-radius: 1.5rem;
+    font-size: 1rem;
+}
+
+.discoverButton:hover {
+    background-color: white;
+    color: orange !important;
+    border-color: orange !important;
+}
+
+.iconDown {
+    color: orange;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+.spann {
+    color: rgb(253, 126, 20);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .howText,
+    .additionalText {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .featuresContainer {
+        padding: 1rem;
+    }
+    
+    .howText,
+    .additionalText {
+        font-size: 1.5rem;
+    }
+}

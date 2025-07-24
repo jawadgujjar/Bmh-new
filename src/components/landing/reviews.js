@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from "../styles/reviews.module.css";
+import styles from "../../styles/reviews.module.css";
 import { Col, Row } from 'antd';
 import Image from 'next/image';
 
