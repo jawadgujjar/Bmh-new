@@ -1,11 +1,12 @@
-/* navbar.module.css */
-
 /* Base Navbar Styles */
 .customNavbar {
-  background-color: #000 !important;
-  padding: 0.5rem 1rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: transparent;
+  padding: 1.5rem 1rem;
   transition: all 0.3s ease;
+}
+
+.customNavbar.scrolled {
+  background-color: #000 !important;
 }
 
 .containerSize {
@@ -21,6 +22,10 @@
   transition: all 0.3s ease;
 }
 
+.customNavbar.scrolled .logoWidth {
+  width: 100px;
+}
+
 /* Toggle Button */
 .navbarToggle {
   border: none;
@@ -29,10 +34,6 @@
 
 .navbarToggle:focus {
   box-shadow: none;
-}
-
-.navbarToggleIcon {
-  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(255, 255, 255, 0.8)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
 /* Offcanvas Styles */
@@ -108,7 +109,7 @@
   width: 70%;
 }
 
-/* Original Dropdown Styles */
+/* Dropdown Styles */
 .navDropdown .dropdown-menu {
   background-color: #fff;
   border: none;
@@ -219,14 +220,16 @@
   outline: none;
   padding: 0.5rem;
 }
+
 .navDropdown :global(.dropdown-toggle) {
-  color: white !important; /* Your desired color */
+  color: white !important;
   font-weight: bold;
 }
+
 .navDropdown :global(.dropdown-toggle:hover) {
-  color: #ffa500 !important; /* Hover color (orange-ish) */
+  color: #ffa500 !important;
 }
- 
+
 /* Responsive Adjustments */
 @media (max-width: 1199.98px) {
   .navDropdown .dropdown-menu {
