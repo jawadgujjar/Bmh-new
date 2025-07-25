@@ -1,9 +1,21 @@
-
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
+/* Navbar scroll effect */
+.scrolled {
+  background-color: black !important;
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
 
+/* Optional: Change navbar text color when scrolled */
+.scrolled .nav-link {
+  color: white !important;
+}
+
+.scrolled .navbar-brand {
+  color: white !important;
+}
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
