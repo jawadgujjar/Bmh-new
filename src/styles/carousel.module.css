@@ -1,0 +1,153 @@
+/* Container for centering and responsiveness */
+.aliceCarousel__prevBtn,
+.aliceCarousel__nextBtn {
+  display: none !important; /* Forcefully hide the buttons */
+}
+.aliceCarousel__dots {
+  display: none !important; /* Forcefully hide the dots */
+}
+
+.carouselWrapper {
+  position: relative; /* Make wrapper relative for absolute buttons */
+  padding: 20px; /* Add some padding to avoid arrow overlap */
+}
+
+.customerDiv {
+  text-align: center;
+  margin-top: 0.4rem;
+  /* Adjust margin as needed */
+}
+
+/* Carousel wrapper styling */
+.carouselWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Carousel container styling */
+.carouselContainer {
+  width: 90%;
+  height: auto;
+  /* Adjust height for responsiveness */
+  padding: 2rem;
+  max-width: 1000px;
+  /* Increased max-width for the carousel container */
+  overflow: hidden;
+  position: relative;
+  border-radius: 15px;
+  /* Rounded corners for carousel container */
+  /* Light gradient background */
+}
+
+/* Hide carousel indicators */
+.carouselIndicators {
+  display: none;
+}
+
+/* Ensure carousel items are displayed as block and centered */
+.carouselItemContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 18rem;
+  /* Adjust height as needed */
+  width: 100%;
+  /* Full width of container */
+  padding: 1rem;
+  /* Add padding to ensure spacing around the card */
+}
+
+.antCard .antCardBody {
+  padding: 0;
+}
+
+/* Center card content */
+.carouselCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  max-width: 420px;
+  color: #000000;
+  padding: 0; /* Remove padding */
+  border: none; /* Remove border */
+  background: none; /* Remove background */
+  box-shadow: none; /* Remove shadow */
+  margin: auto; /* Center the card horizontally */
+}
+
+/* Card avatar styling */
+.avatarReview {
+  width: 4rem;
+  /* Adjust avatar size */
+  height: 4rem;
+  /* Adjust avatar size */
+  margin-bottom: 1rem;
+  border-radius: 50%;
+  /* Make the avatar circular */
+}
+
+/* Card title styling */
+.carouselCard h5 {
+  font-size: 1rem;
+  /* Smaller font size for title */
+  color: #070707;
+  margin: 0.5rem 0;
+}
+
+/* Card review styling */
+.carouselCard p {
+  font-size: 0.7rem;
+  /* Adjust font size for review text */
+  color: #070707;
+  line-height: 1.4;
+  margin-bottom: 1rem;
+}
+
+/* Hide carousel controls (Next and Prev icons) */
+.carouselControlPrev,
+.carouselControlNext {
+  display: none;
+}
+
+/* Media queries for different screen sizes */
+@media (max-width: 1024px) {
+  .carouselContainer {
+    height: auto;
+    /* Adjust height for larger screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .carouselCard {
+    max-width: 300px;
+    /* Further adjust card size for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .carouselCard {
+    max-width: 250px;
+    /* Even smaller card size */
+  }
+}
+
+@media (max-width: 425px) {
+  .carouselCard {
+    max-width: 250px;
+    /* Even smaller card size */
+    height: 30rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .carouselCard {
+    max-width: 250px;
+    /* Even smaller card size */
+    height: 30rem;
+  }
+}
