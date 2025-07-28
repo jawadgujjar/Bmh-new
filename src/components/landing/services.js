@@ -4,58 +4,76 @@ import Link from 'next/link';
 import { FaCaretDown } from "react-icons/fa6";
 import styles from '../../styles/services.module.css';
 
-const Features = () => {
+const Services = () => {
+    const services = [
+        {
+            title: "Full Stack Development",
+            image: "../images/fullstack.jpg", // Replace with your actual image path
+            description: "We provide end-to-end web development solutions covering front-end, back-end, and database management for seamless digital experiences.",
+            link: "/fullstack"
+        },
+        {
+            title: "Search Engine Optimization",
+            image: "../images/seo.jpg", // Replace with your actual image path
+            description: "Boost your online visibility with our comprehensive SEO strategies that drive organic traffic and improve search rankings.",
+            link: "/seo"
+        },
+        {
+            title: "Google Ads",
+            image: "../images/google ads.jpg", // Replace with your actual image path
+            description: "Maximize your advertising ROI with our expert Google Ads management and optimization services.",
+            link: "/google-ads"
+        },
+        {
+            title: "Brand Marketing",
+            image: "../images/brand marketing.jpg", // Replace with your actual image path
+            description: "Build a strong brand identity with our strategic marketing solutions that resonate with your target audience.",
+            link: "/brand-marketing"
+        },
+        {
+            title: "E-Commerce Specialization",
+            image: "../images/ecommerce.avif", // Replace with your actual image path
+            description: "Transform your online store with our specialized e-commerce solutions designed to increase conversions and sales.",
+            link: "/ecommerce"
+        },
+        {
+            title: "Website Development",
+            image: "../images/web.jpg", // Replace with your actual image path
+            description: "Get custom, responsive websites that deliver exceptional user experiences and drive business growth.",
+            link: "/web-development"
+        }
+    ];
+
     return (
-        <div className={styles.featuresContainer}>
-            <div>
-                <p className={styles.howText}>Services We <span className={styles.spann}>Offer?</span></p>
-                <p className={styles.additionalText}>See how we can help your business grow</p>
-                <div>
-                    <Button className={styles.discoverButton}>Discover Our Services</Button>
-                </div>
-                <FaCaretDown className={styles.iconDown} />
+        <div className={styles.servicesContainer}>
+            <div className={styles.headerSection}>
+                <h1 className={styles.mainTitle}>Services We <span className={styles.highlight}>Offer?</span></h1>
+                <p className={styles.subTitle}>See how we can help your business grow</p>
+                <Button className={styles.ctaButton}>Discover Our Services</Button>
+                <FaCaretDown className={styles.scrollIndicator} />
             </div>
             
-            <Row gutter={[16, 16]} justify="center">
-                <Col xs={24} sm={12} md={8}>
-                    <Card className={styles.antCards} title="Brand Marketing" bordered={false}>
-                        Our company specializes in brand marketing services, helping businesses build a strong and memorable brand identity. We create compelling brand strategies, develop consistent messaging, and enhance customer engagement to boost recognition, foster loyalty, and differentiate you from competitors. Let us elevate your brand and drive your business success.
-                        <p className={styles.learnmore}><Link href="/brandmarketingpage">Learn more</Link></p>
-                    </Card>
-                </Col>
-                <Col xs={24} sm={12} md={8}>
-                    <Card className={styles.antCards} title="SEO" bordered={false}>
-                        Our company offers expert SEO services to improve your online visibility and drive organic traffic to your website. We optimize your site's content, structure, and keywords to enhance search engine rankings, attract more potential customers, and increase your business's online presence. Let us help you achieve better search engine performance and grow your digital footprint.
-                        <p className={styles.learnmore}><Link href="/seopage">Learn more</Link></p>
-                    </Card>
-                </Col>
-                <Col xs={24} sm={12} md={8}>
-                    <Card className={styles.antCards} title="E-Commerce Specialization" bordered={false}>
-                        Our company provides specialized e-commerce services to enhance your online store's performance. We offer tailored solutions for platform development, user experience optimization, and digital marketing strategies to drive sales and growth. Let us help you create a seamless, engaging shopping experience and maximize your e-commerce success.
-                        <p className={styles.learnmore}><Link href="/ecommercepage">Learn more</Link></p>
-                    </Card>
-                </Col>
+            <Row gutter={[24, 24]} justify="center">
+                {services.map((service, index) => (
+                    <Col key={index} xs={24} sm={12} md={8} lg={8}>
+                        <div className={styles.serviceCard}>
+                            <div className={styles.cardImage}>
+                                <img src={service.image} alt={service.title} />
+                                <div className={styles.cardOverlay}>
+                                    <p className={styles.cardDescription}>{service.description}</p>
+                                    <Link href={service.link}>
+                                        <Button className={styles.viewButton}>View More</Button>
+                                    </Link>
+                                </div>
+                            </div>
+                            <h3 className={styles.cardTitle}>{service.title}</h3>
+                        </div>
+                    </Col>
+                ))}
             </Row>
-
-            {/* Second Row */}
-            <Row gutter={[16, 16]} justify="center">
-                <Col xs={24} sm={12} md={8}>
-                    <Card className={styles.antCards} title="Digital Marketing" bordered={false}>
-                        Our company offers specialized digital marketing services to elevate your online presence and drive growth. We provide customized strategies for content creation, social media management, and search engine optimization to enhance your brand's visibility and engagement. Let us help you craft compelling digital campaigns and optimize your online performance to achieve your marketing goals.
-                        <p className={styles.learnmore}>
-                            <Link href="/digitalmarketingpage">Learn more</Link>
-                        </p>
-                    </Card>
-                </Col>
-                <Col xs={24} sm={12} md={8}>
-                    <Card className={styles.antCards} title="Website Development" bordered={false}>
-                        Our company offers professional web development services to create and maintain high-quality, responsive websites. We design and build custom sites that enhance user experience, optimize performance, and align with your business goals. Let us bring your online vision to life and ensure your website stands out and functions seamlessly.
-                        <p className={styles.learnmore}><Link href="/webdevelopmentpage">Learn more</Link></p>
-                    </Card>
-                </Col>
-            </Row>
+            <div className={styles.divider}></div>
         </div>
     );
-}
+};
 
-export default Features;
+export default Services;
