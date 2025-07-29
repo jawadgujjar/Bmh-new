@@ -2,6 +2,11 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding: 2rem 0;
+    background-color: #E6F0FA;
+    border-radius: 8px;
+    margin: 2rem auto;
+    max-width: 1200px;
 }
 
 .freeText {
@@ -12,25 +17,21 @@
     font-size: 2.3rem;
     text-align: center;
     font-weight: bold;
+    margin-bottom: 2rem;
 }
 
 .centerProposalform {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 3rem;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
 }
 
 .contactContainerProposal {
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
     width: 100%;
     padding: 30px;
-    margin-top: 1rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
+    background: transparent; /* Changed from white to transparent */
 }
 
 .contactForm {
@@ -46,6 +47,7 @@
     display: block;
     margin-bottom: 0.5rem;
     font-weight: bold;
+    color: #333; /* Added for better visibility */
 }
 
 .formGroup input,
@@ -55,6 +57,7 @@
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 1rem;
+    background-color: rgba(255, 255, 255, 0.8); /* Slightly white for better readability */
 }
 
 .formGroup textarea {
@@ -78,10 +81,96 @@
     background-color: rgb(230, 110, 10);
 }
 
+/* Contact Info Styles */
+.contactInfoContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    background: transparent; /* Changed from white to transparent */
+    border-radius: 10px;
+}
+
+.contactTitle {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.contactDetails {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.contactItem {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.contactIcon {
+    color: rgb(253, 126, 20);
+    font-size: 1.5rem;
+    margin-right: 1rem;
+}
+
+.contactText {
+    color: #333;
+}
+
+.socialIcons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.socialIcon {
+    color: rgb(253, 126, 20);
+    font-size: 1.8rem;
+    transition: color 0.3s;
+}
+
+.socialIcon:hover {
+    color: rgb(230, 110, 10);
+}
+
+.contactButton {
+    background-color: rgb(253, 126, 20);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.contactButton:hover {
+    background-color: rgb(230, 110, 10);
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .getProposalText {
         font-size: 1.8rem;
+    }
+    
+    .contactContainerProposal {
+        margin-bottom: 2rem;
+    }
+
+    .contactTitle {
+        font-size: 1.8rem;
+    }
+
+    .contactItem {
+        font-size: 1rem;
     }
 }
 
@@ -92,5 +181,17 @@
     
     .contactContainerProposal {
         padding: 20px;
+    }
+
+    .contactTitle {
+        font-size: 1.5rem;
+    }
+
+    .socialIcons {
+        gap: 1rem;
+    }
+
+    .socialIcon {
+        font-size: 1.5rem;
     }
 }
