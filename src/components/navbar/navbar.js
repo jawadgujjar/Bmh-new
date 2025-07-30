@@ -20,10 +20,8 @@ function NavbarBmh() {
   const router = useRouter();
 
   // Scroll effect handler
-
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
+    console.log("NavbarBmh mounted"); // Debug: Confirm component mounts
     if (typeof window === "undefined") return;
 
     const threshold = 10;
@@ -33,10 +31,7 @@ function NavbarBmh() {
     const updateScrolled = () => {
       const currentScrollY = window.scrollY;
       const shouldScroll = currentScrollY > threshold;
-
-      // Debugging line
-      console.log(`ScrollY: ${currentScrollY}, isScrolled: ${shouldScroll}`);
-
+      console.log(`ScrollY: ${currentScrollY}, isScrolled: ${shouldScroll}`); // Debug: Log scroll position and state
       setIsScrolled(shouldScroll);
       lastScrollY = currentScrollY > 0 ? currentScrollY : 0;
       ticking = false;
@@ -50,7 +45,10 @@ function NavbarBmh() {
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      console.log("NavbarBmh unmounted"); // Debug: Confirm cleanup
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   // Click outside search handler
@@ -81,7 +79,12 @@ function NavbarBmh() {
     <Navbar
       expand="lg"
       fixed="top"
-      className={`${styles.customNavbar} ${isScrolled ? styles.scrolled : ""}`}
+      style={{
+        backgroundColor: isScrolled ? '#000' : 'transparent',
+        transition: 'background-color 0.3s ease-in-out',
+        zIndex: 1000, // Ensure navbar is on top
+      }}
+      className={styles.customNavbar}
     >
       <Container fluid className={styles.containerSize}>
         <Navbar.Brand onClick={() => handleNavClick("/")}>
