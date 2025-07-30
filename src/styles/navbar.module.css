@@ -1,12 +1,7 @@
 /* Base Navbar Styles */
 .customNavbar {
-  background-color: transparent;
   padding: 1.5rem 1rem;
   transition: all 0.3s ease;
-}
-
-.customNavbar.scrolled {
-  background-color: #000 !important;
 }
 
 .containerSize {

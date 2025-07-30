@@ -1,0 +1,104 @@
+.modalContainer {
+  max-width: 100%;
+}
+
+.portfolioModalBody {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.portfolioModalImages {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+}
+
+.portfolioModalImage {
+  width: 100%;
+  height: auto;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.portfolioModalFooter {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.allLogosContact {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.divLogos {
+  font-size: 24px;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.divLogos:hover {
+  color: rgb(253, 126, 20);
+}
+
+.fontsizeCall {
+  margin: 10px 0;
+  text-align: center;
+  font-size: 16px;
+}
+
+.callusText {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.phoneLink {
+  color: rgb(253, 126, 20);
+  text-decoration: none;
+  margin-left: 5px;
+  transition: color 0.3s ease;
+}
+
+.phoneLink:hover {
+  color: #d35400;
+}
+
+.discoverButton1 {
+  background-color: rgb(15, 15, 15) !important;
+  color: white !important;
+  border: none !important;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.discoverButton1:hover {
+  background-color: rgb(253, 126, 20) !important;
+}
+
+@media (max-width: 768px) {
+  .portfolioModalBody {
+    flex-direction: column;
+  }
+  
+  .portfolioModalImages {
+    flex-direction: column;
+  }
+  
+  .allLogosContact {
+    flex-wrap: wrap;
+  }
+}

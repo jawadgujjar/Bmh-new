@@ -68,6 +68,7 @@ const Carousel = () => {
           />
         </div>
       </div>
+      <div className={styles.divider}></div>
     </div>
   );
 };

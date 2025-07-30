@@ -1,0 +1,148 @@
+.footerContainer {
+  background-color: #000; /* Changed to black */
+  color: #fff; /* Changed text color to white for better contrast */
+  padding: 3rem 0 0;
+  font-family: 'Arial', sans-serif;
+}
+
+.footerContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.footerSection {
+  margin-bottom: 2rem;
+}
+
+.brandName {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff; /* Changed to white */
+  margin-bottom: 1rem;
+}
+
+.sectionTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #fff; /* Changed to white */
+}
+
+.sectionSubtitle {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 1.5rem 0 1rem;
+  color: #fff; /* Changed to white */
+}
+
+.sectionText {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  color: #ccc; /* Lighter gray for better readability on black */
+}
+
+.footerList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footerList li {
+  margin-bottom: 0.8rem;
+  font-size: 0.95rem;
+  color: #ccc; /* Lighter gray for better readability on black */
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.footerList li:hover {
+  color: #fd7e14; /* Orange color remains for hover */
+}
+
+.socialIcons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.socialIcon {
+  color: #ccc; /* Lighter gray for better visibility on black */
+  font-size: 1.3rem;
+  transition: color 0.3s;
+}
+
+.socialIcon:hover {
+  color: #fd7e14; /* Orange color remains for hover */
+}
+
+.contactInfo {
+  margin-bottom: 1.5rem;
+}
+
+.contactCountry {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #fff; /* Changed to white */
+}
+
+.contactDetail {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #ccc; /* Lighter gray for better readability on black */
+}
+
+.contactIcon {
+  margin-right: 0.5rem;
+  color: #fd7e14; /* Orange color remains */
+}
+
+.footerBottom {
+  background-color: #111; /* Darker black for the bottom section */
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #ccc; /* Lighter gray for better readability */
+  margin-top: 2rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .footerSection {
+    margin-bottom: 1.5rem;
+  }
+  
+  .brandName {
+    font-size: 1.3rem;
+  }
+  
+  .sectionTitle {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .footerContent {
+    padding: 0 0.5rem;
+  }
+  
+  .brandName {
+    font-size: 1.2rem;
+  }
+  
+  .sectionTitle {
+    font-size: 1.1rem;
+  }
+  
+  .socialIcons {
+    gap: 0.8rem;
+  }
+  
+  .socialIcon {
+    font-size: 1.2rem;
+  }
+}

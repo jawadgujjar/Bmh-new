@@ -1,0 +1,86 @@
+/* Base styles for the container */
+.containerportfolio {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* Styles for the text-box */
+.textBox {
+    background-color: #f5f5f5; /* Off-white background color */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Center-align text and button */
+    width: 100%; /* Full width on small screens */
+    max-width: 40rem; /* Maximum width for larger screens */
+}
+
+/* Styles for the text inside the text-box */
+.textBox p {
+    margin: 0 0 20px 0; /* Margin-bottom to separate text from button */
+    font-size: 2rem; /* Font size in rem for better scalability */
+    font-weight: bold;
+    color: #333; /* Darker text color for contrast */
+}
+
+/* Styles for the action button */
+.actionButton {
+    background-color: rgb(253,126,20);      
+    color: #fff; /* Button text color */
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem; /* Font size in rem */
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for the button */
+.actionButton:hover {
+    background-color: #FFD700; /* Darker shade for hover effect */
+}
+
+.portfolio {
+    text-align: center;
+    font-family: Roboto, sans-serif;
+    margin-bottom: 20px;
+    margin-top: -18px;
+    font-weight: bold;
+    font-size: 3rem;
+    margin-top: 1rem;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .textBox {
+        padding: 15px;
+        width: 90%; /* Adjust width for smaller screens */
+    }
+
+    .textBox p {
+        font-size: 1.5rem; /* Smaller font size for smaller screens */
+    }
+
+    .actionButton {
+        padding: 8px 16px; /* Adjust padding for smaller screens */
+        font-size: 0.875rem; /* Smaller font size for the button */
+    }
+}
+
+@media (max-width: 480px) {
+    .textBox {
+        padding: 10px;
+        width: 95%; /* Further adjust width for very small screens */
+    }
+
+    .textBox p {
+        font-size: 1.25rem; /* Even smaller font size for very small screens */
+    }
+
+    .actionButton {
+        padding: 6px 12px; /* Adjust padding for very small screens */
+        font-size: 0.75rem; /* Smaller font size for the button */
+    }
+}

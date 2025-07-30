@@ -113,12 +113,22 @@
 .carouselControlNext {
   display: none;
 }
-
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #FF8C00, transparent);
+  margin: 60px auto 0;
+  width: 80%;
+  max-width: 800px;
+}
 /* Media queries for different screen sizes */
 @media (max-width: 1024px) {
   .carouselContainer {
     height: auto;
     /* Adjust height for larger screens */
+  }
+    .divider {
+    margin: 50px auto 0;
+    width: 90%;
   }
 }
 
@@ -126,6 +136,10 @@
   .carouselCard {
     max-width: 300px;
     /* Further adjust card size for smaller screens */
+  }
+   .divider {
+    margin: 40px auto 0;
+    width: 95%;
   }
 }
 
