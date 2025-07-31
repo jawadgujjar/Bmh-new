@@ -3,16 +3,18 @@ import { useState } from 'react';
 import styles from '../../styles/portfolio.module.css';
 import PortfolioModal1 from '../portfolio/portfoliomodal';
 
-const PortfolioCard = ({ previewImage, title, description, onClick }) => {
+const PortfolioCard = ({ previewUrl, title, description, onClick }) => {
     return (
         <div className={styles.portfolioCard} onClick={onClick}>
             <div className={styles.portfolioCardInner}>
                 <div className={styles.portfolioCardImageWrapper}>
                     <div className={styles.portfolioCardHoverPreview}>
-                        <img 
-                            src={previewImage} 
-                            alt={`${title} preview`}    
-                            className={styles.portfolioPreviewImage} 
+                        <iframe 
+                            src={previewUrl}
+                            className={styles.websitePreviewFrame}
+                            title={`${title} preview`}
+                            loading="lazy"
+                            sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
                         />
                     </div>
                 </div>
@@ -27,10 +29,10 @@ const PortfolioCard = ({ previewImage, title, description, onClick }) => {
 
 const Portfolio = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalImages, setModalImages] = useState([]);
+    const [modalUrl, setModalUrl] = useState('');
 
-    const handleCardClick = (images) => {
-        setModalImages(images);
+    const handleCardClick = (url) => {
+        setModalUrl(url);
         setIsModalOpen(true);
     };
 
@@ -39,28 +41,43 @@ const Portfolio = () => {
     };
 
     const cardsData = [
-        // Example data
         {
-            previewImage: '/images/largecard.jpeg',
-            title: 'Apple Website',
-            description: 'Apples official website showcasing their products.',
-            images: [
-                '/images/largecard.jpeg',
-                '/images/largecard.jpeg',
-                '/images/largecard.jpeg',
-            ],
+            previewUrl: 'https://bmh.vercel.app/',
+            title: 'BMH',
+            description: 'Google\'s search engine homepage.',
+            fullUrl: 'https://bmh.vercel.app/'
         }, 
         {
-            previewImage: '/images/largecard.jpeg',
-            title: 'Apple Website',
-            description: 'Apples official website showcasing their products.',
-            images: [
-                '/images/largecard.jpeg',
-                '/images/largecard.jpeg',
-                '/images/largecard.jpeg',
-            ],
-        }, 
-        // Add more cards as needed
+            previewUrl: 'https://sireprinting.com/',
+            title: 'Sire Printing',
+            description: 'Google\'s search engine homepage.',
+            fullUrl: 'https://sireprinting.com/'
+        },
+        {
+            previewUrl: 'https://sireprinting.com/',
+            title: 'Sire Printing',
+            description: 'Google\'s search engine homepage.',
+            fullUrl: 'https://sireprinting.com/'
+        },
+        {
+            previewUrl: 'https://sireprinting.com/',
+            title: 'Sire Printing',
+            description: 'Google\'s search engine homepage.',
+            fullUrl: 'https://sireprinting.com/'
+        },
+        {
+            previewUrl: 'https://sireprinting.com/',
+            title: 'Sire Printing',
+            description: 'Google\'s search engine homepage.',
+            fullUrl: 'https://sireprinting.com/'
+        },
+        {
+            previewUrl: 'https://sireprinting.com/',
+            title: 'Sire Printing',
+            description: 'Google\'s search engine homepage.',
+            fullUrl: 'https://sireprinting.com/'
+        },
+        // Add more websites as needed
     ];
 
     return (
@@ -69,17 +86,17 @@ const Portfolio = () => {
                 {cardsData.map((card, index) => (
                     <PortfolioCard
                         key={index}
-                        previewImage={card.previewImage}
+                        previewUrl={card.previewUrl}
                         title={card.title}
                         description={card.description}
-                        onClick={() => handleCardClick(card.images)}
+                        onClick={() => handleCardClick(card.fullUrl)}
                     />
                 ))}
             </div>
             <PortfolioModal1
                 isVisible={isModalOpen}
                 onClose={handleCloseModal}
-                images={modalImages}
+                url={modalUrl}
             />
         </>
     );

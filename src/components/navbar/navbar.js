@@ -21,34 +21,15 @@ function NavbarBmh() {
 
   // Scroll effect handler
   useEffect(() => {
-    console.log("NavbarBmh mounted"); // Debug: Confirm component mounts
-    if (typeof window === "undefined") return;
-
-    const threshold = 10;
-    let lastScrollY = window.scrollY;
-    let ticking = false;
-
-    const updateScrolled = () => {
-      const currentScrollY = window.scrollY;
-      const shouldScroll = currentScrollY > threshold;
-      console.log(`ScrollY: ${currentScrollY}, isScrolled: ${shouldScroll}`); // Debug: Log scroll position and state
-      setIsScrolled(shouldScroll);
-      lastScrollY = currentScrollY > 0 ? currentScrollY : 0;
-      ticking = false;
-    };
-
     const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(updateScrolled);
-        ticking = true;
-      }
+      const scrollY = window.scrollY;
+      const shouldScroll = scrollY > 50;
+      console.log(`ScrollY: ${scrollY}, isScrolled: ${shouldScroll}`);
+      setIsScrolled(shouldScroll);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => {
-      console.log("NavbarBmh unmounted"); // Debug: Confirm cleanup
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Click outside search handler
@@ -79,16 +60,11 @@ function NavbarBmh() {
     <Navbar
       expand="lg"
       fixed="top"
-      style={{
-        backgroundColor: isScrolled ? '#000' : 'transparent',
-        transition: 'background-color 0.3s ease-in-out',
-        zIndex: 1000, // Ensure navbar is on top
-      }}
-      className={styles.customNavbar}
+      className={`${styles.customNavbar} ${isScrolled ? styles.scrolled : ""}`}
     >
       <Container fluid className={styles.containerSize}>
-        <Navbar.Brand onClick={() => handleNavClick("/")}>
-          <Link href="/" passHref>
+        <Navbar.Brand>
+          <Link href="/" onClick={() => handleNavClick("/")}>
             <img
               className={styles.logoWidth}
               src="/bmhlogo.svg"
@@ -116,13 +92,12 @@ function NavbarBmh() {
           </Offcanvas.Header>
           <Offcanvas.Body className={styles.offcanvasBody}>
             <Nav className={`${styles.navLinks}`}>
-              <Link href="/home" passHref legacyBehavior>
-                <Nav.Link
-                  onClick={() => handleNavClick("/home")}
-                  className={styles.navLink}
-                >
-                  Home
-                </Nav.Link>
+              <Link
+                href="/home"
+                className={styles.navLink}
+                onClick={() => handleNavClick("/home")}
+              >
+                Home
               </Link>
 
               <NavDropdown
@@ -136,26 +111,25 @@ function NavbarBmh() {
                       <Col xs={12} sm={6} md={4} lg={3}>
                         <div className={styles.imageH6}>
                           <GiPublicSpeaker />
-                          <Link href="/digital-marketing" passHref>
-                            <p className={styles.dropdownLinks}>
-                              Digital Marketing
-                            </p>
+                          <Link
+                            href="/digital-marketing"
+                            className={styles.dropdownLinks}
+                          >
+                            Digital Marketing
                           </Link>
                         </div>
                         <br />
-                        <Link href="/seocompany" passHref>
-                          <NavDropdown.Item
-                            className={styles.originalDropdownItem}
-                          >
-                            • SEO Company
-                          </NavDropdown.Item>
+                        <Link
+                          href="/seocompany"
+                          className={styles.originalDropdownItem}
+                        >
+                          • SEO Company
                         </Link>
-                        <Link href="/localseo" passHref>
-                          <NavDropdown.Item
-                            className={styles.originalDropdownItem}
-                          >
-                            • Local SEO
-                          </NavDropdown.Item>
+                        <Link
+                          href="/localseo"
+                          className={styles.originalDropdownItem}
+                        >
+                          • Local SEO
                         </Link>
                       </Col>
 
@@ -167,12 +141,11 @@ function NavbarBmh() {
                           </p>
                         </div>
                         <br />
-                        <Link href="/webdevelopmentpage" passHref>
-                          <NavDropdown.Item
-                            className={styles.originalDropdownItem}
-                          >
-                            Website Design
-                          </NavDropdown.Item>
+                        <Link
+                          href="/webdevelopmentpage"
+                          className={styles.originalDropdownItem}
+                        >
+                          Website Design
                         </Link>
                       </Col>
 
@@ -184,12 +157,11 @@ function NavbarBmh() {
                           </p>
                         </div>
                         <br />
-                        <Link href="/appdevelopment" passHref>
-                          <NavDropdown.Item
-                            className={styles.originalDropdownItem}
-                          >
-                            App Development
-                          </NavDropdown.Item>
+                        <Link
+                          href="/appdevelopment"
+                          className={styles.originalDropdownItem}
+                        >
+                          App Development
                         </Link>
                       </Col>
                     </Row>
@@ -197,22 +169,20 @@ function NavbarBmh() {
                 </NavDropdown.ItemText>
               </NavDropdown>
 
-              <Link href="/contact" passHref legacyBehavior>
-                <Nav.Link
-                  onClick={() => handleNavClick("/contact")}
-                  className={styles.navLink}
-                >
-                  Web Development
-                </Nav.Link>
+              <Link
+                href="/contact"
+                className={styles.navLink}
+                onClick={() => handleNavClick("/contact")}
+              >
+                Web Development
               </Link>
 
-              <Link href="/portfolio" passHref legacyBehavior>
-                <Nav.Link
-                  onClick={() => handleNavClick("/portfolio")}
-                  className={styles.navLink}
-                >
-                  Portfolio
-                </Nav.Link>
+              <Link
+                href="/portfolio"
+                className={styles.navLink}
+                onClick={() => handleNavClick("/portfolio")}
+              >
+                Portfolio
               </Link>
 
               <div className={styles.phoneContainer}>

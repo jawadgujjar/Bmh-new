@@ -1,7 +1,21 @@
 /* Base Navbar Styles */
 .customNavbar {
+  background-color: #1a1a1a !important;
   padding: 1.5rem 1rem;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease;
+}
+
+.customNavbar.scrolled {
+  background-color: #000 !important;
+}
+
+/* Ensure text remains white when scrolled */
+.customNavbar.scrolled .navLink,
+.customNavbar.scrolled .navDropdown .dropdown-toggle,
+.customNavbar.scrolled .phoneLink,
+.customNavbar.scrolled .searchIcon,
+.customNavbar.scrolled .offcanvasTitle {
+  color: #fff !important;
 }
 
 .containerSize {
@@ -33,7 +47,7 @@
 
 /* Offcanvas Styles */
 .offcanvas {
-  background-color: #000;
+  background-color: #000 !important;
   max-width: 80%;
 }
 
@@ -57,6 +71,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  color: #000 !important;
 }
 
 @media (min-width: 992px) {
@@ -106,7 +121,7 @@
 
 /* Dropdown Styles */
 .navDropdown .dropdown-menu {
-  background-color: #fff;
+  background-color: #fff !important;
   border: none;
   border-radius: 0;
   padding: 1rem;
@@ -146,6 +161,7 @@
   font-weight: 700 !important;
   padding: 0.5rem 1rem !important;
   transition: all 0.2s ease;
+  display: block;
 }
 
 .originalDropdownItem:hover {
@@ -217,7 +233,7 @@
 }
 
 .navDropdown :global(.dropdown-toggle) {
-  color: white !important;
+  color: #fff !important;
   font-weight: bold;
 }
 

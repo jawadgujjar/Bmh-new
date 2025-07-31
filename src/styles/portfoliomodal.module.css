@@ -1,104 +1,131 @@
 .modalContainer {
-  max-width: 100%;
+  max-width: 900px;
+  margin-top: 6rem;
 }
 
-.portfolioModalBody {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+.modalRow {
+  height: 90%;
 }
 
-.portfolioModalImages {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+.websiteCol {
+  height: 100%;
+  padding: 0 !important;
 }
 
-.imageContainer {
+.contactCol {
+  height: 100%;
+  padding: 0 !important;
+  background: #f9f9f9;
+  border-left: 1px solid #eee;
+}
+
+.websitePreviewContainer {
+  height: 100%;
   position: relative;
-  width: 100%;
+  overflow: hidden;
+  border-radius: 6px 0 0 6px;
 }
 
-.portfolioModalImage {
+.websiteIframe {
   width: 100%;
-  height: auto;
-  max-height: 300px;
-  object-fit: cover;
-  border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  height: 100%;
+  border: none;
+  display: block;
 }
 
 .portfolioModalFooter {
-  margin-top: 20px;
+  height: 100%;
+  padding: 15px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
+  gap: 20px;
 }
 
 .allLogosContact {
   display: flex;
-  gap: 15px;
+  gap: 18px;
   justify-content: center;
-  margin-bottom: 20px;
 }
 
-.divLogos {
-  font-size: 24px;
-  color: #333;
-  transition: color 0.3s ease;
+.socialLink {
+  color: #555;
+  font-size: 22px;
+  transition: all 0.2s ease;
 }
 
-.divLogos:hover {
+.socialLink:hover {
   color: rgb(253, 126, 20);
 }
 
+.contactInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
 .fontsizeCall {
-  margin: 10px 0;
+  margin: 0;
   text-align: center;
-  font-size: 16px;
+  font-size: 15px;
+  color: #555;
 }
 
 .callusText {
-  font-weight: bold;
+  font-weight: 600;
   margin-right: 5px;
+  color: #333;
 }
 
 .phoneLink {
   color: rgb(253, 126, 20);
   text-decoration: none;
   margin-left: 5px;
-  transition: color 0.3s ease;
-}
-
-.phoneLink:hover {
-  color: #d35400;
+  font-weight: 500;
 }
 
 .discoverButton1 {
-  background-color: rgb(15, 15, 15) !important;
+  background-color: rgb(253, 126, 20) !important;
   color: white !important;
   border: none !important;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
+  padding: 8px 24px;
+  border-radius: 4px;
+  font-size: 15px;
+  font-weight: 500;
 }
 
-.discoverButton1:hover {
-  background-color: rgb(253, 126, 20) !important;
-}
-
+/* Mobile View */
 @media (max-width: 768px) {
-  .portfolioModalBody {
-    flex-direction: column;
+  .websitePreviewContainer {
+    border-radius: 6px 6px 0 0;
   }
   
-  .portfolioModalImages {
-    flex-direction: column;
+  .contactCol {
+    border-left: none;
+    border-top: 1px solid #eee;
+    border-radius: 0 0 6px 6px;
   }
   
   .allLogosContact {
-    flex-wrap: wrap;
+    flex-direction: row;
+  }
+}
+
+/* Small Mobile View */
+@media (max-width: 480px) {
+  .portfolioModalFooter {
+    padding: 10px;
+    gap: 15px;
+  }
+  
+  .allLogosContact {
+    gap: 15px;
+  }
+  
+  .fontsizeCall {
+    font-size: 14px;
   }
 }
