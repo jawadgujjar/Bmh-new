@@ -37,17 +37,24 @@ const PortfolioModal1 = ({ isVisible, onClose, url }) => {
       centered
       width={isMobile ? '95%' : Math.min(windowSize.width * 0.8, 900)}
       className={styles.modalContainer}
+      style={{ 
+        position: 'fixed',
+        top: '80px', // Adjusted to appear below navbar
+        left: '50%',
+        transform: 'translateX(-50%)',
+        zIndex: 1001,
+        padding: 0,
+        margin: 0
+      }}
       bodyStyle={{
         padding: 0,
-        height: isMobile ? '80vh' : Math.min(windowSize.height * 0.8, 650),
+        height: isMobile ? 'calc(100vh - 100px)' : 'calc(100vh - 120px)',
+        maxHeight: '800px',
+        overflow: 'hidden'
       }}
     >
       <Row gutter={0} className={styles.modalRow}>
-        <Col 
-          xs={24} 
-          md={16} 
-          className={styles.websiteCol}
-        >
+        <Col xs={24} md={16} className={styles.websiteCol}>
           <div className={styles.websitePreviewContainer}>
             <iframe 
               src={url}
@@ -60,11 +67,7 @@ const PortfolioModal1 = ({ isVisible, onClose, url }) => {
           </div>
         </Col>
         
-        <Col 
-          xs={24} 
-          md={8} 
-          className={styles.contactCol}
-        >
+        <Col xs={24} md={8} className={styles.contactCol}>
           <div className={styles.portfolioModalFooter}>
             <div className={styles.allLogosContact}>
               <a href="#" className={styles.socialLink}><TiSocialFacebook /></a>

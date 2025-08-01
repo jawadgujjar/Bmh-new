@@ -93,9 +93,9 @@ function NavbarBmh() {
           <Offcanvas.Body className={styles.offcanvasBody}>
             <Nav className={`${styles.navLinks}`}>
               <Link
-                href="/home"
+                href="/"
                 className={styles.navLink}
-                onClick={() => handleNavClick("/home")}
+                onClick={() => handleNavClick("/")}
               >
                 Home
               </Link>
@@ -170,9 +170,9 @@ function NavbarBmh() {
               </NavDropdown>
 
               <Link
-                href="/contact"
+                href="/webdevelopment"
                 className={styles.navLink}
-                onClick={() => handleNavClick("/contact")}
+                onClick={() => handleNavClick("/webdevelopment")}
               >
                 Web Development
               </Link>

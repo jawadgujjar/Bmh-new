@@ -1,10 +1,19 @@
 .modalContainer {
+  position: fixed !important;
+  top: 80px !important; /* Adjusted based on navbar height */
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 100%;
   max-width: 900px;
-  margin-top: 6rem;
+  margin: 0 !important;
+  padding: 0 !important;
+  z-index: 1001 !important; /* Higher than navbar */
 }
 
 .modalRow {
-  height: 90%;
+  height: 100%;
+  margin: 0;
+  display: flex;
 }
 
 .websiteCol {
@@ -21,6 +30,7 @@
 
 .websitePreviewContainer {
   height: 100%;
+  width: 100%;
   position: relative;
   overflow: hidden;
   border-radius: 6px 0 0 6px;
@@ -35,7 +45,7 @@
 
 .portfolioModalFooter {
   height: 100%;
-  padding: 15px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -45,7 +55,7 @@
 
 .allLogosContact {
   display: flex;
-  gap: 18px;
+  gap: 20px;
   justify-content: center;
 }
 
@@ -63,7 +73,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 15px;
   width: 100%;
 }
 
@@ -91,14 +101,21 @@
   background-color: rgb(253, 126, 20) !important;
   color: white !important;
   border: none !important;
-  padding: 8px 24px;
+  padding: 10px 25px;
   border-radius: 4px;
   font-size: 15px;
   font-weight: 500;
+  width: 100%;
+  max-width: 200px;
 }
 
 /* Mobile View */
 @media (max-width: 768px) {
+  .modalContainer {
+    width: 95% !important;
+    top: 60px !important; /* Adjusted for mobile navbar */
+  }
+  
   .websitePreviewContainer {
     border-radius: 6px 6px 0 0;
   }
@@ -109,23 +126,36 @@
     border-radius: 0 0 6px 6px;
   }
   
+  .portfolioModalFooter {
+    padding: 15px;
+    gap: 15px;
+  }
+  
   .allLogosContact {
-    flex-direction: row;
+    gap: 15px;
   }
 }
 
 /* Small Mobile View */
 @media (max-width: 480px) {
+  .modalContainer {
+    top: 50px !important; /* Further adjustment for small mobile */
+  }
+  
   .portfolioModalFooter {
-    padding: 10px;
-    gap: 15px;
+    padding: 12px;
+    gap: 12px;
   }
   
   .allLogosContact {
-    gap: 15px;
+    gap: 12px;
   }
   
   .fontsizeCall {
     font-size: 14px;
+  }
+  
+  .discoverButton1 {
+    padding: 8px 20px;
   }
 }
