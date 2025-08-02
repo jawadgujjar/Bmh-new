@@ -112,7 +112,7 @@ function NavbarBmh() {
                         <div className={styles.imageH6}>
                           <GiPublicSpeaker />
                           <Link
-                            href="/digital-marketing"
+                            href="/digitalmarketing"
                             className={styles.dropdownLinks}
                           >
                             Digital Marketing
