@@ -1,167 +1,184 @@
-/* Container for centering and responsiveness */
-.aliceCarousel__prevBtn,
-.aliceCarousel__nextBtn {
-  display: none !important; /* Forcefully hide the buttons */
-}
-.aliceCarousel__dots {
-  display: none !important; /* Forcefully hide the dots */
-}
-
-.carouselWrapper {
-  position: relative; /* Make wrapper relative for absolute buttons */
-  padding: 20px; /* Add some padding to avoid arrow overlap */
-}
-
+/* Professional testimonial carousel styling */
 .customerDiv {
   text-align: center;
-  margin-top: 0.4rem;
-  /* Adjust margin as needed */
+  padding: 3rem 1rem;
+  background: #f8f9fa;
+  position: relative;
 }
 
-/* Carousel wrapper styling */
+.customers {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #FF6B00;
+  margin-bottom: 0.5rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.customer {
+  font-size: 1.1rem;
+  color: #6c757d;
+  margin-bottom: 2rem;
+  font-family: 'Inter', sans-serif;
+}
+
 .carouselWrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 1.5rem;
   box-sizing: border-box;
 }
 
-/* Carousel container styling */
 .carouselContainer {
-  width: 90%;
-  height: auto;
-  /* Adjust height for responsiveness */
-  padding: 2rem;
-  max-width: 1000px;
-  /* Increased max-width for the carousel container */
-  overflow: hidden;
+  width: 100%;
+  max-width: 1200px;
+  padding: 1rem;
   position: relative;
-  border-radius: 15px;
-  /* Rounded corners for carousel container */
-  /* Light gradient background */
+  border-radius: 12px;
+  background: #ffffff;
 }
 
-/* Hide carousel indicators */
-.carouselIndicators {
-  display: none;
-}
-
-/* Ensure carousel items are displayed as block and centered */
+/* Carousel item container - increased height */
 .carouselItemContent {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 18rem;
-  /* Adjust height as needed */
-  width: 100%;
-  /* Full width of container */
   padding: 1rem;
-  /* Add padding to ensure spacing around the card */
+  height: 32rem; /* Further increased height */
 }
 
-.antCard .antCardBody {
-  padding: 0;
-}
-
-/* Center card content */
+/* Card styling */
 .carouselCard {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   width: 100%;
-  max-width: 420px;
-  color: #000000;
-  padding: 0; /* Remove padding */
-  border: none; /* Remove border */
-  background: none; /* Remove background */
-  box-shadow: none; /* Remove shadow */
-  margin: auto; /* Center the card horizontally */
+  max-width: 360px;
+  padding: 2rem;
+  height: 100%; /* Take full height of container */
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Card avatar styling */
+/* Avatar styling */
 .avatarReview {
-  width: 4rem;
-  /* Adjust avatar size */
-  height: 4rem;
-  /* Adjust avatar size */
-  margin-bottom: 1rem;
+  width: 4.5rem;
+  height: 4.5rem;
   border-radius: 50%;
-  /* Make the avatar circular */
+  margin-bottom: 1.2rem;
+  border: 2px solid #007bff;
 }
 
-/* Card title styling */
-.carouselCard h5 {
-  font-size: 1rem;
-  /* Smaller font size for title */
-  color: #070707;
+/* Text styling */
+.name {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #1a1a1a;
   margin: 0.5rem 0;
+  font-family: 'Inter', sans-serif;
 }
 
-/* Card review styling */
-.carouselCard p {
-  font-size: 0.7rem;
-  /* Adjust font size for review text */
-  color: #070707;
-  line-height: 1.4;
+.occupation {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-bottom: 1rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.rating {
   margin-bottom: 1rem;
 }
 
-/* Hide carousel controls (Next and Prev icons) */
-.carouselControlPrev,
-.carouselControlNext {
-  display: none;
+.review {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.6;
+  font-style: italic;
+  margin: 1rem 0;
+  font-family: 'Inter', sans-serif;
 }
+
 .divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #FF8C00, transparent);
-  margin: 60px auto 0;
-  width: 80%;
-  max-width: 800px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #007bff, transparent);
+  margin: 3rem auto 0;
+  width: 60%;
+  max-width: 600px;
 }
-/* Media queries for different screen sizes */
+
+/* Responsive adjustments */
 @media (max-width: 1024px) {
   .carouselContainer {
-    height: auto;
-    /* Adjust height for larger screens */
+    max-width: 900px;
   }
-    .divider {
-    margin: 50px auto 0;
-    width: 90%;
+
+  .carouselCard {
+    max-width: 320px;
   }
 }
 
 @media (max-width: 768px) {
-  .carouselCard {
-    max-width: 300px;
-    /* Further adjust card size for smaller screens */
+  .customers {
+    font-size: 2rem;
   }
-   .divider {
-    margin: 40px auto 0;
-    width: 95%;
+
+  .customer {
+    font-size: 1rem;
+  }
+
+  .carouselItemContent {
+    height: 30rem;
+  }
+
+  .carouselCard {
+    max-width: 280px;
+    padding: 1.5rem;
+  }
+
+  .name {
+    font-size: 1.2rem;
+  }
+
+  .occupation {
+    font-size: 0.85rem;
+  }
+
+  .review {
+    font-size: 0.95rem;
   }
 }
 
 @media (max-width: 480px) {
-  .carouselCard {
-    max-width: 250px;
-    /* Even smaller card size */
+  .carouselItemContent {
+    height: 32rem;
   }
-}
 
-@media (max-width: 425px) {
-  .carouselCard {
-    max-width: 250px;
-    /* Even smaller card size */
-    height: 30rem;
+  .customers {
+    font-size: 1.8rem;
   }
-}
 
-@media (max-width: 375px) {
-  .carouselCard {
-    max-width: 250px;
-    /* Even smaller card size */
-    height: 30rem;
+  .customer {
+    font-size: 0.9rem;
+  }
+
+  .avatarReview {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .name {
+    font-size: 1.1rem;
+  }
+
+  .occupation {
+    font-size: 0.8rem;
+  }
+
+  .review {
+    font-size: 0.9rem;
   }
 }
