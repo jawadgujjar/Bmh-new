@@ -47,7 +47,7 @@ const Carousel = () => {
 
   return (
     <div className={styles.customerDiv}>
-      <h1 className={styles.customers}>What Our Clients Say</h1>
+      <h1 className={styles.customers}><span className={styles.blackText}>What Our </span> Clients Say</h1>
       <p className={styles.customer}>Real stories from clients showcasing our exceptional service and results.</p>
       <div className={styles.carouselWrapper}>
         <div className={styles.carouselContainer}>
