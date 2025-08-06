@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from 'react';
-import styles from '../../styles/digital-marketing/calltoactiondigital1.module.css';
+import styles from '../../styles/web-development/calltoactionweb1.module.css';
 
-function Calltoactiondigital1() {
+function Calltoactionweb1() {
   const [email, setEmail] = useState('');
 
   const handleSubmit = (e) => {
@@ -48,4 +48,4 @@ function Calltoactiondigital1() {
   );
 }
 
-export default Calltoactiondigital1;
+export default Calltoactionweb1;
