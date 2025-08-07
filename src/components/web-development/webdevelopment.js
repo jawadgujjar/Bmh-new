@@ -69,7 +69,7 @@ const Webdevelopment1 = () => {
                     />
                 </div>
                 <div className={styles.pointsList}>
-                    <p className={styles.pointsTextx}>Website Development</p>
+                    <p className={styles.pointsTextx}>How We Work!</p>
                     <ul className={styles.featuresList}>
                         <li className={styles.featureItem}>
                             <span className={styles.featureTitle}>User Experience (UX) Design:</span> Focus on creating a user-friendly interface that ensures easy navigation and a seamless experience for visitors.

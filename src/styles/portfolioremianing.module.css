@@ -1,4 +1,50 @@
-/* Base styles for the container */
+/* portfolioremianing.module.css */
+
+/* Portfolio Title */
+.portfolio {
+    text-align: center;
+    font-family: Roboto, sans-serif;
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 3rem;
+    margin-top: 7rem;
+    color: #333;
+}
+
+/* Categories Section */
+.categoriesContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px auto 40px;
+    max-width: 1200px;
+    padding: 0 20px;
+}
+
+.categoryButton {
+    padding: 8px 16px;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    color: #333;
+    text-transform: capitalize;
+}
+
+.categoryButton.active {
+    background-color: rgb(253,126,20);
+    color: white;
+    border-color: rgb(253,126,20);
+}
+
+.categoryButton:hover {
+    background-color: #e0e0e0;
+}
+
+/* "How Does Your Site Compare?" Section - BLACK BACKGROUND */
 .containerportfolio {
     display: flex;
     align-items: center;
@@ -6,81 +52,83 @@
     padding: 20px;
 }
 
-/* Styles for the text-box */
 .textBox {
-    background-color: #f5f5f5; /* Off-white background color */
-    padding: 20px;
+    background-color: #000; /* Black background */
+    padding: 30px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center; /* Center-align text and button */
-    width: 100%; /* Full width on small screens */
-    max-width: 40rem; /* Maximum width for larger screens */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    text-align: center;
+    width: 100%;
+    max-width: 40rem;
 }
 
-/* Styles for the text inside the text-box */
 .textBox p {
-    margin: 0 0 20px 0; /* Margin-bottom to separate text from button */
-    font-size: 2rem; /* Font size in rem for better scalability */
+    margin: 0 0 25px 0;
+    font-size: 2rem;
     font-weight: bold;
-    color: #333; /* Darker text color for contrast */
+    color: #fff; /* White text */
 }
 
-/* Styles for the action button */
+/* Button Styles */
 .actionButton {
-    background-color: rgb(253,126,20);      
-    color: #fff; /* Button text color */
+    background-color: rgb(253,126,20);
+    color: #fff;
     border: none;
-    padding: 10px 20px;
-    font-size: 1rem; /* Font size in rem */
+    padding: 12px 24px;
+    font-size: 1rem;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    font-weight: 600;
 }
 
-/* Hover effect for the button */
 .actionButton:hover {
-    background-color: #FFD700; /* Darker shade for hover effect */
+    background-color: #ff9807; /* Light orange on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-.portfolio {
-    text-align: center;
-    font-family: Roboto, sans-serif;
-    margin-bottom: 20px;
-    margin-top: -18px;
-    font-weight: bold;
-    font-size: 3rem;
-    margin-top: 7rem;
-}
-
-/* Responsive styles */
+/* Responsive Styles */
 @media (max-width: 768px) {
+    .portfolio {
+        font-size: 2.5rem;
+        margin-top: 5rem;
+    }
+    
     .textBox {
-        padding: 15px;
-        width: 90%; /* Adjust width for smaller screens */
+        padding: 25px;
     }
-
+    
     .textBox p {
-        font-size: 1.5rem; /* Smaller font size for smaller screens */
+        font-size: 1.7rem;
     }
-
+    
     .actionButton {
-        padding: 8px 16px; /* Adjust padding for smaller screens */
-        font-size: 0.875rem; /* Smaller font size for the button */
+        padding: 10px 20px;
     }
 }
 
 @media (max-width: 480px) {
+    .portfolio {
+        font-size: 2rem;
+        margin-top: 4rem;
+    }
+    
     .textBox {
-        padding: 10px;
-        width: 95%; /* Further adjust width for very small screens */
+        padding: 20px;
     }
-
+    
     .textBox p {
-        font-size: 1.25rem; /* Even smaller font size for very small screens */
+        font-size: 1.4rem;
+        margin-bottom: 20px;
     }
-
+    
     .actionButton {
-        padding: 6px 12px; /* Adjust padding for very small screens */
-        font-size: 0.75rem; /* Smaller font size for the button */
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+    
+    .categoriesContainer {
+        gap: 6px;
     }
 }

@@ -1,0 +1,134 @@
+/* Calltoactiondigital2.module.css */
+.ctaContainer {
+  background-color: #000;
+  border-radius: 12px;
+  padding: 3rem;
+  color: white;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  margin: 2rem auto;
+  max-width: 1400px;
+  width: 90%;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.ctaContent {
+  position: relative;
+  z-index: 2;
+}
+
+.titleWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 1rem;
+}
+
+.circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #FD7E14;
+  box-shadow: 0 0 10px rgba(253, 126, 20, 0.7);
+}
+
+.ctaTitle {
+  font-size: 1.2rem;
+  margin: 0;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.ctaSubtitle {
+  font-size: 1.9rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #FD7E14;
+}
+
+.ctaDescription {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #FD7E14;
+  color: white;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  gap: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.ctaButton:hover {
+  background-color: #e67312;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(253, 126, 20, 0.4);
+}
+
+.phoneIcon {
+  font-size: 1rem;
+}
+
+.animatedLine {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #FD7E14, transparent);
+  animation: lineAnimation 3s infinite;
+}
+
+@keyframes lineAnimation {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (max-width: 768px) {
+  .ctaContainer {
+    padding: 2rem 1.5rem;
+  }
+  
+  .ctaTitle {
+    font-size: 1rem;
+  }
+  
+  .ctaSubtitle {
+    font-size: 1.5rem;
+  }
+  
+  .ctaDescription {
+    font-size: 1rem;
+  }
+  
+  .ctaButton {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .titleWrapper {
+    gap: 8px;
+  }
+  
+  .circle {
+    width: 8px;
+    height: 8px;
+  }
+}

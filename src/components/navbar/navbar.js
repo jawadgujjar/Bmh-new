@@ -134,12 +134,17 @@ function NavbarBmh() {
                       </Col>
 
                       <Col xs={12} sm={6} md={4} lg={3}>
-                        <div className={styles.imageH6}>
-                          <BiWorld />
-                          <p className={styles.dropdownLinks}>
-                            Web Development
-                          </p>
-                        </div>
+                        <Link href="/webdevelopment" passHref>
+                          <div
+                            className={styles.imageH6}
+                            style={{ cursor: "pointer" }}
+                          >
+                            <BiWorld />
+                            <p className={styles.dropdownLinks}>
+                              Web Development
+                            </p>
+                          </div>
+                        </Link>
                         <br />
                         <Link
                           href="/webdevelopmentpage"
@@ -150,12 +155,17 @@ function NavbarBmh() {
                       </Col>
 
                       <Col xs={12} sm={6} md={4} lg={3}>
-                        <div className={styles.imageH6}>
-                          <HiDeviceMobile />
-                          <p className={styles.dropdownLinks}>
-                            App Development
-                          </p>
-                        </div>
+                        <Link href="/appdevelopment" passHref>
+                          <div
+                            className={styles.imageH6}
+                            style={{ cursor: "pointer" }}
+                          >
+                            <HiDeviceMobile />
+                            <p className={styles.dropdownLinks}>
+                              App Development
+                            </p>
+                          </div>
+                        </Link>
                         <br />
                         <Link
                           href="/appdevelopment"

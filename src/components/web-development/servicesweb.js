@@ -14,75 +14,75 @@ import styles from "../../styles/web-development/servicesweb.module.css";
 
 const services = [
   {
-    title: "Search Engine Optimization (SEO)",
+    title: "MEAN Stack Development",
     description:
-      "Through careful keyword research and white hat SEO practices, we can help you achieve higher organic rankings and increased visibility in search results.",
-    link: "https://example.com/seo",
-    icon: <FaSearch />,
-    bgColor: "black",
-  },
-  {
-    title: "Franchise SEO",
-    description:
-      "Amplify your market reach and improve your brand reputation with Thrive's franchise SEO services.",
-    link: "https://example.com/franchise-seo",
-    icon: <FaMapMarkerAlt />,
-    bgColor: "white",
-  },
-  {
-    title: "Local SEO",
-    description:
-      "Statistics show that 88 percent of consumers searching for local businesses online will call or visit a store within 24 hours.",
-    link: "https://example.com/local-seo",
-    icon: <FaMapMarkerAlt />,
-    bgColor: "black",
-  },
-  {
-    title: "Technical SEO",
-    description:
-      "Establish a strong online foundation with on-point technical SEO and internet marketing services.",
-    link: "https://example.com/technical-seo",
+      "Build robust, scalable web applications using MongoDB, Express, Angular, and Node.js for full-stack JavaScript solutions.",
+    link: "https://example.com/mean-development",
     icon: <FaCode />,
-    bgColor: "white",
-  },
-  {
-    title: "Link Building",
-    description:
-      "Acquire a steady stream of traffic from high-authority websites and increase your consumer trust.",
-    link: "https://example.com/link-building",
-    icon: <FaLink />,
     bgColor: "black",
   },
   {
-    title: "Web Design & Development",
+    title: "MERN Stack Development",
     description:
-      "Thrive builds custom, mobile-ready and search engine optimized websites that help you meet your business objectives.",
-    link: "https://example.com/web-design-development",
+      "Leverage the power of MongoDB, Express, React, and Node.js to create dynamic and modern web applications.",
+    link: "https://example.com/mern-development",
     icon: <FaLaptopCode />,
     bgColor: "white",
   },
   {
-    title: "Social Media Marketing",
+    title: "Vast Technology Options",
     description:
-      "Ready to expand and market to your audiences on social media? We build social media campaigns to help your business grow.",
-    link: "https://example.com/social-media-marketing",
+      "From modern frameworks to custom stacks, we offer tailored tech solutions to fit your project requirements.",
+    link: "https://example.com/technology-options",
     icon: <FaShareAlt />,
     bgColor: "black",
   },
   {
-    title: "Pay Per Click (PPC) Management",
+    title: "WordPress Development",
     description:
-      "Reach your customers quickly and with precision with a data-driven PPC campaign.",
-    link: "https://example.com/ppc-management",
-    icon: <FaDollarSign />,
+      "We craft powerful and fully-customized WordPress websites optimized for performance and easy management.",
+    link: "https://example.com/wordpress",
+    icon: <FaPencilAlt />,
     bgColor: "white",
   },
   {
-    title: "Content Writing",
+    title: "Shopify (E-Commerce)",
     description:
-      "Your website's content is crucial: it's the foundation of your SEO and the reason many people visit your site.",
-    link: "https://example.com/content-writing",
-    icon: <FaPencilAlt />,
+      "Boost your online store with Shopify development services, from custom themes to powerful integrations.",
+    link: "https://example.com/shopify",
+    icon: <FaDollarSign />,
+    bgColor: "black",
+  },
+  {
+    title: "Python Development",
+    description:
+      "We build scalable and secure web applications using Python and Django for robust backend solutions.",
+    link: "https://example.com/python-development",
+    icon: <FaCode />,
+    bgColor: "white",
+  },
+  {
+    title: "JavaScript Development",
+    description:
+      "Expert JavaScript developers building interactive and responsive user interfaces with clean code.",
+    link: "https://example.com/javascript-development",
+    icon: <FaCode />,
+    bgColor: "black",
+  },
+  {
+    title: ".NET Development",
+    description:
+      "Create high-performance enterprise-level applications using Microsoft .NET technologies.",
+    link: "https://example.com/dotnet",
+    icon: <FaLaptopCode />,
+    bgColor: "white",
+  },
+  {
+    title: "Next.js Development",
+    description:
+      "Deliver fast, SEO-friendly, and server-rendered React apps using the power of Next.js.",
+    link: "https://example.com/nextjs",
+    icon: <FaCode />,
     bgColor: "black",
   },
 ];
@@ -90,9 +90,11 @@ const services = [
 function Webservices1() {
   return (
     <div className={styles.container}>
-      <p className={styles.text1}>Brand's Digital Marketing Services</p>
+      <p className={styles.text1}>Our Expertise</p>
       <p className={styles.text2}>
-        Build Brand Recognition as an Industry Leader and Increase Profitability
+        Our Full-stack developers tackle complex projects with ease. Our mastery
+        of both front-end and back-end technologies ensures efficient
+        development, getting your project done smoothly and effectively.
       </p>
 
       <div className={styles.cardsContainer}>
