@@ -1,0 +1,95 @@
+.seoContainer {
+  margin: 0 auto;
+  padding: 30px;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.mainTitle {
+  font-size: 32px;
+  font-weight: bold;
+  color: #222;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.subTitle {
+  font-size: 22px;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.keywordsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.keywordButton {
+  padding: 10px 15px;
+  background-color: #f0f4f8;
+  color: #000; /* Black text by default */
+  border: none;
+  border-radius: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.keywordButton:hover {
+  background-color: #FD7E14; /* Orange background on hover */
+  color: #000; /* Black text on hover */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(253, 126, 20, 0.2);
+}
+
+.keywordButton.activeKeyword {
+  background-color: #FD7E14; /* Orange background when active */
+  color: white; /* White text when active */
+  box-shadow: 0 4px 8px rgba(253, 126, 20, 0.3);
+}
+
+.divider {
+  border: none;
+  height: 1px;
+  background-color: #eee;
+  margin: 30px 0;
+}
+
+.contentSection {
+  background-color: #f8fafc;
+  padding: 25px;
+  border-radius: 8px;
+  min-height: 200px;
+  transition: all 0.3s ease;
+}
+
+.contentTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #FD7E14;
+  margin-bottom: 15px;
+}
+
+.contentText {
+  color: #555;
+  line-height: 1.7;
+  font-size: 16px;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

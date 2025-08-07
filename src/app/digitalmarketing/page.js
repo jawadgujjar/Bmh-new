@@ -8,7 +8,7 @@ import Whydigital from "@/components/digital-marketing/whydigital";
 import ProposalForm from "@/components/landing/proposalform";
 import Reviews from "@/components/landing/reviews";
 
-export default function PortfolioPage() {
+export default function DigitalmarketingPage() {
   return (
     <main>
        <HeroDigitalMarketing/>

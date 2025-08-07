@@ -1,0 +1,156 @@
+.container {
+  margin-top: 3rem;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.text1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-align: center;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.text2 {
+  font-size: 1.2rem;
+  text-align: center;
+  color: #666;
+  margin-bottom: 2rem;
+  max-width: 800px;
+}
+
+.cardsContainer {
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+.card {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+  padding: 1.5rem;
+}
+
+.cardBlack {
+  background-color: #4b4a4a;
+}
+
+.cardWhite {
+  background-color: #fff;
+  border: 1px solid #eee;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.cardTitleBlack {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #ff6b35;
+  margin-left: 0.5rem;
+  margin-bottom: 0;
+}
+
+.cardTitleWhite {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  margin-left: 0.5rem;
+  margin-bottom: 0;
+}
+
+.cardDescriptionBlack {
+  color: #fff;
+  text-align: left;
+  line-height: 1.6;
+}
+
+.cardDescriptionWhite {
+  color: #555;
+  text-align: left;
+  line-height: 1.6;
+}
+
+.iconBlack {
+  font-size: 1.5rem;
+  color: #ff6b35;
+}
+
+.iconWhite {
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+
+.proposalButton {
+  color: white;
+  background-color: #ff6b35;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  height: 3rem;
+  width: 22rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.proposalButton:hover {
+  color: #ff6b35 !important;
+  background-color: white !important;
+  border: 2px solid #ff6b35 !important;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .text1 {
+    font-size: 1.5rem;
+  }
+
+  .text2 {
+    font-size: 1rem;
+  }
+
+  .proposalButton {
+    width: 100%;
+    max-width: 22rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .text1 {
+    font-size: 1.3rem;
+  }
+
+  .text2 {
+    font-size: 0.9rem;
+  }
+
+  .cardTitleBlack, .cardTitleWhite {
+    font-size: 1.1rem;
+  }
+
+  .cardDescriptionBlack, .cardDescriptionWhite {
+    font-size: 0.9rem;
+  }
+}

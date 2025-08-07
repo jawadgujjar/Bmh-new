@@ -1,47 +1,60 @@
 "use client";
 
-import React, { useState } from 'react';
-import styles from '../../styles/web-development/keywordsweb.module.css';
+import React, { useState } from "react";
+import styles from "../../styles/web-development/keywordsweb.module.css";
 
 function Keywordsweb() {
-  // SEO keywords with associated content
+  // Updated keyword content
   const keywordContent = {
-    "Major Search Engines": {
-      title: "Major Search Engines Optimization",
-      content: "We optimize your website for all major search engines including Google, Bing, and Yahoo to ensure maximum visibility across platforms."
+    "Full Stack Migration & Porting": {
+      title: "Full Stack Migration & Porting Services",
+      content:
+        "We offer seamless migration and porting solutions for full-stack applications, ensuring data integrity, compatibility, and minimal downtime during transitions.",
     },
-    "Google My Business": {
-      title: "Google My Business Optimization",
-      content: "Enhance your local SEO with our expert Google My Business profile optimization services to appear in local searches and Google Maps."
+    "Integration Provider": {
+      title: "System Integration Services",
+      content:
+        "Our integration services help connect your existing systems, applications, and APIs for a unified, efficient digital environment.",
     },
-    "Different Type Of Seo": {
-      title: "Comprehensive SEO Services",
-      content: "We provide all types of SEO including on-page, off-page, technical, and local SEO tailored to your business needs."
+    "CMS Development Service": {
+      title: "Custom CMS Development",
+      content:
+        "From WordPress to enterprise CMS platforms, we develop content management systems tailored to your specific business requirements.",
     },
-    "Seo Audits": {
-      title: "Professional SEO Audits",
-      content: "Our thorough SEO audits identify technical issues, content gaps, and optimization opportunities to improve your search rankings."
+    "Full-Stack Development For E-Commerce": {
+      title: "Full-Stack E-Commerce Solutions",
+      content:
+        "We provide complete front-end and back-end development for e-commerce platforms, ensuring scalability, performance, and secure transactions.",
     },
-    "E-Commerce Seo": {
-      title: "E-Commerce SEO Solutions",
-      content: "Specialized SEO strategies for online stores to improve product visibility, category pages, and conversion rates."
+    "Completely Integrated Mobile Development": {
+      title: "End-to-End Mobile App Development",
+      content:
+        "Our mobile solutions include fully integrated Android & iOS apps with backend support, API integration, and cross-platform capabilities.",
     },
-    "Technical Seo": {
-      title: "Technical SEO Expertise",
-      content: "We fix crawl errors, improve site speed, implement schema markup, and ensure your website meets all technical SEO requirements."
+    "Consulting Services": {
+      title: "IT & Development Consulting",
+      content:
+        "Receive expert advice on technology stacks, development strategies, project planning, and scaling your digital infrastructure.",
     },
-    "Other Search Engines": {
-      title: "Multi-Platform Search Optimization",
-      content: "Beyond Google, we optimize for alternative search platforms like YouTube, Amazon, and niche industry-specific search engines."
+    Maintenance: {
+      title: "Website & Application Maintenance",
+      content:
+        "We provide ongoing maintenance, bug fixing, performance optimization, and updates to keep your digital assets running smoothly.",
     },
-    "Free Seo Tips": {
-      title: "Free SEO Tips & Resources",
-      content: "Of course! Why not. Our WordPress and Shopify SEO experts are dedicated to helping business owners boost their growth and rank better on the search engines without spending a lot of money. Our experts can provide basic SEO knowledge and consultation free of cost to make you understand your site better."
-    }
+    Support: {
+      title: "24/7 Technical Support",
+      content:
+        "Our dedicated support team is available around the clock to assist you with any technical issues, updates, or troubleshooting.",
+    },
   };
 
-  const [activeContent, setActiveContent] = useState(keywordContent["Free Seo Tips"]);
-  const [activeKeyword, setActiveKeyword] = useState("Free Seo Tips");
+  // ✅ Set a valid default key here
+  const [activeKeyword, setActiveKeyword] = useState(
+    "Full Stack Migration & Porting"
+  );
+  const [activeContent, setActiveContent] = useState(
+    keywordContent["Full Stack Migration & Porting"]
+  );
 
   const handleKeywordClick = (keyword) => {
     setActiveContent(keywordContent[keyword]);
@@ -50,32 +63,39 @@ function Keywordsweb() {
 
   return (
     <div className={styles.seoContainer}>
-      <h1 className={styles.mainTitle}>Affordable SEO Packages That Works</h1>
-      
+      <h1 className={styles.mainTitle}>
+        Custom Web Development Solutions That Deliver Results
+      </h1>
+
       <h2 className={styles.subTitle}>
-        Why You Should Trust On The Custom Websites With Your Biggest Goals?
+        Built for Performance, Designed for Impact — Let’s Develop a Website
+        That Works for Your Business.
       </h2>
-      
+
       {/* Keywords buttons row */}
       <div className={styles.keywordsRow}>
         {Object.keys(keywordContent).map((keyword, index) => (
-          <button 
-            key={index} 
-            className={`${styles.keywordButton} ${activeKeyword === keyword ? styles.activeKeyword : ''}`}
+          <button
+            key={index}
+            className={`${styles.keywordButton} ${
+              activeKeyword === keyword ? styles.activeKeyword : ""
+            }`}
             onClick={() => handleKeywordClick(keyword)}
           >
             {keyword}
           </button>
         ))}
       </div>
-      
+
       <hr className={styles.divider} />
-      
-      {/* Dynamic content section */}
-      <div className={styles.contentSection}>
-        <h3 className={styles.contentTitle}>{activeContent.title}</h3>
-        <p className={styles.contentText}>{activeContent.content}</p>
-      </div>
+
+      {/* Dynamic content section - Safe rendering */}
+      {activeContent && (
+        <div className={styles.contentSection}>
+          <h3 className={styles.contentTitle}>{activeContent.title}</h3>
+          <p className={styles.contentText}>{activeContent.content}</p>
+        </div>
+      )}
     </div>
   );
 }
