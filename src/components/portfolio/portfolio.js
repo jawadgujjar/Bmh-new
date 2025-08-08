@@ -9,7 +9,7 @@ const PortfolioCard = ({ previewUrl, title, description, onClick }) => {
             <div className={styles.portfolioCardInner}>
                 <div className={styles.portfolioCardImageWrapper}>
                     <div className={styles.portfolioCardHoverPreview}>
-                        <iframe 
+                        <iframe
                             src={previewUrl}
                             className={styles.websitePreviewFrame}
                             title={`${title} preview`}
@@ -44,40 +44,15 @@ const Portfolio = () => {
         {
             previewUrl: 'https://bmh.vercel.app/',
             title: 'BMH',
-            description: 'Google\'s search engine homepage.',
+            description: 'Landing page preview.',
             fullUrl: 'https://bmh.vercel.app/'
-        }, 
-        {
-            previewUrl: 'https://sireprinting.com/',
-            title: 'Sire Printing',
-            description: 'Google\'s search engine homepage.',
-            fullUrl: 'https://sireprinting.com/'
         },
         {
             previewUrl: 'https://sireprinting.com/',
             title: 'Sire Printing',
-            description: 'Google\'s search engine homepage.',
+            description: 'Landing page preview.',
             fullUrl: 'https://sireprinting.com/'
-        },
-        {
-            previewUrl: 'https://sireprinting.com/',
-            title: 'Sire Printing',
-            description: 'Google\'s search engine homepage.',
-            fullUrl: 'https://sireprinting.com/'
-        },
-        {
-            previewUrl: 'https://sireprinting.com/',
-            title: 'Sire Printing',
-            description: 'Google\'s search engine homepage.',
-            fullUrl: 'https://sireprinting.com/'
-        },
-        {
-            previewUrl: 'https://sireprinting.com/',
-            title: 'Sire Printing',
-            description: 'Google\'s search engine homepage.',
-            fullUrl: 'https://sireprinting.com/'
-        },
-        // Add more websites as needed
+        }
     ];
 
     return (

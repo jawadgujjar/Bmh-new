@@ -12,6 +12,7 @@
     height: 400px;
     perspective: 1000px;
     cursor: pointer;
+    overflow: hidden;
 }
 
 .portfolioCardInner {
@@ -41,22 +42,30 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.8);
     transform: rotate(0deg) skew(0deg);
     overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 .websitePreviewFrame {
     width: 100%;
-    height: 100%;
+    height: 300%; /* zyada content cover kare */
     border: none;
-    transform: scale(0.8);
-    transform-origin: top left;
-    pointer-events: none;
+    transform: translateY(0);
+    transition: transform 5s linear; /* slow scroll */
+    pointer-events: none; /* disable clicks */
+}
+
+/* Hover Effects */
+.portfolioCard:hover .portfolioCardInner {
+    transform: rotateY(0);
+}
+
+.portfolioCard:hover .portfolioCardImageWrapper {
+    transform: rotate(0deg) skew(0deg);
+}
+
+.portfolioCard:hover .websitePreviewFrame {
+    transform: translateY(-66%); /* neeche scroll kare */
 }
 
 .portfolioCardContent {
@@ -71,26 +80,9 @@
     transition: opacity 0.5s ease;
 }
 
-.portfolioCard:hover .portfolioCardInner {
-    transform: rotateY(0);
-}
-
-.portfolioCard:hover .portfolioCardImageWrapper {
-    transform: rotate(0deg) skew(0deg);
-}
-
-.portfolioCard:hover .portfolioCardHoverPreview {
-    opacity: 1;
-    transform: rotate(0deg) skew(0deg);
-}
-
-.portfolioCard:hover .websitePreviewFrame {
-    transform: scale(0.9);
-}
-
 @media (max-width: 768px) {
     .portfolioCardImageWrapper {
-        transform: rotate(0deg) skew(0deg)
+        transform: rotate(0deg) skew(0deg);
     }
     
     .portfolioCard {
