@@ -10,7 +10,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { BiWorld } from "react-icons/bi";
 import { GiPublicSpeaker } from "react-icons/gi";
-import { HiDeviceMobile, HiSearch } from "react-icons/hi";
+import { HiDeviceMobile, HiSearch, HiPhone } from "react-icons/hi";
+import { FaWhatsapp } from "react-icons/fa";
 import { Col, Row } from "react-bootstrap";
 import styles from "../../styles/navbar.module.css";
 
@@ -19,12 +20,10 @@ function NavbarBmh() {
   const [isScrolled, setIsScrolled] = useState(false);
   const router = useRouter();
 
-  // Scroll effect handler
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const shouldScroll = scrollY > 50;
-      console.log(`ScrollY: ${scrollY}, isScrolled: ${shouldScroll}`);
       setIsScrolled(shouldScroll);
     };
 
@@ -32,7 +31,6 @@ function NavbarBmh() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Click outside search handler
   useEffect(() => {
     const handleClickOutside = (event) => {
       const searchBar = document.getElementById("search-bar");
@@ -132,7 +130,6 @@ function NavbarBmh() {
                           • Local SEO
                         </Link>
                       </Col>
-
                       <Col xs={12} sm={6} md={4} lg={3}>
                         <Link href="/webdevelopment" passHref>
                           <div
@@ -153,7 +150,6 @@ function NavbarBmh() {
                           Website Design
                         </Link>
                       </Col>
-
                       <Col xs={12} sm={6} md={4} lg={3}>
                         <Link href="/appdevelopment" passHref>
                           <div
@@ -179,13 +175,171 @@ function NavbarBmh() {
                 </NavDropdown.ItemText>
               </NavDropdown>
 
-              <Link
-                href="/webdevelopment"
-                className={styles.navLink}
-                onClick={() => handleNavClick("/webdevelopment")}
+              <NavDropdown
+                title="Web Development"
+                className={styles.navDropdown}
+                renderMenuOnMount={true}
               >
-                Web Development
-              </Link>
+                <NavDropdown.ItemText>
+                  <Container fluid>
+                    <Row className={`g-3 ${styles.serviceTab}`}>
+                      <Col xs={12} sm={6} md={4} lg={3}>
+                        <div className={styles.imageH6}>
+                          <BiWorld />
+                          <Link
+                            href="/webdevelopment"
+                            className={styles.dropdownLinks}
+                          >
+                            Web Development
+                          </Link>
+                        </div>
+                        <br />
+                        <Link
+                          href="/webdesign"
+                          className={styles.originalDropdownItem}
+                        >
+                          • Web Design
+                        </Link>
+                        <Link
+                          href="/ecommerce"
+                          className={styles.originalDropdownItem}
+                        >
+                          • E-commerce Solutions
+                        </Link>
+                        <Link
+                          href="/cms"
+                          className={styles.originalDropdownItem}
+                        >
+                          • CMS Development
+                        </Link>
+                      </Col>
+                      <Col xs={12} sm={6} md={4} lg={3}>
+                        <Link href="/digitalmarketing" passHref>
+                          <div
+                            className={styles.imageH6}
+                            style={{ cursor: "pointer" }}
+                          >
+                            <GiPublicSpeaker />
+                            <p className={styles.dropdownLinks}>
+                              Digital Marketing
+                            </p>
+                          </div>
+                        </Link>
+                        <br />
+                        <Link
+                          href="/seo"
+                          className={styles.originalDropdownItem}
+                        >
+                          SEO Services
+                        </Link>
+                      </Col>
+                      <Col xs={12} sm={6} md={4} lg={3}>
+                        <Link href="/appdevelopment" passHref>
+                          <div
+                            className={styles.imageH6}
+                            style={{ cursor: "pointer" }}
+                          >
+                            <HiDeviceMobile />
+                            <p className={styles.dropdownLinks}>
+                              App Development
+                            </p>
+                          </div>
+                        </Link>
+                        <br />
+                        <Link
+                          href="/mobileapps"
+                          className={styles.originalDropdownItem}
+                        >
+                          Mobile Applications
+                        </Link>
+                      </Col>
+                    </Row>
+                  </Container>
+                </NavDropdown.ItemText>
+              </NavDropdown>
+
+              <NavDropdown
+                title="App Development"
+                className={styles.navDropdown}
+                renderMenuOnMount={true}
+              >
+                <NavDropdown.ItemText>
+                  <Container fluid>
+                    <Row className={`g-3 ${styles.serviceTab}`}>
+                      <Col xs={12} sm={6} md={4} lg={3}>
+                        <div className={styles.imageH6}>
+                          <HiDeviceMobile />
+                          <Link
+                            href="/appdevelopment"
+                            className={styles.dropdownLinks}
+                          >
+                            App Development
+                          </Link>
+                        </div>
+                        <br />
+                        <Link
+                          href="/iosdevelopment"
+                          className={styles.originalDropdownItem}
+                        >
+                          • iOS Development
+                        </Link>
+                        <Link
+                          href="/androiddevelopment"
+                          className={styles.originalDropdownItem}
+                        >
+                          • Android Development
+                        </Link>
+                        <Link
+                          href="/hybridapps"
+                          className={styles.originalDropdownItem}
+                        >
+                          • Hybrid Apps
+                        </Link>
+                      </Col>
+                      <Col xs={12} sm={6} md={4} lg={3}>
+                        <Link href="/webdevelopment" passHref>
+                          <div
+                            className={styles.imageH6}
+                            style={{ cursor: "pointer" }}
+                          >
+                            <BiWorld />
+                            <p className={styles.dropdownLinks}>
+                              Web Development
+                            </p>
+                          </div>
+                        </Link>
+                        <br />
+                        <Link
+                          href="/responsiveweb"
+                          className={styles.originalDropdownItem}
+                        >
+                          Responsive Web Design
+                        </Link>
+                      </Col>
+                      <Col xs={12} sm={6} md={4} lg={3}>
+                        <Link href="/digitalmarketing" passHref>
+                          <div
+                            className={styles.imageH6}
+                            style={{ cursor: "pointer" }}
+                          >
+                            <GiPublicSpeaker />
+                            <p className={styles.dropdownLinks}>
+                              Digital Marketing
+                            </p>
+                          </div>
+                        </Link>
+                        <br />
+                        <Link
+                          href="/socialmediamarketing"
+                          className={styles.originalDropdownItem}
+                        >
+                          Social Media Marketing
+                        </Link>
+                      </Col>
+                    </Row>
+                  </Container>
+                </NavDropdown.ItemText>
+              </NavDropdown>
 
               <Link
                 href="/portfolio"
@@ -195,11 +349,16 @@ function NavbarBmh() {
                 Portfolio
               </Link>
 
-              <div className={styles.phoneContainer}>
-                <a href="tel:+1234567890" className={styles.phoneLink}>
-                  +123-456-7890
-                </a>
-              </div>
+              <a href="https://wa.me/1234567890" className={styles.whatsappButton}>
+                WhatsApp Now <FaWhatsapp />
+              </a>
+              <Link
+                href="/get-a-quote"
+                className={styles.quoteButton}
+                onClick={() => handleNavClick("/get-a-quote")}
+              >
+                Get Free Quote <HiPhone />
+              </Link>
 
               <div className={styles.searchContainer}>
                 <HiSearch
