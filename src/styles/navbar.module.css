@@ -105,9 +105,7 @@
   transform: rotate(180deg);
 }
 
-:global(.dropdown-toggle::after) {
-  border-top-color: white !important;
-}
+
 
 /* Dropdown Menu */
 .customDropdown .dropdown-menu {
