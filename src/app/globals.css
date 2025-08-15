@@ -36,6 +36,9 @@ a {
   color: inherit;
   text-decoration: none;
 }
+.dropdown-toggle::after {
+  border-top-color: white !important;
+}
 
 @media (prefers-color-scheme: dark) {
   html {
