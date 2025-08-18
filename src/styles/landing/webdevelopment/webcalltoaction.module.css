@@ -1,0 +1,363 @@
+.container {
+  padding: 4rem 0;
+  background-color: #2d3748;
+  color: #fff;
+  text-align: center;
+  max-width: 100%;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.backgroundBalls {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.ball {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(249, 115, 22, 0.15);
+  animation: float 15s infinite linear;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) translateX(0);
+  }
+  25% {
+    transform: translateY(-20vh) translateX(10vw);
+  }
+  50% {
+    transform: translateY(10vh) translateX(20vw);
+  }
+  75% {
+    transform: translateY(-10vh) translateX(-10vw);
+  }
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+}
+
+/* Generate random positions and sizes for balls */
+.ball:nth-child(1) {
+  width: 80px;
+  height: 80px;
+  top: 10%;
+  left: 5%;
+  animation-delay: 0s;
+  animation-duration: 18s;
+}
+.ball:nth-child(2) {
+  width: 120px;
+  height: 120px;
+  top: 70%;
+  left: 80%;
+  animation-delay: 2s;
+  animation-duration: 20s;
+}
+.ball:nth-child(3) {
+  width: 60px;
+  height: 60px;
+  top: 30%;
+  left: 60%;
+  animation-delay: 4s;
+  animation-duration: 15s;
+}
+.ball:nth-child(4) {
+  width: 100px;
+  height: 100px;
+  top: 50%;
+  left: 20%;
+  animation-delay: 1s;
+  animation-duration: 22s;
+}
+.ball:nth-child(5) {
+  width: 70px;
+  height: 70px;
+  top: 80%;
+  left: 40%;
+  animation-delay: 3s;
+  animation-duration: 17s;
+}
+.ball:nth-child(6) {
+  width: 90px;
+  height: 90px;
+  top: 20%;
+  left: 30%;
+  animation-delay: 5s;
+  animation-duration: 19s;
+}
+.ball:nth-child(7) {
+  width: 50px;
+  height: 50px;
+  top: 60%;
+  left: 10%;
+  animation-delay: 2s;
+  animation-duration: 16s;
+}
+.ball:nth-child(8) {
+  width: 110px;
+  height: 110px;
+  top: 40%;
+  left: 70%;
+  animation-delay: 1s;
+  animation-duration: 21s;
+}
+.ball:nth-child(9) {
+  width: 65px;
+  height: 65px;
+  top: 25%;
+  left: 85%;
+  animation-delay: 4s;
+  animation-duration: 18s;
+}
+.ball:nth-child(10) {
+  width: 85px;
+  height: 85px;
+  top: 75%;
+  left: 15%;
+  animation-delay: 3s;
+  animation-duration: 20s;
+}
+.ball:nth-child(11) {
+  width: 45px;
+  height: 45px;
+  top: 35%;
+  left: 45%;
+  animation-delay: 0s;
+  animation-duration: 15s;
+}
+.ball:nth-child(12) {
+  width: 95px;
+  height: 95px;
+  top: 55%;
+  left: 65%;
+  animation-delay: 2s;
+  animation-duration: 19s;
+}
+.ball:nth-child(13) {
+  width: 75px;
+  height: 75px;
+  top: 15%;
+  left: 25%;
+  animation-delay: 1s;
+  animation-duration: 17s;
+}
+.ball:nth-child(14) {
+  width: 55px;
+  height: 55px;
+  top: 65%;
+  left: 55%;
+  animation-delay: 3s;
+  animation-duration: 16s;
+}
+.ball:nth-child(15) {
+  width: 105px;
+  height: 105px;
+  top: 45%;
+  left: 35%;
+  animation-delay: 4s;
+  animation-duration: 22s;
+}
+
+.process {
+  max-width: 1200px;
+  margin: 0 auto 3rem;
+  padding: 0 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.processTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: #f97316;
+  position: relative;
+  display: inline-block;
+}
+
+.processTitle::after {
+  content: '';
+  position: absolute;
+  width: 50%;
+  height: 4px;
+  background: #fff;
+  bottom: -10px;
+  left: 25%;
+  border-radius: 2px;
+}
+
+.steps {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.step:hover {
+  transform: translateY(-5px);
+}
+
+.stepButton {
+  background-color: #f97316;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.75rem;
+  border-radius: 1.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.stepButton:hover {
+  background-color: #ff8c00;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.stepDescription {
+  max-width: 250px;
+  font-size: 1rem;
+  color: #e2e8f0;
+  line-height: 1.5;
+}
+
+.arrow {
+  font-size: 2rem;
+  margin: 1.5rem 0;
+  align-self: center;
+  color: #f97316;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+}
+
+.webDevSection {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  background-color: #212531;
+  border-radius: 1rem;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  position: relative;
+  z-index: 1;
+}
+
+.webDevTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #f97316;
+}
+
+.webDevSubtitle {
+  font-size: 1.1rem;
+  color: #fff;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.getStartedButton {
+  background-color: #f97316;
+  color: #fff;
+  border: none;
+  padding: 0.9rem 2.5rem;
+  border-radius: 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.getStartedButton:hover {
+  background-color: #ff8c00;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .container {
+    padding: 3rem 0;
+  }
+  
+  .steps {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .arrow {
+    transform: rotate(90deg);
+    margin: 0.5rem 0;
+  }
+
+  .stepDescription {
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+
+  .webDevTitle {
+    font-size: 1.5rem;
+  }
+
+  .webDevSubtitle {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .processTitle {
+    font-size: 1.5rem;
+  }
+
+  .stepButton {
+    font-size: 0.9rem;
+    padding: 0.6rem 1.5rem;
+  }
+
+  .webDevTitle {
+    font-size: 1.3rem;
+  }
+
+  .webDevSubtitle {
+    font-size: 0.9rem;
+  }
+
+  .getStartedButton {
+    font-size: 1rem;
+    padding: 0.8rem 2rem;
+  }
+}
