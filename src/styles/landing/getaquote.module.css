@@ -2,16 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 /* Form Wrapper */
-.formWrapper,
-:global(.getaquote-module__G5UDDW__formWrapper) {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: auto;
-    padding: 0;
-    background: transparent !important;
-    font-family: 'Poppins', sans-serif;
-}
+
 
 /* Form Container */
 .formContainer {

@@ -40,6 +40,17 @@ a {
   border-top-color: white !important;
 }
 
+.formWrapper,
+.getaquote-module__G5UDDW__formWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: auto;
+    padding: 0;
+    background: transparent !important;
+    font-family: 'Poppins', sans-serif;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
