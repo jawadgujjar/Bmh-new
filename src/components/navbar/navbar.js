@@ -4,7 +4,22 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Navbar, Nav, Container, Button, NavDropdown } from "react-bootstrap";
-import { CiMobile3 } from "react-icons/ci";
+import { 
+  CiMobile3, 
+  CiDesktop, 
+  CiShoppingCart, 
+  CiSettings 
+} from "react-icons/ci";
+import { 
+  FiSearch, 
+  FiMapPin, 
+  FiUserCheck, 
+  FiSmile, 
+  FiShare2,
+  FiGlobe,
+  FiSmartphone,
+  FiLayers
+} from "react-icons/fi";
 import styles from "../../styles/navbar.module.css";
 
 function NavbarBmh() {
@@ -64,10 +79,10 @@ function NavbarBmh() {
       collapseOnSelect
     >
       <Container fluid className={styles.mainContainer}>
-        <Navbar.Brand 
-          as={Link} 
-          href="/" 
-          onClick={handleNavClick} 
+        <Navbar.Brand
+          as={Link}
+          href="/"
+          onClick={handleNavClick}
           className={styles.mainBrand}
         >
           <img
@@ -78,8 +93,8 @@ function NavbarBmh() {
         </Navbar.Brand>
 
         <div className={styles.changeNavbarNav}>
-          <Navbar.Toggle 
-            aria-controls="basic-navbar-nav" 
+          <Navbar.Toggle
+            aria-controls="basic-navbar-nav"
             className={styles.customToggle}
             aria-label="Toggle navigation"
           />
@@ -94,45 +109,58 @@ function NavbarBmh() {
               show={activeDropdown === 'digital-marketing-dropdown'}
               onToggle={(isOpen) => handleDropdownToggle('digital-marketing-dropdown', isOpen)}
             >
-              <NavDropdown.Item 
-                as={Link} 
-                href="/seocompany" 
+              <NavDropdown.Item
+                as={Link}
+                href="/digitalmarketing"
                 onClick={handleNavClick}
                 className={styles.navDropdownItem}
               >
-                • SEO Company
+                <FiSearch className={styles.icon} /> Digital Marketing
               </NavDropdown.Item>
-              <NavDropdown.Item 
-                as={Link} 
-                href="/localseo" 
+
+              <NavDropdown.Item
+                as={Link}
+                href="/seocompany"
                 onClick={handleNavClick}
                 className={styles.navDropdownItem}
               >
-                • Local SEO
+                <FiSearch className={styles.icon} /> SEO Company
               </NavDropdown.Item>
-              <NavDropdown.Item 
-                as={Link} 
-                href="/hireseoconsultant" 
+
+              <NavDropdown.Item
+                as={Link}
+                href="/localseo"
                 onClick={handleNavClick}
                 className={styles.navDropdownItem}
               >
-                • Hire SEO Consultant
+                <FiMapPin className={styles.icon} /> Local SEO
               </NavDropdown.Item>
-              <NavDropdown.Item 
-                as={Link} 
-                href="/dentalseo" 
+
+              <NavDropdown.Item
+                as={Link}
+                href="/hireseoconsultant"
                 onClick={handleNavClick}
                 className={styles.navDropdownItem}
               >
-                • Dental SEO Company
+                <FiUserCheck className={styles.icon} /> Hire SEO Consultant
               </NavDropdown.Item>
-              <NavDropdown.Item 
-                as={Link} 
-                href="/socialmediamarketing" 
+
+              <NavDropdown.Item
+                as={Link}
+                href="/dentalseo"
                 onClick={handleNavClick}
                 className={styles.navDropdownItem}
               >
-                • Cosmetics SEO Company
+                <FiSmile className={styles.icon} /> Dental SEO Company
+              </NavDropdown.Item>
+
+              <NavDropdown.Item
+                as={Link}
+                href="/socialmediamarketing"
+                onClick={handleNavClick}
+                className={styles.navDropdownItem}
+              >
+                <FiShare2 className={styles.icon} /> Cosmetics SEO Company
               </NavDropdown.Item>
             </NavDropdown>
 
@@ -143,29 +171,29 @@ function NavbarBmh() {
               show={activeDropdown === 'web-development-dropdown'}
               onToggle={(isOpen) => handleDropdownToggle('web-development-dropdown', isOpen)}
             >
-              <NavDropdown.Item 
-                as={Link} 
-                href="/webdevelopmentpage" 
+              <NavDropdown.Item
+                as={Link}
+                href="/webdevelopment"
                 onClick={handleNavClick}
                 className={styles.navDropdownItem}
               >
-                • Website Design
+                <CiDesktop className={styles.icon} /> Website Design
               </NavDropdown.Item>
-              <NavDropdown.Item 
-                as={Link} 
-                href="/ecommercedevelopment" 
+              <NavDropdown.Item
+                as={Link}
+                href="/ecommercedevelopment"
                 onClick={handleNavClick}
                 className={styles.navDropdownItem}
               >
-                • E-commerce Development
+                <CiShoppingCart className={styles.icon} /> E-commerce Development
               </NavDropdown.Item>
-              <NavDropdown.Item 
-                as={Link} 
-                href="/custom-software" 
+              <NavDropdown.Item
+                as={Link}
+                href="/custom-software"
                 onClick={handleNavClick}
                 className={styles.navDropdownItem}
               >
-                • Custom Software
+                <CiSettings className={styles.icon} /> Custom Software
               </NavDropdown.Item>
             </NavDropdown>
 
@@ -176,35 +204,35 @@ function NavbarBmh() {
               show={activeDropdown === 'app-development-dropdown'}
               onToggle={(isOpen) => handleDropdownToggle('app-development-dropdown', isOpen)}
             >
-              <NavDropdown.Item 
-                as={Link} 
-                href="/mobile-app-development" 
+              <NavDropdown.Item
+                as={Link}
+                href="/appdevelopment"
                 onClick={handleNavClick}
                 className={styles.navDropdownItem}
               >
-                • Mobile App Development
+                <FiSmartphone className={styles.icon} /> Mobile App Development
               </NavDropdown.Item>
-              <NavDropdown.Item 
-                as={Link} 
-                href="/web-app-development" 
+              <NavDropdown.Item
+                as={Link}
+                href="/web-app-development"
                 onClick={handleNavClick}
                 className={styles.navDropdownItem}
               >
-                • Web App Development
+                <FiGlobe className={styles.icon} /> Web App Development
               </NavDropdown.Item>
-              <NavDropdown.Item 
-                as={Link} 
-                href="/hybrid-app-development" 
+              <NavDropdown.Item
+                as={Link}
+                href="/hybrid-app-development"
                 onClick={handleNavClick}
                 className={styles.navDropdownItem}
               >
-                • Hybrid App Development
+                <FiLayers className={styles.icon} /> Hybrid App Development
               </NavDropdown.Item>
             </NavDropdown>
 
-            <Nav.Link 
-              as={Link} 
-              href="/portfolio" 
+            <Nav.Link
+              as={Link}
+              href="/portfolio"
               onClick={handleNavClick}
               className={styles.mainLink}
               active={pathname === "/portfolio"}
@@ -212,9 +240,9 @@ function NavbarBmh() {
               Portfolio
             </Nav.Link>
 
-            <Link href="/get-quote" passHref>
-              <Button 
-                variant="primary" 
+            <Link href="/getaquote" passHref>
+              <Button
+                variant="primary"
                 className={styles.quoteButton}
                 onClick={handleNavClick}
               >
@@ -222,8 +250,8 @@ function NavbarBmh() {
               </Button>
             </Link>
 
-            <a 
-              href="tel:+1234567890" 
+            <a
+              href="tel:+1234567890"
               className={styles.phoneNumberDiv}
               onClick={() => setExpanded(false)}
             >

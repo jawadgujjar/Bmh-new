@@ -50,11 +50,16 @@ function Keywordsdigital() {
 
   return (
     <div className={styles.seoContainer}>
-      <h1 className={styles.mainTitle}>Affordable SEO Packages That Works</h1>
-      
-      <h2 className={styles.subTitle}>
-        Why You Should Trust On The Custom Websites With Your Biggest Goals?
-      </h2>
+      <div className={styles.headerSection}>
+        <h1 className={styles.mainTitle}>Premium SEO Solutions That Deliver Results</h1>
+        
+        <div className={styles.subTitleContainer}>
+          <h2 className={styles.subTitle}>
+            Why Trust Our Expertise With Your Digital Growth?
+          </h2>
+          <div className={styles.titleUnderline}></div>
+        </div>
+      </div>
       
       {/* Keywords buttons row */}
       <div className={styles.keywordsRow}>
@@ -64,17 +69,31 @@ function Keywordsdigital() {
             className={`${styles.keywordButton} ${activeKeyword === keyword ? styles.activeKeyword : ''}`}
             onClick={() => handleKeywordClick(keyword)}
           >
-            {keyword}
+            <span className={styles.keywordText}>{keyword}</span>
+            {activeKeyword === keyword && <div className={styles.activeIndicator}></div>}
           </button>
         ))}
       </div>
       
-      <hr className={styles.divider} />
+      <div className={styles.dividerContainer}>
+        <div className={styles.dividerLine}></div>
+        <div className={styles.dividerIcon}>✦</div>
+        <div className={styles.dividerLine}></div>
+      </div>
       
       {/* Dynamic content section */}
       <div className={styles.contentSection}>
-        <h3 className={styles.contentTitle}>{activeContent.title}</h3>
+        <div className={styles.contentHeader}>
+          <h3 className={styles.contentTitle}>{activeContent.title}</h3>
+          <div className={styles.contentIcon}>◉</div>
+        </div>
         <p className={styles.contentText}>{activeContent.content}</p>
+        <div className={styles.contentFooter}>
+          <button className={styles.ctaButton}>
+            Explore Service
+            <span className={styles.arrow}>→</span>
+          </button>
+        </div>
       </div>
     </div>
   );

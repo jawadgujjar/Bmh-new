@@ -5,8 +5,8 @@
 import Alice from "@/components/landing/alicecarousel";
 import Calltoaction from "@/components/landing/calltoaction";
 import Carousel from "@/components/landing/carousel";
+import FAQ from "@/components/landing/faqs";
 import Forwhom from "@/components/landing/forwhom";
-import Form1 from "@/components/landing/getaquote";
 import HeroMain from "@/components/landing/heromain";
 import ProposalForm from "@/components/landing/proposalform";
 import Reviews from "@/components/landing/reviews";  
@@ -35,6 +35,7 @@ export default function Home() {
       <Reward/>
       <ProposalForm/>
       {/* <Form1/> */}
+      <FAQ/>
 
     </>
   );
