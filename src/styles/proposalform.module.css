@@ -29,19 +29,7 @@
     padding: 0 1rem;
 }
 
-/* Form container adjustments */
-:global(.formContainer) {
-    background-color: #E6F0FA !important;
-    box-shadow: none !important;
-    padding: 20px !important;
-    border-radius: 10px !important;
-}
 
-:global(.formWrapper) {
-    min-height: auto !important;
-    padding: 0 !important;
-    background: transparent !important;
-}
 
 /* Contact Info Styles */
 .contactInfoContainer {
