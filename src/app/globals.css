@@ -70,3 +70,53 @@ a {
     color-scheme: dark;
   }
 }
+/* ==== Proposal Form Overrides ==== */
+/* .customInput,
+.customTextarea,
+.customInputNumber {
+  background-color: white !important;
+  border: 1px solid #ddd !important;
+}
+
+.submitButton {
+  background-color: rgb(253, 126, 20) !important;
+  border: none !important;
+  color: white !important;
+}
+
+.submitButton:hover {
+  background-color: rgb(230, 110, 10) !important;
+}
+
+.formHeading {
+  color: #333 !important;
+}
+
+.h6Form {
+  color: #333 !important;
+}
+
+.callLink {
+  color: rgb(253, 126, 20) !important;
+}
+
+.formContainer {
+  background-color: #E6F0FA !important;
+  box-shadow: none !important;
+  padding: 20px !important;
+  border-radius: 10px !important;
+  width: 100% !important;
+}
+
+@media (max-width: 768px) {
+  .formContainer {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .formContainer {
+    padding: 15px !important;
+    width: 100% !important;
+  }
+} */
