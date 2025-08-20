@@ -36,8 +36,33 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
 .dropdown-toggle::after {
   border-top-color: white !important;
+}
+
+.formWrapper,
+.getaquote-module__G5UDDW__formWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: auto;
+    padding: 0;
+    background: transparent !important;
+    font-family: 'Poppins', sans-serif;
+}
+/* Form container adjustments */
+.formContainer {
+    background-color: #E6F0FA !important;
+    box-shadow: none !important;
+    padding: 20px !important;
+    border-radius: 10px !important;
+}
+
+.formWrapper {
+    min-height: auto !important;
+    padding: 0 !important;
+    background: transparent !important;
 }
 
 @media (prefers-color-scheme: dark) {

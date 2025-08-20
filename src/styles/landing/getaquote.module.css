@@ -1,0 +1,153 @@
+/* Font Import - Add this at the top of your CSS */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* Form Wrapper */
+
+
+/* Form Container */
+.formContainer {
+    width: 45rem;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    margin: 1rem auto;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Heading */
+.formHeading {
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #333;
+    text-transform: uppercase;
+    font-size: 1.8rem;
+    letter-spacing: 0.5px;
+}
+
+/* Labels */
+.formLabel {
+    color: #333;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+/* Input Fields */
+.customInput,
+.customTextarea,
+.customInputNumber {
+    border-radius: 8px;
+    color: #333;
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    transition: all 0.3s ease;
+    width: 100%;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Height Adjustments */
+.customInput,
+.customTextarea,
+.customInputNumber {
+    height: 40px;
+}
+
+.customTextarea {
+    min-height: 120px;
+}
+
+/* Placeholders */
+.customTextarea::placeholder,
+.customInput::placeholder,
+.customInputNumber::placeholder {
+    color: #888;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Input Number Specific */
+.customInputNumber {
+    height: auto;
+}
+
+/* Submit Button */
+.submitButton {
+    border: 1px solid #000;
+    background-color: #000;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    height: 40px;
+    font-family: 'Poppins', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.submitButton:hover {
+    background-color: #fff !important;
+    border-color: #000 !important;
+    color: #000 !important;
+}
+
+/* Footer Text */
+.h6Form {
+    text-align: center;
+    color: #333;
+    margin: 2rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+}
+
+/* Phone Link */
+.callLink {
+    color: #FFA500;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.callLink:hover {
+    text-decoration: underline;
+}
+
+/* Form Layout */
+.formItemRow {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.formItemRow :global(.ant-form-item) {
+    flex: 1;
+    min-width: 0;
+    margin-bottom: 0 !important;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .formContainer {
+        padding: 15px;
+    }
+
+    .formItemRow {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .customInput,
+    .customTextarea,
+    .customInputNumber {
+        height: auto;
+    }
+}
+
+@media (max-width: 425px) {
+    .formContainer {
+        padding: 15px;
+        width: 20rem;
+    }
+    
+    .formHeading {
+        font-size: 1.5rem;
+    }
+}

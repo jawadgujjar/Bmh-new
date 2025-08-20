@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import AliceCarousel from 'react-alice-carousel';
 import { Card, Avatar } from 'antd';
