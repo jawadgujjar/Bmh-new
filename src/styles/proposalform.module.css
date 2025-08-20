@@ -3,11 +3,13 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 2rem 0;
+    padding: 2rem 1rem;
     background-color: #E6F0FA;
     border-radius: 8px;
     margin: 2rem auto;
-    max-width: 1200px;
+    max-width: 1000px;
+    width: 95%;
+    box-sizing: border-box;
 }
 
 .freeText {
@@ -15,58 +17,173 @@
 }
 
 .getProposalText {
-    font-size: 2.3rem;
+    font-size: 2rem;
     text-align: center;
     font-weight: bold;
     margin-bottom: 2rem;
     color: #333;
+    line-height: 1.2;
+    padding: 0 1rem;
 }
 
 .centerProposalform {
     width: 100%;
-    max-width: 1200px;
     margin: 0 auto;
-    padding: 0 1rem;
 }
 
+/* Form container */
+.formContainer {
+    width: 100%;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
 
+.form {
+    width: 100%;
+}
+
+.formRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-size: 0.95rem;
+}
+
+.input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    width: 100%;
+    transition: border-color 0.3s;
+}
+
+.input:focus {
+    border-color: rgb(253, 126, 20);
+    outline: none;
+}
+
+.inputWithIcon {
+    position: relative;
+}
+
+.dollarIcon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+}
+
+.inputWithIcon .input {
+    padding-left: 30px;
+}
+
+.textarea {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    width: 100%;
+    resize: vertical;
+    min-height: 120px;
+    font-family: inherit;
+    transition: border-color 0.3s;
+}
+
+.textarea:focus {
+    border-color: rgb(253, 126, 20);
+    outline: none;
+}
+
+.submitButton {
+    background-color: rgb(253, 126, 20);
+    color: white;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+    margin: 1.5rem 0;
+}
+
+.submitButton:hover {
+    background-color: rgb(230, 110, 10);
+}
+
+.callText {
+    text-align: center;
+    color: #666;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+}
+
+.callLink {
+    color: rgb(253, 126, 20);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.callLink:hover {
+    text-decoration: underline;
+}
 
 /* Contact Info Styles */
 .contactInfoContainer {
     width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 2rem;
-    background-color: #E6F0FA;
     border-radius: 10px;
-    box-shadow: none;
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    height: 100%;
 }
 
 .contactTitle {
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: bold;
     margin-bottom: 1.5rem;
     color: #333;
+    text-align: center;
 }
 
 .contactDetails {
     text-align: center;
     margin-bottom: 2rem;
+    width: 100%;
 }
 
 .contactItem {
     display: flex;
     align-items: center;
+    justify-content: center;
     margin-bottom: 1rem;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
 }
 
 .contactIcon {
     color: rgb(253, 126, 20);
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     margin-right: 1rem;
 }
 
@@ -79,11 +196,12 @@
     justify-content: center;
     gap: 1.5rem;
     margin-bottom: 2rem;
+    flex-wrap: wrap;
 }
 
 .socialIcon {
     color: rgb(253, 126, 20);
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     transition: color 0.3s;
 }
 
@@ -100,84 +218,128 @@
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s;
+    min-width: 180px;
 }
 
 .contactButton:hover {
     background-color: rgb(230, 110, 10);
 }
 
-/* Form input styling overrides */
-:global(.customInput),
-:global(.customTextarea),
-:global(.customInputNumber) {
-    background-color: white !important;
-    border: 1px solid #ddd !important;
-}
-
-:global(.submitButton) {
-    background-color: rgb(253, 126, 20) !important;
-    border: none !important;
-    color: white !important;
-}
-
-:global(.submitButton:hover) {
-    background-color: rgb(230, 110, 10) !important;
-}
-
-:global(.formHeading) {
-    color: #333 !important;
-}
-
-:global(.h6Form) {
-    color: #333 !important;
-}
-
-:global(.callLink) {
-    color: rgb(253, 126, 20) !important;
-}
-
 /* Responsive adjustments */
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
+    .mainProposalform {
+        margin: 2rem auto;
+        width: 95%;
+    }
+}
+
+@media (max-width: 992px) {
     .getProposalText {
         font-size: 1.8rem;
     }
     
     .contactTitle {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
     }
-
-    .contactItem {
-        font-size: 1rem;
-    }
-
-    :global(.formContainer) {
-        width: 100% !important;
+    
+    .mainProposalform {
+        width: 90%;
     }
 }
 
-@media (max-width: 480px) {
+/* 768px specific adjustments */
+@media (max-width: 768px) {
+    .mainProposalform {
+        width: 85%;
+        padding: 1.5rem;
+        margin: 1.5rem auto;
+    }
+    
     .getProposalText {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .formContainer {
+        padding: 1.5rem;
+    }
+    
+    .formRow {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
     }
     
     .contactInfoContainer {
-        padding: 20px;
+        padding: 1.5rem;
+        margin-top: 1.5rem;
+    }
+    
+    .contactTitle {
+        font-size: 1.5rem;
+        margin-bottom: 1.2rem;
+    }
+    
+    .contactItem {
+        flex-direction: row;
+        font-size: 1rem;
+    }
+    
+    .contactIcon {
+        font-size: 1.2rem;
+        margin-right: 0.8rem;
+    }
+    
+    .socialIcons {
+        gap: 1.2rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .socialIcon {
+        font-size: 1.4rem;
+    }
+    
+    .submitButton {
+        padding: 12px 24px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .mainProposalform {
+        width: 95%;
+        padding: 1rem;
+        margin: 1rem auto;
+    }
+    
+    .getProposalText {
+        font-size: 1.4rem;
+        padding: 0;
+    }
+    
+    .formContainer {
+        padding: 1.2rem;
+    }
+    
+    .contactInfoContainer {
+        padding: 1.2rem;
     }
 
     .contactTitle {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
     }
 
-    .socialIcons {
-        gap: 1rem;
+    .contactButton {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+        min-width: 160px;
     }
-
-    .socialIcon {
-        font-size: 1.5rem;
+    
+    .label {
+        font-size: 0.9rem;
     }
-
-    :global(.formContainer) {
-        padding: 15px !important;
-        width: 100% !important;
+    
+    .input, .textarea {
+        padding: 10px;
+        font-size: 0.95rem;
     }
 }
