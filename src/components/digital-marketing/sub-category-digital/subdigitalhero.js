@@ -1,16 +1,16 @@
 import React from 'react';
 import { Button } from 'antd';
 import Link from 'next/link';
-import styles from '../../styles/digital-marketing/digitalhero.module.css';
+import styles from '../../../styles/digital-marketing/sub-category-digital/subdigitalhero.module.css';
 import Image from 'next/image';
 
-function HeroDigitalMarketing() {
+function SubHeroSEOCompany() {
     return (
         <div className={styles.backheroDigital}>
             <div className={styles.backgroundImage}>
                 <Image
                     src="/images/hero.jpg"
-                    alt="Digital Marketing Background"
+                    alt="SEO Company Background"
                     layout="fill"
                     objectFit="cover"
                     quality={100}
@@ -19,11 +19,14 @@ function HeroDigitalMarketing() {
             </div>
 
             <div className={styles.mainHerodigital}>
-                <p className={styles.heroFirstText}>Digital Marketing Services</p>
-                <p className={styles.growText}>Expand your client base with targeted, data-driven strategies that boost visibility, build lasting trust, and deliver measurable results for your business.</p>
+                <p className={styles.heroFirstText}>SEO Company Services</p>
+                <p className={styles.growText}>
+                    Drive more traffic, boost your search engine rankings, and grow your business online 
+                    with our expert SEO strategies tailored to your industry and audience.
+                </p>
                 <div className={styles.formDigital}>
                     <Link href="/getaquote" passHref>
-                        <Button className={styles.proposalButton}>Get My Free Proposal</Button>
+                        <Button className={styles.proposalButton}>Get My Free SEO Proposal</Button>
                     </Link>
                 </div>
             </div>
@@ -31,4 +34,4 @@ function HeroDigitalMarketing() {
     );
 }
 
-export default HeroDigitalMarketing;
+export default SubHeroSEOCompany;

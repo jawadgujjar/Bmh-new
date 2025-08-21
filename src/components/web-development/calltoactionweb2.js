@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaPhone } from 'react-icons/fa';
+import { FaPhone, FaArrowRight } from 'react-icons/fa';
 import styles from '../../styles/web-development/calltoactionweb2.module.css';
 
 function Calltoactionweb2() {
@@ -12,14 +12,31 @@ function Calltoactionweb2() {
           <span className={styles.circle}></span>
         </div>
         
-        <h3 className={styles.ctaSubtitle}>Let’s Start Venture With Us Call Now</h3>
-        <p className={styles.ctaDescription}>Let's Discuss How We Can Help Bring Your Project Life</p>
+        <h3 className={styles.ctaSubtitle}>Let's Start Your Venture With Us</h3>
+        <p className={styles.ctaDescription}>Let's Discuss How We Can Help Bring Your Project to Life</p>
         
-        <a href="tel:2134167355" className={styles.ctaButton}>
-          <FaPhone className={styles.phoneIcon} />
-          (213) 416-7355
-        </a>
+        <div className={styles.ctaActions}>
+          <a href="tel:2134167355" className={styles.ctaButton}>
+            <div className={styles.buttonContent}>
+              <FaPhone className={styles.phoneIcon} />
+              <span>(213) 416-7355</span>
+              <div className={styles.buttonHoverEffect}></div>
+            </div>
+          </a>
+          
+          <a href="#contact" className={styles.secondaryButton}>
+            <span>Schedule Consultation</span>
+            <FaArrowRight className={styles.arrowIcon} />
+          </a>
+        </div>
       </div>
+      
+      <div className={styles.decorativeElement}>
+        <div className={styles.decorativeCircle}></div>
+        <div className={styles.decorativeCircle}></div>
+        <div className={styles.decorativeCircle}></div>
+      </div>
+      
       <div className={styles.animatedLine}></div>
     </div>
   );

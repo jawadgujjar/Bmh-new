@@ -1,19 +1,22 @@
 import React from 'react';
 import { FaPhone, FaArrowRight } from 'react-icons/fa';
-import styles from '../../styles/app-development/calltoactionapp2.module.css';
+import styles from '../../../styles/digital-marketing/sub-category-digital/subcalltoactiondigital2.module.css';
 
-function Calltoactionapp2() {
+function SubCalltoactiondigital2() {
   return (
     <div className={styles.ctaContainer}>
       <div className={styles.ctaContent}>
         <div className={styles.titleWrapper}>
           <span className={styles.circle}></span>
-          <h2 className={styles.ctaTitle}>What are you waiting for?</h2>
+          <h2 className={styles.ctaTitle}>Ready To Transform Your Digital Presence?</h2>
           <span className={styles.circle}></span>
         </div>
         
-        <h3 className={styles.ctaSubtitle}>Let's Start Your App Venture With Us</h3>
-        <p className={styles.ctaDescription}>Let's Discuss How We Can Help Bring Your Mobile App to Life</p>
+        <h3 className={styles.ctaSubtitle}>Let's Create Something Extraordinary Together</h3>
+        <p className={styles.ctaDescription}>
+          Our team of digital experts is ready to elevate your brand with tailored strategies 
+          that deliver exceptional results.
+        </p>
         
         <div className={styles.ctaActions}>
           <a href="tel:2134167355" className={styles.ctaButton}>
@@ -25,7 +28,7 @@ function Calltoactionapp2() {
           </a>
           
           <a href="#contact" className={styles.secondaryButton}>
-            <span>Schedule App Consultation</span>
+            <span>Schedule Consultation</span>
             <FaArrowRight className={styles.arrowIcon} />
           </a>
         </div>
@@ -42,4 +45,4 @@ function Calltoactionapp2() {
   );
 }
 
-export default Calltoactionapp2;
+export default SubCalltoactiondigital2;

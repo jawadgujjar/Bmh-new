@@ -1,0 +1,64 @@
+.aboutdigitalMain {
+    margin-top: 4rem;
+    margin-bottom: 3rem;
+}
+
+.provenTextDigital {
+    font-size: 1.7rem;
+    font-weight: bolder;
+}
+
+.specialText {
+    font-weight: bolder;
+}
+
+.allTextDigital {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.imageContainer {
+    position: relative;
+    width: 100%;
+    height: auto;
+}
+
+.callactionButton {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+}
+
+.proposalButton {
+    background-color: #fd7e14;
+    color: white;
+    border: none;
+    padding: 0 2rem;
+    height: 3rem;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.proposalButton:hover {
+    background-color: white !important;
+    color: #fd7e14 !important;
+    border: 1px solid #fd7e14 !important;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .provenTextDigital {
+        font-size: 1.4rem;
+    }
+    
+    .allTextDigital {
+        font-size: 1rem;
+    }
+    
+    .proposalButton {
+        width: 100%;
+        padding: 0 1rem;
+        font-size: 0.9rem;
+    }
+}

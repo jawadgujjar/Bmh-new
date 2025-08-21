@@ -63,39 +63,54 @@ function Keywordsweb() {
 
   return (
     <div className={styles.seoContainer}>
-      <h1 className={styles.mainTitle}>
-        Custom Web Development Solutions That Deliver Results
-      </h1>
-
-      <h2 className={styles.subTitle}>
-        Built for Performance, Designed for Impact — Let’s Develop a Website
-        That Works for Your Business.
-      </h2>
-
+      <div className={styles.headerSection}>
+        <h1 className={styles.mainTitle}>
+          Custom Web Development Solutions That Deliver Results
+        </h1>
+        
+        <div className={styles.subTitleContainer}>
+          <h2 className={styles.subTitle}>
+            Built for Performance, Designed for Impact — Let's Develop a Website
+            That Works for Your Business.
+          </h2>
+          <div className={styles.titleUnderline}></div>
+        </div>
+      </div>
+      
       {/* Keywords buttons row */}
       <div className={styles.keywordsRow}>
         {Object.keys(keywordContent).map((keyword, index) => (
-          <button
-            key={index}
-            className={`${styles.keywordButton} ${
-              activeKeyword === keyword ? styles.activeKeyword : ""
-            }`}
+          <button 
+            key={index} 
+            className={`${styles.keywordButton} ${activeKeyword === keyword ? styles.activeKeyword : ''}`}
             onClick={() => handleKeywordClick(keyword)}
           >
-            {keyword}
+            <span className={styles.keywordText}>{keyword}</span>
+            {activeKeyword === keyword && <div className={styles.activeIndicator}></div>}
           </button>
         ))}
       </div>
-
-      <hr className={styles.divider} />
-
-      {/* Dynamic content section - Safe rendering */}
-      {activeContent && (
-        <div className={styles.contentSection}>
+      
+      <div className={styles.dividerContainer}>
+        <div className={styles.dividerLine}></div>
+        <div className={styles.dividerIcon}>✦</div>
+        <div className={styles.dividerLine}></div>
+      </div>
+      
+      {/* Dynamic content section */}
+      <div className={styles.contentSection}>
+        <div className={styles.contentHeader}>
           <h3 className={styles.contentTitle}>{activeContent.title}</h3>
-          <p className={styles.contentText}>{activeContent.content}</p>
+          <div className={styles.contentIcon}>◉</div>
         </div>
-      )}
+        <p className={styles.contentText}>{activeContent.content}</p>
+        <div className={styles.contentFooter}>
+          <button className={styles.ctaButton}>
+            Explore Service
+            <span className={styles.arrow}>→</span>
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
