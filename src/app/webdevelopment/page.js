@@ -1,4 +1,5 @@
  
+import Carousel from "@/components/landing/carousel";
 import Calltoactionweb1 from "@/components/web-development/calltoactionweb1";
 import Calltoactionweb2 from "@/components/web-development/calltoactionweb2";
 import Faqwebdevelopment1 from "@/components/web-development/faqswebdevelopment";
@@ -14,6 +15,7 @@ export default function WebdevelopmentPage() {
       <Calltoactionweb1/>
       <Webservices1/>
       <Calltoactionweb2/>
+      <Carousel/>
       <Faqwebdevelopment1/>
     </main>
   );

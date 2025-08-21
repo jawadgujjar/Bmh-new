@@ -5,8 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Navbar, Nav, Container, Button, NavDropdown } from "react-bootstrap";
 import { 
-  CiMobile3, 
-  CiDesktop, 
+  CiMobile3,  
   CiShoppingCart, 
   CiSettings 
 } from "react-icons/ci";
@@ -17,9 +16,9 @@ import {
   FiSmile, 
   FiShare2,
   FiGlobe,
-  FiSmartphone,
   FiLayers
 } from "react-icons/fi";
+import { FaBullhorn,FaLaptopCode,FaMobileAlt } from "react-icons/fa";
 import styles from "../../styles/navbar.module.css";
 
 function NavbarBmh() {
@@ -113,14 +112,16 @@ function NavbarBmh() {
                 as={Link}
                 href="/digitalmarketing"
                 onClick={handleNavClick}
-                className={styles.navDropdownItem}
+                className={styles.navDropdownItemfirst}
               >
-                <FiSearch className={styles.icon} /> Digital Marketing
+                <FaBullhorn className={styles.icon} /> Digital Marketing
+              
               </NavDropdown.Item>
+              <div className={styles.orangeUnderline}></div>
 
               <NavDropdown.Item
                 as={Link}
-                href="/seocompany"
+                href="/digitalmarketing/seocompany"
                 onClick={handleNavClick}
                 className={styles.navDropdownItem}
               >
@@ -175,10 +176,12 @@ function NavbarBmh() {
                 as={Link}
                 href="/webdevelopment"
                 onClick={handleNavClick}
-                className={styles.navDropdownItem}
+                className={styles.navDropdownItemfirst}
               >
-                <CiDesktop className={styles.icon} /> Website Design
+                <FaLaptopCode className={styles.icon} /> Website Design
+                
               </NavDropdown.Item>
+              <div className={styles.orangeUnderline}></div>
               <NavDropdown.Item
                 as={Link}
                 href="/ecommercedevelopment"
@@ -208,10 +211,11 @@ function NavbarBmh() {
                 as={Link}
                 href="/appdevelopment"
                 onClick={handleNavClick}
-                className={styles.navDropdownItem}
+                className={styles.navDropdownItemfirst}
               >
-                <FiSmartphone className={styles.icon} /> Mobile App Development
+                <FaMobileAlt  className={styles.icon} /> Mobile App Development
               </NavDropdown.Item>
+              <div className={styles.orangeUnderline}></div>
               <NavDropdown.Item
                 as={Link}
                 href="/web-app-development"

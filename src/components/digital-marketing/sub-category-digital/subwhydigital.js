@@ -1,10 +1,10 @@
 import React from 'react';
-import styles from '../../styles/digital-marketing/whydigital.module.css'; // Using CSS Modules
+import styles from '../../../styles/digital-marketing/sub-category-digital/subwhydigital.module.css'; // Using CSS Modules
 import Link from 'next/link';
 import { Row, Col, Button } from 'antd';
 import Image from 'next/image'; // Using Next.js Image component
 
-function Whydigital() {
+function SubWhydigital() {
     return (
         <div className={styles.aboutdigitalMain}>
             <Row justify="center">
@@ -52,4 +52,4 @@ function Whydigital() {
     );
 }
 
-export default Whydigital;
+export default SubWhydigital;

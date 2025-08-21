@@ -1,8 +1,8 @@
-/* keywordsapp.module.css */
+/* keywordsdigital.module.css */
 .seoContainer {
   margin: 0 auto;
   padding: 50px 30px;
-  background: linear-gradient(135deg, #fef7ed 0%, #ffffff 100%);
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
   border-radius: 16px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
   position: relative;
@@ -16,7 +16,7 @@
   right: 0;
   width: 300px;
   height: 300px;
-  background: radial-gradient(circle, rgba(247, 152, 13, 0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(253, 126, 20, 0.1) 0%, transparent 70%);
   z-index: 0;
 }
 
@@ -54,7 +54,7 @@
 .titleUnderline {
   height: 3px;
   width: 60%;
-  background: linear-gradient(90deg, transparent, #F7980D, transparent);
+  background: linear-gradient(90deg, transparent, #FD7E14, transparent);
   margin: 0 auto;
   border-radius: 3px;
 }
@@ -87,15 +87,15 @@
 
 .keywordButton:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(247, 152, 13, 0.15);
-  border-color: #F7980D;
+  box-shadow: 0 10px 20px rgba(253, 126, 20, 0.15);
+  border-color: #FD7E14;
   color: #1a202c;
 }
 
 .keywordButton.activeKeyword {
-  background: linear-gradient(135deg, #F7980D 0%, #FBBF24 100%);
+  background: linear-gradient(135deg, #FD7E14 0%, #F6AD55 100%);
   color: white;
-  box-shadow: 0 10px 20px rgba(247, 152, 13, 0.2);
+  box-shadow: 0 10px 20px rgba(253, 126, 20, 0.2);
   border: none;
 }
 
@@ -129,7 +129,7 @@
 
 .dividerIcon {
   margin: 0 20px;
-  color: #F7980D;
+  color: #FD7E14;
   font-size: 20px;
 }
 
@@ -160,7 +160,7 @@
 
 .contentIcon {
   margin-left: 12px;
-  color: #F7980D;
+  color: #FD7E14;
   font-size: 14px;
 }
 
@@ -182,7 +182,7 @@
   align-items: center;
   gap: 8px;
   padding: 12px 24px;
-  background: linear-gradient(135deg, #F7980D 0%, #F59E0B 100%);
+  background: linear-gradient(135deg, #2D3748 0%, #4A5568 100%);
   color: white;
   border: none;
   border-radius: 8px;
@@ -193,7 +193,7 @@
 
 .ctaButton:hover {
   transform: translateX(5px);
-  box-shadow: 0 5px 15px rgba(247, 152, 13, 0.3);
+  box-shadow: 0 5px 15px rgba(45, 55, 72, 0.3);
 }
 
 .arrow {

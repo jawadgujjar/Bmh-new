@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from 'react';
-import styles from '../../styles/digital-marketing/keywordsdigital.module.css';
+import styles from '../../../styles/digital-marketing/sub-category-digital/subkeywordsdigital.module.css';
 
-function Keywordsdigital() {
+function SubKeywordsdigital() {
   // SEO keywords with associated content
   const keywordContent = {
     "Major Search Engines": {
@@ -100,4 +100,4 @@ const [activeKeyword, setActiveKeyword] = useState("Major Search Engines");
   );
 }
 
-export default Keywordsdigital;
+export default SubKeywordsdigital;

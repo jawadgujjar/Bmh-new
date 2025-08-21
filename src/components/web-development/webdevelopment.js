@@ -85,7 +85,7 @@ const Webdevelopment1 = () => {
                         </li>
                     </ul>
                     <div className={styles.ctaButtons}>
-                        <Link href="/contact" className={styles.ctaButton}>Get Started</Link>
+                        <Link href="/getaquote" className={styles.ctaButton}>Get Started</Link>
                     </div>
                 </div>
             </div>

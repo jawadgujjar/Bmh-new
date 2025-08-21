@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from 'react';
-import styles from '../../styles/digital-marketing/calltoactiondigital1.module.css';
+import styles from '../../../styles/digital-marketing/sub-category-digital/subcalltoactiondigital1.module.css';
 
-function Calltoactionweb1() {
+function SubCalltoactiondigital1() {
   const [step, setStep] = useState(0); // 0 = initial, 1 = form, 2 = success
   const [formData, setFormData] = useState({
     name: '',
@@ -47,12 +47,12 @@ function Calltoactionweb1() {
         <div className={styles.initialStep}>
           <div className={styles.titleWrapper}>
             <div className={styles.circle}></div>
-            <h2 className={styles.ctaTitle}>See Your Digital Marketing Analysis</h2>
+            <h2 className={styles.ctaTitle}>Premium Digital Marketing Analysis</h2>
             <div className={styles.circle}></div>
           </div>
-          <p className={styles.ctaSubtitle}>Did You Experiencing Low Traffic & Make Your Website Fastest</p>
+          <p className={styles.ctaSubtitle}>Transform Your Online Presence With Expert Strategy</p>
           <p className={styles.ctaDescription}>
-            Enter your email to get a SEO analysis and schedule consultation about it.
+            Get a comprehensive SEO analysis and personalized consultation to elevate your digital marketing.
           </p>
           
           <button onClick={handleGetQuote} className={styles.quoteButton}>
@@ -167,4 +167,4 @@ function Calltoactionweb1() {
   );
 }
 
-export default Calltoactionweb1;
+export default SubCalltoactiondigital1;
