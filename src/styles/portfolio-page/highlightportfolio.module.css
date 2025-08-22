@@ -1,0 +1,96 @@
+/* styles/portfolio-page/imageportfolio.module.css */
+.highlightContainer {
+  padding: 80px 24px;
+  background: #f8f9fa;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+.highlightContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.title {
+  font-size: 36px;
+  font-weight: 600;
+  text-align: center;
+  color: #000;
+  margin-bottom: 50px;
+  letter-spacing: -0.5px;
+}
+
+.imageGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.imageWrapper:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.gridImage {
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.3s ease;
+}
+
+.imageWrapper:hover .gridImage {
+  transform: scale(1.05);
+}
+
+.gridImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  inset: 0;
+}
+
+/* Responsive design */
+@media (max-width: 992px) {
+  .imageGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  
+  .title {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .highlightContainer {
+    padding: 60px 20px;
+  }
+  
+  .imageGrid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .imageWrapper {
+    height: 200px;
+  }
+  
+  .title {
+    font-size: 28px;
+    margin-bottom: 30px;
+  }
+}
