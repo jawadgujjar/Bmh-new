@@ -87,23 +87,21 @@ const WebIndustries = () => {
               key={index}
               className={`${styles.carouselSlide} ${Math.abs(activeIndex - index) < 4 ? styles.activeSlide : ''}`}
             >
-              <a href={industry.link} target="_blank" rel="noopener noreferrer" className={styles.carouselLink}>
-                <div
-                  className={styles.carouselCard}
-                  onMouseEnter={() => handleMouseEnter(index)}
-                  onMouseLeave={() => handleMouseLeave(index)}
-                >
-                  <iframe
-                    ref={iframeRefs.current[index]}
-                    src={industry.link}
-                    className={styles.cardIframe}
-                    title={industry.title}
-                    sandbox="allow-scripts allow-same-origin"
-                  />
-                  <h3 className={styles.cardTitle}>{industry.title}</h3>
-                  <p className={styles.cardDescription}>{industry.description}</p>
-                </div>
-              </a>
+              <div
+                className={styles.carouselCard}
+                onMouseEnter={() => handleMouseEnter(index)}
+                onMouseLeave={() => handleMouseLeave(index)}
+              >
+                <iframe
+                  ref={iframeRefs.current[index]}
+                  src={industry.link}
+                  className={styles.cardIframe}
+                  title={industry.title}
+                  sandbox="allow-scripts allow-same-origin"
+                />
+                <h3 className={styles.cardTitle}>{industry.title}</h3>
+                <p className={styles.cardDescription}>{industry.description}</p>
+              </div>
             </div>
           ))}
         </div>

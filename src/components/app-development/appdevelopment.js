@@ -11,9 +11,9 @@ import { FaFire } from 'react-icons/fa';
 const Appdevelopment1 = () => {
     return (
         <section id="about" className={styles.section}>
-            <div className={styles.headerWrapper}>
+            {/* <div className={styles.headerWrapper}>
                 <h1 className={styles.brand}>Mobile App Development</h1>
-            </div>
+            </div> */}
 
             <div className={styles.container}>
                 <div className={styles.textContent}>
