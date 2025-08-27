@@ -75,7 +75,9 @@
   border: none;
   border-radius: 0.25rem;
   margin-bottom: 0.5rem;
+  overflow: auto;
 }
+
 
 .cardTitle {
   font-size: 1.1rem;

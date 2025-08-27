@@ -79,33 +79,32 @@ const SeoIndustries = () => {
       <h2 className={styles.carouselTitle}>SEO By Industries</h2>
       <p className={styles.carouselSubtitle}>SEO-driven app and web solutions for growth.</p>
       <div className={styles.carouselWrapper}>
-        <div 
+        <div
           className={styles.carouselTrack}
           style={{ transform: `translateX(-${(activeIndex * 25)}%)` }}
         >
           {industries.map((industry, index) => (
-            <div 
-              key={index}
-              className={`${styles.carouselSlide} ${Math.abs(activeIndex - index) < 4 ? styles.activeSlide : ''}`}
-            >
-              <a href={industry.link} target="_blank" rel="noopener noreferrer" className={styles.carouselLink}>
-                <div 
-                  className={styles.carouselCard}
-                  onMouseEnter={() => handleMouseEnter(index)}
-                  onMouseLeave={() => handleMouseLeave(index)}
-                >
-                  <iframe
-                    ref={iframeRefs.current[index]}
-                    src={industry.link}
-                    className={styles.cardIframe}
-                    title={industry.title}
-                    sandbox="allow-scripts allow-same-origin"
-                  />
-                  <h3 className={styles.cardTitle}>{industry.title}</h3>
-                  <p className={styles.cardDescription}>{industry.description}</p>
-                </div>
-              </a>
-            </div>
+            <div
+  key={index}
+  className={`${styles.carouselSlide} ${Math.abs(activeIndex - index) < 4 ? styles.activeSlide : ''}`}
+>
+  <div
+    className={styles.carouselCard}
+    onMouseEnter={() => handleMouseEnter(index)}
+    onMouseLeave={() => handleMouseLeave(index)}
+  >
+    <iframe
+      ref={iframeRefs.current[index]}
+      src={industry.link}
+      className={styles.cardIframe}
+      title={industry.title}
+      sandbox="allow-scripts allow-same-origin"
+    />
+    <h3 className={styles.cardTitle}>{industry.title}</h3>
+    <p className={styles.cardDescription}>{industry.description}</p>
+  </div>
+</div>
+
           ))}
         </div>
       </div>

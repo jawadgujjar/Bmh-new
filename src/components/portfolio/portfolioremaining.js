@@ -6,7 +6,7 @@ import styles from '../../styles/portfolioremianing.module.css';
 
 const PortfolioRemain = () => {
   const [activeCategory, setActiveCategory] = useState('All');
-  
+
   const categories = [
     'All',
     'Digital Marketing',
@@ -27,8 +27,8 @@ const PortfolioRemain = () => {
 
   return (
     <div>
-      <p className={styles.portfolio}>PORTFOLIO</p>
-      
+      {/* <p className={styles.portfolio}>PORTFOLIO</p> */}
+
       {/* Categories Section */}
       <div className={styles.categoriesContainer}>
         {categories.map((category) => (
@@ -41,15 +41,16 @@ const PortfolioRemain = () => {
           </button>
         ))}
       </div>
-      
+
       <Portfolio activeCategory={activeCategory} />
-      
+
       <div className={styles.containerportfolio}>
         <div className={styles.textBox}>
           <p>How Does Your Site Compare?</p>
-          <button className={styles.actionButton}>Free SEO Report</button>
+          <button className={styles.actionButton}>Free Report</button>
         </div>
       </div>
+
       <Carousel />
     </div>
   );

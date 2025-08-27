@@ -2,6 +2,7 @@ import Appdevelopment1 from "@/components/app-development/appdevelopment";
 import Calltoactionapp1 from "@/components/app-development/calltoactionapp1";
 import Calltoactionapp2 from "@/components/app-development/calltoactionapp2";
 import Faqapp1 from "@/components/app-development/faqsapp";
+import Heroapp1 from "@/components/app-development/heroapp";
 import Keywordsapp from "@/components/app-development/keywordsapp";
 import Appservices1 from "@/components/app-development/servicesapp";
 import Carousel from "@/components/landing/carousel";
@@ -11,6 +12,7 @@ import Carousel from "@/components/landing/carousel";
 export default function AppdevelopmentPage() {
   return (
     <main>
+        <Heroapp1/>
         <Appdevelopment1/>
         <Keywordsapp/>
         <Calltoactionapp1/>

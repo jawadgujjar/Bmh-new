@@ -1,0 +1,128 @@
+/* digitalhero.module.css */
+.backheroDigital {
+    position: relative;
+    height: 70vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+}
+
+.backgroundImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.backgroundImage::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; /* Changed to cover full height */
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+}
+
+.mainHerodigital {
+    z-index: 5;
+    color: white;
+    position: relative;
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.heroFirstText {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.growText {
+    color: rgb(253, 126, 20);
+    font-size: 1.3rem;
+    margin-bottom: 2rem;
+}
+
+.formDigital {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 100%; /* Full width of parent */
+    max-width: 600px; /* Maximum width */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.proposalButton {
+    color: white;
+    background-color: rgb(253, 126, 20);
+    border: none;
+    font-size: large;
+    font-weight: bold;
+    height: 3rem;
+    width: 100%; /* Button takes full width of form */
+    max-width: 300px; /* But has a maximum width */
+}
+
+.proposalButton:hover {
+    color: rgb(253, 126, 20) !important;
+    background-color: white !important;
+    border: 2px solid rgb(253, 126, 20) !important;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .backheroDigital {
+        height: 60vh;
+    }
+    
+    .mainHerodigital {
+        margin-top: 2rem;
+    }
+
+    .heroFirstText {
+        font-size: 1.8rem;
+    }
+
+    .growText {
+        font-size: 1.1rem;
+    }
+    
+    .formDigital {
+        padding: 1rem;
+        margin-top: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .heroFirstText {
+        font-size: 1.5rem;
+    }
+
+    .growText {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .formDigital {
+        width: 100%;
+        padding: 1rem;
+    }
+    
+    .proposalButton {
+        font-size: medium;
+        height: 2.8rem;
+    }
+}
