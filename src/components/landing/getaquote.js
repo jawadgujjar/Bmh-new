@@ -1,30 +1,50 @@
 'use client';
 import React from 'react';
-import { Form, Input, Button, InputNumber } from 'antd';
+import { Form, Input, Button, InputNumber, message } from 'antd';
 import styles from '../../styles/landing/getaquote.module.css';
 
 const { TextArea } = Input;
 
 function Form1() {
-    const onFinish = (values) => {
-        console.log('Form Values:', values);
+    const [form] = Form.useForm(); // form instance
+
+    const onFinish = async (values) => {
+        try {
+            const res = await fetch("/api/getaquote", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(values),
+            });
+            console.log("Form submitted data ===>", values);
+
+            if (res.ok) {
+                message.success("Form submitted successfully!");
+                form.resetFields(); // reset karega fields ko
+            } else {
+                const errorData = await res.json();
+                message.error(errorData.error || "Failed to submit form!");
+            }
+        } catch (error) {
+            message.error("Something went wrong!");
+        }
     };
 
     return (
         <div className={styles.formWrapper}>
             <div className={styles.formContainer}>
                 <h2 className={styles.formHeading}>Get My Free Proposal</h2>
-                <Form layout="vertical" onFinish={onFinish}>
+                <Form 
+                    form={form}  // yahan bind karna zaroori hai
+                    layout="vertical" 
+                    onFinish={onFinish}
+                >
                     <div className={styles.formItemRow}>
                         <Form.Item
                             label={<span className={styles.formLabel}>First Name</span>}
                             name="firstName"
                             rules={[{ required: true, message: 'Please enter your first name!' }]}
                         >
-                            <Input
-                                placeholder="Enter your first name"
-                                className={styles.customInput}
-                            />
+                            <Input placeholder="Enter your first name" className={styles.customInput} />
                         </Form.Item>
 
                         <Form.Item
@@ -32,10 +52,7 @@ function Form1() {
                             name="lastName"
                             rules={[{ required: true, message: 'Please enter your last name!' }]}
                         >
-                            <Input
-                                placeholder="Enter your last name"
-                                className={styles.customInput}
-                            />
+                            <Input placeholder="Enter your last name" className={styles.customInput} />
                         </Form.Item>
                     </div>
 
@@ -48,42 +65,33 @@ function Form1() {
                                 { pattern: /^\d+$/, message: 'Please enter a valid phone number!' }
                             ]}
                         >
-                            <Input
-                                placeholder="Enter your phone number"
-                                className={styles.customInput}
-                            />
+                            <Input placeholder="Enter your phone number" className={styles.customInput} />
                         </Form.Item>
 
                         <Form.Item
                             label={<span className={styles.formLabel}>Email Address</span>}
-                            name="email"
+                            name="emailAddress"
                             rules={[
                                 { required: true, message: 'Please enter your email!' },
                                 { type: 'email', message: 'Please enter a valid email!' },
                             ]}
                         >
-                            <Input
-                                placeholder="Enter your email address"
-                                className={styles.customInput}
-                            />
+                            <Input placeholder="Enter your email address" className={styles.customInput} />
                         </Form.Item>
                     </div>
 
                     <div className={styles.formItemRow}>
                         <Form.Item
                             label={<span className={styles.formLabel}>Website URL (Optional)</span>}
-                            name="website"
+                            name="websiteUrl"
                             rules={[{ type: 'url', message: 'Please enter a valid URL!' }]}
                         >
-                            <Input
-                                placeholder="Enter your website URL"
-                                className={styles.customInput}
-                            />
+                            <Input placeholder="Enter your website URL" className={styles.customInput} />
                         </Form.Item>
 
                         <Form.Item
                             label={<span className={styles.formLabel}>Projected Monthly Budget</span>}
-                            name="budget"
+                            name="monthlyBudget"
                             rules={[{ required: true, message: 'Please enter your projected monthly budget!' }]}
                         >
                             <InputNumber
@@ -108,12 +116,7 @@ function Form1() {
                     </Form.Item>
 
                     <Form.Item>
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            block
-                            className={styles.submitButton}
-                        >
+                        <Button type="primary" htmlType="submit" block className={styles.submitButton}>
                             Submit
                         </Button>
                     </Form.Item>
