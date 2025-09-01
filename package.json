@@ -14,6 +14,7 @@
     "antd": "^5.26.6",
     "bootstrap": "^5.3.7",
     "bootstrap-icons": "^1.13.1",
+    "mongoose": "^8.18.0",
     "next": "15.4.2",
     "react": "19.1.0",
     "react-alice-carousel": "^2.9.1",
