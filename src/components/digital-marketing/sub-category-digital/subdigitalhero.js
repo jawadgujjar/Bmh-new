@@ -4,13 +4,17 @@ import Link from 'next/link';
 import styles from '../../../styles/digital-marketing/sub-category-digital/subdigitalhero.module.css';
 import Image from 'next/image';
 
-function SubHeroSEOCompany() {
+function SubHeroDigitalMarketing({ 
+  backgroundImage = "/images/hero.jpg", 
+  heading = "SEO Company Services",
+  description = "Drive more traffic, boost your search engine rankings, and grow your business online with our expert SEO strategies tailored to your industry and audience."
+}) {
     return (
         <div className={styles.backheroDigital}>
             <div className={styles.backgroundImage}>
                 <Image
-                    src="/images/hero.jpg"
-                    alt="SEO Company Background"
+                    src={backgroundImage}
+                    alt={heading}
                     layout="fill"
                     objectFit="cover"
                     quality={100}
@@ -19,11 +23,8 @@ function SubHeroSEOCompany() {
             </div>
 
             <div className={styles.mainHerodigital}>
-                <p className={styles.heroFirstText}>SEO Company Services</p>
-                <p className={styles.growText}>
-                    Drive more traffic, boost your search engine rankings, and grow your business online 
-                    with our expert SEO strategies tailored to your industry and audience.
-                </p>
+                <p className={styles.heroFirstText}>{heading}</p>
+                <p className={styles.growText}>{description}</p>
                 <div className={styles.formDigital}>
                     <Link href="/getaquote" passHref>
                         <Button className={styles.proposalButton}>Get My Free SEO Proposal</Button>
@@ -34,4 +35,4 @@ function SubHeroSEOCompany() {
     );
 }
 
-export default SubHeroSEOCompany;
+export default SubHeroDigitalMarketing;

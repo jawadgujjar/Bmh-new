@@ -4,21 +4,21 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Navbar, Nav, Container, Button, NavDropdown } from "react-bootstrap";
-import { 
-  CiMobile3,  
-  CiShoppingCart, 
-  CiSettings 
+import {
+  CiMobile3,
+  CiShoppingCart,
+  CiSettings,
 } from "react-icons/ci";
-import { 
-  FiSearch, 
-  FiMapPin, 
-  FiUserCheck, 
-  FiSmile, 
+import {
+  FiSearch,
+  FiMapPin,
+  FiUserCheck,
+  FiSmile,
   FiShare2,
   FiGlobe,
-  FiLayers
+  FiLayers,
 } from "react-icons/fi";
-import { FaBullhorn,FaLaptopCode,FaMobileAlt } from "react-icons/fa";
+import { FaBullhorn, FaLaptopCode, FaMobileAlt } from "react-icons/fa";
 import styles from "../../styles/navbar.module.css";
 
 function NavbarBmh() {
@@ -27,6 +27,16 @@ function NavbarBmh() {
   const [scrolled, setScrolled] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [subcategories, setSubcategories] = useState({
+    "digital-marketing": [],
+    "web-development": [],
+    "app-development": [],
+  });
+  const [loading, setLoading] = useState({
+    "digital-marketing": true,
+    "web-development": true,
+    "app-development": true,
+  });
 
   const handleNavClick = () => {
     window.scrollTo(0, 0);
@@ -36,11 +46,7 @@ function NavbarBmh() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(window.scrollY > 50);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -59,13 +65,146 @@ function NavbarBmh() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleDropdownToggle = (dropdownId, isOpen) => {
-    if (isOpen) {
-      setActiveDropdown(dropdownId);
-    } else {
-      setActiveDropdown(null);
-    }
+  useEffect(() => {
+    const fetchSubcategories = async (category) => {
+      try {
+        setLoading((prev) => ({ ...prev, [category]: true }));
+        console.log(`Fetching subcategories for ${category}...`);
+        const response = await fetch(`/api/subcategories?category=${category}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`API response not ok: ${response.status} - ${await response.text()}`);
+        }
+
+        const data = await response.json();
+        console.log(`Raw API response for ${category}:`, data);
+
+        // Ensure data is an array
+        const subcategoriesData = Array.isArray(data) ? data : (data.data || [data]);
+        console.log(`Processed subcategories for ${category}:`, subcategoriesData);
+
+        // Use API data with fallback slugs if missing
+        setSubcategories((prev) => ({
+          ...prev,
+          [category]: subcategoriesData.length > 0
+            ? subcategoriesData.map((item) => ({
+                ...item,
+                slug: item.slug || generateSlug(item.name || "unnamed"),
+                icon: item.icon || "FaBullhorn",
+              }))
+            : [
+                { _id: "1", name: "SEO Company", icon: "FiSearch", slug: "seocompany", category: "digital-marketing" },
+                { _id: "2", name: "Local SEO", icon: "FiMapPin", slug: "localseo", category: "digital-marketing" },
+                { _id: "3", name: "Hire SEO Consultant", icon: "FiUserCheck", slug: "hireseoconsultant", category: "digital-marketing" },
+                { _id: "4", name: "Dental SEO Company", icon: "FiSmile", slug: "dentalseo", category: "digital-marketing" },
+                { _id: "5", name: "Cosmetics SEO Company", icon: "FiShare2", slug: "cosmeticsseo", category: "digital-marketing" },
+                { _id: "6", name: "SEO Services", icon: "FiSearch", slug: "seo-services", category: "digital-marketing" },
+                { _id: "6", name: "Website Design", icon: "FaLaptopCode", slug: "webdevelopment", category: "web-development" },
+                { _id: "7", name: "E-commerce Development", icon: "CiShoppingCart", slug: "ecommercedevelopment", category: "web-development" },
+                { _id: "8", name: "Custom Software", icon: "CiSettings", slug: "custom-software", category: "web-development" },
+                { _id: "9", name: "Mobile Application Development", icon: "FaMobileAlt", slug: "mobile-application-development", category: "app-development" },
+                { _id: "10", name: "Web App Development", icon: "FiGlobe", slug: "web-app-development", category: "app-development" },
+                { _id: "11", name: "Hybrid App Development", icon: "FiLayers", slug: "hybrid-app-development", category: "app-development" },
+              ].filter((item) => item.category === category),
+        }));
+      } catch (error) {
+        console.error(`Error fetching ${category} subcategories:`, error);
+        const fallbackSubcategories = {
+          "digital-marketing": [
+            { _id: "1", name: "SEO Company", icon: "FiSearch", slug: "seocompany", category: "digital-marketing" },
+            { _id: "2", name: "Local SEO", icon: "FiMapPin", slug: "localseo", category: "digital-marketing" },
+            { _id: "3", name: "Hire SEO Consultant", icon: "FiUserCheck", slug: "hireseoconsultant", category: "digital-marketing" },
+            { _id: "4", name: "Dental SEO Company", icon: "FiSmile", slug: "dentalseo", category: "digital-marketing" },
+            { _id: "5", name: "Cosmetics SEO Company", icon: "FiShare2", slug: "cosmeticsseo", category: "digital-marketing" },
+            { _id: "6", name: "SEO Services", icon: "FiSearch", slug: "seo-services", category: "digital-marketing" },
+          ],
+          "web-development": [
+            { _id: "6", name: "Website Design", icon: "FaLaptopCode", slug: "webdevelopment", category: "web-development" },
+            { _id: "7", name: "E-commerce Development", icon: "CiShoppingCart", slug: "ecommercedevelopment", category: "web-development" },
+            { _id: "8", name: "Custom Software", icon: "CiSettings", slug: "custom-software", category: "web-development" },
+          ],
+          "app-development": [
+            { _id: "9", name: "Mobile Application Development", icon: "FaMobileAlt", slug: "mobile-application-development", category: "app-development" },
+            { _id: "10", name: "Web App Development", icon: "FiGlobe", slug: "web-app-development", category: "app-development" },
+            { _id: "11", name: "Hybrid App Development", icon: "FiLayers", slug: "hybrid-app-development", category: "app-development" },
+          ],
+        };
+        setSubcategories((prev) => ({
+          ...prev,
+          [category]: fallbackSubcategories[category] || [],
+        }));
+      } finally {
+        setLoading((prev) => ({ ...prev, [category]: false }));
+      }
+    };
+
+    ["digital-marketing", "web-development", "app-development"].forEach(fetchSubcategories);
+  }, []);
+
+  const generateSlug = (name) => {
+    if (!name) return "default-slug";
+    return name
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^\w\-]+/g, "")
+      .replace(/\-\-+/g, "-")
+      .replace(/^-+/, "")
+      .replace(/-+$/, "");
   };
+
+  const handleDropdownToggle = (dropdownId, isOpen) => {
+    setActiveDropdown(isOpen ? dropdownId : null);
+  };
+
+  const getIconComponent = (iconName) => {
+    const iconMap = {
+      FiSearch: <FiSearch className={styles.icon} />,
+      FiMapPin: <FiMapPin className={styles.icon} />,
+      FiUserCheck: <FiUserCheck className={styles.icon} />,
+      FiSmile: <FiSmile className={styles.icon} />,
+      FiShare2: <FiShare2 className={styles.icon} />,
+      FaBullhorn: <FaBullhorn className={styles.icon} />,
+      FaLaptopCode: <FaLaptopCode className={styles.icon} />,
+      CiShoppingCart: <CiShoppingCart className={styles.icon} />,
+      CiSettings: <CiSettings className={styles.icon} />,
+      FaMobileAlt: <FaMobileAlt className={styles.icon} />,
+      FiGlobe: <FiGlobe className={styles.icon} />,
+      FiLayers: <FiLayers className={styles.icon} />,
+    };
+    return iconMap[iconName] || <FaBullhorn className={styles.icon} />;
+  };
+
+  const categoryConfig = [
+    {
+      title: "DIGITAL MARKETING",
+      id: "digital-marketing-dropdown",
+      path: "digitalmarketing",
+      mainIcon: <FaBullhorn className={styles.icon} />,
+      mainName: "Digital Marketing",
+      categoryKey: "digital-marketing",
+    },
+    {
+      title: "WEB DEVELOPMENT",
+      id: "web-development-dropdown",
+      path: "webdevelopment",
+      mainIcon: <FaLaptopCode className={styles.icon} />,
+      mainName: "Website Design",
+      categoryKey: "web-development",
+    },
+    {
+      title: "APP DEVELOPMENT",
+      id: "app-development-dropdown",
+      path: "appdevelopment",
+      mainIcon: <FaMobileAlt className={styles.icon} />,
+      mainName: "Mobile Application Development",
+      categoryKey: "app-development",
+    },
+  ];
 
   return (
     <Navbar
@@ -101,138 +240,57 @@ function NavbarBmh() {
 
         <Navbar.Collapse id="basic-navbar-nav" className={styles.mainCollapse}>
           <Nav className={`${styles.mainNav} ms-auto`}>
-            <NavDropdown
-              title={<span className={styles.mainLink}>DIGITAL MARKETING</span>}
-              id="digital-marketing-dropdown"
-              className={styles.customDropdown}
-              show={activeDropdown === 'digital-marketing-dropdown'}
-              onToggle={(isOpen) => handleDropdownToggle('digital-marketing-dropdown', isOpen)}
-            >
-              <NavDropdown.Item
-                as={Link}
-                href="/digitalmarketing"
-                onClick={handleNavClick}
-                className={styles.navDropdownItemfirst}
-              >
-                <FaBullhorn className={styles.icon} /> Digital Marketing
-              
-              </NavDropdown.Item>
-              <div className={styles.orangeUnderline}></div>
+            {categoryConfig.map((category) => {
+              const categorySubcategories = subcategories[category.categoryKey] || [];
+              console.log(`Rendering ${category.title} with subcategories:`, categorySubcategories);
 
-              <NavDropdown.Item
-                as={Link}
-                href="/digitalmarketing/seocompany"
-                onClick={handleNavClick}
-                className={styles.navDropdownItem}
-              >
-                <FiSearch className={styles.icon} /> SEO Company
-              </NavDropdown.Item>
+              return (
+                <NavDropdown
+                  key={category.id}
+                  title={<span className={styles.mainLink}>{category.title}</span>}
+                  id={category.id}
+                  className={styles.customDropdown}
+                  show={activeDropdown === category.id}
+                  onToggle={(isOpen) => handleDropdownToggle(category.id, isOpen)}
+                >
+                  <NavDropdown.Item
+                    as={Link}
+                    href={`/${category.path}`}
+                    onClick={handleNavClick}
+                    className={styles.navDropdownItemfirst}
+                  >
+                    {category.mainIcon} {category.mainName}
+                  </NavDropdown.Item>
+                  <div className={styles.orangeUnderline}></div>
 
-              <NavDropdown.Item
-                as={Link}
-                href="/localseo"
-                onClick={handleNavClick}
-                className={styles.navDropdownItem}
-              >
-                <FiMapPin className={styles.icon} /> Local SEO
-              </NavDropdown.Item>
-
-              <NavDropdown.Item
-                as={Link}
-                href="/hireseoconsultant"
-                onClick={handleNavClick}
-                className={styles.navDropdownItem}
-              >
-                <FiUserCheck className={styles.icon} /> Hire SEO Consultant
-              </NavDropdown.Item>
-
-              <NavDropdown.Item
-                as={Link}
-                href="/dentalseo"
-                onClick={handleNavClick}
-                className={styles.navDropdownItem}
-              >
-                <FiSmile className={styles.icon} /> Dental SEO Company
-              </NavDropdown.Item>
-
-              <NavDropdown.Item
-                as={Link}
-                href="/socialmediamarketing"
-                onClick={handleNavClick}
-                className={styles.navDropdownItem}
-              >
-                <FiShare2 className={styles.icon} /> Cosmetics SEO Company
-              </NavDropdown.Item>
-            </NavDropdown>
-
-            <NavDropdown
-              title={<span className={styles.mainLink}>WEB DEVELOPMENT</span>}
-              id="web-development-dropdown"
-              className={styles.customDropdown}
-              show={activeDropdown === 'web-development-dropdown'}
-              onToggle={(isOpen) => handleDropdownToggle('web-development-dropdown', isOpen)}
-            >
-              <NavDropdown.Item
-                as={Link}
-                href="/webdevelopment"
-                onClick={handleNavClick}
-                className={styles.navDropdownItemfirst}
-              >
-                <FaLaptopCode className={styles.icon} /> Website Design
-                
-              </NavDropdown.Item>
-              <div className={styles.orangeUnderline}></div>
-              <NavDropdown.Item
-                as={Link}
-                href="/ecommercedevelopment"
-                onClick={handleNavClick}
-                className={styles.navDropdownItem}
-              >
-                <CiShoppingCart className={styles.icon} /> E-commerce Development
-              </NavDropdown.Item>
-              <NavDropdown.Item
-                as={Link}
-                href="/custom-software"
-                onClick={handleNavClick}
-                className={styles.navDropdownItem}
-              >
-                <CiSettings className={styles.icon} /> Custom Software
-              </NavDropdown.Item>
-            </NavDropdown>
-
-            <NavDropdown
-              title={<span className={styles.mainLink}>APP DEVELOPMENT</span>}
-              id="app-development-dropdown"
-              className={styles.customDropdown}
-              show={activeDropdown === 'app-development-dropdown'}
-              onToggle={(isOpen) => handleDropdownToggle('app-development-dropdown', isOpen)}
-            >
-              <NavDropdown.Item
-                as={Link}
-                href="/appdevelopment"
-                onClick={handleNavClick}
-                className={styles.navDropdownItemfirst}
-              >
-                <FaMobileAlt  className={styles.icon} /> Mobile App Development
-              </NavDropdown.Item>
-              <div className={styles.orangeUnderline}></div>
-              <NavDropdown.Item
-                as={Link}
-                href="/web-app-development"
-                onClick={handleNavClick}
-                className={styles.navDropdownItem}
-              >
-                <FiGlobe className={styles.icon} /> Web App Development
-              </NavDropdown.Item>
-              <NavDropdown.Item
-                as={Link}
-                href="/hybrid-app-development"
-                onClick={handleNavClick}
-                className={styles.navDropdownItem}
-              >
-                <FiLayers className={styles.icon} /> Hybrid App Development
-              </NavDropdown.Item>
-            </NavDropdown>
+                  {loading[category.categoryKey] ? (
+                    <NavDropdown.Item className={styles.navDropdownItem}>
+                      Loading...
+                    </NavDropdown.Item>
+                  ) : categorySubcategories.length === 0 ? (
+                    <NavDropdown.Item className={styles.navDropdownItem}>
+                      No subcategories available
+                    </NavDropdown.Item>
+                  ) : (
+                    categorySubcategories.map((subcategory) => (
+                      console.log(`Generating link for ${subcategory.name} with slug: ${subcategory.slug}`),
+                      <NavDropdown.Item
+                        key={subcategory._id || subcategory.name}
+                        as={Link}
+                        href={`/${category.path}/${subcategory.slug}`}
+                        onClick={(e) => {
+                          handleNavClick();
+                          console.log(`Navigating to /${category.path}/${subcategory.slug}`);
+                        }}
+                        className={styles.navDropdownItem}
+                      >
+                        {getIconComponent(subcategory.icon)} {subcategory.name}
+                      </NavDropdown.Item>
+                    ))
+                  )}
+                </NavDropdown>
+              );
+            })}
 
             <Nav.Link
               as={Link}
