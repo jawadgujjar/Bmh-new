@@ -3,8 +3,12 @@
 import React, { useState } from 'react';
 import styles from '../../../styles/digital-marketing/sub-category-digital/subcalltoactiondigital1.module.css';
 
-function SubCalltoactiondigital1() {
-  const [step, setStep] = useState(0); // 0 = initial, 1 = form, 2 = success
+function SubCalltoactiondigital1({ 
+  title = "Premium Digital Marketing Analysis",
+  subtitle = "Transform Your Online Presence With Expert Strategy",
+  description = "Get a comprehensive SEO analysis and personalized consultation to elevate your digital marketing."
+}) {
+  const [step, setStep] = useState(0);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -21,14 +25,13 @@ function SubCalltoactiondigital1() {
   };
 
   const handleGetQuote = () => {
-    setStep(1); // Move to form step
+    setStep(1);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add your form submission logic here
     console.log('Form submitted:', formData);
-    setStep(2); // Move to success step
+    setStep(2);
   };
 
   const handleReset = () => {
@@ -47,13 +50,11 @@ function SubCalltoactiondigital1() {
         <div className={styles.initialStep}>
           <div className={styles.titleWrapper}>
             <div className={styles.circle}></div>
-            <h2 className={styles.ctaTitle}>Premium Digital Marketing Analysis</h2>
+            <h2 className={styles.ctaTitle}>{title}</h2>
             <div className={styles.circle}></div>
           </div>
-          <p className={styles.ctaSubtitle}>Transform Your Online Presence With Expert Strategy</p>
-          <p className={styles.ctaDescription}>
-            Get a comprehensive SEO analysis and personalized consultation to elevate your digital marketing.
-          </p>
+          <p className={styles.ctaSubtitle}>{subtitle}</p>
+          <p className={styles.ctaDescription}>{description}</p>
           
           <button onClick={handleGetQuote} className={styles.quoteButton}>
             Get Instant Quote
