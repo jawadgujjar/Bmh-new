@@ -7,7 +7,7 @@
     justify-content: center;
     align-items: center;
     padding: 40px;
-    /* background: #0f172a;   */
+    background: #0f172a; /* Dark background as requested */
 }
 
 /* Form Container */
@@ -15,7 +15,7 @@
     width: 100%;
     max-width: 800px;
     padding: 40px;
-    background: linear-gradient(135deg, #0f172a, #1e293b);
+    background: linear-gradient(135deg, #0f172a, #1e293b); /* Original gradient background */
     border-radius: 20px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
     font-family: 'Poppins', sans-serif;
@@ -27,7 +27,7 @@
     text-align: center;
     font-weight: 700;
     margin-bottom: 1.5rem;
-    color: #ff7f11; /* Orange heading */
+    color: #ff7f11; /* Orange heading as requested */
     text-transform: uppercase;
     font-size: 2rem;
     letter-spacing: 0.5px;
@@ -45,10 +45,9 @@
 .customTextarea,
 .customInputNumber {
     border-radius: 8px;
-    color: #fff;
-    background-color: #0f172a;
+    color: #000000; /* Black text for entered values */
+    background-color: #ffffff; /* White background for inputs */
     border: 1px solid #334155;
-    transition: all 0.3s ease;
     width: 100%;
     font-family: 'Poppins', sans-serif;
 }
@@ -67,7 +66,7 @@
 .customInput::placeholder,
 .customTextarea::placeholder,
 .customInputNumber::placeholder {
-    color: #94a3b8;
+    color: #94a3b8; /* Original placeholder color */
     font-family: 'Poppins', sans-serif;
 }
 
@@ -78,6 +77,8 @@
     border-color: #ff7f11;
     outline: none;
     box-shadow: 0 0 6px rgba(255, 127, 17, 0.6);
+    background-color: #ffffff; /* Maintain white background on focus */
+    color: #000000; /* Maintain black text on focus */
 }
 
 /* Submit Button */
@@ -98,6 +99,12 @@
 .submitButton:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(255, 127, 17, 0.6);
+}
+
+.submitButton:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+    box-shadow: none;
 }
 
 /* Footer Text */
@@ -143,5 +150,9 @@
     .formItemRow {
         flex-direction: column;
         gap: 12px;
+    }
+
+    .formHeading {
+        font-size: 1.8rem;
     }
 }

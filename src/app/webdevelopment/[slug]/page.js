@@ -5,6 +5,7 @@ import SubHeroDigitalMarketing from "@/components/digital-marketing/sub-category
 import SubKeywordsdigital from "@/components/digital-marketing/sub-category-digital/subkeywordsdigital"; // Replace if needed
 import SubWhydigital from "@/components/digital-marketing/sub-category-digital/subwhydigital"; // Replace if needed
 import Carousel from "@/components/landing/carousel";
+import Form1 from "@/components/landing/getaquote";
 import ProposalForm from "@/components/landing/proposalform";
 import SeoIndustries from "@/components/landing/seoindustries";
 
@@ -86,15 +87,13 @@ export default async function SubCategoryPage({ params }) {
   };
 
   const cta1Props = {
-    title: subcategory.middleSection?.description1 || "Call to Action",
-    subtitle: subcategory.middleSection?.description1 || "",
-    description: subcategory.middleSection?.description1 || "",
+    title: subcategory.cta1?.heading || "",
+    description: subcategory.cta1?.description || "",
   };
 
   const cta2Props = {
-    title: subcategory.keywordsSection?.relatedHeading?.[0] || "Get in Touch",
-    subtitle: subcategory.keywordsSection?.relatedHeading?.[0] || "",
-    description: subcategory.keywordsSection?.relatedDescription?.[0] || "",
+    title: subcategory.cta2?.heading || "",
+    description: subcategory.cta2?.description || "",
     phoneNumber: "+123-456-7890",
   };
 
@@ -112,7 +111,7 @@ export default async function SubCategoryPage({ params }) {
       <SubCalltoactiondigital1 {...cta1Props} />
       <SeoIndustries {...industriesProps} />
       <SubCalltoactiondigital2 {...cta2Props} />
-      <ProposalForm />
+      <Form1 />
       <Carousel />
     </main>
   );

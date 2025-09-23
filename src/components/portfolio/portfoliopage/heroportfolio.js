@@ -1,18 +1,31 @@
-// components/Heroportfolio.js
 "use client";
 
 import React from 'react';
 import styles from '../../../styles/portfolio-page/heroportfolio.module.css';
 
-function Heroportfolio() {
+function Heroportfolio({ header }) {
   return (
     <div className={styles.heroContainer}>
-      <div className={styles.imageOverlay}></div>
+      <div className={styles.imageOverlay}>
+        {header.image && (
+          <img 
+            src={header.image} 
+            alt={header.title} 
+            className={styles.overlayImage} 
+          />
+        )}
+      </div>
       
       <div className={styles.content}>
-        <h1 className={styles.title}>BRAND MARKETING HUB</h1>
+        <h1 className={styles.title}>
+          {header.title || 'BRAND MARKETING HUB'}
+        </h1>
         <div className={styles.divider}></div>
-        <p className={styles.credit}>DESIGNED BY BMH</p>
+        
+        {/* ✅ Show description */}
+        {header.description && (
+          <p className={styles.description}>{header.description}</p>
+        )}
       </div>
       
       <div className={styles.scrollIndicator}>

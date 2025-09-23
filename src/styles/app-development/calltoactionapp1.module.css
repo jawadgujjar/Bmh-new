@@ -1,85 +1,103 @@
-/* calltoactionapp1.module.css */
+/* calltoactiondigital1.module.css */
 .ctaContainer {
-  background-color: #000;
-  border-radius: 12px;
-  padding: 3rem;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border-radius: 20px;
+  padding: 4rem;
   color: white;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-  margin: 2rem auto;
-  max-width: 1400px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  margin: 3rem auto;
+  max-width: 900px;
   width: 90%;
   position: relative;
   overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ctaContainer::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(253, 126, 20, 0.1) 0%, transparent 70%);
+  z-index: 1;
 }
 
 .initialStep, .formStep, .successStep {
-  text-align: center;
   position: relative;
   z-index: 2;
+  text-align: center;
 }
 
 .titleWrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 15px;
-  margin-bottom: 1rem;
+  gap: 20px;
+  margin-bottom: 1.5rem;
 }
 
 .circle {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  background-color: #F7980D;
-  box-shadow: 0 0 10px rgba(247, 152, 13, 0.7);
+  background: linear-gradient(135deg, #fd7e14, #f59e0b);
+  box-shadow: 0 0 15px rgba(253, 126, 20, 0.7);
 }
 
 .ctaTitle {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   margin: 0;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #fff;
+  letter-spacing: 2px;
+  color: #e2e8f0;
+  font-weight: 500;
 }
 
 .ctaSubtitle {
-  font-size: 1.9rem;
+  font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
-  background: linear-gradient(90deg, #F7980D, #FBBF24);
+  background: linear-gradient(90deg, #fd7e14, #f59e0b, #fbbf24);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  line-height: 1.2;
 }
 
 .ctaDescription {
-  font-size: 1.1rem;
-  margin-bottom: 2rem;
+  font-size: 1.2rem;
+  margin-bottom: 3rem;
   opacity: 0.9;
-  color: white;
+  color: #cbd5e1;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
 }
 
 .quoteButton {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  background: linear-gradient(135deg, #F7980D 0%, #FBBF24 100%);
+  gap: 12px;
+  background: linear-gradient(135deg, #fd7e14 0%, #f59e0b 100%);
   color: white;
   padding: 1.2rem 2.5rem;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   margin: 0 auto;
-  box-shadow: 0 5px 15px rgba(247, 152, 13, 0.3);
+  box-shadow: 0 10px 25px rgba(253, 126, 20, 0.3);
 }
 
 .quoteButton:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(247, 152, 13, 0.4);
+  box-shadow: 0 15px 30px rgba(253, 126, 20, 0.4);
 }
 
 .arrowIcon {
@@ -92,14 +110,14 @@
 
 /* Form Step Styles */
 .formHeader {
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
 .formTitle {
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
-  background: linear-gradient(90deg, #F7980D, #FBBF24);
+  background: linear-gradient(90deg, #fd7e14, #f59e0b);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -107,7 +125,7 @@
 
 .formSubtitle {
   font-size: 1.1rem;
-  color: #ccc;
+  color: #cbd5e1;
   margin-bottom: 0;
 }
 
@@ -117,8 +135,8 @@
 
 .formRow {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .formRow .inputGroup {
@@ -133,25 +151,25 @@
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
-  color: #fff;
+  color: #e2e8f0;
 }
 
 .formInput, .formTextarea {
   width: 100%;
-  padding: 1rem;
-  border: 1px solid #333;
-  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  border: 1px solid #334155;
+  border-radius: 10px;
   font-size: 1rem;
-  background-color: rgba(255, 255, 255, 0.1);
+  background: rgba(15, 23, 42, 0.5);
   color: white;
   transition: all 0.3s ease;
 }
 
 .formInput:focus, .formTextarea:focus {
   outline: none;
-  border-color: #F7980D;
-  box-shadow: 0 0 0 3px rgba(247, 152, 13, 0.2);
-  background-color: rgba(255, 255, 255, 0.15);
+  border-color: #fd7e14;
+  box-shadow: 0 0 0 3px rgba(253, 126, 20, 0.2);
+  background: rgba(15, 23, 42, 0.8);
 }
 
 .formTextarea {
@@ -168,10 +186,10 @@
 
 .backButton {
   background: transparent;
-  color: #ccc;
+  color: #94a3b8;
   padding: 0.9rem 1.8rem;
-  border: 1px solid #333;
-  border-radius: 8px;
+  border: 1px solid #334155;
+  border-radius: 10px;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
@@ -180,28 +198,28 @@
 
 .backButton:hover {
   background: rgba(255, 255, 255, 0.05);
-  color: #fff;
+  color: #e2e8f0;
 }
 
 .submitFormButton {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: linear-gradient(135deg, #F7980D 0%, #FBBF24 100%);
+  gap: 10px;
+  background: linear-gradient(135deg, #fd7e14 0%, #f59e0b 100%);
   color: white;
   padding: 1rem 2rem;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 5px 15px rgba(247, 152, 13, 0.3);
+  box-shadow: 0 5px 15px rgba(253, 126, 20, 0.3);
 }
 
 .submitFormButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(247, 152, 13, 0.4);
+  box-shadow: 0 8px 20px rgba(253, 126, 20, 0.4);
 }
 
 .submitFormButton:hover .arrowIcon {
@@ -214,14 +232,14 @@
 }
 
 .successIcon {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 1.5rem;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 2rem;
 }
 
 .successCircle {
   fill: none;
-  stroke: #F7980D;
+  stroke: #fd7e14;
   stroke-width: 3;
   stroke-dasharray: 283;
   stroke-dashoffset: 283;
@@ -252,26 +270,26 @@
 }
 
 .successTitle {
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  color: #F7980D;
+  color: #fd7e14;
 }
 
 .successMessage {
   font-size: 1.1rem;
-  color: #ccc;
+  color: #cbd5e1;
   line-height: 1.6;
   max-width: 500px;
-  margin: 0 auto 2rem;
+  margin: 0 auto 2.5rem;
 }
 
 .newRequestButton {
-  background: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
   color: white;
   padding: 1rem 2rem;
-  border: 1px solid #333;
-  border-radius: 8px;
+  border: 1px solid #475569;
+  border-radius: 10px;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
@@ -279,7 +297,7 @@
 }
 
 .newRequestButton:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: linear-gradient(135deg, #334155 0%, #475569 100%);
   transform: translateY(-2px);
 }
 
@@ -289,7 +307,7 @@
   left: 0;
   width: 100%;
   height: 2px;
-  background: linear-gradient(90deg, transparent, #F7980D, transparent);
+  background: linear-gradient(90deg, transparent, #fd7e14, transparent);
   animation: lineAnimation 3s infinite;
 }
 
@@ -305,15 +323,15 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .ctaContainer {
-    padding: 2rem 1.5rem;
+    padding: 2.5rem 1.5rem;
   }
   
   .ctaTitle {
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
   
   .ctaSubtitle {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
   }
   
   .formRow {
@@ -322,12 +340,12 @@
   }
   
   .titleWrapper {
-    gap: 8px;
+    gap: 12px;
   }
   
   .circle {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
   }
   
   .formActions {
@@ -338,26 +356,22 @@
   .backButton, .submitFormButton {
     width: 100%;
   }
-  
-  .formTitle {
-    font-size: 1.5rem;
-  }
-  
-  .successTitle {
-    font-size: 1.5rem;
-  }
 }
 
 @media (max-width: 480px) {
   .ctaSubtitle {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
   }
   
   .ctaDescription {
     font-size: 1rem;
   }
   
-  .successMessage {
-    font-size: 1rem;
+  .formTitle {
+    font-size: 1.6rem;
+  }
+  
+  .successTitle {
+    font-size: 1.6rem;
   }
 }

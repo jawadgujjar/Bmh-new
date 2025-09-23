@@ -6,11 +6,13 @@ import styles from '../../styles/digital-marketing/calltoactiondigital1.module.c
 function Calltoactionweb1() {
   const [step, setStep] = useState(0); // 0 = initial, 1 = form, 2 = success
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    message: ''
+    fullName: '',
+    emailAddress: '',
+    phoneNumber: '',
+    goalsAndRequirements: ''
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -24,21 +26,46 @@ function Calltoactionweb1() {
     setStep(1); // Move to form step
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add your form submission logic here
-    console.log('Form submitted:', formData);
-    setStep(2); // Move to success step
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch("/api/calltoactionquote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        console.log("Form submitted:", data);
+        setStep(2); // success step
+      } else {
+        // Improved error handling
+        const errorMessage = data.error || "Something went wrong. Please try again.";
+        setError(errorMessage.includes("validation failed") 
+          ? "Please fill out all required fields correctly." 
+          : errorMessage);
+      }
+    } catch (err) {
+      setError("Server error. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleReset = () => {
     setStep(0);
     setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      message: ''
+      fullName: '',
+      emailAddress: '',
+      phoneNumber: '',
+      goalsAndRequirements: ''
     });
+    setError(null);
   };
 
   return (
@@ -72,12 +99,12 @@ function Calltoactionweb1() {
           <form onSubmit={handleSubmit} className={styles.quoteForm}>
             <div className={styles.formRow}>
               <div className={styles.inputGroup}>
-                <label htmlFor="name" className={styles.inputLabel}>Full Name</label>
+                <label htmlFor="fullName" className={styles.inputLabel}>Full Name</label>
                 <input
                   type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
+                  id="fullName"
+                  name="fullName"
+                  value={formData.fullName}
                   onChange={handleInputChange}
                   className={styles.formInput}
                   placeholder="Enter your full name"
@@ -86,12 +113,12 @@ function Calltoactionweb1() {
               </div>
               
               <div className={styles.inputGroup}>
-                <label htmlFor="email" className={styles.inputLabel}>Email Address</label>
+                <label htmlFor="emailAddress" className={styles.inputLabel}>Email Address</label>
                 <input
                   type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
+                  id="emailAddress"
+                  name="emailAddress"
+                  value={formData.emailAddress}
                   onChange={handleInputChange}
                   className={styles.formInput}
                   placeholder="Enter your email address"
@@ -102,12 +129,12 @@ function Calltoactionweb1() {
             
             <div className={styles.formRow}>
               <div className={styles.inputGroup}>
-                <label htmlFor="phone" className={styles.inputLabel}>Phone Number</label>
+                <label htmlFor="phoneNumber" className={styles.inputLabel}>Phone Number</label>
                 <input
                   type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
                   onChange={handleInputChange}
                   className={styles.formInput}
                   placeholder="Enter your phone number"
@@ -117,11 +144,11 @@ function Calltoactionweb1() {
             </div>
             
             <div className={styles.inputGroup}>
-              <label htmlFor="message" className={styles.inputLabel}>Your Goals & Requirements</label>
+              <label htmlFor="goalsAndRequirements" className={styles.inputLabel}>Your Goals & Requirements</label>
               <textarea
-                id="message"
-                name="message"
-                value={formData.message}
+                id="goalsAndRequirements"
+                name="goalsAndRequirements"
+                value={formData.goalsAndRequirements}
                 onChange={handleInputChange}
                 className={styles.formTextarea}
                 placeholder="Tell us about your business and marketing goals"
@@ -129,13 +156,15 @@ function Calltoactionweb1() {
                 required
               ></textarea>
             </div>
+
+            {error && <p className={styles.errorMessage}>{error}</p>}
             
             <div className={styles.formActions}>
               <button type="button" onClick={handleReset} className={styles.backButton}>
                 Back
               </button>
-              <button type="submit" className={styles.submitFormButton}>
-                Submit Request
+              <button type="submit" className={styles.submitFormButton} disabled={loading}>
+                {loading ? "Submitting..." : "Submit Request"}
                 <span className={styles.arrowIcon}>→</span>
               </button>
             </div>
