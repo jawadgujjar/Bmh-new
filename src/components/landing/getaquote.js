@@ -1,40 +1,53 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, Input, Button, InputNumber, message } from 'antd';
 import styles from '../../styles/landing/getaquote.module.css';
 
 const { TextArea } = Input;
 
 function Form1() {
-    const [form] = Form.useForm(); // form instance
+    const [form] = Form.useForm();
+    const [loading, setLoading] = useState(false);
 
     const onFinish = async (values) => {
+        setLoading(true);
         try {
+            const submitData = {
+                firstName: values.firstName,
+                lastName: values.lastName,
+                phoneNumber: values.phoneNumber,
+                emailAddress: values.emailAddress,
+                websiteUrl: values.websiteUrl || '',
+                monthlyBudget: values.monthlyBudget,
+                projectDetails: values.projectDetails,
+            };
+
             const res = await fetch("/api/getaquote", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(values),
+                body: JSON.stringify(submitData),
             });
-            console.log("Form submitted data ===>", values);
 
             if (res.ok) {
-                message.success("Form submitted successfully!");
-                form.resetFields(); // reset karega fields ko
+                message.success("Thank you for your quote request! Our team will contact you within 24 hours.");
+                form.resetFields();
             } else {
                 const errorData = await res.json();
-                message.error(errorData.error || "Failed to submit form!");
+                message.error(errorData.error || "Failed to submit form. Please check your inputs and try again.");
             }
         } catch (error) {
-            message.error("Something went wrong!");
+            message.error("Something went wrong. Please try again later.");
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
         <div className={styles.formWrapper}>
             <div className={styles.formContainer}>
-                <h2 className={styles.formHeading}>Get My Free Proposal</h2>
+                <h2 className={styles.formHeading}>Get Your Free Proposal</h2>
                 <Form 
-                    form={form}  // yahan bind karna zaroori hai
+                    form={form}
                     layout="vertical" 
                     onFinish={onFinish}
                 >
@@ -116,8 +129,15 @@ function Form1() {
                     </Form.Item>
 
                     <Form.Item>
-                        <Button type="primary" htmlType="submit" block className={styles.submitButton}>
-                            Submit
+                        <Button 
+                            type="primary" 
+                            htmlType="submit" 
+                            block 
+                            className={styles.submitButton} 
+                            loading={loading}
+                            disabled={loading}
+                        >
+                            {loading ? 'Submitting...' : 'Submit'}
                         </Button>
                     </Form.Item>
                 </Form>

@@ -43,6 +43,14 @@ const subCategorySchema = new mongoose.Schema(
       description2: String, // Second description
     },
     keywordsSection: keywordSchema,
+    cta1: {
+      heading: String,
+      description: String,
+    },
+    cta2: {
+      heading: String,
+      description: String,
+    },
   },
   { timestamps: true }
 );

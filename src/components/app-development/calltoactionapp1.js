@@ -6,12 +6,14 @@ import styles from '../../styles/app-development/calltoactionapp1.module.css';
 function Calltoactionapp1() {
   const [step, setStep] = useState(0); // 0 = initial, 1 = form, 2 = success
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
+    fullName: '',
+    emailAddress: '',
+    phoneNumber: '',
     projectType: '',
-    message: ''
+    goalsAndRequirements: ''
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -25,22 +27,47 @@ function Calltoactionapp1() {
     setStep(1); // Move to form step
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add your form submission logic here
-    console.log('Form submitted:', formData);
-    setStep(2); // Move to success step
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch("/api/calltoactionquote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        console.log("Form submitted:", data);
+        setStep(2); // success step
+      } else {
+        // Improved error handling
+        const errorMessage = data.error || "Something went wrong. Please try again.";
+        setError(errorMessage.includes("validation failed") 
+          ? "Please fill out all required fields correctly." 
+          : errorMessage);
+      }
+    } catch (err) {
+      setError("Server error. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleReset = () => {
     setStep(0);
     setFormData({
-      name: '',
-      email: '',
-      phone: '',
+      fullName: '',
+      emailAddress: '',
+      phoneNumber: '',
       projectType: '',
-      message: ''
+      goalsAndRequirements: ''
     });
+    setError(null);
   };
 
   return (
@@ -54,7 +81,7 @@ function Calltoactionapp1() {
           </div>
           <p className={styles.ctaSubtitle}>Have an app idea? Need expert guidance to bring it to life?</p>
           <p className={styles.ctaDescription}>
-            Enter your email to schedule a free consultation with our mobile app development experts. 
+            Enter your email to schedule a free consultation with our mobile app development experts.
             We'll discuss your goals, platforms, features, and timelines.
           </p>
           
@@ -75,12 +102,12 @@ function Calltoactionapp1() {
           <form onSubmit={handleSubmit} className={styles.quoteForm}>
             <div className={styles.formRow}>
               <div className={styles.inputGroup}>
-                <label htmlFor="name" className={styles.inputLabel}>Full Name</label>
+                <label htmlFor="fullName" className={styles.inputLabel}>Full Name</label>
                 <input
                   type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
+                  id="fullName"
+                  name="fullName"
+                  value={formData.fullName}
                   onChange={handleInputChange}
                   className={styles.formInput}
                   placeholder="Enter your full name"
@@ -89,12 +116,12 @@ function Calltoactionapp1() {
               </div>
               
               <div className={styles.inputGroup}>
-                <label htmlFor="email" className={styles.inputLabel}>Email Address</label>
+                <label htmlFor="emailAddress" className={styles.inputLabel}>Email Address</label>
                 <input
                   type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
+                  id="emailAddress"
+                  name="emailAddress"
+                  value={formData.emailAddress}
                   onChange={handleInputChange}
                   className={styles.formInput}
                   placeholder="Enter your email address"
@@ -105,12 +132,12 @@ function Calltoactionapp1() {
             
             <div className={styles.formRow}>
               <div className={styles.inputGroup}>
-                <label htmlFor="phone" className={styles.inputLabel}>Phone Number</label>
+                <label htmlFor="phoneNumber" className={styles.inputLabel}>Phone Number</label>
                 <input
                   type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
                   onChange={handleInputChange}
                   className={styles.formInput}
                   placeholder="Enter your phone number"
@@ -139,11 +166,11 @@ function Calltoactionapp1() {
             </div>
             
             <div className={styles.inputGroup}>
-              <label htmlFor="message" className={styles.inputLabel}>Project Details & Requirements</label>
+              <label htmlFor="goalsAndRequirements" className={styles.inputLabel}>Project Details & Requirements</label>
               <textarea
-                id="message"
-                name="message"
-                value={formData.message}
+                id="goalsAndRequirements"
+                name="goalsAndRequirements"
+                value={formData.goalsAndRequirements}
                 onChange={handleInputChange}
                 className={styles.formTextarea}
                 placeholder="Tell us about your app idea, target audience, and any specific features you need"
@@ -151,13 +178,15 @@ function Calltoactionapp1() {
                 required
               ></textarea>
             </div>
+
+            {error && <p className={styles.errorMessage}>{error}</p>}
             
             <div className={styles.formActions}>
               <button type="button" onClick={handleReset} className={styles.backButton}>
                 Back
               </button>
-              <button type="submit" className={styles.submitFormButton}>
-                Submit Request
+              <button type="submit" className={styles.submitFormButton} disabled={loading}>
+                {loading ? "Submitting..." : "Submit Request"}
                 <span className={styles.arrowIcon}>→</span>
               </button>
             </div>

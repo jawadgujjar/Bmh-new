@@ -4,7 +4,7 @@ import styles from '../../../styles/digital-marketing/sub-category-digital/subca
 
 function SubCalltoactiondigital2({ 
   title = "Ready To Transform Your Digital Presence?",
-  subtitle = "Let's Create Something Extraordinary Together",
+  // subtitle = "Let's Create Something Extraordinary Together",
   description = "Our team of digital experts is ready to elevate your brand with tailored strategies that deliver exceptional results.",
   phoneNumber = "(213) 416-7355"
 }) {
@@ -17,8 +17,8 @@ function SubCalltoactiondigital2({
           <span className={styles.circle}></span>
         </div>
         
-        <h3 className={styles.ctaSubtitle}>{subtitle}</h3>
-        <p className={styles.ctaDescription}>{description}</p>
+        {/* <h3 className={styles.ctaSubtitle}>{subtitle}</h3> */}
+        <p className={styles.ctaSubtitle}>{description}</p>
         
         <div className={styles.ctaActions}>
           <a href={`tel:${phoneNumber.replace(/\D/g, '')}`} className={styles.ctaButton}>

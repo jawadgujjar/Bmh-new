@@ -46,7 +46,7 @@ export async function GET(request) {
   }
 }
 
-// POST: Create a new subcategory with middleSection transformation
+// POST: Create a new subcategory with middleSection and CTA transformation
 export async function POST(req) {
   try {
     await dbConnect();
@@ -66,12 +66,20 @@ export async function POST(req) {
     if (body.middleSection) {
       const { description, images, extraDescription, ...rest } = body.middleSection;
       body.middleSection = {
-        description1: description || "",
-        image1: images?.[0] || "",
-        image2: images?.[1] || "",
-        description2: extraDescription || "",
+        description1: description || body.middleSection.description1 || "",
+        image1: images?.[0] || body.middleSection.image1 || "",
+        image2: images?.[1] || body.middleSection.image2 || "",
+        description2: extraDescription || body.middleSection.description2 || "",
         ...rest, // Preserve any new fields
       };
+    }
+
+    // Transform CTA1 and CTA2 if using flat structure (optional)
+    if (body.cta1 && typeof body.cta1 === "object" && !body.cta1.heading && !body.cta1.description) {
+      body.cta1 = { heading: body.cta1.heading || "", description: body.cta1.description || "" };
+    }
+    if (body.cta2 && typeof body.cta2 === "object" && !body.cta2.heading && !body.cta2.description) {
+      body.cta2 = { heading: body.cta2.heading || "", description: body.cta2.description || "" };
     }
 
     const subcategory = new SubCategory(body);
@@ -84,7 +92,7 @@ export async function POST(req) {
   }
 }
 
-// PUT: Update a subcategory with middleSection transformation
+// PUT: Update a subcategory with middleSection and CTA transformation
 export async function PUT(req) {
   try {
     await dbConnect();
@@ -104,6 +112,14 @@ export async function PUT(req) {
         description2: extraDescription || body.middleSection.description2 || "",
         ...rest, // Preserve any new fields
       };
+    }
+
+    // Transform CTA1 and CTA2 if using flat structure (optional)
+    if (body.cta1 && typeof body.cta1 === "object" && !body.cta1.heading && !body.cta1.description) {
+      body.cta1 = { heading: body.cta1.heading || body.cta1 || "", description: body.cta1.description || "" };
+    }
+    if (body.cta2 && typeof body.cta2 === "object" && !body.cta2.heading && !body.cta2.description) {
+      body.cta2 = { heading: body.cta2.heading || body.cta2 || "", description: body.cta2.description || "" };
     }
 
     const updated = await SubCategory.findByIdAndUpdate(body._id, body, {
