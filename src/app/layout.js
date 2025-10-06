@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { Geist, Geist_Mono } from "next/font/google";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./globals.css";
 import NavbarBmh from "@/components/navbar/navbar";
 import Footer from "@/components/footer/footer";
- 
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,12 +18,20 @@ const geistMono = Geist_Mono({
 });
 
 export default function RootLayout({ children }) {
+  const pathname = usePathname();
+
+  // check if it's admin route
+  const isAdminRoute = pathname.startsWith("/admin");
+
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <NavbarBmh />
-        {children}
-        <Footer/>
+        {/* Show Navbar/Footer only if not in admin */}
+        {!isAdminRoute && <NavbarBmh />}
+
+        <main>{children}</main>
+
+        {!isAdminRoute && <Footer />}
       </body>
     </html>
   );

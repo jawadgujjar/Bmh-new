@@ -1,0 +1,138 @@
+/* Container */
+.signupContainer {
+  height: 100vh;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-family: 'Poppins', sans-serif; /* Consistent with other components */
+}
+
+/* Signup Box */
+.signupBox {
+  width: 100%;
+  max-width: 1000px;
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 123, 255, 0.3);
+}
+
+/* Welcome Section */
+.welcomeSection {
+  background: #f9f9f9;
+  padding: 60px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: all 0.5s ease-in-out;
+}
+
+/* Welcome Title */
+.welcomeTitle {
+  font-size: 34px;
+  font-weight: bold;
+  background: linear-gradient(to right, #007BFF, #00c6ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Welcome Text */
+.welcomeText {
+  font-size: 18px;
+  text-align: center;
+  max-width: 320px;
+  font-style: italic;
+  color: #333;
+}
+
+/* Form Section */
+.formSection {
+  padding: 40px 30px;
+}
+
+/* Form Title */
+.formTitle {
+  color: #007BFF;
+  text-align: center;
+  margin-bottom: 30px;
+  font-weight: 600;
+  font-size: 24px;
+}
+
+/* Input Fields */
+.formInput {
+  border-radius: 8px;
+  border-color: #007BFF !important;
+  height: 40px;
+}
+
+/* Role Selector */
+.roleSelector {
+  width: 100%;
+  border-radius: 8px;
+  height: 40px;
+}
+
+/* Signup Button */
+.signupButton {
+  border-radius: 8px;
+  font-weight: 600;
+  background: #007BFF;
+  border-color: #007BFF;
+  height: 40px;
+  transition: all 0.3s ease;
+}
+
+.signupButton:hover {
+  background: #0056b3;
+  border-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.signupButton:disabled {
+  background: #94a3b8;
+  border-color: #94a3b8;
+  cursor: not-allowed;
+}
+
+/* Login Link */
+.loginLink {
+  text-align: center;
+  margin-top: 10px;
+  color: #555;
+  font-size: 16px;
+}
+
+.loginLink a {
+  color: #007BFF;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.loginLink a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .welcomeSection {
+    display: none;
+  }
+
+  .formSection {
+    padding: 20px;
+  }
+
+  .formTitle {
+    font-size: 20px;
+  }
+
+  .welcomeTitle {
+    font-size: 28px;
+  }
+}
