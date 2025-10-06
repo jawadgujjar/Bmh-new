@@ -37,6 +37,11 @@ function NavbarBmh() {
     "web-development": true,
     "app-development": true,
   });
+  const [fetchAttempts, setFetchAttempts] = useState({
+    "digital-marketing": 0,
+    "web-development": 0,
+    "app-development": 0,
+  });
 
   const handleNavClick = () => {
     window.scrollTo(0, 0);
@@ -67,6 +72,8 @@ function NavbarBmh() {
 
   useEffect(() => {
     const fetchSubcategories = async (category) => {
+      if (fetchAttempts[category] > 0) return;
+
       try {
         setLoading((prev) => ({ ...prev, [category]: true }));
         console.log(`Fetching subcategories for ${category}...`);
@@ -84,62 +91,24 @@ function NavbarBmh() {
         const data = await response.json();
         console.log(`Raw API response for ${category}:`, data);
 
-        // Ensure data is an array
         const subcategoriesData = Array.isArray(data) ? data : (data.data || [data]);
         console.log(`Processed subcategories for ${category}:`, subcategoriesData);
 
-        // Use API data with fallback slugs if missing
-        setSubcategories((prev) => ({
-          ...prev,
-          [category]: subcategoriesData.length > 0
-            ? subcategoriesData.map((item) => ({
-                ...item,
-                slug: item.slug || generateSlug(item.name || "unnamed"),
-                icon: item.icon || "FaBullhorn",
-              }))
-            : [
-                { _id: "1", name: "SEO Company", icon: "FiSearch", slug: "seocompany", category: "digital-marketing" },
-                { _id: "2", name: "Local SEO", icon: "FiMapPin", slug: "localseo", category: "digital-marketing" },
-                { _id: "3", name: "Hire SEO Consultant", icon: "FiUserCheck", slug: "hireseoconsultant", category: "digital-marketing" },
-                { _id: "4", name: "Dental SEO Company", icon: "FiSmile", slug: "dentalseo", category: "digital-marketing" },
-                { _id: "5", name: "Cosmetics SEO Company", icon: "FiShare2", slug: "cosmeticsseo", category: "digital-marketing" },
-                { _id: "6", name: "SEO Services", icon: "FiSearch", slug: "seo-services", category: "digital-marketing" },
-                { _id: "6", name: "Website Design", icon: "FaLaptopCode", slug: "webdevelopment", category: "web-development" },
-                { _id: "7", name: "E-commerce Development", icon: "CiShoppingCart", slug: "ecommercedevelopment", category: "web-development" },
-                { _id: "8", name: "Custom Software", icon: "CiSettings", slug: "custom-software", category: "web-development" },
-                { _id: "9", name: "Mobile Application Development", icon: "FaMobileAlt", slug: "mobile-application-development", category: "app-development" },
-                { _id: "10", name: "Web App Development", icon: "FiGlobe", slug: "web-app-development", category: "app-development" },
-                { _id: "11", name: "Hybrid App Development", icon: "FiLayers", slug: "hybrid-app-development", category: "app-development" },
-              ].filter((item) => item.category === category),
-        }));
+        if (subcategoriesData.length > 0) {
+          setSubcategories((prev) => ({
+            ...prev,
+            [category]: subcategoriesData.map((item) => ({
+              ...item,
+              slug: item.slug || generateSlug(item.name || "unnamed"),
+              icon: item.icon || "/images/placeholder-icon.png",
+            })),
+          }));
+        }
       } catch (error) {
         console.error(`Error fetching ${category} subcategories:`, error);
-        const fallbackSubcategories = {
-          "digital-marketing": [
-            { _id: "1", name: "SEO Company", icon: "FiSearch", slug: "seocompany", category: "digital-marketing" },
-            { _id: "2", name: "Local SEO", icon: "FiMapPin", slug: "localseo", category: "digital-marketing" },
-            { _id: "3", name: "Hire SEO Consultant", icon: "FiUserCheck", slug: "hireseoconsultant", category: "digital-marketing" },
-            { _id: "4", name: "Dental SEO Company", icon: "FiSmile", slug: "dentalseo", category: "digital-marketing" },
-            { _id: "5", name: "Cosmetics SEO Company", icon: "FiShare2", slug: "cosmeticsseo", category: "digital-marketing" },
-            { _id: "6", name: "SEO Services", icon: "FiSearch", slug: "seo-services", category: "digital-marketing" },
-          ],
-          "web-development": [
-            { _id: "6", name: "Website Design", icon: "FaLaptopCode", slug: "webdevelopment", category: "web-development" },
-            { _id: "7", name: "E-commerce Development", icon: "CiShoppingCart", slug: "ecommercedevelopment", category: "web-development" },
-            { _id: "8", name: "Custom Software", icon: "CiSettings", slug: "custom-software", category: "web-development" },
-          ],
-          "app-development": [
-            { _id: "9", name: "Mobile Application Development", icon: "FaMobileAlt", slug: "mobile-application-development", category: "app-development" },
-            { _id: "10", name: "Web App Development", icon: "FiGlobe", slug: "web-app-development", category: "app-development" },
-            { _id: "11", name: "Hybrid App Development", icon: "FiLayers", slug: "hybrid-app-development", category: "app-development" },
-          ],
-        };
-        setSubcategories((prev) => ({
-          ...prev,
-          [category]: fallbackSubcategories[category] || [],
-        }));
       } finally {
         setLoading((prev) => ({ ...prev, [category]: false }));
+        setFetchAttempts((prev) => ({ ...prev, [category]: prev[category] + 1 }));
       }
     };
 
@@ -159,24 +128,6 @@ function NavbarBmh() {
 
   const handleDropdownToggle = (dropdownId, isOpen) => {
     setActiveDropdown(isOpen ? dropdownId : null);
-  };
-
-  const getIconComponent = (iconName) => {
-    const iconMap = {
-      FiSearch: <FiSearch className={styles.icon} />,
-      FiMapPin: <FiMapPin className={styles.icon} />,
-      FiUserCheck: <FiUserCheck className={styles.icon} />,
-      FiSmile: <FiSmile className={styles.icon} />,
-      FiShare2: <FiShare2 className={styles.icon} />,
-      FaBullhorn: <FaBullhorn className={styles.icon} />,
-      FaLaptopCode: <FaLaptopCode className={styles.icon} />,
-      CiShoppingCart: <CiShoppingCart className={styles.icon} />,
-      CiSettings: <CiSettings className={styles.icon} />,
-      FaMobileAlt: <FaMobileAlt className={styles.icon} />,
-      FiGlobe: <FiGlobe className={styles.icon} />,
-      FiLayers: <FiLayers className={styles.icon} />,
-    };
-    return iconMap[iconName] || <FaBullhorn className={styles.icon} />;
   };
 
   const categoryConfig = [
@@ -268,23 +219,27 @@ function NavbarBmh() {
                       Loading...
                     </NavDropdown.Item>
                   ) : categorySubcategories.length === 0 ? (
-                    <NavDropdown.Item className={styles.navDropdownItem}>
-                      No subcategories available
+                    <NavDropdown.Item className={styles.navDropdownItem} disabled>
+                      No data available
                     </NavDropdown.Item>
                   ) : (
                     categorySubcategories.map((subcategory) => (
-                      console.log(`Generating link for ${subcategory.name} with slug: ${subcategory.slug}`),
+                      console.log(`Subcategory ${subcategory.name} icon: ${subcategory.icon}`),
                       <NavDropdown.Item
                         key={subcategory._id || subcategory.name}
                         as={Link}
                         href={`/${category.path}/${subcategory.slug}`}
-                        onClick={(e) => {
-                          handleNavClick();
-                          console.log(`Navigating to /${category.path}/${subcategory.slug}`);
-                        }}
+                        onClick={() => handleNavClick()}
                         className={styles.navDropdownItem}
+                        style={{ display: "flex", alignItems: "center", minWidth: "150px" }}
                       >
-                        {getIconComponent(subcategory.icon)} {subcategory.name}
+                        <img
+                          src={subcategory.icon}
+                          alt={subcategory.name}
+                          style={{ width: 20, height: 20, marginRight: 8 }}
+                          onError={(e) => (e.currentTarget.src = "/images/placeholder-icon.png")}
+                        />
+                        <span style={{ whiteSpace: "normal", overflow: "visible" }}>{subcategory.name}</span>
                       </NavDropdown.Item>
                     ))
                   )}

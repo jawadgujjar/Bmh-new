@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const portfolioPageSchema = new mongoose.Schema(
   {
     header: {
-      image: { type: String, required: true },
+      image: { type: String  },
       title: { type: String, required: true },
       description: { type: String, required: true },
     },
