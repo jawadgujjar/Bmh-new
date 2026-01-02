@@ -11,37 +11,26 @@ function FAQ() {
 
   const faqData = [
     {
-      question: "How long does it take to receive a quote?",
-      answer: "We typically respond with a quote within 1-2 business days after receiving your request. Complex projects may take slightly longer."
+      question: "What kind of businesses does Brand Marketing Hub work with?",
+      answer: "We work with small businesses, luxury brands, service providers, and individuals who want clear and simple branding that works online."
     },
     {
-      question: "What information do I need to provide for an accurate quote?",
-      answer: "Please provide product type, quantity, dimensions, material preference, and any special requirements like printing or finishing options."
+      question: "Are your digital branding solutions easy to understand?",
+      answer: "Yes. We focus on simple language, clear ideas, and practical strategies that make branding easy for business owners and users."
     },
     {
-      question: "Do you offer design services?",
-      answer: "Yes, we have an in-house design team that can help create or refine your packaging design for an additional fee."
+      question: "Can small businesses benefit from your branding services?",
+      answer: "Absolutely. Our small business branding agency services are designed to be affordable, flexible, and focused on steady growth."
     },
     {
-      question: "What is your minimum order quantity?",
-      answer: "Our MOQ varies by product type but typically starts at 100 units for standard items. Custom products may have higher MOQs."
+      question: "Do you help with personal branding as well?",
+      answer: "Yes. We offer personal branding consultant services for professionals who want to build trust, visibility, and confidence online."
     },
     {
-      question: "What file formats do you accept for artwork?",
-      answer: "We accept AI, EPS, PDF, PSD, JPG, and PNG files. Vector files are preferred for printing."
-    },
-    {
-      question: "How long does production take?",
-      answer: "Production time depends on the complexity of your order but typically ranges from 10-15 business days after approval."
-    },
-    {
-      question: "Do you offer eco-friendly packaging options?",
-      answer: "Yes, we offer a range of sustainable materials including recycled, compostable, and biodegradable options."
-    },
-    {
-      question: "Can I get samples before placing a large order?",
-      answer: "Absolutely! We provide samples of our standard products for a small fee that's credited back when you place your order."
+      question: "How does your branding help with Google and SEO?",
+      answer: "Our content is AI-optimized and semantically structured to match how Google understands helpful and relevant information, while still being written for real people."
     }
+    
   ];
 
   return (

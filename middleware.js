@@ -26,7 +26,7 @@ export function middleware(req) {
       console.log("No token found, redirecting to login");
       return NextResponse.redirect(new URL("/auth/login", req.url));
     }
-
+  
     try {
       // ✅ Verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
