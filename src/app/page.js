@@ -13,7 +13,7 @@ import ProposalForm from "@/components/landing/proposalform";
 import Reviews from "@/components/landing/reviews";  
 import Reward from "@/components/landing/reward";
 import SeoIndustries from "@/components/landing/seoindustries";
- 
+
 import Features from "@/components/landing/services";
 import WebCalltoaction from "@/components/landing/webdevelopment/webcalltoaction";
 import WebIndustries from "@/components/landing/webdevelopment/webindustries";
@@ -23,14 +23,14 @@ export default function Home() {
   return (
     <>
       <HeroMain />
-      <Reviews />  
+      {/* <Reviews />   */}
       <Alice/>
       <Forwhom/>
+      <Features/>
       <SeoIndustries/>
       <Calltoaction/>
       <WebIndustries/>
       <WebCalltoaction/>
-      <Features/>
       <WhyChooseUs/>
       <Carousel/>
       <Reward/>
