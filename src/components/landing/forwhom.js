@@ -37,15 +37,10 @@ const Forwhom = () => {
       <Row gutter={[48, 32]} align="middle">
         <Col xs={24} md={12}>
           <div className={styles.contentSection}>
-            <h3 className={styles.subTitle}>FOR WHOM WE WORK?</h3>
+            <h3 className={styles.subTitle}>Simple and Smart Digital Branding Solutions for the USA</h3>
             <p className={styles.description}>
-              The Brand Marketing Hub is one of the famous{" "}
-              <strong>Mobile App</strong>, <strong>Web Development</strong> and{" "}
-              <strong>Digital Marketing</strong> company based in Denver. A team
-              of experts from Brand Marketing website development company
-              welcomes all businesses from large enterprises to new startups
-              across the globe. There are more than successful projects are on
-              our credits since our goal is the satisfaction of our clients.
+              Brand Marketing Hub helps businesses grow by building strong and meaningful brands online. We provide digital branding solutions that are easy to understand, effective, and designed for real people. Our goal is simple. We help you create a brand that feels clear, trustworthy, and memorable to your audience across the USA.
+              In today’s online world, people connect with brands that feel honest and consistent. A good brand is not only about logos or colors. It is about how people feel when they see your business online. At Brand Marketing Hub, we focus on creating brand experiences that make people feel confident choosing you.
             </p>
             <Button type="primary" size="large" className={styles.quoteButton}>
               Get A Free Quote Now
@@ -58,20 +53,20 @@ const Forwhom = () => {
             <Row gutter={[16, 16]}>
               {cardData.map((card, index) => (
                 <Col xs={24} sm={12} key={index}>
-                  <Card 
+                  <Card
                     className={styles.card}
                     cover={null}
                   >
                     <div className={styles.cardContentWrapper}>
-                     
+
                       <div className={styles.cardIconContainer}>
-                        <img 
-                          alt={card.title} 
-                          src={card.icon.src} 
+                        <img
+                          alt={card.title}
+                          src={card.icon.src}
                           className={styles.cardIcon}
                         />
                       </div>
-                       <h4 className={styles.cardTitle}>{card.title}</h4>
+                      <h4 className={styles.cardTitle}>{card.title}</h4>
                       {/* <p className={styles.cardContent}>{card.content}</p> */}
                     </div>
                   </Card>

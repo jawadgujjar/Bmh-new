@@ -2,27 +2,15 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation"; // 🔴 useRouter add کریں
 import { Navbar, Nav, Container, Button, NavDropdown } from "react-bootstrap";
-import {
-  CiMobile3,
-  CiShoppingCart,
-  CiSettings,
-} from "react-icons/ci";
-import {
-  FiSearch,
-  FiMapPin,
-  FiUserCheck,
-  FiSmile,
-  FiShare2,
-  FiGlobe,
-  FiLayers,
-} from "react-icons/fi";
+import { CiMobile3 } from "react-icons/ci";
 import { FaBullhorn, FaLaptopCode, FaMobileAlt } from "react-icons/fa";
 import styles from "../../styles/navbar.module.css";
 
 function NavbarBmh() {
   const pathname = usePathname();
+  const router = useRouter(); // 🔴 useRouter کو initialize کریں
   const navbarRef = useRef(null);
   const [scrolled, setScrolled] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -45,6 +33,14 @@ function NavbarBmh() {
 
   const handleNavClick = () => {
     window.scrollTo(0, 0);
+    setExpanded(false);
+    setActiveDropdown(null);
+  };
+
+  const handleCategoryClick = (mainPath, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    router.push(mainPath); // 🔴 Next.js router استعمال کریں (fast client-side navigation)
     setExpanded(false);
     setActiveDropdown(null);
   };
@@ -76,7 +72,6 @@ function NavbarBmh() {
 
       try {
         setLoading((prev) => ({ ...prev, [category]: true }));
-        console.log(`Fetching subcategories for ${category}...`);
         const response = await fetch(`/api/subcategories?category=${category}`, {
           method: "GET",
           headers: {
@@ -89,10 +84,7 @@ function NavbarBmh() {
         }
 
         const data = await response.json();
-        console.log(`Raw API response for ${category}:`, data);
-
         const subcategoriesData = Array.isArray(data) ? data : (data.data || [data]);
-        console.log(`Processed subcategories for ${category}:`, subcategoriesData);
 
         if (subcategoriesData.length > 0) {
           setSubcategories((prev) => ({
@@ -126,15 +118,12 @@ function NavbarBmh() {
       .replace(/-+$/, "");
   };
 
-  const handleDropdownToggle = (dropdownId, isOpen) => {
-    setActiveDropdown(isOpen ? dropdownId : null);
-  };
-
   const categoryConfig = [
     {
       title: "DIGITAL MARKETING",
       id: "digital-marketing-dropdown",
-      path: "digitalmarketing",
+      mainPath: "/digitalmarketing",
+      subPath: "digitalmarketing",
       mainIcon: <FaBullhorn className={styles.icon} />,
       mainName: "Digital Marketing",
       categoryKey: "digital-marketing",
@@ -142,7 +131,8 @@ function NavbarBmh() {
     {
       title: "WEB DEVELOPMENT",
       id: "web-development-dropdown",
-      path: "webdevelopment",
+      mainPath: "/webdevelopment",
+      subPath: "webdevelopment",
       mainIcon: <FaLaptopCode className={styles.icon} />,
       mainName: "Website Design",
       categoryKey: "web-development",
@@ -150,7 +140,8 @@ function NavbarBmh() {
     {
       title: "APP DEVELOPMENT",
       id: "app-development-dropdown",
-      path: "appdevelopment",
+      mainPath: "/appdevelopment",
+      subPath: "appdevelopment",
       mainIcon: <FaMobileAlt className={styles.icon} />,
       mainName: "Mobile Application Development",
       categoryKey: "app-development",
@@ -193,27 +184,28 @@ function NavbarBmh() {
           <Nav className={`${styles.mainNav} ms-auto`}>
             {categoryConfig.map((category) => {
               const categorySubcategories = subcategories[category.categoryKey] || [];
-              console.log(`Rendering ${category.title} with subcategories:`, categorySubcategories);
 
               return (
                 <NavDropdown
                   key={category.id}
-                  title={<span className={styles.mainLink}>{category.title}</span>}
+                  title={
+                    <Link 
+                      href={category.mainPath}
+                      onClick={(e) => handleCategoryClick(category.mainPath, e)}
+                      className={styles.mainLink}
+                      style={{textDecoration: 'none', color: 'white'}}
+                    >
+                      {category.title}
+                    </Link>
+                  }
                   id={category.id}
                   className={styles.customDropdown}
                   show={activeDropdown === category.id}
-                  onToggle={(isOpen) => handleDropdownToggle(category.id, isOpen)}
+                  onMouseEnter={() => setActiveDropdown(category.id)}
+                  onMouseLeave={() => setActiveDropdown(null)}
+                  onToggle={() => {}}
                 >
-                  <NavDropdown.Item
-                    as={Link}
-                    href={`/${category.path}`}
-                    onClick={handleNavClick}
-                    className={styles.navDropdownItemfirst}
-                  >
-                    {category.mainIcon} {category.mainName}
-                  </NavDropdown.Item>
-                  <div className={styles.orangeUnderline}></div>
-
+                  {/* سب کٹیگریز */}
                   {loading[category.categoryKey] ? (
                     <NavDropdown.Item className={styles.navDropdownItem}>
                       Loading...
@@ -224,11 +216,10 @@ function NavbarBmh() {
                     </NavDropdown.Item>
                   ) : (
                     categorySubcategories.map((subcategory) => (
-                      console.log(`Subcategory ${subcategory.name} icon: ${subcategory.icon}`),
                       <NavDropdown.Item
                         key={subcategory._id || subcategory.name}
                         as={Link}
-                        href={`/${category.path}/${subcategory.slug}`}
+                        href={`/${category.subPath}/${subcategory.slug}`}
                         onClick={() => handleNavClick()}
                         className={styles.navDropdownItem}
                         style={{ display: "flex", alignItems: "center", minWidth: "150px" }}
@@ -239,7 +230,9 @@ function NavbarBmh() {
                           style={{ width: 20, height: 20, marginRight: 8 }}
                           onError={(e) => (e.currentTarget.src = "/images/placeholder-icon.png")}
                         />
-                        <span style={{ whiteSpace: "normal", overflow: "visible" }}>{subcategory.name}</span>
+                        <span style={{ whiteSpace: "normal", overflow: "visible" }}>
+                          {subcategory.name}
+                        </span>
                       </NavDropdown.Item>
                     ))
                   )}

@@ -1,0 +1,210 @@
+/* ================================
+   HERO FORM – LANDSCAPE VERSION
+   ================================ */
+
+.heroFormContainer {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  padding: 2.5rem 3rem;
+
+  /* LANDSCAPE WIDTH */
+  max-width: 1200px;
+  width: 100%;
+
+  /* TOP + BOTTOM GAP */
+  margin: 1rem auto;
+
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  position: relative;
+  overflow: hidden;
+}
+
+/* subtle glow */
+.heroFormContainer::before {
+  content: "";
+  position: absolute;
+  top: -40%;
+  right: -40%;
+  width: 80%;
+  height: 180%;
+  background: radial-gradient(
+    circle,
+    rgba(253, 126, 20, 0.12) 0%,
+    transparent 70%
+  );
+  z-index: 0;
+}
+
+.quoteForm {
+  position: relative;
+  z-index: 1;
+}
+
+/* ================================
+   FORM LAYOUT - Single Row with Button
+   ================================ */
+
+.formRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.inputGroup {
+  flex: 1;
+  min-width: 0; /* Allows flex items to shrink properly */
+}
+
+.inputLabel {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #e2e8f0;
+}
+
+/* ================================
+   INPUTS
+   ================================ */
+
+.formInput {
+  width: 100%;
+  min-height: 48px;
+  padding: 0.8rem 1.2rem;
+  font-size: 0.95rem;
+  color: #ffffff;
+
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid #334155;
+  border-radius: 12px;
+
+  transition: all 0.3s ease;
+}
+
+.formInput::placeholder {
+  color: #94a3b8;
+}
+
+.formInput:focus {
+  outline: none;
+  border-color: #fd7e14;
+  background: rgba(15, 23, 42, 0.85);
+  box-shadow: 0 0 0 3px rgba(253, 126, 20, 0.25);
+}
+
+/* ================================
+   SUBMIT BUTTON (Compact - Right Side)
+   ================================ */
+
+.submitFormButton {
+  height: 48px;
+  min-width: 180px;
+  margin-bottom: 0.5rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
+  border: none;
+
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #ffffff;
+
+  background: linear-gradient(135deg, #fd7e14 0%, #f59e0b 100%);
+  cursor: pointer;
+
+  box-shadow: 0 8px 20px rgba(253, 126, 20, 0.35);
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.submitFormButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(253, 126, 20, 0.45);
+}
+
+.arrowIcon {
+  transition: transform 0.3s ease;
+}
+
+.submitFormButton:hover .arrowIcon {
+  transform: translateX(4px);
+}
+
+/* ================================
+   RESPONSIVE
+   ================================ */
+
+@media (max-width: 992px) {
+  .heroFormContainer {
+    padding: 2rem 2.5rem;
+    margin: 3rem 1.5rem;
+  }
+  
+  .formRow {
+    gap: 1.2rem;
+  }
+  
+  .submitFormButton {
+    min-width: 160px;
+    font-size: 0.9rem;
+    padding: 0.7rem 1.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .formRow {
+    flex-direction: column;
+    gap: 1.4rem;
+    align-items: stretch;
+  }
+  
+  .heroFormContainer {
+    padding: 2rem 1.5rem;
+    margin: 2.5rem 1rem;
+    border-radius: 18px;
+  }
+  
+  .submitFormButton {
+    width: 100%;
+    margin-top: 0.5rem;
+    height: 50px;
+  }
+  
+  .inputGroup {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroFormContainer {
+    margin: 2rem 0.8rem;
+    padding: 1.8rem 1.2rem;
+  }
+  
+  .formInput {
+    min-height: 46px;
+    padding: 0.7rem 1rem;
+  }
+  
+  .submitFormButton {
+    height: 46px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 360px) {
+  .heroFormContainer {
+    padding: 1.5rem 1rem;
+  }
+  
+  .formInput {
+    font-size: 0.9rem;
+  }
+}

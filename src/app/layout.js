@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { SessionProvider } from "next-auth/react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./globals.css";
@@ -26,12 +27,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {/* Show Navbar/Footer only if not in admin */}
-        {!isAdminRoute && <NavbarBmh />}
+        <SessionProvider>
+          {/* Show Navbar/Footer only if not in admin */}
+          {!isAdminRoute && <NavbarBmh />}
 
-        <main>{children}</main>
+          <main>{children}</main>
 
-        {!isAdminRoute && <Footer />}
+          {!isAdminRoute && <Footer />}
+        </SessionProvider>
       </body>
     </html>
   );
