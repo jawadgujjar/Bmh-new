@@ -48,6 +48,7 @@
   gap: 1.5rem;
 }
 
+/* 🔴 FIX: Main Link Styles for Navbar */
 .mainLink {
   margin-left: 1.5rem;
   color: white !important;
@@ -58,6 +59,9 @@
   letter-spacing: 0.5px;
   transition: color 0.2s ease;
   position: relative;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  display: inline-block;
 }
 
 .mainLink:hover {
@@ -79,30 +83,70 @@
   width: 100%;
 }
 
-/* Dropdown Styles */
+/* 🔴 FIX: Bootstrap NavDropdown Title को Link की तरह behave करने दें */
 .customDropdown .dropdown-toggle {
   color: white !important;
   background-color: transparent !important;
-  border: none;
+  border: none !important;
   font-weight: 700 !important;
   text-transform: uppercase;
-  font-size: 0.9rem;
+  font-size: 0.9rem !important;
   padding: 8px 0 !important;
+  letter-spacing: 0.5px;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  position: relative;
 }
 
-/* Force dropdown arrow to white */
-.mainNavbar .customDropdown .dropdown-toggle::after {
+.customDropdown .dropdown-toggle:hover {
+  color: #FFA500 !important;
+  background-color: transparent !important;
+  border: none !important;
+}
+
+/* 🔴 IMPORTANT: Remove Bootstrap's default arrow if using custom link */
+.customDropdown .dropdown-toggle::after {
+  display: none !important;
+}
+
+/* 🔴 Add custom arrow for dropdown */
+.customDropdown.has-arrow .dropdown-toggle::after {
+  display: inline-block !important;
   vertical-align: .255em;
   content: "";
   border: .3em solid transparent;
   border-top-color: white !important;
   border-bottom: 0;
   margin-left: .255em;
-  display: inline-block;
 }
 
-.customDropdown.show .dropdown-toggle::after {
+.customDropdown.has-arrow.show .dropdown-toggle::after {
   transform: rotate(180deg);
+}
+
+/* Navbar Toggle Button */
+.customToggle {
+  border: none !important;
+  padding: 0.5rem !important;
+  margin-left: 1rem;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+  cursor: pointer;
+}
+
+.customToggle:hover {
+  opacity: 0.8;
+}
+
+.customToggle:focus {
+  box-shadow: none !important;
+}
+
+/* Force the toggler icon to be white */
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
 }
 
 /* Luxury Dropdown Menu */
@@ -117,6 +161,18 @@
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 165, 0, 0.3);
   transition: all 0.3s ease;
+  animation: dropdownFadeIn 0.2s ease;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .navDropdownItem {
@@ -132,6 +188,7 @@
   align-items: center;
   gap: 12px;
   background-color: transparent !important;
+  text-decoration: none !important;
 }
 
 .navDropdownItem:hover {
@@ -154,6 +211,7 @@
   align-items: center;
   gap: 12px;
   background-color: transparent !important;
+  text-decoration: none !important;
 }
 
 .navDropdownItemfirst:hover {
@@ -161,6 +219,25 @@
   background-color: rgba(255, 165, 0, 0.15) !important;
   border-left: 3px solid #FFA500;
   transform: translateX(2px);
+}
+
+.icon {
+  font-size: 18px;
+  color: #FFA500;
+  transition: all 0.3s ease;
+}
+
+.navDropdownItem:hover .icon {
+  color: #FD7E14;
+  transform: scale(1.1);
+}
+
+.orangeUnderline {
+  height: 2px;
+  width: 80%;
+  background-color: #FFA500;
+  margin-top: 8px;
+  border-radius: 2px;
 }
 
 /* Quote Button Styles */
@@ -254,45 +331,6 @@
   transform: scale(1.1);
 }
 
-/* Navbar Toggle Button - FIXED */
-.customToggle {
-  border: none !important;
-  padding: 0.5rem !important;
-  margin-left: 1rem;
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100%;
-}
-
-.customToggle:focus {
-  box-shadow: none !important;
-}
-
-/* Force the toggler icon to be white */
-.navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
-}
-
-.icon {
-  font-size: 18px;
-  color: #FFA500;
-  transition: all 0.3s ease;
-}
-
-.navDropdownItem:hover .icon {
-  color: #FD7E14;
-  transform: scale(1.1);
-}
-
-.orangeUnderline {
-  height: 2px;
-  width: 80%;
-  background-color: #FFA500;
-  margin-top: 8px;
-  border-radius: 2px;
-}
-
 /* Fix for Bootstrap's dropdown width on larger screens */
 @media (min-width: 992px) {
   .navbar-expand-lg .navbar-nav .dropdown-menu {
@@ -327,14 +365,18 @@
     padding: 12px 15px !important;
     margin: 0 !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: block;
+    width: 100%;
   }
 
   .customDropdown .dropdown-toggle {
     width: 100%;
     text-align: left;
     padding: 12px 15px !important;
+    display: block;
+    font-size: 1.1rem !important;
   }
-
+  
   .customDropdown .dropdown-menu {
     position: static !important;
     transform: none !important;
@@ -364,6 +406,8 @@
     padding: 15px;
     background-color: rgba(255, 165, 0, 0.1);
     border-radius: 5px;
+    width: 100%;
+    margin-left: 0;
   }
 
   .textPhone p {
@@ -372,6 +416,11 @@
   
   .orangeUnderline {
     background-color: #FFA500;
+  }
+
+  /* Hide dropdown arrow on mobile */
+  .customDropdown .dropdown-toggle::after {
+    display: none !important;
   }
 }
 

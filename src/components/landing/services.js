@@ -49,7 +49,7 @@ const Services = () => {
             <div className={styles.headerSection}>
                 <h1 className={styles.mainTitle}>Services We <span className={styles.highlight}>Offer?</span></h1>
                 <p className={styles.subTitle}>See how we can help your business grow</p>
-                <Button className={styles.ctaButton}>Discover Our Services</Button>
+                {/* <Button className={styles.ctaButton}>Discover Our Services</Button> */}
                 <FaCaretDown className={styles.scrollIndicator} />
             </div>
             

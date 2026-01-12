@@ -1,63 +1,90 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import Carousel from '../landing/carousel';
-import Portfolio from './portfolio';
-import styles from '../../styles/portfolioremianing.module.css';
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation"; // ✅ client-side navigation
+import Carousel from "../landing/carousel";
+import Portfolio from "./portfolio";
+import styles from "../../styles/portfolioremianing.module.css";
 
-const PortfolioRemain = () => {
-  const [activeCategory, setActiveCategory] = useState('All');
+// slug helper
+const slugify = (text) =>
+  text.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]+/g, "");
+
+const PortfolioRemain = ({ initialCategory = "All" }) => {
+  const [activeCategory, setActiveCategory] = useState(initialCategory);
   const [portfolioData, setPortfolioData] = useState([]);
-  const [categories, setCategories] = useState(['All']); // Initialize with 'All'
+  const [categories, setCategories] = useState(["All"]);
+  const router = useRouter();
 
-  // Fetch data from API on component mount
+  // 🔹 Fetch portfolio data from API
   useEffect(() => {
     const fetchPortfolioData = async () => {
       try {
-        const response = await fetch('/api/portfolio'); // Your API endpoint
+        const response = await fetch("/api/portfolio");
         const result = await response.json();
+
         if (result.success) {
-          const keywordsData = result.data || []; // Use result.data as the array of keyword objects
+          const keywordsData = result.data || [];
 
-          // Extract unique keywords for categories
-          const uniqueKeywords = [...new Set(keywordsData.map(item => item.keyword))];
-          setCategories(['All', ...uniqueKeywords]);
+          // 🔹 Extract unique categories
+          const uniqueKeywords = [
+            ...new Set(keywordsData.map((item) => item.keyword)),
+          ];
+          setCategories(["All", ...uniqueKeywords]);
 
-          // Flatten websites and add keyword to each for filtering
-          const flattenedWebsites = keywordsData.flatMap(keywordItem => 
-            keywordItem.websites.map(website => ({
+          // 🔹 Flatten all projects with category info
+          const flattenedWebsites = keywordsData.flatMap((keywordItem) =>
+            (keywordItem.websites || []).map((website) => ({
               ...website,
-              keyword: keywordItem.keyword // Attach keyword to each website
+              keyword: keywordItem.keyword,
+              categorySlug: slugify(keywordItem.keyword), // ✅ pre-slugify for safe routing
+              projectSlug: slugify(
+                website?.portfolioPage?.header?.title || ""
+              ), // ✅ slug for project
             }))
           );
+
           setPortfolioData(flattenedWebsites);
         }
       } catch (error) {
-        console.error('Error fetching portfolio data:', error);
+        console.error("Error fetching portfolio data:", error);
       }
     };
 
     fetchPortfolioData();
   }, []);
 
+  // 🔹 Handle category button click
+  const handleCategoryClick = (category) => {
+    setActiveCategory(category);
+
+    const slug = category === "All" ? "" : slugify(category);
+    router.push(slug ? `/portfolio/${slug}` : "/portfolio");
+  };
+
   return (
     <div>
-      {/* <p className={styles.portfolio}>PORTFOLIO</p> */}
-
-      {/* Categories Section - Now dynamic from API keywords */}
+      {/* Categories */}
       <div className={styles.categoriesContainer}>
         {categories.map((category) => (
           <button
             key={category}
-            className={`${styles.categoryButton} ${activeCategory === category ? styles.active : ''}`}
-            onClick={() => setActiveCategory(category)}
+            className={`${styles.categoryButton} ${
+              activeCategory === category ? styles.active : ""
+            }`}
+            onClick={() => handleCategoryClick(category)}
           >
             {category}
           </button>
         ))}
       </div>
 
-      <Portfolio activeCategory={activeCategory} portfolioData={portfolioData} />
+      {/* Portfolio listing */}
+      <Portfolio
+        activeCategory={activeCategory}
+        portfolioData={portfolioData}
+      />
 
+      {/* CTA Section */}
       <div className={styles.containerportfolio}>
         <div className={styles.textBox}>
           <p>How Does Your Site Compare?</p>
@@ -65,6 +92,7 @@ const PortfolioRemain = () => {
         </div>
       </div>
 
+      {/* Carousel */}
       <Carousel />
     </div>
   );
