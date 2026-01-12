@@ -1,6 +1,6 @@
 import { google } from "googleapis";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 
 export async function POST() {
   const session = await getServerSession(authOptions);
@@ -14,7 +14,7 @@ export async function POST() {
 
   const auth = new google.auth.OAuth2();
   auth.setCredentials({
-    access_token: session.accessToken
+    access_token: session.accessToken,
   });
 
   const calendar = google.calendar({ version: "v3", auth });
@@ -26,23 +26,23 @@ export async function POST() {
     requestBody: {
       summary: "Website Consultation",
       start: {
-        dateTime: new Date().toISOString()
+        dateTime: new Date().toISOString(),
       },
       end: {
-        dateTime: new Date(Date.now() + 30 * 60000).toISOString()
+        dateTime: new Date(Date.now() + 30 * 60000).toISOString(),
       },
       attendees: [
-        { email: "admin@yourcompany.com" } // 🔴 apna admin email yahan daalo
+        { email: "jawadgujjar573@gmail.com" },
       ],
       conferenceData: {
         createRequest: {
           requestId: "meet-" + Date.now(),
           conferenceSolutionKey: {
-            type: "hangoutsMeet"
-          }
-        }
-      }
-    }
+            type: "hangoutsMeet",
+          },
+        },
+      },
+    },
   });
 
   return new Response(
