@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { signIn, useSession, signOut } from "next-auth/react";
 import styles from "../../../styles/landing/webdevelopment/webcalltoaction.module.css";
 
@@ -10,6 +10,11 @@ function WebCalltoaction() {
   const [message, setMessage] = useState("");
   const [dateTime, setDateTime] = useState("");
   const [messageType, setMessageType] = useState("");
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handleForceLogin = async () => {
     await signOut({ redirect: false });
@@ -45,8 +50,8 @@ function WebCalltoaction() {
         body: JSON.stringify({ 
           dateTime,
           timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-          userEmail: session.user.email,
-          userName: session.user.name || session.user.email
+          userEmail: session?.user?.email || "",
+          userName: session?.user?.name || session?.user?.email || ""
         }),
       });
 
@@ -99,6 +104,39 @@ function WebCalltoaction() {
       default: return "";
     }
   };
+
+  // اگر client side نہیں ہے تو loading state دکھائیں
+  if (!isClient) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.contentWrapper}>
+          <div className={styles.ctaSection}>
+            <div style={{ 
+              height: "40px", 
+              backgroundColor: "rgba(255,255,255,0.1)", 
+              width: "60%", 
+              margin: "20px auto",
+              borderRadius: "8px"
+            }}></div>
+            <div style={{ 
+              height: "20px", 
+              backgroundColor: "rgba(255,255,255,0.05)", 
+              width: "80%", 
+              margin: "10px auto",
+              borderRadius: "4px"
+            }}></div>
+            <div style={{ 
+              height: "150px", 
+              backgroundColor: "rgba(255,255,255,0.05)", 
+              width: "90%", 
+              margin: "20px auto",
+              borderRadius: "8px"
+            }}></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>
@@ -171,7 +209,7 @@ function WebCalltoaction() {
                 fontWeight: "500",
                 marginBottom: "0.5rem"
               }}>
-                ✅ Logged in as: {session.user.email}
+                ✅ Logged in as: {session.user?.email || "User"}
               </p>
               <div className={styles.buttonGroup}>
                 <button 

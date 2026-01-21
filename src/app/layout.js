@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { SessionProvider } from "next-auth/react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "bootstrap/dist/css/bootstrap.min.css";
+// import 'antd/dist/reset.css'; // Ant Design v5
 import "./globals.css";
 import NavbarBmh from "@/components/navbar/navbar";
 import Footer from "@/components/footer/footer";

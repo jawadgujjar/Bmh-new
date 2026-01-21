@@ -1,0 +1,309 @@
+/* Header */
+.blogHeader {
+  position: relative;
+  min-height: 520px;
+  background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
+    url('/images/hero.jpg') center/cover no-repeat;
+  color: white;
+  padding: 50px 20px;
+  margin-bottom: 50px;
+}
+
+.headerContent {
+  max-width: 1200px;
+  margin: 80px auto 0;
+  padding: 0 20px;
+}
+
+.headerBreadcrumbs {
+  margin-bottom: 30px;
+  margin-top: 30px;
+}
+
+.breadcrumbLink {
+  color: rgba(255,255,255,0.8);
+  cursor: pointer;
+}
+
+.breadcrumbLink:hover,
+.currentPage {
+  color: #FD7E14 !important;
+}
+
+.headerMeta {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.headerDate {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.headerTitle {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.headerDescription {
+  font-size: 20px;
+  max-width: 800px;
+  opacity: 0.95;
+}
+
+/* ================= MAIN CONTAINER ================= */
+.mainPageContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 20px 100px;
+  /* min-height: 100vh; */
+}
+/* Grid for left article + right sticky */
+.layoutGrid {
+  display: grid;
+  grid-template-columns: 2.2fr 1fr;
+  gap: 32px;
+  align-items: stretch;
+}
+
+/* .leftArea {}
+.rightArea { position: relative; } */
+
+/* Sticky form */
+.stickyFormWrapper {
+  position: sticky;
+  top: 120px;
+  align-self: flex-start;
+  width: 100%;
+}
+
+/* Row Layout – IMPORTANT FIX */
+.contentRow {
+  display: flex;
+  align-items: flex-start; /* 🔥 STICKY FIX */
+  position: relative;
+}
+
+/* Columns */
+.leftColumn {
+  padding-right: 32px;
+}
+
+.rightColumn {
+  padding-left: 0;
+}
+
+/* ================= TOC ================= */
+.tocCard {
+  margin-bottom: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+}
+
+.tocTitle {
+  font-size: 20px;
+  font-weight: 600;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #FD7E14;
+  margin-bottom: 16px;
+}
+
+.tocItem {
+  display: flex;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+}
+
+.tocItem:hover,
+.activeTocItem {
+  background: #fff7ed;
+  border-left-color: #FD7E14;
+  font-weight: 500;
+}
+
+.tocNumber {
+  color: #FD7E14;
+  font-weight: 600;
+  min-width: 24px;
+}
+
+/* ================= ARTICLE ================= */
+.fullArticleCard {
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+.articleContent {
+  padding: 40px;
+  font-size: 16.5px;
+  line-height: 1.8;
+  color: #333;
+}
+
+.articleContent h2 {
+  font-size: 28px;
+  margin: 40px 0 16px;
+  padding-bottom: 10px;
+  border-bottom: 3px solid #FD7E14;
+  scroll-margin-top: 140px;
+}
+
+.articleContent ul,
+.articleContent ol {
+  padding-left: 24px;
+  margin-bottom: 20px;
+}
+
+.articleFooter {
+  margin-top: 50px;
+  padding-top: 30px;
+  border-top: 1px solid #eee;
+  text-align: center;
+}
+
+/* ================= STICKY FORM (FINAL FIX) ================= */
+.stickyFormWrapper {
+  position: sticky;
+  top: 120px; /* navbar height + gap */
+  width: 100%;
+  align-self: flex-start;
+}
+
+/* Card */
+.quoteFormCard {
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+  padding: 28px 24px;
+  background: #fff;
+  width: 100%;
+}
+
+.formTitle {
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.formDescription {
+  text-align: center;
+  color: #666;
+  margin-bottom: 24px;
+}
+
+.formNote p {
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+  margin: 16px 0 0;
+}
+
+/* ================= LOADING ================= */
+.loadingContainer {
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.loadingSpinner {
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #FD7E14;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+/* breadcrumb */
+/* Breadcrumb container */
+.custom-breadcrumb {
+  margin-bottom: 16px;
+}
+
+/* Text color */
+.custom-breadcrumb .ant-breadcrumb-link,
+.custom-breadcrumb .ant-breadcrumb-link span {
+  color: #fff !important;
+  cursor: pointer;
+}
+
+/* Separator "/" */
+.custom-breadcrumb .ant-breadcrumb-separator {
+  color: #fff !important;
+}
+
+/* Hover color */
+.custom-breadcrumb .ant-breadcrumb-link:hover,
+.custom-breadcrumb .ant-breadcrumb-link span:hover {
+  color: #FD7E14 !important;
+}
+
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 992px) {
+  /* .stickyFormWrapper {
+    position: static;  
+    margin-top: 40px;
+  } */
+
+  .leftColumn {
+    padding-right: 0;
+  }
+
+  .rightColumn {
+    padding-left: 0;
+  }
+
+  .headerTitle {
+    font-size: 36px;
+  }
+
+  .contentRow {
+    flex-direction: column;
+  }
+   .layoutGrid {
+    grid-template-columns: 1fr;
+  }
+  .stickyFormWrapper {
+    position: static;
+    margin-top: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .blogHeader {
+    min-height: 420px;
+    padding: 40px 15px;
+  }
+
+  .headerTitle {
+    font-size: 32px;
+  }
+
+  .articleContent {
+    padding: 24px;
+  }
+
+  .articleContent h2 {
+    font-size: 24px;
+  }
+ 
+  .stickyFormWrapper {
+    position: static;
+    margin-top: 40px;
+  }
+ 
+}
