@@ -7,12 +7,12 @@
 }
 
 /* Orange Theme Colors */
-:global(:root) {
+/* :global(:root) {
   --orange-primary: #FD7E14;
   --orange-light: #FFA94D;
   --orange-dark: #E8590C;
   --orange-gradient: linear-gradient(90deg, #FD7E14 0%, #FFA94D 100%);
-}
+} */
 
 
 /* Section Title */
