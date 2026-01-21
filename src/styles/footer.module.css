@@ -40,6 +40,7 @@
   font-size: 0.95rem;
   line-height: 1.6;
   margin-bottom: 1.5rem;
+  margin-top: 1.5rem;
   color: #ccc; /* Lighter gray for better readability on black */
 }
 
@@ -109,6 +110,13 @@
   color: #ccc; /* Lighter gray for better readability */
   margin-top: 2rem;
 }
+.footerLogo {
+  margin-top: 2rem;
+ width: 12rem;
+ height: auto;
+ margin-right: 2rem;
+ transition: all 0.3s ease;
+}
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
@@ -122,6 +130,10 @@
   
   .sectionTitle {
     font-size: 1.2rem;
+  }
+  .footerLogo {
+    max-width: 150px;
+    margin-right: 0;
   }
 }
 
@@ -144,5 +156,9 @@
   
   .socialIcon {
     font-size: 1.2rem;
+  }
+    .footerLogo {
+    max-width: 120px;
+    margin: 0 auto 1.5rem; 
   }
 }

@@ -1,0 +1,70 @@
+.formCard {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  border: 2px solid #ccc; /* default gray border */
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+  transition: border 0.3s ease;
+}
+
+.formCard :global(.ant-input),
+.formCard :global(.ant-select-selector),
+.formCard :global(.ant-input-affix-wrapper),
+.formCard :global(.ant-input-textarea) {
+  border: 1.5px solid #ccc; /* default gray */
+  border-radius: 8px;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect for all input/select/textarea */
+.formCard :global(.ant-input:hover),
+.formCard :global(.ant-select-selector:hover),
+.formCard :global(.ant-input-affix-wrapper:hover),
+.formCard :global(.ant-input-textarea:hover) {
+  border-color: #FD7E14; /* orange on hover */
+}
+
+/* Focus effect */
+.formCard :global(.ant-input:focus),
+.formCard :global(.ant-input-focused),
+.formCard :global(.ant-select-focused .ant-select-selector),
+.formCard :global(.ant-input-affix-wrapper-focused),
+.formCard :global(.ant-input-textarea-focused) {
+  border-color: #FD7E14 !important; /* orange on focus */
+  box-shadow: 0 0 0 2px rgba(253, 126, 20, 0.2);
+}
+
+/* Title and submit button */
+.formTitle {
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.submitBtn {
+  width: 100%;
+  background-color: #FD7E14;
+  border-color: #FD7E14;
+  height: 44px;
+  font-size: 16px;
+}
+
+.submitBtn:hover {
+  background-color: #e86f0f;
+  border-color: #e86f0f;
+}
+
+.formNote {
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .formCard {
+    padding: 15px;
+  }
+}
