@@ -28,7 +28,7 @@ const subCategorySchema = new mongoose.Schema(
     category: {
       type: String,
       required: true,
-      enum: ["digital-marketing", "web-development", "app-development"], // Restrict to valid categories
+      enum: ["digital-marketing", "web-development", "app-development"], 
     },
     icon: { type: String, required: true },
     topSection: {
@@ -37,10 +37,10 @@ const subCategorySchema = new mongoose.Schema(
       description: String,
     },
     middleSection: {
-      description1: String, // First description
-      image1: String,      // First image
-      image2: String,      // Second image
-      description2: String, // Second description
+      description1: String, 
+      image1: String,      
+      image2: String,      
+      description2: String, 
     },
     keywordsSection: keywordSchema,
     cta1: {

@@ -40,7 +40,7 @@ function NavbarBmh() {
   const handleCategoryClick = (mainPath, e) => {
     e.preventDefault();
     e.stopPropagation();
-    router.push(mainPath); // 🔴 Next.js router استعمال کریں (fast client-side navigation)
+    router.push(mainPath); 
     setExpanded(false);
     setActiveDropdown(null);
   };
