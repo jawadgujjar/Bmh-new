@@ -1,121 +1,146 @@
 "use client";
-import React, { useState, useEffect, useRef } from 'react';
-import styles from '../../styles/landing/seoindustries.module.css';
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import styles from "../../styles/landing/seoindustries.module.css";
+
+// slug helper
+const slugify = (text = "") =>
+  text?.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]+/g, "");
 
 const SeoIndustries = () => {
-  const industries = [
-    {
-      title: "Fitness & Wellness",
-      description: "Boost your fitness brand's online presence with our SEO strategies.",
-      link: "https://gympassport.pk/",
-      image: "/images/fitness-wellness.jpg"
-    },
-    {
-      title: "Fashion",
-      description: "Elevate your fashion brand's visibility in search results.",
-      link: "https://visitlahore.com/",
-      image: "/images/fashion.jpg"
-    },
-    {
-      title: "Education",
-      description: "Improve your educational institution's online discoverability.",
-      link: "https://www.sireprinting.com/",
-      image: "/images/education.jpg"
-    },
-    {
-      title: "Consultancy",
-      description: "SEO-driven digital solutions for consultancy firms.",
-      link: "https://www.7skyconsultancy.com/",
-      image: "/images/consultancy.jpg"
-    },
-    {
-      title: "E-Commerce",
-      description: "Boost your online store's visibility and sales",
-      link: "http://bmh.vercel.app/",
-      image: "/images/ecommerce.jpg"
-    }
-  ];
-
+  const [portfolioData, setPortfolioData] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const iframeRefs = useRef(industries.map(() => React.createRef()));
+  const router = useRouter();
 
+  // ✅ Fetch portfolio
   useEffect(() => {
+    const fetchPortfolio = async () => {
+      try {
+        const res = await fetch("/api/portfolio");
+        const result = await res.json();
+
+        if (result.success) {
+          const keywordsData = result.data || [];
+
+          const flattenedWebsites = keywordsData.flatMap((keywordItem) =>
+            (keywordItem.websites || []).map((website) => ({
+              ...website,
+              keyword: keywordItem.keyword,
+              categorySlug: slugify(keywordItem.keyword),
+              projectSlug: slugify(
+                website?.portfolioPage?.header?.title || ""
+              ),
+            }))
+          );
+
+          setPortfolioData(flattenedWebsites);
+        }
+      } catch (error) {
+        console.error("Portfolio fetch error:", error);
+        setPortfolioData([]);
+      }
+    };
+
+    fetchPortfolio();
+  }, []);
+
+  // ✅ Auto carousel slide
+  useEffect(() => {
+    if (!portfolioData.length) return;
+
     const interval = setInterval(() => {
       if (!isPaused) {
-        setActiveIndex((prevIndex) => (prevIndex + 1) % industries.length);
+        setActiveIndex((prev) => (prev + 1) % portfolioData.length);
       }
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [isPaused, industries.length]);
+  }, [isPaused, portfolioData.length]);
 
-  const handleMouseEnter = (index) => {
-    setIsPaused(true);
-    const iframe = iframeRefs.current[index].current;
-    if (iframe) {
-      let scrollPosition = 0;
-      const scrollInterval = setInterval(() => {
-        scrollPosition += 2;
-        iframe.contentWindow.scrollTo(0, scrollPosition);
-        if (scrollPosition >= iframe.contentWindow.document.body.scrollHeight) {
-          scrollPosition = 0;
-        }
-      }, 50);
-      iframe.dataset.scrollInterval = scrollInterval;
-    }
+  // ✅ Click → Portfolio detail page
+  const handleClick = (item) => {
+    router.push(`/portfolio/${item.categorySlug}/${item.projectSlug}`);
   };
 
-  const handleMouseLeave = (index) => {
-    setIsPaused(false);
-    const iframe = iframeRefs.current[index].current;
-    if (iframe && iframe.dataset.scrollInterval) {
-      clearInterval(iframe.dataset.scrollInterval);
-    }
-  };
+  // ✅ Loading fallback
+  if (!portfolioData.length) {
+    return (
+      <div className={styles.carouselContainer}>
+        <h2 className={styles.carouselTitle}>
+          Completed Projects with Proven Results
+        </h2>
+        <p className={styles.carouselSubtitle}>Loading portfolio...</p>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.carouselContainer}>
-      <h2 className={styles.carouselTitle}>SEO By Industries</h2>
-      <p className={styles.carouselSubtitle}>SEO-driven app and web solutions for growth.</p>
+      <h2 className={styles.carouselTitle}>
+        Completed Projects with Proven Results
+      </h2>
+      <p className={styles.carouselSubtitle}>
+        SEO-driven app and web solutions for growth.
+      </p>
+
       <div className={styles.carouselWrapper}>
         <div
           className={styles.carouselTrack}
-          style={{ transform: `translateX(-${(activeIndex * 25)}%)` }}
+          style={{ transform: `translateX(-${activeIndex * 25}%)` }}
         >
-          {industries.map((industry, index) => (
-            <div
-  key={index}
-  className={`${styles.carouselSlide} ${Math.abs(activeIndex - index) < 4 ? styles.activeSlide : ''}`}
->
-  <div
-    className={styles.carouselCard}
-    onMouseEnter={() => handleMouseEnter(index)}
-    onMouseLeave={() => handleMouseLeave(index)}
-  >
-    <iframe
-      ref={iframeRefs.current[index]}
-      src={industry.link}
-      className={styles.cardIframe}
-      title={industry.title}
-      sandbox="allow-scripts allow-same-origin"
-    />
-    <h3 className={styles.cardTitle}>{industry.title}</h3>
-    <p className={styles.cardDescription}>{industry.description}</p>
-  </div>
-</div>
+          {portfolioData.map((item, index) => {
+            const title = item.portfolioPage?.header?.title || "Untitled";
+            const description =
+              item.portfolioPage?.header?.description || "";
+            const imageUrl =
+              item.portfolioPage?.header?.image || "/placeholder.jpg";
 
-          ))}
+            return (
+              <div
+                key={index}
+                className={`${styles.carouselSlide} ${
+                  Math.abs(activeIndex - index) < 4
+                    ? styles.activeSlide
+                    : ""
+                }`}
+              >
+                <div
+                  className={styles.carouselCard}
+                  onMouseEnter={() => setIsPaused(true)}
+                  onMouseLeave={() => setIsPaused(false)}
+                  onClick={() => handleClick(item)}
+                  style={{ cursor: "pointer" }}
+                >
+                  {/* ✅ IMAGE PREVIEW */}
+                  <img
+                    src={imageUrl}
+                    alt={title}
+                    className={styles.cardImage}
+                  />
+
+                  <h3 className={styles.cardTitle}>{title}</h3>
+                  <p className={styles.cardDescription}>{description}</p>
+
+                  <span className={styles.viewProjectBtn}>
+                    View Project
+                  </span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
+      {/* ✅ Indicators */}
       <div className={styles.carouselIndicators}>
-        {industries.map((_, index) => (
+        {portfolioData.map((_, index) => (
           <button
             key={index}
             onClick={() => setActiveIndex(index)}
-            className={`${styles.indicator} ${index === activeIndex ? styles.activeIndicator : ''}`}
-            aria-label={`Go to slide ${index + 1}`}
+            className={`${styles.indicator} ${
+              index === activeIndex ? styles.activeIndicator : ""
+            }`}
           />
         ))}
       </div>

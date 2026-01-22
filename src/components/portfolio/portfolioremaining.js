@@ -88,7 +88,7 @@ const PortfolioRemain = ({ initialCategory = "All" }) => {
       <div className={styles.containerportfolio}>
         <div className={styles.textBox}>
           <p>How Does Your Site Compare?</p>
-          <button className={styles.actionButton}>Free Report</button>
+          <button className={styles.actionButton}>Free Quote</button>
         </div>
       </div>
 
