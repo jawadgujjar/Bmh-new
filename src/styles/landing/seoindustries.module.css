@@ -39,9 +39,9 @@
   min-width: 25%;
   padding: 0 0.5rem;
   box-sizing: border-box;
-  opacity: 0.3;
-  transform: scale(0.9);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  opacity: 0.35;
+  transform: scale(0.92);
+  transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
 .activeSlide {
@@ -57,28 +57,35 @@
 .carouselCard {
   background-color: white;
   padding: 1rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 14px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
   height: 100%;
-  transition: box-shadow 0.3s ease;
+  transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .carouselCard:hover {
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px);
 }
 
-.cardIframe {
+/* ✅ IMAGE PREVIEW INSTEAD OF IFRAME */
+.cardImage {
   width: 100%;
   height: 250px;
-  border: none;
-  border-radius: 0.25rem;
-  margin-bottom: 0.5rem;
-  overflow: auto;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 0.6rem;
+  transition: transform 0.4s ease;
 }
 
+.carouselCard:hover .cardImage {
+  transform: scale(1.05);
+}
 
+/* Title */
 .cardTitle {
   font-size: 1.1rem;
   font-weight: 700;
@@ -86,12 +93,28 @@
   margin: 0.5rem 0;
 }
 
+/* Description */
 .cardDescription {
   color: #4a5568;
   font-size: 0.9rem;
   line-height: 1.4;
+  flex-grow: 1;
 }
 
+/* Button */
+.viewProjectBtn {
+  margin-top: 10px;
+  font-weight: 600;
+  color: #3182ce;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.carouselCard:hover .viewProjectBtn {
+  color: #1a202c;
+}
+
+/* Indicators */
 .carouselIndicators {
   display: flex;
   justify-content: center;
@@ -124,8 +147,8 @@
     min-width: 33.33%;
   }
 
-  .cardIframe {
-    height: 200px;
+  .cardImage {
+    height: 220px;
   }
 
   .cardTitle {
@@ -158,8 +181,8 @@
     min-width: 50%;
   }
 
-  .cardIframe {
-    height: 180px;
+  .cardImage {
+    height: 190px;
   }
 
   .cardTitle {
@@ -188,8 +211,8 @@
     min-width: 100%;
   }
 
-  .cardIframe {
-    height: 160px;
+  .cardImage {
+    height: 170px;
   }
 
   .cardTitle {
