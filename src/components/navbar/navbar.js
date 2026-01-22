@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation"; // 🔴 useRouter add کریں
+import { usePathname, useRouter } from "next/navigation"; //  
 import { Navbar, Nav, Container, Button, NavDropdown } from "react-bootstrap";
 import { CiMobile3 } from "react-icons/ci";
 import { FaBullhorn, FaLaptopCode, FaMobileAlt } from "react-icons/fa";
@@ -10,7 +10,7 @@ import styles from "../../styles/navbar.module.css";
 
 function NavbarBmh() {
   const pathname = usePathname();
-  const router = useRouter(); // 🔴 useRouter کو initialize کریں
+  const router = useRouter(); // 
   const navbarRef = useRef(null);
   const [scrolled, setScrolled] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -40,7 +40,7 @@ function NavbarBmh() {
   const handleCategoryClick = (mainPath, e) => {
     e.preventDefault();
     e.stopPropagation();
-    router.push(mainPath); 
+    router.push(mainPath);  
     setExpanded(false);
     setActiveDropdown(null);
   };
@@ -278,4 +278,4 @@ function NavbarBmh() {
   );
 }
 
-export default NavbarBmh;
+export default NavbarBmh; 

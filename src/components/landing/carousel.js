@@ -1,12 +1,12 @@
 "use client";
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import AliceCarousel from 'react-alice-carousel';
 import { Card, Avatar } from 'antd';
 import { Rate } from 'antd';
 import 'react-alice-carousel/lib/alice-carousel.css';
 import styles from '../../styles/carousel.module.css';
 
-// Carousel items
+// Carousel items - constant data
 const carouselItems = [
   {
     img: "/images/download.jpg",
@@ -30,6 +30,11 @@ const carouselItems = [
 
 const Carousel = () => {
   const carouselRef = React.useRef(null);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Render carousel items
   const renderItems = () => (
@@ -45,6 +50,32 @@ const Carousel = () => {
       </div>
     ))
   );
+
+  // اگر client side نہیں ہے تو loading state دکھائیں
+  if (!isClient) {
+    return (
+      <div className={styles.customerDiv}>
+        <h1 className={styles.customers}><span className={styles.blackText}>What Our </span> Clients Say</h1>
+        <p className={styles.customer}>Real stories from clients showcasing our exceptional service and results.</p>
+        <div className={styles.carouselWrapper}>
+          <div className={styles.carouselContainer}>
+            <div style={{ display: 'flex', gap: '20px', justifyContent: 'center' }}>
+              {[1, 2, 3].map((_, index) => (
+                <Card key={index} className={styles.carouselCard} style={{ opacity: 0.5 }}>
+                  <div style={{ height: '50px', width: '50px', borderRadius: '50%', backgroundColor: '#f0f0f0', marginBottom: '10px' }}></div>
+                  <div style={{ height: '20px', backgroundColor: '#f0f0f0', width: '100px', marginBottom: '10px' }}></div>
+                  <div style={{ height: '15px', backgroundColor: '#f0f0f0', width: '150px', marginBottom: '10px' }}></div>
+                  <div style={{ height: '15px', backgroundColor: '#f0f0f0', width: '100%', marginBottom: '5px' }}></div>
+                  <div style={{ height: '15px', backgroundColor: '#f0f0f0', width: '80%', marginBottom: '5px' }}></div>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className={styles.divider}></div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.customerDiv}>
@@ -64,8 +95,8 @@ const Carousel = () => {
             autoPlay
             autoPlayInterval={4000}
             infinite
-            disableButtonsControls={true}  // This removes navigation arrows
-            disableDotsControls={true}     // This removes dots navigation
+            disableButtonsControls={true}
+            disableDotsControls={true}
           />
         </div>
       </div>

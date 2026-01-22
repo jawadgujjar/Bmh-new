@@ -1,0 +1,55 @@
+/* blogs.css */
+.blogs-page-wrapper {
+  min-height: 100vh;
+}
+
+/* Header with Background Image */
+.blogs-header {
+  position: relative;
+  height: 490px;
+  background: 
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)),
+    url('../../../public//images//hero.jpg') center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+}
+
+.header-overlay {
+  padding: 0 20px;
+}
+
+.header-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.breadcrumb {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Main Content */
+.blogs-main-content {
+  padding: 40px 0;
+  background: #f8f9fa;
+}
+
+/* Responsive Header */
+@media (max-width: 768px) {
+  .blogs-header {
+    height: 200px;
+  }
+  
+  .header-title {
+    font-size: 2rem;
+  }
+  
+  .breadcrumb {
+    font-size: 0.9rem;
+  }
+}

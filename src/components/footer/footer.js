@@ -1,14 +1,15 @@
 import React from 'react';
 import { Row, Col } from 'antd';
-import { 
-  FacebookOutlined, 
-  TwitterOutlined, 
-  InstagramOutlined, 
+import {
+  FacebookOutlined,
+  TwitterOutlined,
+  InstagramOutlined,
   LinkedinOutlined,
   PhoneOutlined,
   MailOutlined,
   EnvironmentOutlined
 } from '@ant-design/icons';
+import Link from "next/link";
 import styles from "../../styles/footer.module.css";
 
 function Footer() {
@@ -19,7 +20,13 @@ function Footer() {
           {/* Column 1: Brand Info and Social Media */}
           <Col xs={24} sm={12} md={6} lg={6}>
             <div className={styles.footerSection}>
-              <h3 className={styles.brandName}>Brand Marketing Hub</h3>
+              <img
+                src="/bmhlogo.svg"
+                alt="Brand Marketing Hub Logo"
+                className={styles.footerLogo}
+                draggable={false}
+              />
+
               <p className={styles.sectionText}>
                 Follow us on social media to get more updates about our services.
               </p>
@@ -40,7 +47,12 @@ function Footer() {
               <ul className={styles.footerList}>
                 <li>About Us</li>
                 <li>FAQ</li>
-                <li>Blog</li>
+                <li>
+                  <Link href="/blogs" className={styles.footerLink}>
+                    Blog
+                  </Link>
+                </li>
+
                 <li>Portfolio</li>
                 <li>Careers</li>
                 <li>Privacy Policy</li>
@@ -75,7 +87,7 @@ function Footer() {
               <p className={styles.sectionText}>
                 Get in touch today, and we'll help you build your dream project real soon.
               </p>
-              
+
               <div className={styles.contactInfo}>
                 <h4 className={styles.contactCountry}>USA</h4>
                 <div className={styles.contactDetail}>
