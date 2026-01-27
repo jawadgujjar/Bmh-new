@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useEffect, useState } from 'react';
 import { Card, Breadcrumb, Button, Tag } from 'antd';
 import { HomeOutlined, CalendarOutlined } from '@ant-design/icons';
@@ -7,15 +6,8 @@ import { useRouter, useParams } from 'next/navigation';
 import styles from '../[id]/blog-detail.module.css';
 import MainpageForm from '@/components/blogs/mainpageform';
 
-/* =====================
-   SLUG FUNCTION
-===================== */
 const slugify = (text) =>
-  text
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/\s+/g, '-');
+  text.toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
 
 export default function BlogDetailPage() {
   const router = useRouter();
@@ -28,9 +20,6 @@ export default function BlogDetailPage() {
 
   const ORANGE_COLOR = '#FD7E14';
 
-  /* =====================
-     FETCH BLOG BY SLUG
-  ===================== */
   useEffect(() => {
     if (!id) return;
 
@@ -38,24 +27,15 @@ export default function BlogDetailPage() {
       try {
         const res = await fetch(`/api/blogs/${id}`);
         if (!res.ok) throw new Error('Blog not found');
-
         const data = await res.json();
 
         const toc = [];
         let count = 0;
-
-        // 👉 headings ko id do + toc banao
         const updatedContent = data.fullContent.replace(
           /<h([2-4])>(.*?)<\/h\1>/g,
           (match, level, text) => {
             const headingId = `${slugify(text)}-${count++}`;
-
-            toc.push({
-              id: headingId,
-              title: text,
-              level: Number(level),
-            });
-
+            toc.push({ id: headingId, title: text, level: Number(level) });
             return `<h${level} id="${headingId}">${text}</h${level}>`;
           }
         );
@@ -73,57 +53,33 @@ export default function BlogDetailPage() {
     fetchBlog();
   }, [id, router]);
 
-  /* =====================
-     ACTIVE SECTION OBSERVER
-  ===================== */
   useEffect(() => {
     if (!post) return;
-
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
+          if (entry.isIntersecting) setActiveSection(entry.target.id);
         });
       },
-      {
-        rootMargin: '-120px 0px -40% 0px',
-        threshold: 0.3,
-      }
+      { rootMargin: '-120px 0px -40% 0px', threshold: 0.3 }
     );
 
-    document.querySelectorAll('h2[id], h3[id], h4[id]').forEach((el) => {
-      observer.observe(el);
-    });
-
+    document.querySelectorAll('h2[id], h3[id], h4[id]').forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, [post]);
 
-  /* =====================
-     SCROLL TO SECTION
-  ===================== */
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
     if (!el) return;
-
-    el.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  /* =====================
-     LOADING
-  ===================== */
-  if (loading) {
-    return (
-      <div className={styles.loadingContainer}>
-        <div className={styles.loadingSpinner} />
-        <p>Loading article...</p>
-      </div>
-    );
-  }
+  if (loading) return (
+    <div className={styles.loadingContainer}>
+      <div className={styles.loadingSpinner} />
+      <p>Loading article...</p>
+    </div>
+  );
 
   if (!post) return null;
 
@@ -133,11 +89,10 @@ export default function BlogDetailPage() {
 
   return (
     <>
-      {/* HEADER */}
       <div className={styles.blogHeader}>
         <div className={styles.headerContent}>
           <Breadcrumb
-           style={{ marginBottom: '10px' }}
+            style={{ marginBottom: '10px' }}
             separator={<span style={{ color: '#fff' }}>/</span>}
             items={[
               {
@@ -164,9 +119,7 @@ export default function BlogDetailPage() {
                   </span>
                 ),
               },
-              {
-                title: <span style={{ color: '#fff' }}>{post.title}</span>,
-              },
+              { title: <span style={{ color: '#fff' }}>{post.title}</span> },
             ]}
           />
 
@@ -184,23 +137,17 @@ export default function BlogDetailPage() {
         </div>
       </div>
 
-      {/* MAIN CONTENT */}
       <div className={styles.mainPageContainer}>
         <div className={styles.layoutGrid}>
-          {/* LEFT */}
           <div className={styles.leftArea}>
-            {/* TOC */}
             {tocItems.length > 0 && (
               <Card className={styles.tocCard}>
                 <h3>Table of Contents</h3>
-
                 {tocItems.map((item, i) => (
                   <div
                     key={item.id}
                     onClick={() => scrollToSection(item.id)}
-                    className={`${styles.tocItem} ${
-                      activeSection === item.id ? styles.activeTocItem : ''
-                    }`}
+                    className={`${styles.tocItem} ${activeSection === item.id ? styles.activeTocItem : ''}`}
                     style={{ paddingLeft: (item.level - 2) * 16 }}
                   >
                     {i + 1}. {item.title}
@@ -209,13 +156,11 @@ export default function BlogDetailPage() {
               </Card>
             )}
 
-            {/* ARTICLE */}
             <Card className={styles.fullArticleCard}>
               <div
                 className={styles.articleContent}
                 dangerouslySetInnerHTML={{ __html: post.fullContent }}
               />
-
               <Button
                 type="primary"
                 onClick={() => router.push('/blogs')}
@@ -226,7 +171,6 @@ export default function BlogDetailPage() {
             </Card>
           </div>
 
-          {/* RIGHT */}
           <div className={styles.stickyFormWrapper}>
             <MainpageForm />
           </div>

@@ -3,44 +3,40 @@ import dbConnect from "@/lib/mongodb";
 import Blog from "@/models/blogs";
 
 /* ================= GET ================= */
-export async function GET(req, { params }) {
+export async function GET(req, context) {
   try {
-    const { slug } = await params;
-
+    const { slug } = await context.params; // ✅ FIXED
     await dbConnect();
 
-    const blog = await Blog.findOne({ slug }).lean();
+    const query = /^[0-9a-fA-F]{24}$/.test(slug)
+      ? { _id: slug }
+      : { slug };
+
+    const blog = await Blog.findOne(query).lean();
 
     if (!blog) {
       return NextResponse.json({ error: "Blog not found" }, { status: 404 });
     }
 
-    return NextResponse.json(
-      {
-        title: blog.title,
-        slug: blog.slug,
-        description: blog.description,
-        category: blog.category,
-        date: blog.createdAt,
-        fullContent: blog.fullContent,
-      },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("GET blog by slug error:", error);
+    return NextResponse.json(blog);
+  } catch (err) {
+    console.error("GET Error:", err);
     return NextResponse.json({ error: "Failed to fetch blog" }, { status: 500 });
   }
 }
 
 /* ================= PUT ================= */
-export async function PUT(req, { params }) {
+export async function PUT(req, context) {
   try {
-    const { slug } = await params;
-
+    const { slug } = await context.params; // ✅ FIXED
     await dbConnect();
     const body = await req.json();
 
-    const updatedBlog = await Blog.findOneAndUpdate({ slug }, body, {
+    const query = /^[0-9a-fA-F]{24}$/.test(slug)
+      ? { _id: slug }
+      : { slug };
+
+    const updatedBlog = await Blog.findOneAndUpdate(query, body, {
       new: true,
       runValidators: true,
     }).lean();
@@ -49,35 +45,35 @@ export async function PUT(req, { params }) {
       return NextResponse.json({ error: "Blog not found" }, { status: 404 });
     }
 
-    return NextResponse.json(
-      { message: "Blog updated successfully", blog: updatedBlog },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("PUT blog by slug error:", error);
+    return NextResponse.json({
+      message: "Blog updated successfully",
+      blog: updatedBlog,
+    });
+  } catch (err) {
+    console.error("PUT Error:", err);
     return NextResponse.json({ error: "Failed to update blog" }, { status: 400 });
   }
 }
 
 /* ================= DELETE ================= */
-export async function DELETE(req, { params }) {
+export async function DELETE(req, context) {
   try {
-    const { slug } = await params;
-
+    const { slug } = await context.params; // ✅ FIXED
     await dbConnect();
 
-    const deletedBlog = await Blog.findOneAndDelete({ slug }).lean();
+    const query = /^[0-9a-fA-F]{24}$/.test(slug)
+      ? { _id: slug }
+      : { slug };
+
+    const deletedBlog = await Blog.findOneAndDelete(query).lean();
 
     if (!deletedBlog) {
       return NextResponse.json({ error: "Blog not found" }, { status: 404 });
     }
 
-    return NextResponse.json(
-      { message: "Blog deleted successfully" },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("DELETE blog by slug error:", error);
+    return NextResponse.json({ message: "Blog deleted successfully" });
+  } catch (err) {
+    console.error("DELETE Error:", err);
     return NextResponse.json({ error: "Failed to delete blog" }, { status: 500 });
   }
 }
