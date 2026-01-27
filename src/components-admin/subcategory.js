@@ -34,6 +34,11 @@ export default function SubCategory() {
   const [editingSubCat, setEditingSubCat] = useState(null);
   const [form] = Form.useForm();
 
+  // NEW STATES FOR PAGE MODAL
+  const [isPageModalOpen, setIsPageModalOpen] = useState(false);
+  const [selectedSubCategory, setSelectedSubCategory] = useState(null);
+  const [pageForm] = Form.useForm();
+
   // Fetch SubCategories
   const fetchSubCategories = async () => {
     try {
@@ -72,7 +77,6 @@ export default function SubCategory() {
       const data = await res.json();
 
       if (data.success) {
-        // ✅ Nested fields handle properly
         if (Array.isArray(fieldName)) {
           let nestedValue = data.url;
           for (let i = fieldName.length - 1; i >= 0; i--) {
@@ -95,12 +99,51 @@ export default function SubCategory() {
     }
   };
 
-  // Custom Upload Component with preview
-  const UploadField = ({ name, label }) => {
+  // Handle file upload for Page Modal
+  const handlePageUpload = async (file, fieldName) => {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        if (Array.isArray(fieldName)) {
+          let nestedValue = data.url;
+          for (let i = fieldName.length - 1; i >= 0; i--) {
+            nestedValue = { [fieldName[i]]: nestedValue };
+          }
+          pageForm.setFieldsValue(nestedValue);
+        } else {
+          pageForm.setFieldsValue({ [fieldName]: data.url });
+        }
+        message.success("Image uploaded successfully");
+        return data.url;
+      } else {
+        message.error(data.error || "Failed to upload image");
+        return false;
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      message.error("Error uploading image");
+      return false;
+    }
+  };
+
+  // Custom Upload Component with preview (FOR SUBCATEGORY MODAL)
+  const UploadField = ({ name, label, formType = "subcategory" }) => {
     const [fileList, setFileList] = useState([]);
+    const currentForm = formType === "page" ? pageForm : form;
+    const isModalOpenState =
+      formType === "page" ? isPageModalOpen : isModalOpen;
+    const uploadHandler = formType === "page" ? handlePageUpload : handleUpload;
 
     useEffect(() => {
-      const currentValue = form.getFieldValue(name);
+      const currentValue = currentForm.getFieldValue(name);
       if (currentValue) {
         setFileList([
           {
@@ -111,22 +154,28 @@ export default function SubCategory() {
           },
         ]);
       }
-    }, [form, name, isModalOpen]);
+    }, [currentForm, name, isModalOpenState]);
 
     return (
-      <Form.Item label={label} name={name} rules={[{ required: true, message: `Please upload ${label}` }]}>
+      <Form.Item
+        label={label}
+        name={name}
+        rules={[{ required: true, message: `Please upload ${label}` }]}
+      >
         <Upload
           listType="picture"
           fileList={fileList}
           beforeUpload={async (file) => {
-            const url = await handleUpload(file, name);
+            const url = await uploadHandler(file, name);
             if (url) {
-              setFileList([{ uid: "-1", name: file.name, status: "done", url }]);
+              setFileList([
+                { uid: "-1", name: file.name, status: "done", url },
+              ]);
             }
             return Upload.LIST_IGNORE;
           }}
           onRemove={() => {
-            form.setFieldsValue({ [name]: "" });
+            currentForm.setFieldsValue({ [name]: "" });
             setFileList([]);
           }}
         >
@@ -157,7 +206,9 @@ export default function SubCategory() {
       const data = await res.json();
 
       if (data.success) {
-        message.success(editingSubCat ? "SubCategory updated!" : "SubCategory added!");
+        message.success(
+          editingSubCat ? "SubCategory updated!" : "SubCategory added!",
+        );
         form.resetFields();
         setEditingSubCat(null);
         setIsModalOpen(false);
@@ -188,6 +239,38 @@ export default function SubCategory() {
     }
   };
 
+  // NEW: Handle Page Creation
+  const handlePageCreate = async () => {
+    try {
+      const values = await pageForm.validateFields();
+
+      const res = await fetch("/api/page", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        message.success("Page created successfully!");
+
+        // Close modal and redirect to pages page
+        setIsPageModalOpen(false);
+        pageForm.resetFields();
+        setSelectedSubCategory(null);
+
+        // Redirect to pages page
+        window.location.href = "/pages";
+      } else {
+        message.error(data.error || "Failed to create page");
+      }
+    } catch (err) {
+      console.error("Error creating page:", err);
+      message.error("Error creating page");
+    }
+  };
+
   // Open modal for editing
   const handleEdit = (record) => {
     setEditingSubCat(record);
@@ -204,7 +287,16 @@ export default function SubCategory() {
     setIsModalOpen(true);
   };
 
-  // Table Columns
+  // NEW: Open Page Creation Modal
+  const openPageModal = (subCategory) => {
+    setSelectedSubCategory(subCategory);
+    pageForm.setFieldsValue({
+      subcategory: subCategory._id, // Auto-populate subcategory ID
+    });
+    setIsPageModalOpen(true);
+  };
+
+  // Table Columns (Updated with Add Page button)
   const columns = [
     {
       title: "Icon",
@@ -241,6 +333,13 @@ export default function SubCategory() {
             onClick={() => message.info(`Viewing ${record.name}`)}
           />
           <Button icon={<EditOutlined />} onClick={() => handleEdit(record)} />
+          <Button
+            type="primary"
+            onClick={() => openPageModal(record)}
+            style={{ marginLeft: 8 }}
+          >
+            Add Page
+          </Button>
           <Popconfirm
             title="Delete SubCategory?"
             onConfirm={() => handleDelete(record._id)}
@@ -261,7 +360,11 @@ export default function SubCategory() {
       }}
     >
       <Space
-        style={{ display: "flex", justifyContent: "space-between", marginBottom: 20 }}
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: 20,
+        }}
       >
         <Title level={3} style={{ margin: 0, color: "#1890ff" }}>
           📂 Sub Categories
@@ -288,6 +391,115 @@ export default function SubCategory() {
         pagination={{ pageSize: 5 }}
       />
 
+      {/* NEW: PAGE CREATION MODAL */}
+      <Modal
+        title={`Add Page for ${selectedSubCategory?.name || "SubCategory"}`}
+        open={isPageModalOpen}
+        onCancel={() => {
+          setIsPageModalOpen(false);
+          setSelectedSubCategory(null);
+          pageForm.resetFields();
+        }}
+        onOk={handlePageCreate}
+        okText="Create Page"
+        width={800}
+      >
+        <Form layout="vertical" form={pageForm}>
+          {/* Title Field */}
+          <Form.Item
+            label="Page Title"
+            name="title"
+            rules={[{ required: true, message: "Please enter page title" }]}
+          >
+            <Input placeholder="Enter page title" />
+          </Form.Item>
+
+          {/* SubCategory ID (Auto-populated, read-only) */}
+          <Form.Item
+            label="SubCategory"
+            name="subcategory"
+            rules={[{ required: true, message: "SubCategory is required" }]}
+          >
+            <Input
+              disabled
+              value={selectedSubCategory?.name}
+              addonBefore="ID:"
+              addonAfter={selectedSubCategory?.name}
+            />
+          </Form.Item>
+
+          {/* Page Description */}
+          <Form.Item label="Page Description" name="subcatpagedescr">
+            <Input.TextArea placeholder="Enter page description" rows={4} />
+          </Form.Item>
+
+          {/* Top Section */}
+          <Form.Item label="Top Section">
+            <UploadField
+              name={["topSection", "backgroundImage"]}
+              label="Background Image"
+              formType="page"
+            />
+            <Form.Item label="Heading" name={["topSection", "heading"]}>
+              <Input placeholder="Enter top section heading" />
+            </Form.Item>
+            <Form.Item label="Description" name={["topSection", "description"]}>
+              <Input.TextArea
+                placeholder="Enter top section description"
+                rows={3}
+              />
+            </Form.Item>
+          </Form.Item>
+
+          {/* Middle Section */}
+          <Form.Item label="Middle Section">
+            <Form.Item
+              label="Description 1"
+              name={["middleSection", "description1"]}
+            >
+              <Input.TextArea placeholder="Enter first description" rows={3} />
+            </Form.Item>
+            <UploadField
+              name={["middleSection", "image1"]}
+              label="Image 1"
+              formType="page"
+            />
+            <UploadField
+              name={["middleSection", "image2"]}
+              label="Image 2"
+              formType="page"
+            />
+            <Form.Item
+              label="Description 2"
+              name={["middleSection", "description2"]}
+            >
+              <Input.TextArea placeholder="Enter second description" rows={3} />
+            </Form.Item>
+          </Form.Item>
+
+          {/* CTA 1 */}
+          <Form.Item label="Call to Action 1">
+            <Form.Item label="Heading" name={["cta1", "heading"]}>
+              <Input placeholder="Enter CTA 1 heading" />
+            </Form.Item>
+            <Form.Item label="Description" name={["cta1", "description"]}>
+              <Input.TextArea placeholder="Enter CTA 1 description" rows={3} />
+            </Form.Item>
+          </Form.Item>
+
+          {/* CTA 2 */}
+          <Form.Item label="Call to Action 2">
+            <Form.Item label="Heading" name={["cta2", "heading"]}>
+              <Input placeholder="Enter CTA 2 heading" />
+            </Form.Item>
+            <Form.Item label="Description" name={["cta2", "description"]}>
+              <Input.TextArea placeholder="Enter CTA 2 description" rows={3} />
+            </Form.Item>
+          </Form.Item>
+        </Form>
+      </Modal>
+
+      {/* ORIGINAL SUBCATEGORY MODAL (UNCHANGED) */}
       <Modal
         title={editingSubCat ? "✏️ Edit Sub Category" : "➕ Add Sub Category"}
         open={isModalOpen}
@@ -301,7 +513,9 @@ export default function SubCategory() {
           <Form.Item
             label="Name"
             name="name"
-            rules={[{ required: true, message: "Please enter sub category name" }]}
+            rules={[
+              { required: true, message: "Please enter sub category name" },
+            ]}
           >
             <Input placeholder="Enter sub category name" />
           </Form.Item>
@@ -323,23 +537,35 @@ export default function SubCategory() {
 
           {/* Top Section */}
           <Form.Item label="Top Section">
-            <UploadField name={["topSection", "backgroundImage"]} label="Background Image" />
+            <UploadField
+              name={["topSection", "backgroundImage"]}
+              label="Background Image"
+            />
             <Form.Item label="Heading" name={["topSection", "heading"]}>
               <Input placeholder="Enter top section heading" />
             </Form.Item>
             <Form.Item label="Description" name={["topSection", "description"]}>
-              <Input.TextArea placeholder="Enter top section description" rows={4} />
+              <Input.TextArea
+                placeholder="Enter top section description"
+                rows={4}
+              />
             </Form.Item>
           </Form.Item>
 
           {/* Middle Section */}
           <Form.Item label="Middle Section">
-            <Form.Item label="Description 1" name={["middleSection", "description1"]}>
+            <Form.Item
+              label="Description 1"
+              name={["middleSection", "description1"]}
+            >
               <Input.TextArea placeholder="Enter first description" rows={4} />
             </Form.Item>
             <UploadField name={["middleSection", "image1"]} label="Image 1" />
             <UploadField name={["middleSection", "image2"]} label="Image 2" />
-            <Form.Item label="Description 2" name={["middleSection", "description2"]}>
+            <Form.Item
+              label="Description 2"
+              name={["middleSection", "description2"]}
+            >
               <Input.TextArea placeholder="Enter second description" rows={4} />
             </Form.Item>
           </Form.Item>
@@ -349,8 +575,14 @@ export default function SubCategory() {
             <Form.Item label="Heading" name={["keywordsSection", "heading"]}>
               <Input placeholder="Enter keywords section heading" />
             </Form.Item>
-            <Form.Item label="Description" name={["keywordsSection", "description"]}>
-              <Input.TextArea placeholder="Enter keywords section description" rows={4} />
+            <Form.Item
+              label="Description"
+              name={["keywordsSection", "description"]}
+            >
+              <Input.TextArea
+                placeholder="Enter keywords section description"
+                rows={4}
+              />
             </Form.Item>
 
             <Form.Item label="Keywords">
@@ -358,14 +590,29 @@ export default function SubCategory() {
                 {(fields, { add, remove }) => (
                   <>
                     {fields.map(({ key, name, ...restField }) => (
-                      <Space key={key} style={{ display: "flex", marginBottom: 8 }} align="baseline">
-                        <Form.Item {...restField} name={name} rules={[{ required: true, message: "Enter a keyword" }]}>
+                      <Space
+                        key={key}
+                        style={{ display: "flex", marginBottom: 8 }}
+                        align="baseline"
+                      >
+                        <Form.Item
+                          {...restField}
+                          name={name}
+                          rules={[
+                            { required: true, message: "Enter a keyword" },
+                          ]}
+                        >
                           <Input placeholder="Keyword" />
                         </Form.Item>
                         <MinusCircleOutlined onClick={() => remove(name)} />
                       </Space>
                     ))}
-                    <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                    <Button
+                      type="dashed"
+                      onClick={() => add()}
+                      block
+                      icon={<PlusOutlined />}
+                    >
                       Add Keyword
                     </Button>
                   </>
@@ -378,14 +625,32 @@ export default function SubCategory() {
                 {(fields, { add, remove }) => (
                   <>
                     {fields.map(({ key, name, ...restField }) => (
-                      <Space key={key} style={{ display: "flex", marginBottom: 8 }} align="baseline">
-                        <Form.Item {...restField} name={name} rules={[{ required: true, message: "Enter a related heading" }]}>
+                      <Space
+                        key={key}
+                        style={{ display: "flex", marginBottom: 8 }}
+                        align="baseline"
+                      >
+                        <Form.Item
+                          {...restField}
+                          name={name}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Enter a related heading",
+                            },
+                          ]}
+                        >
                           <Input placeholder="Related Heading" />
                         </Form.Item>
                         <MinusCircleOutlined onClick={() => remove(name)} />
                       </Space>
                     ))}
-                    <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                    <Button
+                      type="dashed"
+                      onClick={() => add()}
+                      block
+                      icon={<PlusOutlined />}
+                    >
                       Add Related Heading
                     </Button>
                   </>
@@ -398,14 +663,32 @@ export default function SubCategory() {
                 {(fields, { add, remove }) => (
                   <>
                     {fields.map(({ key, name, ...restField }) => (
-                      <Space key={key} style={{ display: "flex", marginBottom: 8 }} align="baseline">
-                        <Form.Item {...restField} name={name} rules={[{ required: true, message: "Enter a related description" }]}>
+                      <Space
+                        key={key}
+                        style={{ display: "flex", marginBottom: 8 }}
+                        align="baseline"
+                      >
+                        <Form.Item
+                          {...restField}
+                          name={name}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Enter a related description",
+                            },
+                          ]}
+                        >
                           <Input placeholder="Related Description" />
                         </Form.Item>
                         <MinusCircleOutlined onClick={() => remove(name)} />
                       </Space>
                     ))}
-                    <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                    <Button
+                      type="dashed"
+                      onClick={() => add()}
+                      block
+                      icon={<PlusOutlined />}
+                    >
                       Add Related Description
                     </Button>
                   </>

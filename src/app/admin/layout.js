@@ -7,6 +7,7 @@ import SubCategory from "@/components-admin/subcategory";
 import Portfolio from "@/components-admin/portfolio";
 import GetaQuote from "@/components-admin/getaquote";
 import CallToActionQuote from "@/components-admin/calltoactionquote";
+import Pages from "@/components-admin/pages";
 
 export default function AdminLayout() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -28,6 +29,8 @@ export default function AdminLayout() {
         return <Dashboard />;
       case "sub-category":
         return <SubCategory />;
+        case "pages":
+        return <Pages />;
       case "portfolio":
         return <Portfolio />;
       case "getaquote":

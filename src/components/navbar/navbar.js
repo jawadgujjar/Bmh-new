@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation"; //  
+import { usePathname, useRouter } from "next/navigation";
 import { Navbar, Nav, Container, Button, NavDropdown } from "react-bootstrap";
 import { CiMobile3 } from "react-icons/ci";
 import { FaBullhorn, FaLaptopCode, FaMobileAlt } from "react-icons/fa";
@@ -10,11 +10,12 @@ import styles from "../../styles/navbar.module.css";
 
 function NavbarBmh() {
   const pathname = usePathname();
-  const router = useRouter(); // 
+  const router = useRouter();
   const navbarRef = useRef(null);
   const [scrolled, setScrolled] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
+
   const [subcategories, setSubcategories] = useState({
     "digital-marketing": [],
     "web-development": [],
@@ -31,6 +32,10 @@ function NavbarBmh() {
     "app-development": 0,
   });
 
+  // ── New states for pages ───────────────────────────────
+  const [pagesBySub, setPagesBySub] = useState({});
+  const [pagesLoading, setPagesLoading] = useState({});
+
   const handleNavClick = () => {
     window.scrollTo(0, 0);
     setExpanded(false);
@@ -40,7 +45,7 @@ function NavbarBmh() {
   const handleCategoryClick = (mainPath, e) => {
     e.preventDefault();
     e.stopPropagation();
-    router.push(mainPath);  
+    router.push(mainPath);
     setExpanded(false);
     setActiveDropdown(null);
   };
@@ -49,7 +54,6 @@ function NavbarBmh() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -61,11 +65,11 @@ function NavbarBmh() {
         setActiveDropdown(null);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Fetch subcategories
   useEffect(() => {
     const fetchSubcategories = async (category) => {
       if (fetchAttempts[category] > 0) return;
@@ -74,30 +78,24 @@ function NavbarBmh() {
         setLoading((prev) => ({ ...prev, [category]: true }));
         const response = await fetch(`/api/subcategories?category=${category}`, {
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
         });
 
-        if (!response.ok) {
-          throw new Error(`API response not ok: ${response.status} - ${await response.text()}`);
-        }
+        if (!response.ok) throw new Error(`API ${response.status}`);
 
         const data = await response.json();
-        const subcategoriesData = Array.isArray(data) ? data : (data.data || [data]);
+        const subcats = Array.isArray(data) ? data : data.data || [];
 
-        if (subcategoriesData.length > 0) {
-          setSubcategories((prev) => ({
-            ...prev,
-            [category]: subcategoriesData.map((item) => ({
-              ...item,
-              slug: item.slug || generateSlug(item.name || "unnamed"),
-              icon: item.icon || "/images/placeholder-icon.png",
-            })),
-          }));
-        }
+        setSubcategories((prev) => ({
+          ...prev,
+          [category]: subcats.map((item) => ({
+            ...item,
+            slug: item.slug || generateSlug(item.name || "unnamed"),
+            icon: item.icon || "/images/placeholder-icon.png",
+          })),
+        }));
       } catch (error) {
-        console.error(`Error fetching ${category} subcategories:`, error);
+        console.error(`Error fetching ${category}:`, error);
       } finally {
         setLoading((prev) => ({ ...prev, [category]: false }));
         setFetchAttempts((prev) => ({ ...prev, [category]: prev[category] + 1 }));
@@ -105,7 +103,28 @@ function NavbarBmh() {
     };
 
     ["digital-marketing", "web-development", "app-development"].forEach(fetchSubcategories);
-  }, []);
+  }, [fetchAttempts]);
+
+  // Fetch pages when subcategory becomes visible (on hover)
+  const fetchPages = async (subcategoryId, cacheKey) => {
+    if (!subcategoryId || pagesBySub[cacheKey]) return;
+
+    try {
+      setPagesLoading((prev) => ({ ...prev, [cacheKey]: true }));
+      const res = await fetch(`/api/page?subcategory=${subcategoryId}`);
+      if (!res.ok) throw new Error("Pages fetch failed");
+
+      const data = await res.json();
+      setPagesBySub((prev) => ({
+        ...prev,
+        [cacheKey]: Array.isArray(data) ? data : [],
+      }));
+    } catch (err) {
+      console.error("Pages fetch error:", err);
+    } finally {
+      setPagesLoading((prev) => ({ ...prev, [cacheKey]: false }));
+    }
+  };
 
   const generateSlug = (name) => {
     if (!name) return "default-slug";
@@ -189,11 +208,11 @@ function NavbarBmh() {
                 <NavDropdown
                   key={category.id}
                   title={
-                    <Link 
+                    <Link
                       href={category.mainPath}
                       onClick={(e) => handleCategoryClick(category.mainPath, e)}
                       className={styles.mainLink}
-                      style={{textDecoration: 'none', color: 'white'}}
+                      style={{ textDecoration: "none", color: "white" }}
                     >
                       {category.title}
                     </Link>
@@ -205,36 +224,64 @@ function NavbarBmh() {
                   onMouseLeave={() => setActiveDropdown(null)}
                   onToggle={() => {}}
                 >
-                  {/* سب کٹیگریز */}
                   {loading[category.categoryKey] ? (
                     <NavDropdown.Item className={styles.navDropdownItem}>
                       Loading...
                     </NavDropdown.Item>
                   ) : categorySubcategories.length === 0 ? (
                     <NavDropdown.Item className={styles.navDropdownItem} disabled>
-                      No data available
+                      No subcategories
                     </NavDropdown.Item>
                   ) : (
-                    categorySubcategories.map((subcategory) => (
-                      <NavDropdown.Item
-                        key={subcategory._id || subcategory.name}
-                        as={Link}
-                        href={`/${category.subPath}/${subcategory.slug}`}
-                        onClick={() => handleNavClick()}
-                        className={styles.navDropdownItem}
-                        style={{ display: "flex", alignItems: "center", minWidth: "150px" }}
-                      >
-                        <img
-                          src={subcategory.icon}
-                          alt={subcategory.name}
-                          style={{ width: 20, height: 20, marginRight: 8 }}
-                          onError={(e) => (e.currentTarget.src = "/images/placeholder-icon.png")}
-                        />
-                        <span style={{ whiteSpace: "normal", overflow: "visible" }}>
-                          {subcategory.name}
-                        </span>
-                      </NavDropdown.Item>
-                    ))
+                    categorySubcategories.map((sub) => {
+                      const cacheKey = `${category.categoryKey}-${sub._id || sub.slug}`;
+                      const pages = pagesBySub[cacheKey] || [];
+                      const isLoadingPages = pagesLoading[cacheKey];
+
+                      return (
+                        <div key={sub._id || sub.slug}>
+                          <NavDropdown.Item
+                            as={Link}
+                            href={`/${category.subPath}/${sub.slug}`}
+                            onClick={handleNavClick}
+                            className={styles.navDropdownItem}
+                            onMouseEnter={() => {
+                              if (sub._id && !pagesBySub[cacheKey]) {
+                                fetchPages(sub._id, cacheKey);
+                              }
+                            }}
+                            style={{ display: "flex", alignItems: "center", minWidth: "180px" }}
+                          >
+                            <img
+                              src={sub.icon}
+                              alt={sub.name}
+                              style={{ width: 20, height: 20, marginRight: 10 }}
+                              onError={(e) => (e.currentTarget.src = "/images/placeholder-icon.png")}
+                            />
+                            <span style={{ whiteSpace: "normal" }}>{sub.name}</span>
+                          </NavDropdown.Item>
+
+                          {/* Pages under this subcategory */}
+                          {isLoadingPages ? (
+                            <NavDropdown.Item className={styles.pageItem} disabled>
+                              Loading pages...
+                            </NavDropdown.Item>
+                          ) : pages.length > 0 ? (
+                            pages.map((page) => (
+                              <NavDropdown.Item
+                                key={page._id}
+                                as={Link}
+                                href={`/${category.subPath}/${sub.slug}/${page.slug}`}
+                                onClick={handleNavClick}
+                                className={styles.pageItem}
+                              >
+                                → {page.title}
+                              </NavDropdown.Item>
+                            ))
+                          ) : null}
+                        </div>
+                      );
+                    })
                   )}
                 </NavDropdown>
               );
@@ -278,4 +325,4 @@ function NavbarBmh() {
   );
 }
 
-export default NavbarBmh; 
+export default NavbarBmh;
