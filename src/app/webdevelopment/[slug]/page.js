@@ -6,6 +6,7 @@ import SubKeywordsdigital from "@/components/digital-marketing/sub-category-digi
 import SubWhydigital from "@/components/digital-marketing/sub-category-digital/subwhydigital"; // Replace if needed
 import Carousel from "@/components/landing/carousel";
 import Form1 from "@/components/landing/getaquote";
+import Heroform from "@/components/landing/heroform";
 import ProposalForm from "@/components/landing/proposalform";
 import SeoIndustries from "@/components/landing/seoindustries";
 
@@ -105,6 +106,7 @@ export default async function SubCategoryPage({ params }) {
   return (
     <main>
       <SubHeroDigitalMarketing {...heroProps} />
+      <Heroform/>
       <SubAboutdigital {...aboutProps} />
       <SubWhydigital {...whyChooseProps} />
       <SubKeywordsdigital {...keywordsProps} />

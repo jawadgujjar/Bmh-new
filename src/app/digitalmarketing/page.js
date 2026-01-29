@@ -7,6 +7,7 @@ import Digitalservices1 from "@/components/digital-marketing/servicesdigital";
 import Whydigital from "@/components/digital-marketing/whydigital";
 import Carousel from "@/components/landing/carousel";
 import Form1 from "@/components/landing/getaquote";
+import Heroform from "@/components/landing/heroform";
 import ProposalForm from "@/components/landing/proposalform";
 import Reviews from "@/components/landing/reviews";
 
@@ -14,6 +15,7 @@ export default function DigitalmarketingPage() {
   return (
     <main>
        <HeroDigitalMarketing/>
+       <Heroform/>
        <Aboutdigital/>
        <Whydigital/>
        {/* <Reviews/> */}
