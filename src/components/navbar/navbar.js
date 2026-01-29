@@ -76,10 +76,13 @@ function NavbarBmh() {
 
       try {
         setLoading((prev) => ({ ...prev, [category]: true }));
-        const response = await fetch(`/api/subcategories?category=${category}`, {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        });
+        const response = await fetch(
+          `/api/subcategories?category=${category}`,
+          {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+          },
+        );
 
         if (!response.ok) throw new Error(`API ${response.status}`);
 
@@ -92,18 +95,53 @@ function NavbarBmh() {
             ...item,
             slug: item.slug || generateSlug(item.name || "unnamed"),
             icon: item.icon || "/images/placeholder-icon.png",
+            // Store category info for routing
+            categoryPath: getCategoryPath(category),
+            categoryName: getCategoryName(category),
           })),
         }));
       } catch (error) {
         console.error(`Error fetching ${category}:`, error);
       } finally {
         setLoading((prev) => ({ ...prev, [category]: false }));
-        setFetchAttempts((prev) => ({ ...prev, [category]: prev[category] + 1 }));
+        setFetchAttempts((prev) => ({
+          ...prev,
+          [category]: prev[category] + 1,
+        }));
       }
     };
 
-    ["digital-marketing", "web-development", "app-development"].forEach(fetchSubcategories);
+    ["digital-marketing", "web-development", "app-development"].forEach(
+      fetchSubcategories,
+    );
   }, [fetchAttempts]);
+
+  // Helper functions to get category info
+  const getCategoryPath = (categoryKey) => {
+    switch (categoryKey) {
+      case "digital-marketing":
+        return "digitalmarketing";
+      case "web-development":
+        return "webdevelopment";
+      case "app-development":
+        return "appdevelopment";
+      default:
+        return "digitalmarketing";
+    }
+  };
+
+  const getCategoryName = (categoryKey) => {
+    switch (categoryKey) {
+      case "digital-marketing":
+        return "Digital Marketing";
+      case "web-development":
+        return "Web Development";
+      case "app-development":
+        return "App Development";
+      default:
+        return "Digital Marketing";
+    }
+  };
 
   // Fetch pages when subcategory becomes visible (on hover)
   const fetchPages = async (subcategoryId, cacheKey) => {
@@ -112,15 +150,36 @@ function NavbarBmh() {
     try {
       setPagesLoading((prev) => ({ ...prev, [cacheKey]: true }));
       const res = await fetch(`/api/page?subcategory=${subcategoryId}`);
-      if (!res.ok) throw new Error("Pages fetch failed");
+
+      console.log(
+        `Fetching pages for subcategory: ${subcategoryId}, cacheKey: ${cacheKey}`,
+      );
+
+      if (!res.ok) {
+        console.error(`Pages fetch failed: ${res.status}`);
+        throw new Error("Pages fetch failed");
+      }
 
       const data = await res.json();
+
+      // Handle different response formats
+      let pagesArray = [];
+      if (Array.isArray(data)) {
+        pagesArray = data;
+      } else if (data && typeof data === "object") {
+        pagesArray = [data];
+      }
+
       setPagesBySub((prev) => ({
         ...prev,
-        [cacheKey]: Array.isArray(data) ? data : [],
+        [cacheKey]: pagesArray,
       }));
     } catch (err) {
       console.error("Pages fetch error:", err);
+      setPagesBySub((prev) => ({
+        ...prev,
+        [cacheKey]: [],
+      }));
     } finally {
       setPagesLoading((prev) => ({ ...prev, [cacheKey]: false }));
     }
@@ -142,7 +201,6 @@ function NavbarBmh() {
       title: "DIGITAL MARKETING",
       id: "digital-marketing-dropdown",
       mainPath: "/digitalmarketing",
-      subPath: "digitalmarketing",
       mainIcon: <FaBullhorn className={styles.icon} />,
       mainName: "Digital Marketing",
       categoryKey: "digital-marketing",
@@ -151,7 +209,6 @@ function NavbarBmh() {
       title: "WEB DEVELOPMENT",
       id: "web-development-dropdown",
       mainPath: "/webdevelopment",
-      subPath: "webdevelopment",
       mainIcon: <FaLaptopCode className={styles.icon} />,
       mainName: "Website Design",
       categoryKey: "web-development",
@@ -160,7 +217,6 @@ function NavbarBmh() {
       title: "APP DEVELOPMENT",
       id: "app-development-dropdown",
       mainPath: "/appdevelopment",
-      subPath: "appdevelopment",
       mainIcon: <FaMobileAlt className={styles.icon} />,
       mainName: "Mobile Application Development",
       categoryKey: "app-development",
@@ -202,7 +258,8 @@ function NavbarBmh() {
         <Navbar.Collapse id="basic-navbar-nav" className={styles.mainCollapse}>
           <Nav className={`${styles.mainNav} ms-auto`}>
             {categoryConfig.map((category) => {
-              const categorySubcategories = subcategories[category.categoryKey] || [];
+              const categorySubcategories =
+                subcategories[category.categoryKey] || [];
 
               return (
                 <NavDropdown
@@ -220,64 +277,203 @@ function NavbarBmh() {
                   id={category.id}
                   className={styles.customDropdown}
                   show={activeDropdown === category.id}
-                  onMouseEnter={() => setActiveDropdown(category.id)}
+                  onMouseEnter={() => {
+                    setActiveDropdown(category.id);
+                    // Pre-fetch pages
+                    categorySubcategories.forEach((sub) => {
+                      const cacheKey = `${category.categoryKey}-${sub._id || sub.slug}`;
+                      if (
+                        sub._id &&
+                        !pagesBySub[cacheKey] &&
+                        !pagesLoading[cacheKey]
+                      ) {
+                        fetchPages(sub._id, cacheKey);
+                      }
+                    });
+                  }}
                   onMouseLeave={() => setActiveDropdown(null)}
                   onToggle={() => {}}
                 >
                   {loading[category.categoryKey] ? (
                     <NavDropdown.Item className={styles.navDropdownItem}>
-                      Loading...
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          padding: "8px 15px",
+                        }}
+                      >
+                        <div
+                          className="spinner-border spinner-border-sm text-primary me-2"
+                          style={{ width: "12px", height: "12px" }}
+                        />
+                        <span style={{ fontSize: "14px" }}>Loading...</span>
+                      </div>
                     </NavDropdown.Item>
                   ) : categorySubcategories.length === 0 ? (
-                    <NavDropdown.Item className={styles.navDropdownItem} disabled>
-                      No subcategories
+                    <NavDropdown.Item
+                      className={styles.navDropdownItem}
+                      disabled
+                    >
+                      <span style={{ fontSize: "14px", color: "#666" }}>
+                        No subcategories
+                      </span>
                     </NavDropdown.Item>
                   ) : (
                     categorySubcategories.map((sub) => {
                       const cacheKey = `${category.categoryKey}-${sub._id || sub.slug}`;
                       const pages = pagesBySub[cacheKey] || [];
                       const isLoadingPages = pagesLoading[cacheKey];
+                      const hasPages = pages.length > 0;
 
                       return (
-                        <div key={sub._id || sub.slug}>
+                        <div
+                          key={sub._id || sub.slug}
+                          className={styles.subcategoryContainer}
+                        >
+                          {/* Subcategory Link - GOES TO /sub-slug */}
                           <NavDropdown.Item
                             as={Link}
-                            href={`/${category.subPath}/${sub.slug}`}
+                            // SUB CATEGORY LINK: /seo (without category)
+                            href={`/${sub.slug}`}
                             onClick={handleNavClick}
-                            className={styles.navDropdownItem}
+                            className={`${styles.navDropdownItem} ${styles.subcategoryItem}`}
                             onMouseEnter={() => {
-                              if (sub._id && !pagesBySub[cacheKey]) {
+                              if (
+                                sub._id &&
+                                !pagesBySub[cacheKey] &&
+                                !pagesLoading[cacheKey]
+                              ) {
                                 fetchPages(sub._id, cacheKey);
                               }
                             }}
-                            style={{ display: "flex", alignItems: "center", minWidth: "180px" }}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              minWidth: "220px",
+                              padding: "10px 15px",
+                              borderBottom: hasPages
+                                ? "1px solid #eee"
+                                : "none",
+                              fontWeight: "500",
+                            }}
                           >
-                            <img
-                              src={sub.icon}
-                              alt={sub.name}
-                              style={{ width: 20, height: 20, marginRight: 10 }}
-                              onError={(e) => (e.currentTarget.src = "/images/placeholder-icon.png")}
-                            />
-                            <span style={{ whiteSpace: "normal" }}>{sub.name}</span>
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                flex: 1,
+                              }}
+                            >
+                              <img
+                                src={sub.icon}
+                                alt={sub.name}
+                                style={{
+                                  width: 24,
+                                  height: 24,
+                                  marginRight: 12,
+                                  borderRadius: "4px",
+                                  objectFit: "cover",
+                                }}
+                                onError={(e) => {
+                                  e.currentTarget.src =
+                                    "/images/placeholder-icon.png";
+                                  e.currentTarget.onerror = null;
+                                }}
+                              />
+                              <span
+                                style={{
+                                  color: "#333",
+                                  fontSize: "14px",
+                                  fontWeight: "500",
+                                }}
+                              >
+                                {sub.name}
+                              </span>
+                            </div>
+                            {isLoadingPages && (
+                              <div
+                                className="spinner-border spinner-border-sm text-secondary ms-2"
+                                style={{ width: "12px", height: "12px" }}
+                              />
+                            )}
+                            {hasPages && !isLoadingPages && (
+                              <span
+                                style={{
+                                  fontSize: "11px",
+                                  color: "#007bff",
+                                  background: "#e7f1ff",
+                                  padding: "2px 6px",
+                                  borderRadius: "10px",
+                                  fontWeight: "500",
+                                }}
+                              >
+                                {pages.length}
+                              </span>
+                            )}
                           </NavDropdown.Item>
 
                           {/* Pages under this subcategory */}
                           {isLoadingPages ? (
-                            <NavDropdown.Item className={styles.pageItem} disabled>
-                              Loading pages...
-                            </NavDropdown.Item>
-                          ) : pages.length > 0 ? (
-                            pages.map((page) => (
-                              <NavDropdown.Item
-                                key={page._id}
-                                as={Link}
-                                href={`/${category.subPath}/${sub.slug}/${page.slug}`}
-                                onClick={handleNavClick}
+                            <div className={styles.pageItemsContainer}>
+                              <div
                                 className={styles.pageItem}
+                                style={{ padding: "8px 15px 8px 40px" }}
                               >
-                                → {page.title}
-                              </NavDropdown.Item>
-                            ))
+                                <small style={{ color: "#666" }}>
+                                  Loading services...
+                                </small>
+                              </div>
+                            </div>
+                          ) : hasPages ? (
+                            <div className={styles.pageItemsContainer}>
+                              {pages.map((page) => (
+                                <NavDropdown.Item
+                                  key={page._id}
+                                  as={Link}
+                                  // PAGE LINK: /seo/my-sample-page (without category)
+                                  href={`/${sub.slug}/${page.slug}`}
+                                  onClick={handleNavClick}
+                                  className={styles.pageItem}
+                                  style={{
+                                    padding: "8px 15px 8px 40px",
+                                    fontSize: "13px",
+                                    color: "#555",
+                                    borderLeft: "2px solid #ddd",
+                                    marginLeft: "20px",
+                                    marginRight: "10px",
+                                    borderRadius: "0 4px 4px 0",
+                                    transition: "all 0.2s",
+                                  }}
+                                >
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                    }}
+                                  >
+                                    <span
+                                      style={{
+                                        color: "#007bff",
+                                        marginRight: "8px",
+                                        fontSize: "14px",
+                                      }}
+                                    >
+                                      ›
+                                    </span>
+                                    <span
+                                      style={{
+                                        whiteSpace: "normal",
+                                        lineHeight: "1.4",
+                                      }}
+                                    >
+                                      {page.title}
+                                    </span>
+                                  </div>
+                                </NavDropdown.Item>
+                              ))}
+                            </div>
                           ) : null}
                         </div>
                       );
@@ -295,6 +491,16 @@ function NavbarBmh() {
               active={pathname === "/portfolio"}
             >
               Portfolio
+            </Nav.Link>
+
+            <Nav.Link
+              as={Link}
+              href="/blogs"
+              onClick={handleNavClick}
+              className={styles.mainLink}
+              active={pathname === "/blogs"}
+            >
+              Blogs
             </Nav.Link>
 
             <Link href="/getaquote" passHref>
@@ -315,7 +521,7 @@ function NavbarBmh() {
               <CiMobile3 className={styles.mobileIcon} />
               <div className={styles.textPhone}>
                 <p>+123-456-7890</p>
-                <p>Speak With an Expert</p>
+                <p>Speak With Expert</p>
               </div>
             </a>
           </Nav>

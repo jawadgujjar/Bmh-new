@@ -17,13 +17,27 @@ const pageSchema = new mongoose.Schema(
           .replace(/-+$/, "");
       },
     },
+    
+    // SEO Fields
+    metaTitle: { type: String },
+    metaDescription: { type: String },
+    metaKeywords: { type: String },
+    metaSchema: { type: String },
+    
+    // Category and Subcategory
+    category: {
+      type: String,
+      required: true,
+      enum: ["digital-marketing", "web-development", "app-development"],
+    },
     subcategory: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "SubCategory",
       required: true,
     },
-    subcatpagedescr: { type: String }, // <-- New field
+    subcatpagedescr: { type: String },
 
+    // Page Content Sections
     topSection: {
       backgroundImage: String,
       heading: String,

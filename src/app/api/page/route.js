@@ -2,15 +2,28 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import Page from "@/models/page";
 
-// GET: fetch all pages or by subcategory
+// GET: fetch all pages or by subcategory OR by slug
 export async function GET(request) {
   try {
     await dbConnect();
     const { searchParams } = new URL(request.url);
     const subcategoryId = searchParams.get("subcategory");
+    const category = searchParams.get("category");
+    const slug = searchParams.get("slug");
 
     let query = {};
+
+    if (slug) {
+      // Get single page by slug
+      const page = await Page.findOne({ slug }).lean();
+      if (!page) {
+        return NextResponse.json({ error: "Page not found" }, { status: 404 });
+      }
+      return NextResponse.json(page, { status: 200 });
+    }
+
     if (subcategoryId) query.subcategory = subcategoryId;
+    if (category) query.category = category;
 
     const pages = await Page.find(query).lean();
     return NextResponse.json(pages, { status: 200 });
@@ -25,6 +38,7 @@ export async function POST(req) {
     await dbConnect();
     const body = await req.json();
 
+    // Generate slug from title if not provided
     if (!body.slug && body.title) {
       body.slug = body.title
         .toLowerCase()
@@ -35,8 +49,22 @@ export async function POST(req) {
         .replace(/-+$/, "");
     }
 
-    // Ensure subcatpagedescr exists
+    // Ensure SEO fields have default values
+    if (!body.metaTitle) body.metaTitle = "";
+    if (!body.metaDescription) body.metaDescription = "";
+    if (!body.metaKeywords) body.metaKeywords = "";
+    if (!body.metaSchema) body.metaSchema = "";
     if (!body.subcatpagedescr) body.subcatpagedescr = "";
+
+    // Validate category
+    const validCategories = [
+      "digital-marketing",
+      "web-development",
+      "app-development",
+    ];
+    if (!body.category || !validCategories.includes(body.category)) {
+      return NextResponse.json({ error: "Invalid category" }, { status: 400 });
+    }
 
     // middleSection transformation
     if (body.middleSection) {
@@ -67,7 +95,27 @@ export async function PUT(req) {
     if (!body._id)
       return NextResponse.json({ error: "ID required" }, { status: 400 });
 
+    // Ensure SEO fields exist
+    if (!body.metaTitle) body.metaTitle = "";
+    if (!body.metaDescription) body.metaDescription = "";
+    if (!body.metaKeywords) body.metaKeywords = "";
+    if (!body.metaSchema) body.metaSchema = "";
     if (!body.subcatpagedescr) body.subcatpagedescr = "";
+
+    // Validate category if provided
+    if (body.category) {
+      const validCategories = [
+        "digital-marketing",
+        "web-development",
+        "app-development",
+      ];
+      if (!validCategories.includes(body.category)) {
+        return NextResponse.json(
+          { error: "Invalid category" },
+          { status: 400 },
+        );
+      }
+    }
 
     if (body.middleSection) {
       const { description, images, extraDescription, ...rest } =
