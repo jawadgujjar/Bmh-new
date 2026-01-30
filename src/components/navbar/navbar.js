@@ -1,225 +1,119 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { Navbar, Nav, Container, Button, NavDropdown } from "react-bootstrap";
+import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { CiMobile3 } from "react-icons/ci";
-import { FaBullhorn, FaLaptopCode, FaMobileAlt } from "react-icons/fa";
+import { FaChevronRight } from "react-icons/fa";
 import styles from "../../styles/navbar.module.css";
 
 function NavbarBmh() {
-  const pathname = usePathname();
-  const router = useRouter();
-  const navbarRef = useRef(null);
   const [scrolled, setScrolled] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
-
-  const [subcategories, setSubcategories] = useState({
-    "digital-marketing": [],
-    "web-development": [],
-    "app-development": [],
-  });
-  const [loading, setLoading] = useState({
-    "digital-marketing": true,
-    "web-development": true,
-    "app-development": true,
-  });
-  const [fetchAttempts, setFetchAttempts] = useState({
-    "digital-marketing": 0,
-    "web-development": 0,
-    "app-development": 0,
-  });
-
-  // ── New states for pages ───────────────────────────────
+  const [subcategories, setSubcategories] = useState({});
   const [pagesBySub, setPagesBySub] = useState({});
-  const [pagesLoading, setPagesLoading] = useState({});
-
-  const handleNavClick = () => {
-    window.scrollTo(0, 0);
-    setExpanded(false);
-    setActiveDropdown(null);
-  };
-
-  const handleCategoryClick = (mainPath, e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    router.push(mainPath);
-    setExpanded(false);
-    setActiveDropdown(null);
-  };
+  const timeoutRef = useRef(null);
+  const navbarRef = useRef(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (navbarRef.current && !navbarRef.current.contains(event.target)) {
+      if (
+        navbarRef.current &&
+        !navbarRef.current.contains(event.target) &&
+        expanded
+      ) {
         setExpanded(false);
         setActiveDropdown(null);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [expanded]);
+
+  useEffect(() => {
+    const fetchCats = async () => {
+      const keys = ["digital-marketing", "web-development", "app-development"];
+      const dataObj = {};
+      for (const key of keys) {
+        try {
+          const res = await fetch(`/api/subcategories?category=${key}`);
+          const data = await res.json();
+          dataObj[key] = Array.isArray(data) ? data : data.data || [];
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      setSubcategories(dataObj);
+    };
+    fetchCats();
   }, []);
 
-  // Fetch subcategories
-  useEffect(() => {
-    const fetchSubcategories = async (category) => {
-      if (fetchAttempts[category] > 0) return;
-
+  const prefetchPages = useCallback(
+    async (subId) => {
+      if (!subId || pagesBySub[subId]) return;
       try {
-        setLoading((prev) => ({ ...prev, [category]: true }));
-        const response = await fetch(
-          `/api/subcategories?category=${category}`,
-          {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-          },
-        );
-
-        if (!response.ok) throw new Error(`API ${response.status}`);
-
-        const data = await response.json();
-        const subcats = Array.isArray(data) ? data : data.data || [];
-
-        setSubcategories((prev) => ({
+        const res = await fetch(`/api/page?subcategory=${subId}`);
+        const data = await res.json();
+        setPagesBySub((prev) => ({
           ...prev,
-          [category]: subcats.map((item) => ({
-            ...item,
-            slug: item.slug || generateSlug(item.name || "unnamed"),
-            icon: item.icon || "/images/placeholder-icon.png",
-            // Store category info for routing
-            categoryPath: getCategoryPath(category),
-            categoryName: getCategoryName(category),
-          })),
+          [subId]: Array.isArray(data) ? data : data.data ? [data.data] : [],
         }));
-      } catch (error) {
-        console.error(`Error fetching ${category}:`, error);
-      } finally {
-        setLoading((prev) => ({ ...prev, [category]: false }));
-        setFetchAttempts((prev) => ({
-          ...prev,
-          [category]: prev[category] + 1,
-        }));
+      } catch (e) {
+        console.error(e);
       }
-    };
+    },
+    [pagesBySub],
+  );
 
-    ["digital-marketing", "web-development", "app-development"].forEach(
-      fetchSubcategories,
-    );
-  }, [fetchAttempts]);
-
-  // Helper functions to get category info
-  const getCategoryPath = (categoryKey) => {
-    switch (categoryKey) {
-      case "digital-marketing":
-        return "digitalmarketing";
-      case "web-development":
-        return "webdevelopment";
-      case "app-development":
-        return "appdevelopment";
-      default:
-        return "digitalmarketing";
-    }
+  const handleOpen = (id) => {
+    if (window.innerWidth < 992) return;
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setActiveDropdown(id);
   };
 
-  const getCategoryName = (categoryKey) => {
-    switch (categoryKey) {
-      case "digital-marketing":
-        return "Digital Marketing";
-      case "web-development":
-        return "Web Development";
-      case "app-development":
-        return "App Development";
-      default:
-        return "Digital Marketing";
-    }
+  const handleClose = () => {
+    if (window.innerWidth < 992) return;
+    timeoutRef.current = setTimeout(() => setActiveDropdown(null), 150);
   };
 
-  // Fetch pages when subcategory becomes visible (on hover)
-  const fetchPages = async (subcategoryId, cacheKey) => {
-    if (!subcategoryId || pagesBySub[cacheKey]) return;
-
-    try {
-      setPagesLoading((prev) => ({ ...prev, [cacheKey]: true }));
-      const res = await fetch(`/api/page?subcategory=${subcategoryId}`);
-
-      console.log(
-        `Fetching pages for subcategory: ${subcategoryId}, cacheKey: ${cacheKey}`,
-      );
-
-      if (!res.ok) {
-        console.error(`Pages fetch failed: ${res.status}`);
-        throw new Error("Pages fetch failed");
-      }
-
-      const data = await res.json();
-
-      // Handle different response formats
-      let pagesArray = [];
-      if (Array.isArray(data)) {
-        pagesArray = data;
-      } else if (data && typeof data === "object") {
-        pagesArray = [data];
-      }
-
-      setPagesBySub((prev) => ({
-        ...prev,
-        [cacheKey]: pagesArray,
-      }));
-    } catch (err) {
-      console.error("Pages fetch error:", err);
-      setPagesBySub((prev) => ({
-        ...prev,
-        [cacheKey]: [],
-      }));
-    } finally {
-      setPagesLoading((prev) => ({ ...prev, [cacheKey]: false }));
-    }
+  const closeMenu = () => {
+    setExpanded(false);
+    setActiveDropdown(null);
   };
 
-  const generateSlug = (name) => {
-    if (!name) return "default-slug";
-    return name
-      .toLowerCase()
-      .replace(/\s+/g, "-")
-      .replace(/[^\w\-]+/g, "")
-      .replace(/\-\-+/g, "-")
-      .replace(/^-+/, "")
-      .replace(/-+$/, "");
+  // Fixed: Toggle Logic for Mobile
+  const toggleSubMenu = (id, e) => {
+    if (window.innerWidth >= 992) return;
+    e.preventDefault();
+    e.stopPropagation();
+    setActiveDropdown(activeDropdown === id ? null : id);
   };
 
   const categoryConfig = [
     {
-      title: "DIGITAL MARKETING",
-      id: "digital-marketing-dropdown",
-      mainPath: "/digitalmarketing",
-      mainIcon: <FaBullhorn className={styles.icon} />,
-      mainName: "Digital Marketing",
-      categoryKey: "digital-marketing",
+      title: "Digital Marketing",
+      id: "dm",
+      path: "/digitalmarketing",
+      key: "digital-marketing",
     },
     {
-      title: "WEB DEVELOPMENT",
-      id: "web-development-dropdown",
-      mainPath: "/webdevelopment",
-      mainIcon: <FaLaptopCode className={styles.icon} />,
-      mainName: "Website Design",
-      categoryKey: "web-development",
+      title: "Web Development",
+      id: "wd",
+      path: "/webdevelopment",
+      key: "web-development",
     },
     {
-      title: "APP DEVELOPMENT",
-      id: "app-development-dropdown",
-      mainPath: "/appdevelopment",
-      mainIcon: <FaMobileAlt className={styles.icon} />,
-      mainName: "Mobile Application Development",
-      categoryKey: "app-development",
+      title: "App Development",
+      id: "ad",
+      path: "/appdevelopment",
+      key: "app-development",
     },
   ];
 
@@ -229,302 +123,124 @@ function NavbarBmh() {
       expand="lg"
       fixed="top"
       expanded={expanded}
-      onToggle={() => setExpanded(!expanded)}
       className={`${styles.mainNavbar} ${scrolled ? styles.scrolled : ""}`}
-      collapseOnSelect
     >
-      <Container fluid className={styles.mainContainer}>
-        <Navbar.Brand
-          as={Link}
-          href="/"
-          onClick={handleNavClick}
-          className={styles.mainBrand}
-        >
-          <img
-            src="/bmhlogo.svg"
-            className={styles.mainLogo}
-            alt="Brand Marketing Hub Logo"
-          />
-        </Navbar.Brand>
-
-        <div className={styles.changeNavbarNav}>
-          <Navbar.Toggle
-            aria-controls="basic-navbar-nav"
-            className={styles.customToggle}
-            aria-label="Toggle navigation"
-          />
+      <Container fluid className={styles.navContainer}>
+        <div className={styles.navLeft}>
+          <Navbar.Brand as={Link} href="/" onClick={closeMenu}>
+            <img src="/bmhlogo.svg" className={styles.logo} alt="Logo" />
+          </Navbar.Brand>
         </div>
 
-        <Navbar.Collapse id="basic-navbar-nav" className={styles.mainCollapse}>
-          <Nav className={`${styles.mainNav} ms-auto`}>
-            {categoryConfig.map((category) => {
-              const categorySubcategories =
-                subcategories[category.categoryKey] || [];
+        {/* Custom Toggle Button with Animation */}
+        <button
+          className={`${styles.customToggle} ${expanded ? styles.open : ""}`}
+          onClick={() => setExpanded(!expanded)}
+          aria-label="Toggle navigation"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
 
-              return (
-                <NavDropdown
-                  key={category.id}
-                  title={
-                    <Link
-                      href={category.mainPath}
-                      onClick={(e) => handleCategoryClick(category.mainPath, e)}
-                      className={styles.mainLink}
-                      style={{ textDecoration: "none", color: "white" }}
-                    >
-                      {category.title}
-                    </Link>
-                  }
-                  id={category.id}
-                  className={styles.customDropdown}
-                  show={activeDropdown === category.id}
-                  onMouseEnter={() => {
-                    setActiveDropdown(category.id);
-                    // Pre-fetch pages
-                    categorySubcategories.forEach((sub) => {
-                      const cacheKey = `${category.categoryKey}-${sub._id || sub.slug}`;
-                      if (
-                        sub._id &&
-                        !pagesBySub[cacheKey] &&
-                        !pagesLoading[cacheKey]
-                      ) {
-                        fetchPages(sub._id, cacheKey);
-                      }
-                    });
-                  }}
-                  onMouseLeave={() => setActiveDropdown(null)}
-                  onToggle={() => {}}
+        <Navbar.Collapse id="nav-menu" className={styles.navCollapse}>
+          <div className={styles.navCenter}>
+            <Nav className={styles.centerLinks}>
+              {categoryConfig.map((cat) => (
+                <div
+                  key={cat.id}
+                  className={styles.navItemWrapper}
+                  onMouseEnter={() => handleOpen(cat.id)}
+                  onMouseLeave={handleClose}
                 >
-                  {loading[category.categoryKey] ? (
-                    <NavDropdown.Item className={styles.navDropdownItem}>
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          padding: "8px 15px",
-                        }}
-                      >
-                        <div
-                          className="spinner-border spinner-border-sm text-primary me-2"
-                          style={{ width: "12px", height: "12px" }}
-                        />
-                        <span style={{ fontSize: "14px" }}>Loading...</span>
-                      </div>
-                    </NavDropdown.Item>
-                  ) : categorySubcategories.length === 0 ? (
-                    <NavDropdown.Item
-                      className={styles.navDropdownItem}
-                      disabled
+                  <div
+                    className={styles.navLinkWrapper}
+                    onClick={(e) => toggleSubMenu(cat.id, e)}
+                  >
+                    <Link
+                      href={cat.path}
+                      className={styles.navLink}
+                      onClick={(e) => {
+                        if (window.innerWidth < 992) {
+                          // On mobile, first click opens dropdown
+                          e.preventDefault();
+                        } else {
+                          closeMenu();
+                        }
+                      }}
                     >
-                      <span style={{ fontSize: "14px", color: "#666" }}>
-                        No subcategories
-                      </span>
-                    </NavDropdown.Item>
-                  ) : (
-                    categorySubcategories.map((sub) => {
-                      const cacheKey = `${category.categoryKey}-${sub._id || sub.slug}`;
-                      const pages = pagesBySub[cacheKey] || [];
-                      const isLoadingPages = pagesLoading[cacheKey];
-                      const hasPages = pages.length > 0;
+                      {cat.title}
+                    </Link>
+                    <FaChevronRight
+                      className={`${styles.mobileArrow} ${activeDropdown === cat.id ? styles.arrowRotate : ""}`}
+                      size={12}
+                    />
+                  </div>
 
-                      return (
-                        <div
-                          key={sub._id || sub.slug}
-                          className={styles.subcategoryContainer}
-                        >
-                          {/* Subcategory Link - GOES TO /sub-slug */}
-                          <NavDropdown.Item
-                            as={Link}
-                            // SUB CATEGORY LINK: /seo (without category)
-                            href={`/${sub.slug}`}
-                            onClick={handleNavClick}
-                            className={`${styles.navDropdownItem} ${styles.subcategoryItem}`}
-                            onMouseEnter={() => {
-                              if (
-                                sub._id &&
-                                !pagesBySub[cacheKey] &&
-                                !pagesLoading[cacheKey]
-                              ) {
-                                fetchPages(sub._id, cacheKey);
-                              }
-                            }}
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "space-between",
-                              minWidth: "220px",
-                              padding: "10px 15px",
-                              borderBottom: hasPages
-                                ? "1px solid #eee"
-                                : "none",
-                              fontWeight: "500",
-                            }}
+                  {activeDropdown === cat.id && (
+                    <div className={styles.customDropdownMenu}>
+                      <div className={styles.dropdownFlex}>
+                        {subcategories[cat.key]?.map((sub) => (
+                          <div
+                            key={sub._id}
+                            className={styles.subCol}
+                            onMouseEnter={() => prefetchPages(sub._id)}
                           >
-                            <div
-                              style={{
-                                display: "flex",
-                                alignItems: "center",
-                                flex: 1,
-                              }}
+                            <Link
+                              href={`/${sub.slug}`}
+                              className={styles.subTitle}
+                              onClick={closeMenu}
                             >
-                              <img
-                                src={sub.icon}
-                                alt={sub.name}
-                                style={{
-                                  width: 24,
-                                  height: 24,
-                                  marginRight: 12,
-                                  borderRadius: "4px",
-                                  objectFit: "cover",
-                                }}
-                                onError={(e) => {
-                                  e.currentTarget.src =
-                                    "/images/placeholder-icon.png";
-                                  e.currentTarget.onerror = null;
-                                }}
-                              />
-                              <span
-                                style={{
-                                  color: "#333",
-                                  fontSize: "14px",
-                                  fontWeight: "500",
-                                }}
+                              {sub.name} <FaChevronRight size={10} />
+                            </Link>
+                            {pagesBySub[sub._id]?.map((p) => (
+                              <Link
+                                key={p._id}
+                                href={`/${sub.slug}/${p.slug}`}
+                                className={styles.pageLink}
+                                onClick={closeMenu}
                               >
-                                {sub.name}
-                              </span>
-                            </div>
-                            {isLoadingPages && (
-                              <div
-                                className="spinner-border spinner-border-sm text-secondary ms-2"
-                                style={{ width: "12px", height: "12px" }}
-                              />
-                            )}
-                            {hasPages && !isLoadingPages && (
-                              <span
-                                style={{
-                                  fontSize: "11px",
-                                  color: "#007bff",
-                                  background: "#e7f1ff",
-                                  padding: "2px 6px",
-                                  borderRadius: "10px",
-                                  fontWeight: "500",
-                                }}
-                              >
-                                {pages.length}
-                              </span>
-                            )}
-                          </NavDropdown.Item>
-
-                          {/* Pages under this subcategory */}
-                          {isLoadingPages ? (
-                            <div className={styles.pageItemsContainer}>
-                              <div
-                                className={styles.pageItem}
-                                style={{ padding: "8px 15px 8px 40px" }}
-                              >
-                                <small style={{ color: "#666" }}>
-                                  Loading services...
-                                </small>
-                              </div>
-                            </div>
-                          ) : hasPages ? (
-                            <div className={styles.pageItemsContainer}>
-                              {pages.map((page) => (
-                                <NavDropdown.Item
-                                  key={page._id}
-                                  as={Link}
-                                  // PAGE LINK: /seo/my-sample-page (without category)
-                                  href={`/${sub.slug}/${page.slug}`}
-                                  onClick={handleNavClick}
-                                  className={styles.pageItem}
-                                  style={{
-                                    padding: "8px 15px 8px 40px",
-                                    fontSize: "13px",
-                                    color: "#555",
-                                    borderLeft: "2px solid #ddd",
-                                    marginLeft: "20px",
-                                    marginRight: "10px",
-                                    borderRadius: "0 4px 4px 0",
-                                    transition: "all 0.2s",
-                                  }}
-                                >
-                                  <div
-                                    style={{
-                                      display: "flex",
-                                      alignItems: "center",
-                                    }}
-                                  >
-                                    <span
-                                      style={{
-                                        color: "#007bff",
-                                        marginRight: "8px",
-                                        fontSize: "14px",
-                                      }}
-                                    >
-                                      ›
-                                    </span>
-                                    <span
-                                      style={{
-                                        whiteSpace: "normal",
-                                        lineHeight: "1.4",
-                                      }}
-                                    >
-                                      {page.title}
-                                    </span>
-                                  </div>
-                                </NavDropdown.Item>
-                              ))}
-                            </div>
-                          ) : null}
-                        </div>
-                      );
-                    })
+                                {p.title}
+                              </Link>
+                            ))}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   )}
-                </NavDropdown>
-              );
-            })}
+                </div>
+              ))}
 
-            <Nav.Link
-              as={Link}
-              href="/portfolio"
-              onClick={handleNavClick}
-              className={styles.mainLink}
-              active={pathname === "/portfolio"}
-            >
-              Portfolio
-            </Nav.Link>
-
-            <Nav.Link
-              as={Link}
-              href="/blogs"
-              onClick={handleNavClick}
-              className={styles.mainLink}
-              active={pathname === "/blogs"}
-            >
-              Blogs
-            </Nav.Link>
-
-            <Link href="/getaquote" passHref>
-              <Button
-                variant="primary"
-                className={styles.quoteButton}
-                onClick={handleNavClick}
-              >
-                Get a Quote
-              </Button>
-            </Link>
-
-            <a
-              href="tel:+1234567890"
-              className={styles.phoneNumberDiv}
-              onClick={() => setExpanded(false)}
-            >
-              <CiMobile3 className={styles.mobileIcon} />
-              <div className={styles.textPhone}>
-                <p>+123-456-7890</p>
-                <p>Speak With Expert</p>
+              <div className={styles.navItemWrapper}>
+                <Link
+                  href="/portfolio"
+                  className={styles.navLink}
+                  onClick={closeMenu}
+                >
+                  Portfolio
+                </Link>
               </div>
-            </a>
-          </Nav>
+            </Nav>
+          </div>
+
+          <div className={styles.navRight}>
+            <div className={styles.actionSection}>
+              <a
+                href="tel:+1234567890"
+                className={styles.phoneBox}
+                onClick={closeMenu}
+              >
+                <CiMobile3 size={24} color="#ffa500" />
+                <div className={styles.phoneText}>
+                  <span>+123-456-7890</span>
+                  <small>Speak with Expert</small>
+                </div>
+              </a>
+              <Link href="/getaquote" onClick={closeMenu}>
+                <Button className={styles.quoteBtn}>Get a Quote</Button>
+              </Link>
+            </div>
+          </div>
         </Navbar.Collapse>
       </Container>
     </Navbar>

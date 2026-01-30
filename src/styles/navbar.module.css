@@ -1,491 +1,226 @@
-/* Main Navbar Styles */
 .mainNavbar {
-  padding: 10px 20px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
+  height: 85px;
+  background: transparent !important;
   transition: all 0.3s ease;
-  background-color: transparent !important;
-  height: 80px;
+  padding: 0;
   display: flex;
   align-items: center;
 }
 
 .mainNavbar.scrolled {
-  background-color: black !important;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  height: 70px;
+  background: rgba(0, 0, 0, 0.95) !important;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
-/* Container Styles */
-.mainContainer {
-  width: 97% !important;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
+.navContainer {
+  display: flex !important;
   justify-content: space-between;
-}
-
-/* Brand/Logo Styles */
-.mainBrand {
-  margin-right: auto;
-  z-index: 1001;
-}
-
-.mainLogo {
-  width: 9rem;
-  height: auto;
-  margin-right: 2rem;
-  transition: all 0.3s ease;
-}
-
-/* Navigation Links */
-.mainNav {
-  display: flex;
   align-items: center;
-  font-weight: bold;
-  gap: 1.5rem;
+  padding: 0 4% !important;
 }
 
-/* 🔴 FIX: Main Link Styles for Navbar */
-.mainLink {
-  margin-left: 1.5rem;
-  color: white !important;
-  font-weight: 700 !important;
-  text-transform: uppercase;
-  font-size: 0.9rem;
-  padding: 8px 0 !important;
-  letter-spacing: 0.5px;
-  transition: color 0.2s ease;
+.navLeft { flex: 0 0 auto; }
+.logo { width: 100px; height: auto; transition: 0.3s; }
+
+.navCollapse {
+  flex: 1;
+  display: flex !important;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navCenter { flex: 1; display: flex; justify-content: center; }
+.centerLinks { display: flex; gap: 10px; }
+
+.navItemWrapper {
   position: relative;
-  cursor: pointer !important;
-  text-decoration: none !important;
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  height: 85px;
 }
+.scrolled .navItemWrapper { height: 70px; }
 
-.mainLink:hover {
-  color: #FFA500 !important;
-}
-
-.mainLink::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background-color: #FFA500;
-  transition: width 0.3s ease;
-}
-
-.mainLink:hover::after {
-  width: 100%;
-}
-
-/* 🔴 FIX: Bootstrap NavDropdown Title को Link की तरह behave करने दें */
-.customDropdown .dropdown-toggle {
+.navLink {
   color: white !important;
-  background-color: transparent !important;
-  border: none !important;
-  font-weight: 700 !important;
-  text-transform: uppercase;
-  font-size: 0.9rem !important;
-  padding: 8px 0 !important;
-  letter-spacing: 0.5px;
-  cursor: pointer !important;
-  text-decoration: none !important;
-  position: relative;
-}
-
-.customDropdown .dropdown-toggle:hover {
-  color: #FFA500 !important;
-  background-color: transparent !important;
-  border: none !important;
-}
-
-/* 🔴 IMPORTANT: Remove Bootstrap's default arrow if using custom link */
-.customDropdown .dropdown-toggle::after {
-  display: none !important;
-}
-
-/* 🔴 Add custom arrow for dropdown */
-.customDropdown.has-arrow .dropdown-toggle::after {
-  display: inline-block !important;
-  vertical-align: .255em;
-  content: "";
-  border: .3em solid transparent;
-  border-top-color: white !important;
-  border-bottom: 0;
-  margin-left: .255em;
-}
-
-.customDropdown.has-arrow.show .dropdown-toggle::after {
-  transform: rotate(180deg);
-}
-
-/* Navbar Toggle Button */
-.customToggle {
-  border: none !important;
-  padding: 0.5rem !important;
-  margin-left: 1rem;
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100%;
-  cursor: pointer;
-}
-
-.customToggle:hover {
-  opacity: 0.8;
-}
-
-.customToggle:focus {
-  box-shadow: none !important;
-}
-
-/* Force the toggler icon to be white */
-.navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
-}
-
-/* Luxury Dropdown Menu */
-.customDropdown .dropdown-menu {
-  background-color: rgba(25, 25, 25, 0.98) !important;
-  border: none;
-  border-radius: 6px;
-  padding: 20px;
-  margin-top: 15px;
-  min-width: 320px !important;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 165, 0, 0.3);
-  transition: all 0.3s ease;
-  animation: dropdownFadeIn 0.2s ease;
-}
-
-@keyframes dropdownFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.navDropdownItem {
-  font-size: 0.95rem !important;
-  font-weight: 500 !important;
-  color: black !important;
-  padding: 12px 20px !important;
-  transition: all 0.3s ease;
-  margin: 5px 0;
-  border-left: 3px solid transparent;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background-color: transparent !important;
-  text-decoration: none !important;
-}
-
-.navDropdownItem:hover {
-  color: #FD7E14 !important;
-  background-color: rgba(255, 165, 0, 0.15) !important;
-  border-left: 3px solid #FFA500;
-  transform: translateX(2px);
-}
-
-.navDropdownItemfirst {
-  font-size: 1.1rem !important;
-  font-weight: 600 !important;
-  color: black !important;
-  padding: 12px 20px !important;
-  transition: all 0.3s ease;
-  margin: 5px 0;
-  border-left: 3px solid transparent;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background-color: transparent !important;
-  text-decoration: none !important;
-}
-
-.navDropdownItemfirst:hover {
-  color: #FD7E14 !important;
-  background-color: rgba(255, 165, 0, 0.15) !important;
-  border-left: 3px solid #FFA500;
-  transform: translateX(2px);
-}
-
-.icon {
-  font-size: 18px;
-  color: #FFA500;
-  transition: all 0.3s ease;
-}
-
-.navDropdownItem:hover .icon {
-  color: #FD7E14;
-  transform: scale(1.1);
-}
-
-.orangeUnderline {
-  height: 2px;
-  width: 80%;
-  background-color: #FFA500;
-  margin-top: 8px;
-  border-radius: 2px;
-}
-
-/* Quote Button Styles */
-.quoteButton {
-  margin-left: 1.5rem;
-  background-color: #5F6F65;
-  color: white;
-  border: none;
-  transition: all 0.3s;
-  font-weight: bold;
-  padding: 10px 25px !important;
-  font-size: 0.9rem;
-  border-radius: 4px;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.quoteButton:hover {
-  background-color: white;
-  color: rgb(3, 28, 29);
-  border: 1px solid rgb(3, 28, 29);
-  transform: translateY(-2px);
-}
-
-/* Phone Number Section */
-.phoneNumberDiv {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  margin-left: 1.5rem;
-  transition: all 0.3s;
-}
-
-.phoneNumberDiv:hover {
-  transform: translateY(-2px);
-}
-
-.mobileIcon {
-  font-size: 2rem;
-  color: #FFA500;
-  margin-right: 8px;
-}
-
-.textPhone {
-  font-size: 0.8rem;
+  font-size: 13px;
   font-weight: 700;
-  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0 15px;
+  text-decoration: none;
+  transition: 0.3s;
 }
 
-.textPhone p {
-  margin: 0;
-  line-height: 1.3;
+.navLink:hover { color: #ffa500 !important; }
+
+/* Section 3: Right */
+.navRight { flex: 0 0 auto; }
+.actionSection { display: flex; align-items: center; gap: 20px; }
+
+.phoneBox { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+.phoneText span { display: block; color: #ffa500; font-weight: 700; font-size: 13px; line-height: 1; }
+.phoneText small { color: #fff; font-size: 10px; opacity: 0.6; }
+
+.quoteBtn {
+  background: #ffa500 !important;
+  border: none !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  padding: 10px 20px !important;
+  border-radius: 4px !important;
+  color: #000 !important;
+  text-transform: uppercase;
 }
 
-.textPhone p:first-child {
-  color: #FFA500;
-  font-weight: 800;
+/* Dropdown */
+.customDropdownMenu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0f0f0f;
+  border: 1px solid rgba(255, 165, 0, 0.2);
+  padding: 20px;
+  width: max-content;
+  min-width: 250px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  border-radius: 0 0 8px 8px;
+  animation: fadeIn 0.2s ease-out;
 }
 
-/* Mobile Icons (User & Cart) */
-.changeNavbarNav {
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, 10px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.dropdownFlex { display: flex; gap: 30px; }
+.subCol { display: flex; flex-direction: column; white-space: nowrap; }
+.subTitle {
+  color: #ffa500 !important;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-right: 1.5rem;
-  z-index: 1001;
+  gap: 8px;
+  border-bottom: 1px solid rgba(255, 165, 0, 0.1);
+  padding-bottom: 5px;
 }
+.pageLink { color: #aaa !important; font-size: 12px; text-decoration: none; padding: 5px 0; }
 
-.changeNavbarLink {
-  color: white;
-  font-size: 1.2rem;
-  transition: all 0.2s;
-}
+/* --- MOBILE RESPONSIVE --- */
 
-.changeNavbarLink:hover {
-  color: #FFA500;
-}
-
-.cartButton {
-  background: none;
+/* Custom Toggle Button Styling */
+.customToggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 25px;
+  background: transparent;
   border: none;
-  padding: 0;
   cursor: pointer;
-  color: white;
-  font-size: 1.2rem;
-  transition: all 0.2s;
+  padding: 0;
+  z-index: 1100;
 }
 
-.cartButton:hover {
-  color: #FFA500;
-  transform: scale(1.1);
-}
-/* Subcategory dropdown (opens to the right) */
-.subcategoryDropdown {
+.customToggle span {
+  width: 30px;
+  height: 3px;
+  background: #ffa500;
+  border-radius: 10px;
+  transition: all 0.3s linear;
   position: relative;
+  transform-origin: 1px;
 }
 
-.subcategoryDropdown .dropdown-menu {
-  position: absolute;
-  left: 100%;           /* opens to the right of parent */
-  top: -10px;           /* slight overlap/alignment */
-  min-width: 240px;
-  margin: 0;
-  padding: 10px 0;
-  background-color: rgba(30, 30, 30, 0.98) !important;
-  border: 1px solid rgba(255, 165, 0, 0.25);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.6);
-}
+@media (max-width: 991px) {
+  .customToggle { display: flex; }
 
-/* Page items (deepest level) */
-.pageItem {
-  font-size: 0.92rem !important;
-  padding: 9px 25px !important;
-  color: #e0e0e0 !important;
-  border-left: 3px solid transparent;
-}
+  /* Animation to X */
+  .customToggle.open span:nth-child(1) { transform: rotate(45deg); }
+  .customToggle.open span:nth-child(2) { opacity: 0; transform: translateX(20px); }
+  .customToggle.open span:nth-child(3) { transform: rotate(-45deg); }
 
-.pageItem:hover {
-  color: #ffaa33 !important;
-  background-color: rgba(255, 165, 0, 0.12) !important;
-  border-left-color: #ffaa33;
-}
-
-/* Mobile — flatten the nesting */
-@media (max-width: 992px) {
-  .subcategoryDropdown .dropdown-menu {
-    position: static !important;
-    left: 0 !important;
-    top: 0 !important;
-    width: 100% !important;
-    box-shadow: none !important;
-    border: none !important;
-    background-color: transparent !important;
-    padding-left: 25px;   /* indent children */
-  }
-
-  .pageItem {
-    padding-left: 35px !important;
-  }
-}
-
-
-/* Fix for Bootstrap's dropdown width on larger screens */
-@media (min-width: 992px) {
-  .navbar-expand-lg .navbar-nav .dropdown-menu {
-    position: absolute;
-    min-width: 320px !important;
-    width: auto !important;
-  }
-}
-
-/* Mobile Menu Styling */
-@media (max-width: 992px) {
-  .mainCollapse {
+  .navCollapse {
     position: fixed;
-    top: 80px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #000;
-    z-index: 999;
-    overflow-y: auto;
-    padding: 20px;
+    top: 0;
+    left: -100%;
+    width: 80%;
+    height: 100vh;
+    background: #000;
+    flex-direction: column;
+    padding: 100px 30px 40px;
+    transition: 0.4s ease-in-out;
+    display: flex !important;
+    align-items: flex-start;
+    box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+    z-index: 1050;
   }
 
-  .mainNav {
+  /* Bootstrap's 'show' class is added automatically via expanded prop */
+  :global(.navbar-collapse.show) {
+    left: 0 !important;
+  }
+
+  .navCenter, .centerLinks {
     flex-direction: column;
     width: 100%;
-    gap: 15px;
+    gap: 0;
   }
 
-  .mainLink {
-    font-size: 1.1rem;
-    padding: 12px 15px !important;
-    margin: 0 !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    display: block;
+  .navItemWrapper {
+    height: auto !important;
+    flex-direction: column;
+    align-items: flex-start;
     width: 100%;
+    border-bottom: 1px solid #222;
   }
 
-  .customDropdown .dropdown-toggle {
+  .navLinkWrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
-    text-align: left;
-    padding: 12px 15px !important;
-    display: block;
-    font-size: 1.1rem !important;
+    padding: 15px 0;
   }
-  
-  .customDropdown .dropdown-menu {
-    position: static !important;
-    transform: none !important;
-    width: 100% !important;
-    background-color: rgba(25, 25, 25, 0.98) !important;
+
+  .navLink { padding: 0; width: 100%; font-size: 16px; }
+
+  .mobileArrow {
+    transition: 0.3s;
+    color: #ffa500;
+  }
+
+  .arrowRotate { transform: rotate(90deg); }
+
+  .customDropdownMenu {
+    position: static;
+    transform: none;
+    width: 100%;
+    background: #111;
+    padding: 15px;
     border: none;
-    box-shadow: none;
-    padding-left: 15px;
-    min-width: 100% !important;
+    border-left: 2px solid #ffa500;
+    margin-bottom: 10px;
+    animation: none;
+    display: block; /* Shown because of parent state */
   }
 
-  .navDropdownItem {
-    color: black !important;
-    padding: 10px 15px !important;
-    font-size: 1rem !important;
-  }
+  .dropdownFlex { flex-direction: column; gap: 20px; }
 
-  .quoteButton {
+  .navRight {
     width: 100%;
-    margin: 15px 0 !important;
-    padding: 12px !important;
-    font-size: 1.1rem;
+    margin-top: 30px;
   }
 
-  .phoneNumberDiv {
-    margin-top: auto;
-    padding: 15px;
-    background-color: rgba(255, 165, 0, 0.1);
-    border-radius: 5px;
-    width: 100%;
-    margin-left: 0;
-  }
-
-  .textPhone p {
-    font-size: 1rem;
-  }
-  
-  .orangeUnderline {
-    background-color: #FFA500;
-  }
-
-  /* Hide dropdown arrow on mobile */
-  .customDropdown .dropdown-toggle::after {
-    display: none !important;
-  }
-}
-
-/* For very small screens */
-@media (max-width: 576px) {
-  .mainCollapse {
-    top: 70px;
-    padding: 15px;
-  }
-  
-  .mainLogo {
-    width: 7rem;
-  }
-  
-  .changeNavbarNav {
-    gap: 0.75rem;
-    margin-right: 1rem;
+  .actionSection {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
   }
 }
