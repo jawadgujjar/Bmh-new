@@ -5,7 +5,7 @@ import Blog from "@/models/blogs";
 /* ================= GET ================= */
 export async function GET(req, context) {
   try {
-    const { slug } = await context.params; // ✅ FIXED
+    const { slug } = await context.params;
     await dbConnect();
 
     const query = /^[0-9a-fA-F]{24}$/.test(slug)
@@ -28,13 +28,37 @@ export async function GET(req, context) {
 /* ================= PUT ================= */
 export async function PUT(req, context) {
   try {
-    const { slug } = await context.params; // ✅ FIXED
+    const { slug } = await context.params;
     await dbConnect();
     const body = await req.json();
 
     const query = /^[0-9a-fA-F]{24}$/.test(slug)
       ? { _id: slug }
       : { slug };
+
+    // ✅ SEO Safe Merge
+    if (body.seo) {
+      body.seo = {
+        metaTitle: body.seo.metaTitle,
+        metaDescription: body.seo.metaDescription,
+        metaKeywords: body.seo.metaKeywords,
+        schemaMarkup: body.seo.schemaMarkup,
+      };
+    }
+
+    // ✅ Auto SEO fallback if missing
+    if (!body.seo && (body.title || body.description)) {
+      body.seo = {
+        metaTitle: body.title,
+        metaDescription: body.description,
+        metaKeywords: [],
+        schemaMarkup: {
+          "@context": "https://schema.org/",
+          "@type": "Article",
+          "headline": body.title,
+        },
+      };
+    }
 
     const updatedBlog = await Blog.findOneAndUpdate(query, body, {
       new: true,
@@ -58,7 +82,7 @@ export async function PUT(req, context) {
 /* ================= DELETE ================= */
 export async function DELETE(req, context) {
   try {
-    const { slug } = await context.params; // ✅ FIXED
+    const { slug } = await context.params;
     await dbConnect();
 
     const query = /^[0-9a-fA-F]{24}$/.test(slug)

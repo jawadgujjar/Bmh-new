@@ -14,6 +14,7 @@ import {
   Popconfirm,
   message,
   Upload,
+  Collapse,
 } from "antd";
 import {
   PlusOutlined,
@@ -22,10 +23,13 @@ import {
   DeleteOutlined,
   MinusCircleOutlined,
   UploadOutlined,
+  GlobalOutlined,
+  InfoCircleOutlined,
 } from "@ant-design/icons";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 const { Option } = Select;
+const { Panel } = Collapse;
 
 export default function SubCategory() {
   const [loading, setLoading] = useState(false);
@@ -33,6 +37,7 @@ export default function SubCategory() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingSubCat, setEditingSubCat] = useState(null);
   const [form] = Form.useForm();
+  const [expandedPanels, setExpandedPanels] = useState(['seo']);
 
   // Fetch SubCategories
   const fetchSubCategories = async () => {
@@ -96,7 +101,7 @@ export default function SubCategory() {
   };
 
   // Custom Upload Component with preview
-  const UploadField = ({ name, label }) => {
+  const UploadField = ({ name, label, required = false }) => {
     const [fileList, setFileList] = useState([]);
 
     useEffect(() => {
@@ -114,7 +119,11 @@ export default function SubCategory() {
     }, [form, name, isModalOpen]);
 
     return (
-      <Form.Item label={label} name={name} rules={[{ required: true, message: `Please upload ${label}` }]}>
+      <Form.Item
+        label={label}
+        name={name}
+        rules={required ? [{ required: true, message: `Please upload ${label}` }] : []}
+      >
         <Upload
           listType="picture"
           fileList={fileList}
@@ -141,6 +150,20 @@ export default function SubCategory() {
     try {
       const values = await form.validateFields();
 
+      // ✅ Prepare SEO data according to model
+      const seoData = {
+        metaTitle: values.seo?.metaTitle || values.topSection?.heading || values.name,
+        metaDescription: values.seo?.metaDescription || values.topSection?.description || values.keywordsSection?.description,
+        metaKeywords: values.seo?.metaKeywords || values.keywordsSection?.keywords || [],
+        schemaMarkup: values.seo?.schemaMarkup || null
+      };
+
+      // Combine all values with SEO
+      const finalValues = {
+        ...values,
+        seo: seoData
+      };
+
       let url = "/api/subcategories";
       let method = "POST";
 
@@ -152,7 +175,7 @@ export default function SubCategory() {
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
+        body: JSON.stringify(finalValues),
       });
       const data = await res.json();
 
@@ -161,6 +184,7 @@ export default function SubCategory() {
         form.resetFields();
         setEditingSubCat(null);
         setIsModalOpen(false);
+        setExpandedPanels(['seo']);
         fetchSubCategories();
       } else {
         message.error(data.error || "Operation failed");
@@ -200,11 +224,13 @@ export default function SubCategory() {
       keywordsSection: record.keywordsSection || {},
       cta1: record.cta1 || {},
       cta2: record.cta2 || {},
+      // ✅ SEO Fields (model ke hisab se)
+      seo: record.seo || {}
     });
     setIsModalOpen(true);
   };
 
-  // Table Columns
+  // Table Columns with SEO Status
   const columns = [
     {
       title: "Icon",
@@ -232,13 +258,35 @@ export default function SubCategory() {
       render: (cat) => <Tag color="blue">{cat || "N/A"}</Tag>,
     },
     {
+      title: "SEO Status",
+      key: "seoStatus",
+      render: (_, record) => {
+        const seo = record.seo || {};
+        return (
+          <div>
+            {seo.metaTitle ? (
+              <Tag color="green">✓ SEO Set</Tag>
+            ) : (
+              <Tag color="orange">No SEO</Tag>
+            )}
+            {seo.metaDescription && (
+              <div style={{ fontSize: '11px', color: '#666', marginTop: '2px' }}>
+                {seo.metaDescription.substring(0, 40)}...
+              </div>
+            )}
+          </div>
+        );
+      },
+    },
+    {
       title: "Actions",
       key: "actions",
       render: (_, record) => (
         <Space>
           <Button
             icon={<EyeOutlined />}
-            onClick={() => message.info(`Viewing ${record.name}`)}
+            onClick={() => window.open(`/${record.category}/${record.slug || record.name.toLowerCase().replace(/\s+/g, '-')}`, '_blank')}
+            title="View Page"
           />
           <Button icon={<EditOutlined />} onClick={() => handleEdit(record)} />
           <Popconfirm
@@ -264,7 +312,7 @@ export default function SubCategory() {
         style={{ display: "flex", justifyContent: "space-between", marginBottom: 20 }}
       >
         <Title level={3} style={{ margin: 0, color: "#1890ff" }}>
-          📂 Sub Categories
+          📂 Sub Categories Management
         </Title>
         <Button
           type="primary"
@@ -289,150 +337,237 @@ export default function SubCategory() {
       />
 
       <Modal
-        title={editingSubCat ? "✏️ Edit Sub Category" : "➕ Add Sub Category"}
+        title={
+          <div>
+            {editingSubCat ? "✏️ Edit Sub Category" : "➕ Add Sub Category"}
+            <div style={{ fontSize: '14px', fontWeight: 'normal', color: '#666', marginTop: '4px' }}>
+              Complete all sections including SEO for better search rankings
+            </div>
+          </div>
+        }
         open={isModalOpen}
-        onCancel={() => setIsModalOpen(false)}
+        onCancel={() => {
+          setIsModalOpen(false);
+          setExpandedPanels(['seo']);
+        }}
         onOk={handleOk}
         okText="Save"
-        width={800}
+        width={900}
+        style={{ maxHeight: '80vh', overflowY: 'auto' }}
       >
         <Form layout="vertical" form={form}>
-          {/* Basic Fields */}
-          <Form.Item
-            label="Name"
-            name="name"
-            rules={[{ required: true, message: "Please enter sub category name" }]}
-          >
-            <Input placeholder="Enter sub category name" />
-          </Form.Item>
+          <Collapse activeKey={expandedPanels} onChange={setExpandedPanels} ghost>
+            {/* Basic Info Panel */}
+            <Panel header="Basic Information" key="basic">
+              <Form.Item
+                label="Name"
+                name="name"
+                rules={[{ required: true, message: "Please enter sub category name" }]}
+                extra="This will be the main title of your sub-category page"
+              >
+                <Input placeholder="Enter sub category name (e.g., SEO Services, E-commerce Development)" />
+              </Form.Item>
 
-          <Form.Item
-            label="Category"
-            name="category"
-            rules={[{ required: true, message: "Please select a category" }]}
-          >
-            <Select placeholder="Select category">
-              <Option value="digital-marketing">Digital Marketing</Option>
-              <Option value="web-development">Web Development</Option>
-              <Option value="app-development">App Development</Option>
-            </Select>
-          </Form.Item>
+              <Form.Item
+                label="Category"
+                name="category"
+                rules={[{ required: true, message: "Please select a category" }]}
+              >
+                <Select placeholder="Select category">
+                  <Option value="digital-marketing">Digital Marketing</Option>
+                  <Option value="web-development">Web Development</Option>
+                  <Option value="app-development">App Development</Option>
+                </Select>
+              </Form.Item>
 
-          {/* Icon Upload */}
-          <UploadField name="icon" label="Icon" />
+              <UploadField name="icon" label="Icon" required />
+            </Panel>
 
-          {/* Top Section */}
-          <Form.Item label="Top Section">
-            <UploadField name={["topSection", "backgroundImage"]} label="Background Image" />
-            <Form.Item label="Heading" name={["topSection", "heading"]}>
-              <Input placeholder="Enter top section heading" />
-            </Form.Item>
-            <Form.Item label="Description" name={["topSection", "description"]}>
-              <Input.TextArea placeholder="Enter top section description" rows={4} />
-            </Form.Item>
-          </Form.Item>
+            {/* Top Section Panel */}
+            <Panel header="Top Section (Hero)" key="topSection">
+              <UploadField name={["topSection", "backgroundImage"]} label="Background Image" />
+              <Form.Item label="Heading" name={["topSection", "heading"]}>
+                <Input placeholder="Enter top section heading" />
+              </Form.Item>
+              <Form.Item label="Description" name={["topSection", "description"]}>
+                <Input.TextArea
+                  placeholder="Enter top section description"
+                  rows={4}
+                  maxLength={300}
+                  showCount
+                />
+              </Form.Item>
+            </Panel>
 
-          {/* Middle Section */}
-          <Form.Item label="Middle Section">
-            <Form.Item label="Description 1" name={["middleSection", "description1"]}>
-              <Input.TextArea placeholder="Enter first description" rows={4} />
-            </Form.Item>
-            <UploadField name={["middleSection", "image1"]} label="Image 1" />
-            <UploadField name={["middleSection", "image2"]} label="Image 2" />
-            <Form.Item label="Description 2" name={["middleSection", "description2"]}>
-              <Input.TextArea placeholder="Enter second description" rows={4} />
-            </Form.Item>
-          </Form.Item>
+            {/* Middle Section Panel */}
+            <Panel header="Middle Section" key="middleSection">
+              <Form.Item label="Description 1" name={["middleSection", "description1"]}>
+                <Input.TextArea placeholder="Enter first description" rows={4} />
+              </Form.Item>
+              <UploadField name={["middleSection", "image1"]} label="Image 1" />
+              <UploadField name={["middleSection", "image2"]} label="Image 2" />
+              <Form.Item label="Description 2" name={["middleSection", "description2"]}>
+                <Input.TextArea placeholder="Enter second description" rows={4} />
+              </Form.Item>
+            </Panel>
 
-          {/* Keywords Section */}
-          <Form.Item label="Keywords Section">
-            <Form.Item label="Heading" name={["keywordsSection", "heading"]}>
-              <Input placeholder="Enter keywords section heading" />
-            </Form.Item>
-            <Form.Item label="Description" name={["keywordsSection", "description"]}>
-              <Input.TextArea placeholder="Enter keywords section description" rows={4} />
-            </Form.Item>
+            {/* Keywords Section Panel */}
+            <Panel header="Keywords Section" key="keywordsSection">
+              <Form.Item label="Heading" name={["keywordsSection", "heading"]}>
+                <Input placeholder="Enter keywords section heading" />
+              </Form.Item>
+              <Form.Item label="Description" name={["keywordsSection", "description"]}>
+                <Input.TextArea placeholder="Enter keywords section description" rows={4} />
+              </Form.Item>
 
-            <Form.Item label="Keywords">
-              <Form.List name={["keywordsSection", "keywords"]}>
-                {(fields, { add, remove }) => (
-                  <>
-                    {fields.map(({ key, name, ...restField }) => (
-                      <Space key={key} style={{ display: "flex", marginBottom: 8 }} align="baseline">
-                        <Form.Item {...restField} name={name} rules={[{ required: true, message: "Enter a keyword" }]}>
-                          <Input placeholder="Keyword" />
-                        </Form.Item>
-                        <MinusCircleOutlined onClick={() => remove(name)} />
-                      </Space>
-                    ))}
-                    <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                      Add Keyword
-                    </Button>
-                  </>
-                )}
-              </Form.List>
-            </Form.Item>
+              <Form.Item label="Keywords">
+                <Form.List name={["keywordsSection", "keywords"]}>
+                  {(fields, { add, remove }) => (
+                    <>
+                      {fields.map(({ key, name, ...restField }) => (
+                        <Space key={key} style={{ display: "flex", marginBottom: 8 }} align="baseline">
+                          <Form.Item {...restField} name={name} rules={[{ required: true, message: "Enter a keyword" }]}>
+                            <Input placeholder="Keyword (e.g., SEO, Digital Marketing)" />
+                          </Form.Item>
+                          <MinusCircleOutlined onClick={() => remove(name)} />
+                        </Space>
+                      ))}
+                      <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                        Add Keyword
+                      </Button>
+                    </>
+                  )}
+                </Form.List>
+              </Form.Item>
 
-            <Form.Item label="Related Headings">
-              <Form.List name={["keywordsSection", "relatedHeading"]}>
-                {(fields, { add, remove }) => (
-                  <>
-                    {fields.map(({ key, name, ...restField }) => (
-                      <Space key={key} style={{ display: "flex", marginBottom: 8 }} align="baseline">
-                        <Form.Item {...restField} name={name} rules={[{ required: true, message: "Enter a related heading" }]}>
-                          <Input placeholder="Related Heading" />
-                        </Form.Item>
-                        <MinusCircleOutlined onClick={() => remove(name)} />
-                      </Space>
-                    ))}
-                    <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                      Add Related Heading
-                    </Button>
-                  </>
-                )}
-              </Form.List>
-            </Form.Item>
+              <Form.Item label="Related Headings">
+                <Form.List name={["keywordsSection", "relatedHeading"]}>
+                  {(fields, { add, remove }) => (
+                    <>
+                      {fields.map(({ key, name, ...restField }) => (
+                        <Space key={key} style={{ display: "flex", marginBottom: 8 }} align="baseline">
+                          <Form.Item {...restField} name={name} rules={[{ required: true, message: "Enter a related heading" }]}>
+                            <Input placeholder="Related Heading" />
+                          </Form.Item>
+                          <MinusCircleOutlined onClick={() => remove(name)} />
+                        </Space>
+                      ))}
+                      <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                        Add Related Heading
+                      </Button>
+                    </>
+                  )}
+                </Form.List>
+              </Form.Item>
 
-            <Form.Item label="Related Descriptions">
-              <Form.List name={["keywordsSection", "relatedDescription"]}>
-                {(fields, { add, remove }) => (
-                  <>
-                    {fields.map(({ key, name, ...restField }) => (
-                      <Space key={key} style={{ display: "flex", marginBottom: 8 }} align="baseline">
-                        <Form.Item {...restField} name={name} rules={[{ required: true, message: "Enter a related description" }]}>
-                          <Input placeholder="Related Description" />
-                        </Form.Item>
-                        <MinusCircleOutlined onClick={() => remove(name)} />
-                      </Space>
-                    ))}
-                    <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                      Add Related Description
-                    </Button>
-                  </>
-                )}
-              </Form.List>
-            </Form.Item>
-          </Form.Item>
+              <Form.Item label="Related Descriptions">
+                <Form.List name={["keywordsSection", "relatedDescription"]}>
+                  {(fields, { add, remove }) => (
+                    <>
+                      {fields.map(({ key, name, ...restField }) => (
+                        <Space key={key} style={{ display: "flex", marginBottom: 8 }} align="baseline">
+                          <Form.Item {...restField} name={name} rules={[{ required: true, message: "Enter a related description" }]}>
+                            <Input.TextArea placeholder="Related Description" rows={2} />
+                          </Form.Item>
+                          <MinusCircleOutlined onClick={() => remove(name)} />
+                        </Space>
+                      ))}
+                      <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                        Add Related Description
+                      </Button>
+                    </>
+                  )}
+                </Form.List>
+              </Form.Item>
+            </Panel>
 
-          {/* CTA 1 */}
-          <Form.Item label="CTA 1">
-            <Form.Item label="Heading" name={["cta1", "heading"]}>
-              <Input placeholder="Enter CTA 1 heading" />
-            </Form.Item>
-            <Form.Item label="Description" name={["cta1", "description"]}>
-              <Input.TextArea placeholder="Enter CTA 1 description" rows={4} />
-            </Form.Item>
-          </Form.Item>
+            {/* CTA Sections Panel */}
+            <Panel header="Call to Action Sections" key="ctaSections">
+              <Form.Item label="CTA 1 Heading" name={["cta1", "heading"]}>
+                <Input placeholder="Enter CTA 1 heading" />
+              </Form.Item>
+              <Form.Item label="CTA 1 Description" name={["cta1", "description"]}>
+                <Input.TextArea placeholder="Enter CTA 1 description" rows={4} />
+              </Form.Item>
 
-          {/* CTA 2 */}
-          <Form.Item label="CTA 2">
-            <Form.Item label="Heading" name={["cta2", "heading"]}>
-              <Input placeholder="Enter CTA 2 heading" />
-            </Form.Item>
-            <Form.Item label="Description" name={["cta2", "description"]}>
-              <Input.TextArea placeholder="Enter CTA 2 description" rows={4} />
-            </Form.Item>
-          </Form.Item>
+              <Form.Item label="CTA 2 Heading" name={["cta2", "heading"]}>
+                <Input placeholder="Enter CTA 2 heading" />
+              </Form.Item>
+              <Form.Item label="CTA 2 Description" name={["cta2", "description"]}>
+                <Input.TextArea placeholder="Enter CTA 2 description" rows={4} />
+              </Form.Item>
+            </Panel>
+
+            {/* ✅ SEO Panel (Model ke hisab se) */}
+            <Panel
+              header={
+                <Space>
+                  <GlobalOutlined />
+                  <Text strong>SEO Settings</Text>
+                </Space>
+              }
+              key="seo"
+            >
+              <Form.Item
+                label="Meta Title"
+                name={["seo", "metaTitle"]}
+                extra="Title for search engines (recommended: 50-60 characters)"
+              >
+                <Input
+                  placeholder="Enter SEO title for this sub-category"
+                  maxLength={70}
+                  showCount
+                />
+              </Form.Item>
+
+              <Form.Item
+                label="Meta Description"
+                name={["seo", "metaDescription"]}
+                extra="Description for search results (recommended: 150-160 characters)"
+              >
+                <Input.TextArea
+                  rows={3}
+                  placeholder="Enter SEO description for this sub-category"
+                  maxLength={160}
+                  showCount
+                />
+              </Form.Item>
+
+              <Form.Item
+                label="Meta Keywords"
+                name={["seo", "metaKeywords"]}
+                extra="Separate with commas (e.g., keyword1, keyword2, keyword3)"
+              >
+                <Input
+                  placeholder="Enter SEO keywords"
+                />
+              </Form.Item>
+
+              <Form.Item
+                label="Schema Markup (JSON-LD)"
+                name={["seo", "schemaMarkup"]}
+                extra={
+                  <div>
+                    <InfoCircleOutlined /> Optional: Add structured data in JSON format
+                  </div>
+                }
+              >
+                <Input.TextArea
+                  rows={5}
+                  placeholder={`{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "Your Service Name",
+  "description": "Service description here",
+  "provider": {
+    "@type": "Organization",
+    "name": "Your Company"
+  }
+}`}
+                />
+              </Form.Item>
+            </Panel>
+          </Collapse>
         </Form>
       </Modal>
     </Card>
