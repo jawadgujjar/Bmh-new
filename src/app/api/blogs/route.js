@@ -4,9 +4,6 @@ import Blog from "@/models/blogs";
 
 /* =========================
    GET → All blogs / by slug / by category
-   /api/blogs
-   /api/blogs?slug=my-blog
-   /api/blogs?category=Tech
 ========================= */
 export async function GET(req) {
   try {
@@ -19,21 +16,20 @@ export async function GET(req) {
     let query = {};
 
     if (slug) query.slug = slug;
-    if (category)
+    if (category) {
       query.category = { $regex: `^${category}$`, $options: "i" };
+    }
 
     const blogs = await Blog.find(query).sort({ createdAt: -1 });
 
     return NextResponse.json(blogs, { status: 200 });
   } catch (err) {
-    console.error("GET Error:", err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
 
 /* =========================
    POST → Create blog
-   POST /api/blogs
 ========================= */
 export async function POST(req) {
   try {
@@ -48,6 +44,18 @@ export async function POST(req) {
         .replace(/[^\w-]+/g, "");
     }
 
+    // SEO fallback auto-generate
+    body.seo = {
+      metaTitle: body?.seo?.metaTitle || body.title,
+      metaDescription: body?.seo?.metaDescription || body.description,
+      metaKeywords: body?.seo?.metaKeywords || [],
+      schemaMarkup: body?.seo?.schemaMarkup || {
+        "@context": "https://schema.org/",
+        "@type": "Article",
+        "headline": body.title,
+      },
+    };
+
     const exists = await Blog.findOne({ slug: body.slug });
     if (exists) {
       return NextResponse.json(
@@ -60,14 +68,12 @@ export async function POST(req) {
 
     return NextResponse.json(blog, { status: 201 });
   } catch (err) {
-    console.error("POST Error:", err);
     return NextResponse.json({ error: err.message }, { status: 400 });
   }
 }
 
 /* =========================
    PUT → Update blog
-   PUT /api/blogs (body must include _id OR slug)
 ========================= */
 export async function PUT(req) {
   try {
@@ -76,9 +82,19 @@ export async function PUT(req) {
 
     if (!body._id && !body.slug) {
       return NextResponse.json(
-        { error: "_id or slug required for update" },
+        { error: "_id or slug required" },
         { status: 400 }
       );
+    }
+
+    // Merge SEO safely
+    if (body.seo) {
+      body.seo = {
+        metaTitle: body.seo.metaTitle,
+        metaDescription: body.seo.metaDescription,
+        metaKeywords: body.seo.metaKeywords,
+        schemaMarkup: body.seo.schemaMarkup,
+      };
     }
 
     const query = body._id ? { _id: body._id } : { slug: body.slug };
@@ -89,23 +105,17 @@ export async function PUT(req) {
     });
 
     if (!updated) {
-      return NextResponse.json(
-        { error: "Blog not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Blog not found" }, { status: 404 });
     }
 
     return NextResponse.json(updated, { status: 200 });
   } catch (err) {
-    console.error("PUT Error:", err);
     return NextResponse.json({ error: err.message }, { status: 400 });
   }
 }
 
 /* =========================
    DELETE → Remove blog
-   DELETE /api/blogs?id=xxx
-   DELETE /api/blogs?slug=my-blog
 ========================= */
 export async function DELETE(req) {
   try {
@@ -117,7 +127,7 @@ export async function DELETE(req) {
 
     if (!id && !slug) {
       return NextResponse.json(
-        { error: "id or slug required for delete" },
+        { error: "id or slug required" },
         { status: 400 }
       );
     }
@@ -127,10 +137,7 @@ export async function DELETE(req) {
     const deleted = await Blog.findOneAndDelete(query);
 
     if (!deleted) {
-      return NextResponse.json(
-        { error: "Blog not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Blog not found" }, { status: 404 });
     }
 
     return NextResponse.json(
@@ -138,7 +145,6 @@ export async function DELETE(req) {
       { status: 200 }
     );
   } catch (err) {
-    console.error("DELETE Error:", err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

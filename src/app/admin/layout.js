@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import AdminSidebar from "@/components-admin/sidebar";
@@ -8,20 +9,26 @@ import Portfolio from "@/components-admin/portfolio";
 import GetaQuote from "@/components-admin/getaquote";
 import CallToActionQuote from "@/components-admin/calltoactionquote";
 import Pages from "@/components-admin/pages";
+import BlogAdmin from "@/components-admin/blogs";
 
 export default function AdminLayout() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [activeComponent, setActiveComponent] = useState("dashboard");
   const router = useRouter();
 
+  // Prevent SSR hydration mismatch
+  useEffect(() => setMounted(true), []);
+
   useEffect(() => {
+    if (!mounted) return;
+
     const userData = localStorage.getItem("userData");
-    if (!userData) {
-      router.push("/auth/login"); // redirect if not logged in
-    } else {
-      setIsAuthenticated(true);
-    }
-  }, [router]);
+    if (!userData) router.push("/auth/login");
+    else setIsAuthenticated(true);
+  }, [mounted, router]);
+
+  if (!mounted || !isAuthenticated) return null; // ✅ client-only render
 
   const renderComponent = () => {
     switch (activeComponent) {
@@ -35,14 +42,14 @@ export default function AdminLayout() {
         return <Portfolio />;
       case "getaquote":
         return <GetaQuote />;
+      case "blogs":
+        return <BlogAdmin />;
       case "calltoactionquote":
         return <CallToActionQuote />;
       default:
         return <Dashboard />;
     }
   };
-
-  if (!isAuthenticated) return null; // wait for auth check
 
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>

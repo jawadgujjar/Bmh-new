@@ -1,61 +1,117 @@
 import { NextResponse } from "next/server";
-import dbConnect from "@/lib/mongodb";
-import SubCategory from "@/models/subcategory";
+import mongoose from "mongoose";
+import SubCategory from "@/models/subcategory"; // Adjust path as needed
 
-// GET single
-export async function GET(req, { params }) {
+// ✅ Connect to MongoDB
+await mongoose.connect(process.env.MONGODB_URI);
+
+// ✅ GET - Fetch single subcategory by ID
+export async function GET(request, { params }) {
   try {
-    await dbConnect();
-    const subcategory = await SubCategory.findById(params.id);
-    if (!subcategory) {
-      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    // ✅ FIX: Await params first
+    const { id } = await params;
+    
+    if (!id) {
+      return NextResponse.json(
+        { success: false, error: "ID is required" },
+        { status: 400 }
+      );
     }
-    return NextResponse.json(subcategory);
-  } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+
+    const subcategory = await SubCategory.findById(id);
+    
+    if (!subcategory) {
+      return NextResponse.json(
+        { success: false, error: "SubCategory not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ success: true, data: subcategory });
+  } catch (error) {
+    console.error("GET Error:", error);
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 500 }
+    );
   }
 }
 
-// UPDATE
-export async function PUT(req, { params }) {
+// ✅ PUT - Update subcategory
+export async function PUT(request, { params }) {
   try {
-    await dbConnect();
-    const body = await req.json();
-
-    // Transform middleSection if using old structure
-    if (body.middleSection) {
-      const { description, images, extraDescription, ...rest } = body.middleSection;
-      body.middleSection = {
-        description1: description || body.middleSection.description1 || "",
-        image1: images?.[0] || body.middleSection.image1 || "",
-        image2: images?.[1] || body.middleSection.image2 || "",
-        description2: extraDescription || body.middleSection.description2 || "",
-        ...rest, // Preserve any new fields
-      };
+    // ✅ FIX: Await params first
+    const { id } = await params;
+    
+    if (!id) {
+      return NextResponse.json(
+        { success: false, error: "ID is required" },
+        { status: 400 }
+      );
     }
 
-    const subcategory = await SubCategory.findByIdAndUpdate(params.id, body, {
+    const body = await request.json();
+
+    // Ensure SEO object exists
+    body.seo = body.seo || {};
+
+    const updated = await SubCategory.findByIdAndUpdate(id, body, {
       new: true,
+      runValidators: true,
     });
-    if (!subcategory) {
-      return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+    if (!updated) {
+      return NextResponse.json(
+        { success: false, error: "SubCategory not found" },
+        { status: 404 }
+      );
     }
-    return NextResponse.json(subcategory);
-  } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 400 });
+
+    return NextResponse.json({ 
+      success: true, 
+      message: "SubCategory updated successfully",
+      data: updated 
+    });
+  } catch (error) {
+    console.error("PUT Error:", error);
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 500 }
+    );
   }
 }
 
-// DELETE
-export async function DELETE(req, { params }) {
+// ✅ DELETE - Delete subcategory
+export async function DELETE(request, { params }) {
   try {
-    await dbConnect();
-    const deleted = await SubCategory.findByIdAndDelete(params.id);
-    if (!deleted) {
-      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    // ✅ FIX: Await params first
+    const { id } = await params;
+    
+    if (!id) {
+      return NextResponse.json(
+        { success: false, error: "ID is required" },
+        { status: 400 }
+      );
     }
-    return NextResponse.json({ message: "Deleted successfully" });
-  } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+
+    const deleted = await SubCategory.findByIdAndDelete(id);
+
+    if (!deleted) {
+      return NextResponse.json(
+        { success: false, error: "SubCategory not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ 
+      success: true, 
+      message: "SubCategory deleted successfully" 
+    });
+  } catch (error) {
+    console.error("DELETE Error:", error);
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 500 }
+    );
   }
 }

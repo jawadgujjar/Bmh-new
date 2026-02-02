@@ -72,7 +72,7 @@ export default function Dashboard() {
       {/* Top Stats */}
       <Row gutter={16} style={{ marginBottom: "20px" }}>
         <Col span={6}>
-          <Card bordered={false}>
+          <Card variant="outlined">
             <Statistic
               title="Total Quotes"
               value={128}
@@ -83,7 +83,7 @@ export default function Dashboard() {
           </Card>
         </Col>
         <Col span={6}>
-          <Card bordered={false}>
+          <Card variant="outlined">
             <Statistic
               title="CTA Quotes"
               value={56}
@@ -94,7 +94,7 @@ export default function Dashboard() {
           </Card>
         </Col>
         <Col span={6}>
-          <Card bordered={false}>
+          <Card variant="outlined">
             <Statistic
               title="Portfolios"
               value={34}
@@ -105,7 +105,7 @@ export default function Dashboard() {
           </Card>
         </Col>
         <Col span={6}>
-          <Card bordered={false}>
+          <Card variant="outlined">
             <Statistic
               title="Users"
               value={12}

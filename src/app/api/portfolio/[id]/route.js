@@ -6,7 +6,7 @@ import Keyword from "@/models/portfolio";
 export async function GET(req, { params }) {
   try {
     await dbConnect();
-    const keyword = await Keyword.findById(params.id);
+    const keyword = await Keyword.findById(params.id).lean();
 
     if (!keyword) {
       return NextResponse.json({ success: false, error: "Not found" }, { status: 404 });
@@ -18,11 +18,13 @@ export async function GET(req, { params }) {
   }
 }
 
-// ✅ Update portfolio by ID
+// ✅ Update portfolio by ID (SEO MANUAL SUPPORT)
 export async function PUT(req, { params }) {
   try {
     await dbConnect();
     const body = await req.json();
+
+    // ❌ NO AUTO SEO — ADMIN CONTROLS EVERYTHING
 
     const updatedKeyword = await Keyword.findByIdAndUpdate(params.id, body, {
       new: true,
@@ -33,7 +35,12 @@ export async function PUT(req, { params }) {
       return NextResponse.json({ success: false, error: "Not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ success: true, data: updatedKeyword });
+    return NextResponse.json({
+      success: true,
+      data: updatedKeyword,
+      message: "Portfolio updated successfully",
+    });
+
   } catch (error) {
     return NextResponse.json({ success: false, error: error.message }, { status: 400 });
   }
@@ -49,7 +56,11 @@ export async function DELETE(req, { params }) {
       return NextResponse.json({ success: false, error: "Not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ success: true, data: deletedKeyword });
+    return NextResponse.json({
+      success: true,
+      data: deletedKeyword,
+      message: "Portfolio deleted successfully",
+    });
   } catch (error) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }

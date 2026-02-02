@@ -1,6 +1,7 @@
  
 import Carousel from "@/components/landing/carousel";
 import Form1 from "@/components/landing/getaquote";
+import Heroform from "@/components/landing/heroform";
 import Calltoactionweb1 from "@/components/web-development/calltoactionweb1";
 import Calltoactionweb2 from "@/components/web-development/calltoactionweb2";
 import Faqwebdevelopment1 from "@/components/web-development/faqswebdevelopment";
@@ -13,6 +14,7 @@ export default function WebdevelopmentPage() {
   return (
     <main>
       <Heroweb1/>
+      <Heroform/>
       <Webdevelopment1 />
       <Keywordsweb/>
       <Calltoactionweb1/>

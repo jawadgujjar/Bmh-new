@@ -1,13 +1,31 @@
-// src/app/blogs/page.js
-import React from 'react';
-import FirstPageBlog from '@/components/blogs/firstpageblog';
-import '../blogs/blogs.css';
+import React from "react";
+import FirstPageBlog from "@/components/blogs/firstpageblog";
+import SEO from "@/components/seo/seo";
+import dbConnect from "@/lib/mongodb";
+import Blog from "@/models/blogs";
+import "../blogs/blogs.css";
 
-const BlogsPage = () => {
+export default async function BlogsPage() {
+  await dbConnect();
+  const blogs = await Blog.find({}).sort({ date: -1 }).lean();
+
+  // Default SEO for Blogs listing
+  const blogsSEO = {
+    metaTitle: "Our Blogs",
+    metaDescription: "Read the latest blogs about tech, marketing, and more.",
+    metaKeywords: ["blogs", "tech", "marketing", "tutorials"],
+    schemaMarkup: {
+      "@context": "https://schema.org",
+      "@type": "Blog",
+      headline: "Our Blogs",
+      description: "Read the latest blogs about tech, marketing, and more.",
+    },
+  };
+
   return (
     <div className="blogs-page-wrapper">
-      
-      {/* Header with Background Image */}
+      <SEO seo={blogsSEO} />
+
       <header className="blogs-header">
         <div className="header-overlay">
           <h1 className="header-title">Blogs</h1>
@@ -16,14 +34,10 @@ const BlogsPage = () => {
           </nav>
         </div>
       </header>
-      
-      {/* Main Content - 2 Columns */}
+
       <main className="blogs-main-content">
-        <FirstPageBlog />
+        <FirstPageBlog blogs={blogs} />
       </main>
-      
     </div>
   );
-};
-
-export default BlogsPage;
+}

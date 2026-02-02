@@ -7,6 +7,7 @@ import Keywordsapp from "@/components/app-development/keywordsapp";
 import Appservices1 from "@/components/app-development/servicesapp";
 import Carousel from "@/components/landing/carousel";
 import Form1 from "@/components/landing/getaquote";
+import Heroform from "@/components/landing/heroform";
  
  
 
@@ -14,6 +15,7 @@ export default function AppdevelopmentPage() {
   return (
     <main>
         <Heroapp1/>
+        <Heroform/>
         <Appdevelopment1/>
         <Keywordsapp/>
         <Calltoactionapp1/>
