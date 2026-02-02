@@ -162,10 +162,7 @@
     z-index: 1050;
   }
 
-  /* Bootstrap's 'show' class is added automatically via expanded prop */
-  :global(.navbar-collapse.show) {
-    left: 0 !important;
-  }
+
 
   .navCenter, .centerLinks {
     flex-direction: column;
