@@ -6,8 +6,11 @@ import SubKeywordsdigital from "@/components/digital-marketing/sub-category-digi
 import SubWhydigital from "@/components/digital-marketing/sub-category-digital/subwhydigital";
 import Carousel from "@/components/landing/carousel";
 import Form1 from "@/components/landing/getaquote";
+import Heroform from "@/components/landing/heroform";
 import ProposalForm from "@/components/landing/proposalform";
 import SeoIndustries from "@/components/landing/seoindustries";
+import SEO from "@/components/seo/seo";
+import { notFound } from 'next/navigation';
 
 async function getSubCategoryData(slug) {
   try {
@@ -33,6 +36,26 @@ async function getSubCategoryData(slug) {
   }
 }
 
+// Schema Markup generate karne ka function
+const generateSchemaMarkup = (subcategory) => {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": subcategory.name || "Digital Marketing Service",
+    "description": subcategory.topSection?.description || subcategory.keywordsSection?.description || "Professional digital marketing service",
+    "provider": {
+      "@type": "Organization",
+      "name": "YourCompany"
+    },
+    "serviceType": subcategory.name,
+    "url": `https://yourdomain.com/digitalmarketing/${subcategory.slug || slug}`,
+    "areaServed": {
+      "@type": "Country",
+      "name": "Global"
+    }
+  };
+};
+
 export default async function SubCategoryPage({ params }) {
   const { slug } = params;
   console.log(`Rendering page for slug: ${slug} under digitalmarketing`);
@@ -40,17 +63,25 @@ export default async function SubCategoryPage({ params }) {
   const subcategory = await getSubCategoryData(slug);
 
   if (!subcategory) {
-    return (
-      <div style={{ padding: "100px 20px", textAlign: "center" }}>
-        <h1>Subcategory not found</h1>
-        <p>The requested subcategory does not exist for slug: {slug}</p>
-        <p>Check the API response in the console for details.</p>
-      </div>
-    );
+    notFound();
   }
 
-  // Log the subcategory data to debug rendering
   console.log("Subcategory data for rendering:", subcategory);
+
+  // ✅ Database se SEO data nikal lein (model ke hisab se)
+  const seoData = subcategory.seo ? {
+    // Agar database mein SEO data hai
+    metaTitle: subcategory.seo.metaTitle || subcategory.topSection?.heading || subcategory.name,
+    metaDescription: subcategory.seo.metaDescription || subcategory.topSection?.description || subcategory.keywordsSection?.description,
+    metaKeywords: subcategory.seo.metaKeywords || subcategory.keywordsSection?.keywords || [],
+    schemaMarkup: subcategory.seo.schemaMarkup || generateSchemaMarkup(subcategory)
+  } : {
+    // Agar database mein SEO data nahi hai
+    metaTitle: subcategory.topSection?.heading || subcategory.name || "Digital Marketing Services",
+    metaDescription: subcategory.topSection?.description || subcategory.keywordsSection?.description || "Professional digital marketing services",
+    metaKeywords: subcategory.keywordsSection?.keywords || ["digital marketing", "services"],
+    schemaMarkup: generateSchemaMarkup(subcategory)
+  };
 
   // Map database fields to component props with fallbacks
   const heroProps = {
@@ -69,11 +100,11 @@ export default async function SubCategoryPage({ params }) {
 
   const whyChooseProps = {
     heading: subcategory.keywordsSection?.relatedHeading?.[0] || "Why Choose Us",
-    description: subcategory.middleSection?.description1 || subcategory.keywordsSection?.relatedDescription?.[0] || "No why choose description", // First description
-    description2: subcategory.middleSection?.description2 || "", // Second description from middleSection
-    conclusion: subcategory.keywordsSection?.relatedDescription?.[1] || "", // Optional third text
-    image1: subcategory.middleSection?.image1 || "/default-image.jpg", // First image
-    image2: subcategory.middleSection?.image2 || "/default-image.jpg", // Second image
+    description: subcategory.middleSection?.description1 || subcategory.keywordsSection?.relatedDescription?.[0] || "No why choose description",
+    description2: subcategory.middleSection?.description2 || "",
+    conclusion: subcategory.keywordsSection?.relatedDescription?.[1] || "",
+    image1: subcategory.middleSection?.image1 || "/default-image.jpg",
+    image2: subcategory.middleSection?.image2 || "/default-image.jpg",
     buttonText: "Learn More",
   };
 
@@ -104,7 +135,11 @@ export default async function SubCategoryPage({ params }) {
 
   return (
     <main>
+      {/* ✅ Sub-category page ke liye SEO - database se actual data */}
+      <SEO seo={seoData} />
+      
       <SubHeroDigitalMarketing {...heroProps} />
+      <Heroform/>
       <SubAboutdigital {...aboutProps} />
       <SubWhydigital {...whyChooseProps} />
       <SubKeywordsdigital {...keywordsProps} />

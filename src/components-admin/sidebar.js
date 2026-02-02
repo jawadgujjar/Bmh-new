@@ -22,16 +22,18 @@ export default function AdminSidebar({ active, setActive }) {
   const links = [
     { id: "dashboard", label: "Dashboard" },
     { id: "sub-category", label: "Sub-Category" },
+    { id: "pages", label: "Pages" },
     { id: "portfolio", label: "Portfolio" },
     { id: "getaquote", label: "Get a Quote" },
     { id: "calltoactionquote", label: "Call-to-Action Quote" },
+    { id: "blogs", label: "Blogs" },
   ];
 
   return (
     <aside className={styles.sidebar}>
       <h2 className={styles.sidebarTitle}>Admin Panel</h2>
       <ul className={styles.navList}>
-        {links.map(link => (
+        {links.map((link) => (
           <li
             key={link.id}
             className={`${styles.navItem} ${active === link.id ? styles.active : ""}`}
