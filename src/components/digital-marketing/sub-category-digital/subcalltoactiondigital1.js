@@ -5,8 +5,8 @@ import styles from '../../../styles/digital-marketing/sub-category-digital/subca
 
 function SubCalltoactiondigital1({ 
   title = "Premium Digital Marketing Analysis",
-  // subtitle = "Transform Your Online Presence With Expert Strategy",
-  description = "Get a comprehensive SEO analysis and personalized consultation to elevate your digital marketing."
+  description = "Get a comprehensive SEO analysis and personalized consultation to elevate your digital marketing.",
+  renderHtml = false
 }) {
   const [step, setStep] = useState(0); // 0 = initial, 1 = form, 2 = success
   const [formData, setFormData] = useState({
@@ -81,8 +81,15 @@ function SubCalltoactiondigital1({
             <h2 className={styles.ctaTitle}>{title}</h2>
             <div className={styles.circle}></div>
           </div>
-          {/* <p className={styles.ctaSubtitle}>{subtitle}</p> */}
-          <p className={styles.ctaSubtitle}>{description}</p>
+          
+          {/* Description with HTML support */}
+          <div className={styles.ctaSubtitle}>
+            {renderHtml ? (
+              <div dangerouslySetInnerHTML={{ __html: description }} />
+            ) : (
+              <p>{description}</p>
+            )}
+          </div>
           
           <button onClick={handleGetQuote} className={styles.quoteButton}>
             Get Instant Quote

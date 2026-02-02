@@ -10,19 +10,51 @@ function SubWhydigital({
   description2 = "", // Should be middleSection.description2
   conclusion = "",
   image1 = "/default-image.jpg", // middleSection.image1
-  image2 = "/default-image.jpg", // middleSection.image2
+  image2 = "/default-image2.jpg", // middleSection.image2
   buttonText = "Learn More",
+  renderHtml = false
 }) {
   return (
     <div className={styles.aboutdigitalMain}>
-      <Row justify="center">
-        <Col
-          xs={22}
-          sm={22}
-          md={10}
-          lg={10}
-          xl={10}
-        >
+      {/* Heading Section */}
+      <div className={styles.sectionHeader}>
+        <h2 className={styles.sectionTitle}>{heading}</h2>
+      </div>
+      
+      <Row justify="center" align="middle" gutter={[30, 30]}>
+        {/* First Description Column */}
+        <Col xs={22} sm={22} md={10} lg={10} xl={10}>
+          <div className={styles.descriptionColumn}>
+            <div className={styles.allTextDigital}>
+              {renderHtml && description ? (
+                <div dangerouslySetInnerHTML={{ __html: description }} />
+              ) : (
+                <p>{description}</p>
+              )}
+            </div>
+          </div>
+        </Col>
+        
+        {/* First Image Column */}
+        <Col xs={22} sm={22} md={10} lg={10} xl={10}>
+          <div className={styles.imageContainer}>
+            <div>
+              <Image
+                src={image1}
+                alt="why-digital-1"
+                width={500}
+                height={400}
+                layout="responsive"
+                quality={100}
+              />
+            </div>
+          </div>
+        </Col>
+      </Row>
+      
+      <Row justify="center" align="middle" gutter={[30, 30]} style={{ marginTop: "40px" }}>
+        {/* Second Image Column */}
+        <Col xs={22} sm={22} md={10} lg={10} xl={10}>
           <div className={styles.imageContainer}>
             <div>
               <Image
@@ -36,17 +68,35 @@ function SubWhydigital({
             </div>
           </div>
         </Col>
-        <Col
-          xs={18}
-          sm={18}
-          md={12}
-          lg={10}
-          xl={10}
-        >
-          {description2 && <p className={styles.allTextDigital}>{description2}</p>}
-          {/* {conclusion && <p className={styles.allTextDigital}>{conclusion}</p>} */}
+        
+        {/* Second Description Column */}
+        <Col xs={22} sm={22} md={10} lg={10} xl={10}>
+          <div className={styles.descriptionColumn}>
+            {description2 && (
+              <div className={styles.allTextDigital}>
+                {renderHtml ? (
+                  <div dangerouslySetInnerHTML={{ __html: description2 }} />
+                ) : (
+                  <p>{description2}</p>
+                )}
+              </div>
+            )}
+            
+            {/* Conclusion (if available) */}
+            {conclusion && (
+              <div className={styles.conclusionText}>
+                {renderHtml ? (
+                  <div dangerouslySetInnerHTML={{ __html: conclusion }} />
+                ) : (
+                  <p>{conclusion}</p>
+                )}
+              </div>
+            )}
+          </div>
         </Col>
       </Row>
+      
+      {/* Button Section */}
       <div className={styles.callactionButton}>
         <Link href="/getaquote" passHref>
           <Button className={styles.proposalButton}>{buttonText}</Button>
