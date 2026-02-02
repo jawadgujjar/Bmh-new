@@ -2,6 +2,11 @@
   --background: #ffffff;
   --foreground: #171717;
 }
+@media (max-width: 991px) {
+  .navbar-collapse.show {
+    left: 0 !important;
+  }
+}
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -75,10 +80,7 @@ a {
   --orange-dark: #E8590C;
   --orange-gradient: linear-gradient(90deg, #FD7E14 0%, #FFA94D 100%);
 }
-  /* Bootstrap's 'show' class is added automatically via expanded prop */
-  :global(.navbar-collapse.show) {
-    left: 0 !important;
-  }
+  
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
