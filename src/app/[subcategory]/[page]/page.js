@@ -232,7 +232,7 @@ export default async function UniversalPageRoute({ params }) {
     <main>
       {/* Page Content - All components ko renderHtml={true} flag ke sath bhejo */}
       <SubHeroDigitalMarketing {...heroProps} renderHtml={true} />
-      <SubAboutdigital {...aboutProps} renderHtml={true} />
+      {/* <SubAboutdigital {...aboutProps} renderHtml={true} /> */}
       <SubWhydigital {...whyChooseProps} renderHtml={true} />
       <SubKeywordsdigital {...keywordsProps} />
       <SubCalltoactiondigital1 {...cta1Props} renderHtml={true} />
