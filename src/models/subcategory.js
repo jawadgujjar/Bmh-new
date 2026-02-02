@@ -35,7 +35,11 @@ const subCategorySchema = new mongoose.Schema(
     category: {
       type: String,
       required: true,
+<<<<<<< HEAD
       enum: ["digital-marketing", "web-development", "app-development"],
+=======
+      enum: ["digital-marketing", "web-development", "app-development"], 
+>>>>>>> f6fcbec61738d4d9eb862aee864f6359b6d66b74
     },
 
     icon: { type: String, required: true },
@@ -47,10 +51,17 @@ const subCategorySchema = new mongoose.Schema(
     },
 
     middleSection: {
+<<<<<<< HEAD
       description1: String,
       image1: String,
       image2: String,
       description2: String,
+=======
+      description1: String, 
+      image1: String,      
+      image2: String,      
+      description2: String, 
+>>>>>>> f6fcbec61738d4d9eb862aee864f6359b6d66b74
     },
 
     keywordsSection: keywordSchema,

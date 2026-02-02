@@ -1,150 +1,119 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation"; //  
-import { Navbar, Nav, Container, Button, NavDropdown } from "react-bootstrap";
+import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { CiMobile3 } from "react-icons/ci";
-import { FaBullhorn, FaLaptopCode, FaMobileAlt } from "react-icons/fa";
+import { FaChevronRight } from "react-icons/fa";
 import styles from "../../styles/navbar.module.css";
 
 function NavbarBmh() {
-  const pathname = usePathname();
-  const router = useRouter(); // 
-  const navbarRef = useRef(null);
   const [scrolled, setScrolled] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
-  const [subcategories, setSubcategories] = useState({
-    "digital-marketing": [],
-    "web-development": [],
-    "app-development": [],
-  });
-  const [loading, setLoading] = useState({
-    "digital-marketing": true,
-    "web-development": true,
-    "app-development": true,
-  });
-  const [fetchAttempts, setFetchAttempts] = useState({
-    "digital-marketing": 0,
-    "web-development": 0,
-    "app-development": 0,
-  });
-
-  const handleNavClick = () => {
-    window.scrollTo(0, 0);
-    setExpanded(false);
-    setActiveDropdown(null);
-  };
-
-  const handleCategoryClick = (mainPath, e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    router.push(mainPath);  
-    setExpanded(false);
-    setActiveDropdown(null);
-  };
+  const [subcategories, setSubcategories] = useState({});
+  const [pagesBySub, setPagesBySub] = useState({});
+  const timeoutRef = useRef(null);
+  const navbarRef = useRef(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (navbarRef.current && !navbarRef.current.contains(event.target)) {
+      if (
+        navbarRef.current &&
+        !navbarRef.current.contains(event.target) &&
+        expanded
+      ) {
         setExpanded(false);
         setActiveDropdown(null);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [expanded]);
 
   useEffect(() => {
-    const fetchSubcategories = async (category) => {
-      if (fetchAttempts[category] > 0) return;
-
-      try {
-        setLoading((prev) => ({ ...prev, [category]: true }));
-        const response = await fetch(`/api/subcategories?category=${category}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`API response not ok: ${response.status} - ${await response.text()}`);
+    const fetchCats = async () => {
+      const keys = ["digital-marketing", "web-development", "app-development"];
+      const dataObj = {};
+      for (const key of keys) {
+        try {
+          const res = await fetch(`/api/subcategories?category=${key}`);
+          const data = await res.json();
+          dataObj[key] = Array.isArray(data) ? data : data.data || [];
+        } catch (e) {
+          console.error(e);
         }
-
-        const data = await response.json();
-        const subcategoriesData = Array.isArray(data) ? data : (data.data || [data]);
-
-        if (subcategoriesData.length > 0) {
-          setSubcategories((prev) => ({
-            ...prev,
-            [category]: subcategoriesData.map((item) => ({
-              ...item,
-              slug: item.slug || generateSlug(item.name || "unnamed"),
-              icon: item.icon || "/images/placeholder-icon.png",
-            })),
-          }));
-        }
-      } catch (error) {
-        console.error(`Error fetching ${category} subcategories:`, error);
-      } finally {
-        setLoading((prev) => ({ ...prev, [category]: false }));
-        setFetchAttempts((prev) => ({ ...prev, [category]: prev[category] + 1 }));
       }
+      setSubcategories(dataObj);
     };
-
-    ["digital-marketing", "web-development", "app-development"].forEach(fetchSubcategories);
+    fetchCats();
   }, []);
 
-  const generateSlug = (name) => {
-    if (!name) return "default-slug";
-    return name
-      .toLowerCase()
-      .replace(/\s+/g, "-")
-      .replace(/[^\w\-]+/g, "")
-      .replace(/\-\-+/g, "-")
-      .replace(/^-+/, "")
-      .replace(/-+$/, "");
+  const prefetchPages = useCallback(
+    async (subId) => {
+      if (!subId || pagesBySub[subId]) return;
+      try {
+        const res = await fetch(`/api/page?subcategory=${subId}`);
+        const data = await res.json();
+        setPagesBySub((prev) => ({
+          ...prev,
+          [subId]: Array.isArray(data) ? data : data.data ? [data.data] : [],
+        }));
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [pagesBySub],
+  );
+
+  const handleOpen = (id) => {
+    if (window.innerWidth < 992) return;
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setActiveDropdown(id);
+  };
+
+  const handleClose = () => {
+    if (window.innerWidth < 992) return;
+    timeoutRef.current = setTimeout(() => setActiveDropdown(null), 150);
+  };
+
+  const closeMenu = () => {
+    setExpanded(false);
+    setActiveDropdown(null);
+  };
+
+  // Fixed: Toggle Logic for Mobile
+  const toggleSubMenu = (id, e) => {
+    if (window.innerWidth >= 992) return;
+    e.preventDefault();
+    e.stopPropagation();
+    setActiveDropdown(activeDropdown === id ? null : id);
   };
 
   const categoryConfig = [
     {
-      title: "DIGITAL MARKETING",
-      id: "digital-marketing-dropdown",
-      mainPath: "/digitalmarketing",
-      subPath: "digitalmarketing",
-      mainIcon: <FaBullhorn className={styles.icon} />,
-      mainName: "Digital Marketing",
-      categoryKey: "digital-marketing",
+      title: "Digital Marketing",
+      id: "dm",
+      path: "/digitalmarketing",
+      key: "digital-marketing",
     },
     {
-      title: "WEB DEVELOPMENT",
-      id: "web-development-dropdown",
-      mainPath: "/webdevelopment",
-      subPath: "webdevelopment",
-      mainIcon: <FaLaptopCode className={styles.icon} />,
-      mainName: "Website Design",
-      categoryKey: "web-development",
+      title: "Web Development",
+      id: "wd",
+      path: "/webdevelopment",
+      key: "web-development",
     },
     {
-      title: "APP DEVELOPMENT",
-      id: "app-development-dropdown",
-      mainPath: "/appdevelopment",
-      subPath: "appdevelopment",
-      mainIcon: <FaMobileAlt className={styles.icon} />,
-      mainName: "Mobile Application Development",
-      categoryKey: "app-development",
+      title: "App Development",
+      id: "ad",
+      path: "/appdevelopment",
+      key: "app-development",
     },
   ];
 
@@ -154,128 +123,128 @@ function NavbarBmh() {
       expand="lg"
       fixed="top"
       expanded={expanded}
-      onToggle={() => setExpanded(!expanded)}
       className={`${styles.mainNavbar} ${scrolled ? styles.scrolled : ""}`}
-      collapseOnSelect
     >
-      <Container fluid className={styles.mainContainer}>
-        <Navbar.Brand
-          as={Link}
-          href="/"
-          onClick={handleNavClick}
-          className={styles.mainBrand}
-        >
-          <img
-            src="/bmhlogo.svg"
-            className={styles.mainLogo}
-            alt="Brand Marketing Hub Logo"
-          />
-        </Navbar.Brand>
-
-        <div className={styles.changeNavbarNav}>
-          <Navbar.Toggle
-            aria-controls="basic-navbar-nav"
-            className={styles.customToggle}
-            aria-label="Toggle navigation"
-          />
+      <Container fluid className={styles.navContainer}>
+        <div className={styles.navLeft}>
+          <Navbar.Brand as={Link} href="/" onClick={closeMenu}>
+            <img src="/bmhlogo.svg" className={styles.logo} alt="Logo" />
+          </Navbar.Brand>
         </div>
 
-        <Navbar.Collapse id="basic-navbar-nav" className={styles.mainCollapse}>
-          <Nav className={`${styles.mainNav} ms-auto`}>
-            {categoryConfig.map((category) => {
-              const categorySubcategories = subcategories[category.categoryKey] || [];
+        {/* Custom Toggle Button with Animation */}
+        <button
+          className={`${styles.customToggle} ${expanded ? styles.open : ""}`}
+          onClick={() => setExpanded(!expanded)}
+          aria-label="Toggle navigation"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
 
-              return (
-                <NavDropdown
-                  key={category.id}
-                  title={
-                    <Link 
-                      href={category.mainPath}
-                      onClick={(e) => handleCategoryClick(category.mainPath, e)}
-                      className={styles.mainLink}
-                      style={{textDecoration: 'none', color: 'white'}}
-                    >
-                      {category.title}
-                    </Link>
-                  }
-                  id={category.id}
-                  className={styles.customDropdown}
-                  show={activeDropdown === category.id}
-                  onMouseEnter={() => setActiveDropdown(category.id)}
-                  onMouseLeave={() => setActiveDropdown(null)}
-                  onToggle={() => {}}
+        <Navbar.Collapse id="nav-menu" className={styles.navCollapse}>
+          <div className={styles.navCenter}>
+            <Nav className={styles.centerLinks}>
+              {categoryConfig.map((cat) => (
+                <div
+                  key={cat.id}
+                  className={styles.navItemWrapper}
+                  onMouseEnter={() => handleOpen(cat.id)}
+                  onMouseLeave={handleClose}
                 >
-                  {/* سب کٹیگریز */}
-                  {loading[category.categoryKey] ? (
-                    <NavDropdown.Item className={styles.navDropdownItem}>
-                      Loading...
-                    </NavDropdown.Item>
-                  ) : categorySubcategories.length === 0 ? (
-                    <NavDropdown.Item className={styles.navDropdownItem} disabled>
-                      No data available
-                    </NavDropdown.Item>
-                  ) : (
-                    categorySubcategories.map((subcategory) => (
-                      <NavDropdown.Item
-                        key={subcategory._id || subcategory.name}
-                        as={Link}
-                        href={`/${category.subPath}/${subcategory.slug}`}
-                        onClick={() => handleNavClick()}
-                        className={styles.navDropdownItem}
-                        style={{ display: "flex", alignItems: "center", minWidth: "150px" }}
-                      >
-                        <img
-                          src={subcategory.icon}
-                          alt={subcategory.name}
-                          style={{ width: 20, height: 20, marginRight: 8 }}
-                          onError={(e) => (e.currentTarget.src = "/images/placeholder-icon.png")}
-                        />
-                        <span style={{ whiteSpace: "normal", overflow: "visible" }}>
-                          {subcategory.name}
-                        </span>
-                      </NavDropdown.Item>
-                    ))
+                  <div
+                    className={styles.navLinkWrapper}
+                    onClick={(e) => toggleSubMenu(cat.id, e)}
+                  >
+                    <Link
+                      href={cat.path}
+                      className={styles.navLink}
+                      onClick={(e) => {
+                        if (window.innerWidth < 992) {
+                          // On mobile, first click opens dropdown
+                          e.preventDefault();
+                        } else {
+                          closeMenu();
+                        }
+                      }}
+                    >
+                      {cat.title}
+                    </Link>
+                    <FaChevronRight
+                      className={`${styles.mobileArrow} ${activeDropdown === cat.id ? styles.arrowRotate : ""}`}
+                      size={12}
+                    />
+                  </div>
+
+                  {activeDropdown === cat.id && (
+                    <div className={styles.customDropdownMenu}>
+                      <div className={styles.dropdownFlex}>
+                        {subcategories[cat.key]?.map((sub) => (
+                          <div
+                            key={sub._id}
+                            className={styles.subCol}
+                            onMouseEnter={() => prefetchPages(sub._id)}
+                          >
+                            <Link
+                              href={`/${sub.slug}`}
+                              className={styles.subTitle}
+                              onClick={closeMenu}
+                            >
+                              {sub.name} <FaChevronRight size={10} />
+                            </Link>
+                            {pagesBySub[sub._id]?.map((p) => (
+                              <Link
+                                key={p._id}
+                                href={`/${sub.slug}/${p.slug}`}
+                                className={styles.pageLink}
+                                onClick={closeMenu}
+                              >
+                                {p.title}
+                              </Link>
+                            ))}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   )}
-                </NavDropdown>
-              );
-            })}
+                </div>
+              ))}
 
-            <Nav.Link
-              as={Link}
-              href="/portfolio"
-              onClick={handleNavClick}
-              className={styles.mainLink}
-              active={pathname === "/portfolio"}
-            >
-              Portfolio
-            </Nav.Link>
-
-            <Link href="/getaquote" passHref>
-              <Button
-                variant="primary"
-                className={styles.quoteButton}
-                onClick={handleNavClick}
-              >
-                Get a Quote
-              </Button>
-            </Link>
-
-            <a
-              href="tel:+1234567890"
-              className={styles.phoneNumberDiv}
-              onClick={() => setExpanded(false)}
-            >
-              <CiMobile3 className={styles.mobileIcon} />
-              <div className={styles.textPhone}>
-                <p>+123-456-7890</p>
-                <p>Speak With an Expert</p>
+              <div className={styles.navItemWrapper}>
+                <Link
+                  href="/portfolio"
+                  className={styles.navLink}
+                  onClick={closeMenu}
+                >
+                  Portfolio
+                </Link>
               </div>
-            </a>
-          </Nav>
+            </Nav>
+          </div>
+
+          <div className={styles.navRight}>
+            <div className={styles.actionSection}>
+              <a
+                href="tel:+1234567890"
+                className={styles.phoneBox}
+                onClick={closeMenu}
+              >
+                <CiMobile3 size={24} color="#ffa500" />
+                <div className={styles.phoneText}>
+                  <span>+123-456-7890</span>
+                  <small>Speak with Expert</small>
+                </div>
+              </a>
+              <Link href="/getaquote" onClick={closeMenu}>
+                <Button className={styles.quoteBtn}>Get a Quote</Button>
+              </Link>
+            </div>
+          </div>
         </Navbar.Collapse>
       </Container>
     </Navbar>
   );
 }
 
-export default NavbarBmh; 
+export default NavbarBmh;
