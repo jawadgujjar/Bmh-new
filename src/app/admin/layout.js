@@ -8,11 +8,9 @@ import SubCategory from "@/components-admin/subcategory";
 import Portfolio from "@/components-admin/portfolio";
 import GetaQuote from "@/components-admin/getaquote";
 import CallToActionQuote from "@/components-admin/calltoactionquote";
-<<<<<<< HEAD
-import BlogAdmin from "@/components-admin/blogs";
-=======
 import Pages from "@/components-admin/pages";
->>>>>>> f6fcbec61738d4d9eb862aee864f6359b6d66b74
+import BlogAdmin from "@/components-admin/blogs";
+ 
 
 export default function AdminLayout() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

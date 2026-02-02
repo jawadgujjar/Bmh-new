@@ -100,8 +100,43 @@ export default function SubCategory() {
     }
   };
 
-  // Custom Upload Component with preview
-  const UploadField = ({ name, label, required = false }) => {
+  // Handle file upload for Page Modal
+  const handlePageUpload = async (file, fieldName) => {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        if (Array.isArray(fieldName)) {
+          let nestedValue = data.url;
+          for (let i = fieldName.length - 1; i >= 0; i--) {
+            nestedValue = { [fieldName[i]]: nestedValue };
+          }
+          pageForm.setFieldsValue(nestedValue);
+        } else {
+          pageForm.setFieldsValue({ [fieldName]: data.url });
+        }
+        message.success("Image uploaded successfully");
+        return data.url;
+      } else {
+        message.error(data.error || "Failed to upload image");
+        return false;
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      message.error("Error uploading image");
+      return false;
+    }
+  };
+
+  // Custom Upload Component with preview (FOR SUBCATEGORY MODAL)
+  const UploadField = ({ name, label, formType = "subcategory" }) => {
     const [fileList, setFileList] = useState([]);
 
     useEffect(() => {
@@ -122,7 +157,7 @@ export default function SubCategory() {
       <Form.Item
         label={label}
         name={name}
-        rules={required ? [{ required: true, message: `Please upload ${label}` }] : []}
+        rules={[{ required: true, message: `Please upload ${label}` }]}
       >
         <Upload
           listType="picture"
@@ -230,6 +265,16 @@ export default function SubCategory() {
     setIsModalOpen(true);
   };
 
+  // NEW: Open Page Creation Modal
+  const openPageModal = (subCategory) => {
+    setSelectedSubCategory(subCategory);
+    pageForm.setFieldsValue({
+      subcategory: subCategory._id, // Auto-populate subcategory ID
+    });
+    setIsPageModalOpen(true);
+  };
+
+  // Table Columns (Updated with Add Page button)
   // Table Columns with SEO Status
   const columns = [
     {
@@ -356,6 +401,16 @@ export default function SubCategory() {
         style={{ maxHeight: '80vh', overflowY: 'auto' }}
       >
         <Form layout="vertical" form={form}>
+          {/* Basic Fields */}
+          <Form.Item
+            label="Name"
+            name="name"
+            rules={[
+              { required: true, message: "Please enter sub category name" },
+            ]}
+          >
+            <Input placeholder="Enter sub category name" />
+          </Form.Item>
           <Collapse activeKey={expandedPanels} onChange={setExpandedPanels} ghost>
             {/* Basic Info Panel */}
             <Panel header="Basic Information" key="basic">
@@ -383,6 +438,167 @@ export default function SubCategory() {
               <UploadField name="icon" label="Icon" required />
             </Panel>
 
+          {/* Top Section */}
+          <Form.Item label="Top Section">
+            <UploadField
+              name={["topSection", "backgroundImage"]}
+              label="Background Image"
+            />
+            <Form.Item label="Heading" name={["topSection", "heading"]}>
+              <Input placeholder="Enter top section heading" />
+            </Form.Item>
+            <Form.Item label="Description" name={["topSection", "description"]}>
+              <Input.TextArea
+                placeholder="Enter top section description"
+                rows={4}
+              />
+            </Form.Item>
+          </Form.Item>
+
+          {/* Middle Section */}
+          <Form.Item label="Middle Section">
+            <Form.Item
+              label="Description 1"
+              name={["middleSection", "description1"]}
+            >
+              <Input.TextArea placeholder="Enter first description" rows={4} />
+            </Form.Item>
+            <UploadField name={["middleSection", "image1"]} label="Image 1" />
+            <UploadField name={["middleSection", "image2"]} label="Image 2" />
+            <Form.Item
+              label="Description 2"
+              name={["middleSection", "description2"]}
+            >
+              <Input.TextArea placeholder="Enter second description" rows={4} />
+            </Form.Item>
+          </Form.Item>
+
+          {/* Keywords Section */}
+          <Form.Item label="Keywords Section">
+            <Form.Item label="Heading" name={["keywordsSection", "heading"]}>
+              <Input placeholder="Enter keywords section heading" />
+            </Form.Item>
+            <Form.Item
+              label="Description"
+              name={["keywordsSection", "description"]}
+            >
+              <Input.TextArea
+                placeholder="Enter keywords section description"
+                rows={4}
+              />
+            </Form.Item>
+
+            <Form.Item label="Keywords">
+              <Form.List name={["keywordsSection", "keywords"]}>
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name, ...restField }) => (
+                      <Space
+                        key={key}
+                        style={{ display: "flex", marginBottom: 8 }}
+                        align="baseline"
+                      >
+                        <Form.Item
+                          {...restField}
+                          name={name}
+                          rules={[
+                            { required: true, message: "Enter a keyword" },
+                          ]}
+                        >
+                          <Input placeholder="Keyword" />
+                        </Form.Item>
+                        <MinusCircleOutlined onClick={() => remove(name)} />
+                      </Space>
+                    ))}
+                    <Button
+                      type="dashed"
+                      onClick={() => add()}
+                      block
+                      icon={<PlusOutlined />}
+                    >
+                      Add Keyword
+                    </Button>
+                  </>
+                )}
+              </Form.List>
+            </Form.Item>
+
+            <Form.Item label="Related Headings">
+              <Form.List name={["keywordsSection", "relatedHeading"]}>
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name, ...restField }) => (
+                      <Space
+                        key={key}
+                        style={{ display: "flex", marginBottom: 8 }}
+                        align="baseline"
+                      >
+                        <Form.Item
+                          {...restField}
+                          name={name}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Enter a related heading",
+                            },
+                          ]}
+                        >
+                          <Input placeholder="Related Heading" />
+                        </Form.Item>
+                        <MinusCircleOutlined onClick={() => remove(name)} />
+                      </Space>
+                    ))}
+                    <Button
+                      type="dashed"
+                      onClick={() => add()}
+                      block
+                      icon={<PlusOutlined />}
+                    >
+                      Add Related Heading
+                    </Button>
+                  </>
+                )}
+              </Form.List>
+            </Form.Item>
+
+            <Form.Item label="Related Descriptions">
+              <Form.List name={["keywordsSection", "relatedDescription"]}>
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name, ...restField }) => (
+                      <Space
+                        key={key}
+                        style={{ display: "flex", marginBottom: 8 }}
+                        align="baseline"
+                      >
+                        <Form.Item
+                          {...restField}
+                          name={name}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Enter a related description",
+                            },
+                          ]}
+                        >
+                          <Input placeholder="Related Description" />
+                        </Form.Item>
+                        <MinusCircleOutlined onClick={() => remove(name)} />
+                      </Space>
+                    ))}
+                    <Button
+                      type="dashed"
+                      onClick={() => add()}
+                      block
+                      icon={<PlusOutlined />}
+                    >
+                      Add Related Description
+                    </Button>
+                  </>
+                )}
+              </Form.List>
+            </Form.Item>
+          </Form.Item>
             {/* Top Section Panel */}
             <Panel header="Top Section (Hero)" key="topSection">
               <UploadField name={["topSection", "backgroundImage"]} label="Background Image" />
