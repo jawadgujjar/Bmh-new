@@ -31,7 +31,7 @@ function SubHeroDigitalMarketing({
                     {renderHtml ? (
                         <div dangerouslySetInnerHTML={{ __html: description }} />
                     ) : (
-                        <p>{description}</p>
+                        <p className={styles.herodes}>{description}</p>
                     )}
                 </div>
                 

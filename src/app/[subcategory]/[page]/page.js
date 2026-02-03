@@ -234,7 +234,7 @@ export default async function UniversalPageRoute({ params }) {
       <SubHeroDigitalMarketing {...heroProps} renderHtml={true} />
       {/* <SubAboutdigital {...aboutProps} renderHtml={true} /> */}
       <SubWhydigital {...whyChooseProps} renderHtml={true} />
-      <SubKeywordsdigital {...keywordsProps} />
+      {/* <SubKeywordsdigital {...keywordsProps} /> */}
       <SubCalltoactiondigital1 {...cta1Props} renderHtml={true} />
       <SeoIndustries {...industriesProps} />
       <SubCalltoactiondigital2 {...cta2Props} renderHtml={true} />

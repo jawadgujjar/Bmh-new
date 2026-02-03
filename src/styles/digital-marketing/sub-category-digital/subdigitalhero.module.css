@@ -43,7 +43,11 @@
     font-size: 2rem;
     font-weight: 700;
     margin-bottom: 1rem;
+    margin-top: 5rem;
 }
+.herodes{
+        font-size: 1rem;
+    }
 
 .growText {
     color: rgb(253, 126, 20);
@@ -120,9 +124,14 @@
     }
 
     .heroFirstText {
-        font-size: 1.8rem;
+        font-size: 1.3rem;
+        margin-top: 3rem;
     }
-
+      .herodes{
+        font-size: 0.8rem;
+    }
+    
+    
     .growText {
         font-size: 1.1rem;
     }
@@ -134,8 +143,12 @@
 }
 
 @media (max-width: 576px) {
-    .heroFirstText {
-        font-size: 1.5rem;
+    .heroFirstText { 
+        font-size: 0.8rem;
+        margin-top: 3rem;
+    }
+    .herodes{
+        font-size: 0.6rem;
     }
 
     .growText {
