@@ -17,7 +17,7 @@ import {
   Row,
   Col,
   Breadcrumb,
-  Image,
+  Collapse,
 } from "antd";
 import {
   PlusOutlined,
@@ -26,13 +26,35 @@ import {
   DeleteOutlined,
   UploadOutlined,
   HomeOutlined,
-  LinkOutlined,
   CopyOutlined,
+  GlobalOutlined,
+  InfoCircleOutlined,
 } from "@ant-design/icons";
-import { useRouter } from "next/navigation";
+
+// Dynamically import TipTap to avoid SSR
+import dynamic from 'next/dynamic';
+
+const TiptapEditor = dynamic(() => import('./TipTapEditor').then(mod => mod.default), {
+  ssr: false,
+  loading: () => (
+    <div style={{
+      border: '1px solid #d9d9d9',
+      borderRadius: '8px',
+      minHeight: '150px',
+      padding: '20px',
+      background: '#fafafa',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>
+      Loading editor...
+    </div>
+  )
+});
 
 const { Title, Text } = Typography;
 const { Option } = Select;
+const { Panel } = Collapse;
 
 export default function Pages() {
   const [loading, setLoading] = useState(false);
@@ -41,7 +63,16 @@ export default function Pages() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPage, setEditingPage] = useState(null);
   const [form] = Form.useForm();
-  const router = useRouter();
+  const [expandedPanels, setExpandedPanels] = useState(['seo']);
+  
+  // State for all editor contents
+  const [editorContents, setEditorContents] = useState({
+    topSectionDescription: "",
+    middleSectionDescription1: "",
+    middleSectionDescription2: "",
+    cta1Description: "",
+    cta2Description: "",
+  });
 
   // Fetch Pages
   const fetchPages = async () => {
@@ -164,35 +195,87 @@ export default function Pages() {
     );
   };
 
+  // Handle editor content change
+  const handleEditorChange = (content, fieldName) => {
+    setEditorContents(prev => ({
+      ...prev,
+      [fieldName]: content
+    }));
+    // Also update form values
+    const formFieldMap = {
+      topSectionDescription: ["topSection", "description"],
+      middleSectionDescription1: ["middleSection", "description1"],
+      middleSectionDescription2: ["middleSection", "description2"],
+      cta1Description: ["cta1", "description"],
+      cta2Description: ["cta2", "description"],
+    };
+    
+    if (formFieldMap[fieldName]) {
+      form.setFieldsValue({
+        [formFieldMap[fieldName][0]]: {
+          ...form.getFieldValue([formFieldMap[fieldName][0]]) || {},
+          [formFieldMap[fieldName][1]]: content
+        }
+      });
+    }
+  };
+
+  // Slug generator
+  const generateSlug = (text) => {
+    if (!text) return '';
+    return text
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^\w-]+/g, '')
+      .replace(/--+/g, '-')
+      .replace(/^-+/, '')
+      .replace(/-+$/, '');
+  };
+
   // Add / Edit Page
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
       
-      // Prepare data for API
-      const pageData = {
-        title: values.title,
-        subcategory: values.subcategory,
-        subcatpagedescr: values.subcatpagedescr || "",
+      // Merge editor contents with form values
+      const finalValues = {
+        ...values,
         topSection: {
-          backgroundImage: values.topSection?.backgroundImage || "",
-          heading: values.topSection?.heading || "",
-          description: values.topSection?.description || "",
+          ...values.topSection,
+          description: editorContents.topSectionDescription
         },
         middleSection: {
-          description1: values.middleSection?.description1 || "",
-          image1: values.middleSection?.image1 || "",
-          image2: values.middleSection?.image2 || "",
-          description2: values.middleSection?.description2 || "",
+          ...values.middleSection,
+          description1: editorContents.middleSectionDescription1,
+          description2: editorContents.middleSectionDescription2
         },
         cta1: {
-          heading: values.cta1?.heading || "",
-          description: values.cta1?.description || "",
+          ...values.cta1,
+          description: editorContents.cta1Description
         },
         cta2: {
-          heading: values.cta2?.heading || "",
-          description: values.cta2?.description || "",
-        },
+          ...values.cta2,
+          description: editorContents.cta2Description
+        }
+      };
+
+      // Prepare data for API according to Page model
+      const pageData = {
+        title: finalValues.title,
+        slug: finalValues.slug,
+        category: finalValues.category,
+        subcategory: finalValues.subcategory,
+        subcatpagedescr: finalValues.subcatpagedescr || "",
+        // SEO Fields
+        metaTitle: finalValues.metaTitle || "",
+        metaDescription: finalValues.metaDescription || "",
+        metaKeywords: finalValues.metaKeywords || "",
+        metaSchema: finalValues.metaSchema || "",
+        // Page Content Sections
+        topSection: finalValues.topSection || {},
+        middleSection: finalValues.middleSection || {},
+        cta1: finalValues.cta1 || {},
+        cta2: finalValues.cta2 || {},
       };
 
       let url = "/api/page";
@@ -204,6 +287,8 @@ export default function Pages() {
         method = "PUT";
         pageData._id = editingPage._id;
       }
+
+      console.log("Saving page data:", pageData);
 
       const res = await fetch(url, {
         method,
@@ -218,8 +303,16 @@ export default function Pages() {
           editingPage ? "Page updated successfully!" : "Page created successfully!"
         );
         form.resetFields();
+        setEditorContents({
+          topSectionDescription: "",
+          middleSectionDescription1: "",
+          middleSectionDescription2: "",
+          cta1Description: "",
+          cta2Description: "",
+        });
         setEditingPage(null);
         setIsModalOpen(false);
+        setExpandedPanels(['seo']);
         fetchPages();
       } else {
         message.error(data.error || "Operation failed");
@@ -253,10 +346,28 @@ export default function Pages() {
   // Open modal for editing
   const handleEdit = (record) => {
     setEditingPage(record);
+    
+    // Set editor contents from record
+    setEditorContents({
+      topSectionDescription: record.topSection?.description || "",
+      middleSectionDescription1: record.middleSection?.description1 || "",
+      middleSectionDescription2: record.middleSection?.description2 || "",
+      cta1Description: record.cta1?.description || "",
+      cta2Description: record.cta2?.description || "",
+    });
+    
     form.setFieldsValue({
       title: record.title,
+      slug: record.slug,
+      category: record.category,
       subcategory: record.subcategory?._id || record.subcategory,
       subcatpagedescr: record.subcatpagedescr || "",
+      // SEO Fields
+      metaTitle: record.metaTitle || "",
+      metaDescription: record.metaDescription || "",
+      metaKeywords: record.metaKeywords || "",
+      metaSchema: record.metaSchema || "",
+      // Page Content Sections
       topSection: {
         backgroundImage: record.topSection?.backgroundImage || "",
         heading: record.topSection?.heading || "",
@@ -293,7 +404,22 @@ export default function Pages() {
       .catch(() => message.error('Failed to copy URL'));
   };
 
-  // Table Columns
+  // Open modal for adding new page
+  const openAddModal = () => {
+    form.resetFields();
+    setEditorContents({
+      topSectionDescription: "",
+      middleSectionDescription1: "",
+      middleSectionDescription2: "",
+      cta1Description: "",
+      cta2Description: "",
+    });
+    setEditingPage(null);
+    setIsModalOpen(true);
+    setExpandedPanels(['seo']);
+  };
+
+  // Table Columns with SEO Status
   const columns = [
     {
       title: "Title",
@@ -305,7 +431,26 @@ export default function Pages() {
           <div style={{ fontSize: 12, color: "#666" }}>
             Slug: {record.slug}
           </div>
+          {record.metaTitle && (
+            <div style={{ fontSize: 11, color: "#888", marginTop: 2 }}>
+              SEO: {record.metaTitle.substring(0, 40)}...
+            </div>
+          )}
         </div>
+      ),
+    },
+    {
+      title: "Category",
+      dataIndex: "category",
+      key: "category",
+      render: (category) => (
+        <Tag color={
+          category === "digital-marketing" ? "blue" :
+          category === "web-development" ? "green" :
+          category === "app-development" ? "orange" : "default"
+        }>
+          {category || "N/A"}
+        </Tag>
       ),
     },
     {
@@ -313,12 +458,31 @@ export default function Pages() {
       dataIndex: "subcategory",
       key: "subcategory",
       render: (subcat) => {
-        // Find subcategory name from subCategories list
         const subcatObj = subCategories.find(s => s._id === subcat || s._id === subcat?._id);
         return (
-          <Tag color="blue">
+          <Tag color="purple">
             {subcatObj?.name || "Unknown"}
           </Tag>
+        );
+      },
+    },
+    {
+      title: "SEO Status",
+      key: "seoStatus",
+      render: (_, record) => {
+        return (
+          <div>
+            {record.metaTitle ? (
+              <Tag color="green">✓ SEO Set</Tag>
+            ) : (
+              <Tag color="orange">No SEO</Tag>
+            )}
+            {record.metaDescription && (
+              <div style={{ fontSize: '11px', color: '#666', marginTop: '2px' }}>
+                {record.metaDescription.substring(0, 40)}...
+              </div>
+            )}
+          </div>
         );
       },
     },
@@ -413,11 +577,7 @@ export default function Pages() {
             <Button
               type="primary"
               icon={<PlusOutlined />}
-              onClick={() => {
-                form.resetFields();
-                setEditingPage(null);
-                setIsModalOpen(true);
-              }}
+              onClick={openAddModal}
               size="large"
             >
               Add New Page
@@ -436,13 +596,13 @@ export default function Pages() {
             expandedRowRender: (record) => (
               <div style={{ padding: 16, background: '#fafafa', borderRadius: 8 }}>
                 <Row gutter={24}>
-                  <Col span={8}>
+                  <Col span={6}>
                     <Text strong>Page Description:</Text>
                     <p style={{ marginTop: 8 }}>
                       {record.subcatpagedescr || "No description"}
                     </p>
                   </Col>
-                  <Col span={8}>
+                  <Col span={6}>
                     <Text strong>Top Section:</Text>
                     <p style={{ marginTop: 8, marginBottom: 0 }}>
                       <strong>Heading:</strong> {record.topSection?.heading || "No heading"}
@@ -451,7 +611,7 @@ export default function Pages() {
                       <strong>Background:</strong> {record.topSection?.backgroundImage ? "✓ Uploaded" : "No image"}
                     </p>
                   </Col>
-                  <Col span={8}>
+                  <Col span={6}>
                     <Text strong>Middle Section:</Text>
                     <p style={{ marginTop: 8, marginBottom: 0 }}>
                       <strong>Image 1:</strong> {record.middleSection?.image1 ? "✓ Uploaded" : "No image"}
@@ -460,44 +620,91 @@ export default function Pages() {
                       <strong>Image 2:</strong> {record.middleSection?.image2 ? "✓ Uploaded" : "No image"}
                     </p>
                   </Col>
+                  <Col span={6}>
+                    <Text strong>SEO Info:</Text>
+                    <p style={{ marginTop: 8, marginBottom: 0 }}>
+                      <strong>Meta Title:</strong> {record.metaTitle ? "✓ Set" : "No"}
+                    </p>
+                    <p style={{ marginTop: 4, marginBottom: 0 }}>
+                      <strong>Meta Desc:</strong> {record.metaDescription ? "✓ Set" : "No"}
+                    </p>
+                  </Col>
                 </Row>
               </div>
             ),
           }}
         />
 
-        {/* Page Modal */}
+        {/* Page Modal with Tiptap Editors */}
         <Modal
           title={editingPage ? "✏️ Edit Page" : "➕ Add New Page"}
           open={isModalOpen}
           onCancel={() => {
             setIsModalOpen(false);
             form.resetFields();
+            setEditorContents({
+              topSectionDescription: "",
+              middleSectionDescription1: "",
+              middleSectionDescription2: "",
+              cta1Description: "",
+              cta2Description: "",
+            });
             setEditingPage(null);
+            setExpandedPanels(['seo']);
           }}
           onOk={handleOk}
           okText={editingPage ? "Update" : "Create"}
           cancelText="Cancel"
-          width={800}
-          okButtonProps={{
-            style: {
-              background: "linear-gradient(90deg, #1890ff 0%, #36cfc9 100%)",
-              border: "none",
-            }
-          }}
+          width={1000}
+          style={{ top: 20 }}
         >
           <Form layout="vertical" form={form}>
             <Row gutter={16}>
-              <Col span={16}>
+              <Col span={12}>
                 <Form.Item
                   label="Page Title"
                   name="title"
                   rules={[{ required: true, message: "Please enter page title" }]}
                 >
-                  <Input placeholder="Enter page title" size="large" />
+                  <Input 
+                    placeholder="Enter page title" 
+                    onChange={(e) => {
+                      const slug = generateSlug(e.target.value);
+                      form.setFieldsValue({ slug });
+                    }}
+                  />
                 </Form.Item>
               </Col>
-              <Col span={8}>
+              <Col span={12}>
+                <Form.Item
+                  label="URL Slug"
+                  name="slug"
+                  rules={[
+                    { required: true, message: "Please enter URL slug" },
+                    { pattern: /^[a-z0-9]+(?:-[a-z0-9]+)*$/, message: 'Only lowercase letters, numbers, and hyphens allowed' }
+                  ]}
+                  extra="yourdomain.com/your-slug"
+                >
+                  <Input placeholder="your-slug" />
+                </Form.Item>
+              </Col>
+            </Row>
+
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item
+                  label="Category"
+                  name="category"
+                  rules={[{ required: true, message: "Please select category" }]}
+                >
+                  <Select placeholder="Select category">
+                    <Option value="digital-marketing">Digital Marketing</Option>
+                    <Option value="web-development">Web Development</Option>
+                    <Option value="app-development">App Development</Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col span={12}>
                 <Form.Item
                   label="SubCategory"
                   name="subcategory"
@@ -505,7 +712,6 @@ export default function Pages() {
                 >
                   <Select 
                     placeholder="Select subcategory" 
-                    size="large"
                     showSearch
                     optionFilterProp="children"
                     filterOption={(input, option) =>
@@ -514,7 +720,7 @@ export default function Pages() {
                   >
                     {subCategories.map((subcat) => (
                       <Option key={subcat._id} value={subcat._id}>
-                        {subcat.name}
+                        {subcat.name} ({subcat.category})
                       </Option>
                     ))}
                   </Select>
@@ -523,140 +729,222 @@ export default function Pages() {
             </Row>
 
             <Form.Item
-              label="Page Description"
+              label="Page Short Description"
               name="subcatpagedescr"
+              extra="Short description for meta tags and preview"
             >
               <Input.TextArea 
-                placeholder="Enter page description" 
-                rows={4}
+                placeholder="Enter short description" 
+                rows={3}
                 style={{ borderRadius: 8 }}
               />
             </Form.Item>
 
+            <Collapse activeKey={expandedPanels} onChange={setExpandedPanels} ghost>
+              {/* SEO Panel */}
+              <Panel
+                header={
+                  <Space>
+                    <GlobalOutlined />
+                    <Text strong>SEO Settings</Text>
+                  </Space>
+                }
+                key="seo"
+              >
+                <Form.Item
+                  label="Meta Title"
+                  name="metaTitle"
+                  extra="Title for search engines (recommended: 50-60 characters)"
+                >
+                  <Input
+                    placeholder="Enter SEO title for this page"
+                    maxLength={70}
+                    showCount
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  label="Meta Description"
+                  name="metaDescription"
+                  extra="Description for search results (recommended: 150-160 characters)"
+                >
+                  <Input.TextArea
+                    rows={3}
+                    placeholder="Enter SEO description for this page"
+                    maxLength={160}
+                    showCount
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  label="Meta Keywords"
+                  name="metaKeywords"
+                  extra="Separate with commas (e.g., keyword1, keyword2, keyword3)"
+                >
+                  <Input
+                    placeholder="Enter SEO keywords"
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  label="Schema Markup (JSON-LD)"
+                  name="metaSchema"
+                  extra={
+                    <div>
+                      <InfoCircleOutlined /> Optional: Add structured data in JSON format
+                    </div>
+                  }
+                >
+                  <Input.TextArea
+                    rows={5}
+                    placeholder={`{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "Your Service Name",
+  "description": "Service description here",
+  "provider": {
+    "@type": "Organization",
+    "name": "Your Company"
+  }
+}`}
+                  />
+                </Form.Item>
+              </Panel>
+            </Collapse>
+
+            {/* Top Section */}
             <div style={{ 
               padding: 16, 
               background: '#f0f9ff', 
               borderRadius: 8,
-              marginBottom: 16 
+              marginBottom: 16,
+              marginTop: 16
             }}>
-              <Text strong style={{ color: '#1890ff', fontSize: 16 }}>
+              <Text strong style={{ color: '#1890ff', fontSize: 16, marginBottom: 12 }}>
                 Top Section
               </Text>
-            </div>
-            
-            <UploadField 
-              name={["topSection", "backgroundImage"]} 
-              label="Background Image" 
-              required={false}
-            />
-            
-            <Row gutter={16}>
-              <Col span={12}>
-                <Form.Item label="Heading" name={["topSection", "heading"]}>
-                  <Input placeholder="Enter top section heading" />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item label="Description" name={["topSection", "description"]}>
-                  <Input.TextArea
-                    placeholder="Enter top section description"
-                    rows={3}
+              <Row gutter={16}>
+                <Col span={12}>
+                  <UploadField 
+                    name={["topSection", "backgroundImage"]} 
+                    label="Background Image" 
+                    required={false}
                   />
-                </Form.Item>
-              </Col>
-            </Row>
+                </Col>
+                <Col span={12}>
+                  <Form.Item label="Heading" name={["topSection", "heading"]}>
+                    <Input placeholder="Enter top section heading" />
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Form.Item label="Description">
+                <TiptapEditor 
+                  content={editorContents.topSectionDescription}
+                  onChange={(content) => handleEditorChange(content, "topSectionDescription")}
+                  height="150px"
+                />
+              </Form.Item>
+            </div>
 
+            {/* Middle Section */}
             <div style={{ 
               padding: 16, 
               background: '#f6ffed', 
               borderRadius: 8,
               marginBottom: 16,
-              marginTop: 24
             }}>
-              <Text strong style={{ color: '#52c41a', fontSize: 16 }}>
+              <Text strong style={{ color: '#52c41a', fontSize: 16, marginBottom: 12 }}>
                 Middle Section
               </Text>
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Form.Item label="Description 1">
+                    <TiptapEditor 
+                      content={editorContents.middleSectionDescription1}
+                      onChange={(content) => handleEditorChange(content, "middleSectionDescription1")}
+                      height="150px"
+                    />
+                  </Form.Item>
+                  <UploadField 
+                    name={["middleSection", "image1"]} 
+                    label="Image 1" 
+                    required={false}
+                  />
+                </Col>
+                <Col span={12}>
+                  <Form.Item label="Description 2">
+                    <TiptapEditor 
+                      content={editorContents.middleSectionDescription2}
+                      onChange={(content) => handleEditorChange(content, "middleSectionDescription2")}
+                      height="150px"
+                    />
+                  </Form.Item>
+                  <UploadField 
+                    name={["middleSection", "image2"]} 
+                    label="Image 2" 
+                    required={false}
+                  />
+                </Col>
+              </Row>
             </div>
-            
-            <Row gutter={16}>
-              <Col span={12}>
-                <Form.Item
-                  label="Description 1"
-                  name={["middleSection", "description1"]}
-                >
-                  <Input.TextArea placeholder="Enter first description" rows={3} />
-                </Form.Item>
-                <UploadField 
-                  name={["middleSection", "image1"]} 
-                  label="Image 1" 
-                  required={false}
-                />
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label="Description 2"
-                  name={["middleSection", "description2"]}
-                >
-                  <Input.TextArea placeholder="Enter second description" rows={3} />
-                </Form.Item>
-                <UploadField 
-                  name={["middleSection", "image2"]} 
-                  label="Image 2" 
-                  required={false}
-                />
-              </Col>
-            </Row>
 
+            {/* Call to Actions */}
             <div style={{ 
               padding: 16, 
               background: '#fff7e6', 
               borderRadius: 8,
               marginBottom: 16,
-              marginTop: 24
             }}>
-              <Text strong style={{ color: '#fa8c16', fontSize: 16 }}>
+              <Text strong style={{ color: '#fa8c16', fontSize: 16, marginBottom: 12 }}>
                 Call to Actions
               </Text>
+              <Row gutter={16}>
+                <Col span={12}>
+                  <div style={{ 
+                    padding: 12, 
+                    background: '#fff7e6', 
+                    borderRadius: 8,
+                    marginBottom: 16
+                  }}>
+                    <Text strong style={{ display: 'block', marginBottom: 8 }}>
+                      CTA 1
+                    </Text>
+                    <Form.Item label="Heading" name={["cta1", "heading"]} style={{ marginBottom: 8 }}>
+                      <Input placeholder="Enter CTA 1 heading" />
+                    </Form.Item>
+                    <Form.Item label="Description">
+                      <TiptapEditor 
+                        content={editorContents.cta1Description}
+                        onChange={(content) => handleEditorChange(content, "cta1Description")}
+                        height="150px"
+                      />
+                    </Form.Item>
+                  </div>
+                </Col>
+                <Col span={12}>
+                  <div style={{ 
+                    padding: 12, 
+                    background: '#fff0f6', 
+                    borderRadius: 8,
+                    marginBottom: 16
+                  }}>
+                    <Text strong style={{ display: 'block', marginBottom: 8 }}>
+                      CTA 2
+                    </Text>
+                    <Form.Item label="Heading" name={["cta2", "heading"]} style={{ marginBottom: 8 }}>
+                      <Input placeholder="Enter CTA 2 heading" />
+                    </Form.Item>
+                    <Form.Item label="Description">
+                      <TiptapEditor 
+                        content={editorContents.cta2Description}
+                        onChange={(content) => handleEditorChange(content, "cta2Description")}
+                        height="150px"
+                      />
+                    </Form.Item>
+                  </div>
+                </Col>
+              </Row>
             </div>
-            
-            <Row gutter={16}>
-              <Col span={12}>
-                <div style={{ 
-                  padding: 12, 
-                  background: '#fff7e6', 
-                  borderRadius: 8,
-                  marginBottom: 16
-                }}>
-                  <Text strong style={{ display: 'block', marginBottom: 8 }}>
-                    CTA 1
-                  </Text>
-                  <Form.Item label="Heading" name={["cta1", "heading"]} style={{ marginBottom: 8 }}>
-                    <Input placeholder="Enter CTA 1 heading" />
-                  </Form.Item>
-                  <Form.Item label="Description" name={["cta1", "description"]}>
-                    <Input.TextArea placeholder="Enter CTA 1 description" rows={2} />
-                  </Form.Item>
-                </div>
-              </Col>
-              <Col span={12}>
-                <div style={{ 
-                  padding: 12, 
-                  background: '#fff0f6', 
-                  borderRadius: 8,
-                  marginBottom: 16
-                }}>
-                  <Text strong style={{ display: 'block', marginBottom: 8 }}>
-                    CTA 2
-                  </Text>
-                  <Form.Item label="Heading" name={["cta2", "heading"]} style={{ marginBottom: 8 }}>
-                    <Input placeholder="Enter CTA 2 heading" />
-                  </Form.Item>
-                  <Form.Item label="Description" name={["cta2", "description"]}>
-                    <Input.TextArea placeholder="Enter CTA 2 description" rows={2} />
-                  </Form.Item>
-                </div>
-              </Col>
-            </Row>
           </Form>
         </Modal>
       </Card>

@@ -7,6 +7,9 @@ function SubAboutdigital({
   heading = "About This Service",
   description1 = "No about description", // Main description
   image1 = "/default-image.jpg", // First image from database
+  image2 = "/default-image2.jpg", // Second image from database
+  description2 = "", // Second description
+  renderHtml = false
 }) {
   return (
     <div className={styles.aboutdigitalMain}>
@@ -18,9 +21,19 @@ function SubAboutdigital({
           lg={10}
           xl={10}
         >
-          {/* <p className={styles.provenTextDigital}>{heading || description1}</p>  */}
-          <p className={styles.allTextDigital}>{description1}</p>
+          {/* Heading */}
+          <h2 className={styles.provenTextDigital}>{heading}</h2> 
+          
+          {/* First Description with HTML support */}
+          <div className={styles.allTextDigital}>
+            {renderHtml ? (
+              <div dangerouslySetInnerHTML={{ __html: description1 }} />
+            ) : (
+              <p>{description1}</p>
+            )}
+          </div>
         </Col>
+        
         <Col
           xs={22}
           sm={22}
@@ -42,6 +55,41 @@ function SubAboutdigital({
           </div>
         </Col>
       </Row>
+      
+      {/* Second Description (if available) */}
+      {description2 && (
+        <Row justify="center" style={{ marginTop: "40px" }}>
+          <Col xs={22} sm={22} md={20} lg={20} xl={20}>
+            <div className={styles.allTextDigital}>
+              {renderHtml ? (
+                <div dangerouslySetInnerHTML={{ __html: description2 }} />
+              ) : (
+                <p>{description2}</p>
+              )}
+            </div>
+          </Col>
+        </Row>
+      )}
+      
+      {/* Second Image (if available) */}
+      {image2 && (
+        <Row justify="center" style={{ marginTop: "30px" }}>
+          <Col xs={22} sm={22} md={10} lg={10} xl={10}>
+            <div className={styles.imageContainer}>
+              <div>
+                <Image
+                  src={image2}
+                  alt="image-2"
+                  width={500}
+                  height={400}
+                  layout="responsive"
+                  quality={100}
+                />
+              </div>
+            </div>
+          </Col>
+        </Row>
+      )}
     </div>
   );
 }

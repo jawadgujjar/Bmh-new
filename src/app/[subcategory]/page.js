@@ -196,7 +196,7 @@ export default async function SubcategoryPage({ params }) {
 
       {/* Page Content */}
       <SubHeroDigitalMarketing {...heroProps} />
-      <SubAboutdigital {...aboutProps} />
+      {/* <SubAboutdigital {...aboutProps} /> */}
       <SubWhydigital {...whyChooseProps} />
       <SubKeywordsdigital {...keywordsProps} />
       <SubCalltoactiondigital1 {...cta1Props} />

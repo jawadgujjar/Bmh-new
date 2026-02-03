@@ -184,7 +184,42 @@
   background: linear-gradient(90deg, transparent, #fd7e14, transparent);
   animation: lineAnimation 3s infinite;
 }
+/* subcalltoactiondigital2.module.css میں اضافی */
+.ctaSubtitle img {
+  max-width: 100%;
+  height: auto;
+  margin: 10px 0;
+  border-radius: 8px;
+}
 
+.ctaSubtitle strong,
+.ctaSubtitle b {
+  font-weight: bold;
+}
+
+.ctaSubtitle em,
+.ctaSubtitle i {
+  font-style: italic;
+}
+
+.ctaSubtitle ul,
+.ctaSubtitle ol {
+  padding-left: 20px;
+  margin: 10px 0;
+}
+
+.ctaSubtitle li {
+  margin-bottom: 5px;
+}
+
+.ctaSubtitle a {
+  color: #1890ff;
+  text-decoration: underline;
+}
+
+.ctaSubtitle a:hover {
+  text-decoration: none;
+}
 @keyframes lineAnimation {
   0% {
     transform: translateX(-100%);

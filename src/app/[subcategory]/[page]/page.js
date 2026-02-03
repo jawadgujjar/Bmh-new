@@ -9,10 +9,53 @@ import Carousel from "@/components/landing/carousel";
 import Form1 from "@/components/landing/getaquote";
 import SeoIndustries from "@/components/landing/seoindustries";
 
+// Simple HTML sanitizer (remove only dangerous tags/attributes)
+const sanitizeHtml = (html) => {
+  if (!html) return "";
+
+  // Remove script, style, iframe, and other dangerous tags
+  let cleanHtml = html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+    .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, "")
+    .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, "")
+    .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, "")
+    .replace(/<embed\b[^<]*(?:(?!<\/embed>)<[^<]*)*<\/embed>/gi, "")
+    .replace(/<link\b[^<]*(?:(?!<\/link>)<[^<]*)*<\/link>/gi, "");
+
+  // Remove dangerous attributes while preserving formatting
+  cleanHtml = cleanHtml
+    .replace(/on\w+="[^"]*"/g, "")
+    .replace(/on\w+='[^']*'/g, "")
+    .replace(/javascript:/g, "")
+    .replace(/vbscript:/g, "")
+    .replace(/data:/g, "");
+
+  return cleanHtml.trim();
+};
+
+// For headings only (remove all HTML tags)
+const stripHtmlTags = (html) => {
+  if (!html) return "";
+  return html
+    .replace(/<[^>]*>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .trim();
+};
+
+// For meta description only (remove all HTML tags)
+const stripHtmlTagsForMeta = (html) => {
+  return stripHtmlTags(html);
+};
+
 async function getPageBySlug(slug) {
   try {
     console.log(`Fetching page with slug: ${slug}`);
-    
+
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"}/api/page?slug=${slug}`,
       {
@@ -24,7 +67,7 @@ async function getPageBySlug(slug) {
     );
 
     console.log(`Response status: ${res.status}`);
-    
+
     if (!res.ok) {
       console.error(`API error: ${res.status} - ${await res.text()}`);
       return null;
@@ -76,12 +119,16 @@ export async function generateMetadata({ params }) {
     };
   }
 
+  // Meta description کے لیے HTML tags remove کریں
+  const cleanMetaDescription = stripHtmlTagsForMeta(
+    pageData.metaDescription ||
+      pageData.topSection?.description ||
+      pageData.subcatpagedescr,
+  );
+
   return {
     title: pageData.metaTitle || pageData.title || "Service Page",
-    description:
-      pageData.metaDescription ||
-      pageData.topSection?.description ||
-      "Professional services",
+    description: cleanMetaDescription || "Professional services",
     keywords: pageData.metaKeywords || "",
   };
 }
@@ -110,54 +157,37 @@ export default async function UniversalPageRoute({ params }) {
   console.log("=== SUBCATEGORY DATA ===");
   console.log(subcategoryData);
 
-  // Determine category path based on page data
-  let categoryPath = "";
-  let categoryName = "";
-
-  switch(pageData.category) {
-    case "digital-marketing":
-      categoryPath = "digitalmarketing";
-      categoryName = "Digital Marketing";
-      break;
-    case "web-development":
-      categoryPath = "webdevelopment";
-      categoryName = "Web Development";
-      break;
-    case "app-development":
-      categoryPath = "appdevelopment";
-      categoryName = "App Development";
-      break;
-    default:
-      // Default to digital marketing if category not set
-      categoryPath = "digitalmarketing";
-      categoryName = "Digital Marketing";
-  }
-
   // Prepare props for components
+  // ✅ Headings ke liye HTML strip karen, lekin descriptions ke liye nahin
+
   const heroProps = {
     backgroundImage: pageData.topSection?.backgroundImage || "/default-bg.jpg",
-    heading: pageData.topSection?.heading || pageData.title || "Service",
-    description:
+    heading: stripHtmlTags(
+      pageData.topSection?.heading || pageData.title || "Service",
+    ),
+    description: sanitizeHtml(
       pageData.topSection?.description ||
-      pageData.metaDescription ||
-      "Description not available",
+        pageData.metaDescription ||
+        "Description not available",
+    ),
   };
 
   const aboutProps = {
-    heading: pageData.middleSection?.description1 || pageData.title,
-    description1:
+    heading: pageData.title, // Always use page title for heading
+    description1: sanitizeHtml(
       pageData.middleSection?.description1 ||
-      pageData.subcatpagedescr ||
-      "Detailed description",
+        pageData.subcatpagedescr ||
+        "Detailed description",
+    ),
     image1: pageData.middleSection?.image1 || "/default-image.jpg",
     image2: pageData.middleSection?.image2 || "/default-image2.jpg",
-    description2: pageData.middleSection?.description2 || "",
+    description2: sanitizeHtml(pageData.middleSection?.description2 || ""),
   };
 
   const whyChooseProps = {
-    heading: pageData.middleSection?.description1 || "Why Choose Us",
-    description: pageData.middleSection?.description1 || "",
-    description2: pageData.middleSection?.description2 || "",
+    heading: "Why Choose Us", // Fixed heading
+    description: sanitizeHtml(pageData.middleSection?.description1 || ""),
+    description2: sanitizeHtml(pageData.middleSection?.description2 || ""),
     conclusion: "",
     image1: pageData.middleSection?.image1 || "/default-image.jpg",
     image2: pageData.middleSection?.image2 || "/default-image2.jpg",
@@ -180,14 +210,16 @@ export default async function UniversalPageRoute({ params }) {
 
   const cta1Props = {
     title: pageData.cta1?.heading || "Ready to Grow?",
-    description:
+    description: sanitizeHtml(
       pageData.cta1?.description || "Contact us for a free consultation",
+    ),
   };
 
   const cta2Props = {
     title: pageData.cta2?.heading || "Need Help?",
-    description:
+    description: sanitizeHtml(
       pageData.cta2?.description || "Our experts are here to assist you",
+    ),
     phoneNumber: "+123-456-7890",
   };
 
@@ -198,50 +230,14 @@ export default async function UniversalPageRoute({ params }) {
 
   return (
     <main>
-      {/* Breadcrumb Navigation */}
-      {/* <div
-        className="breadcrumb-container"
-        style={{
-          padding: "15px 20px",
-          background: "#f8f9fa",
-          borderBottom: "1px solid #eaeaea",
-        }}
-      >
-        <div className="container">
-          <nav style={{ fontSize: "14px" }}>
-            <a href="/" style={{ color: "#007bff", textDecoration: "none" }}>
-              Home
-            </a>
-            <span style={{ margin: "0 8px", color: "#666" }}>&gt;</span>
-            <a
-              href={`/${categoryPath}`}
-              style={{ color: "#007bff", textDecoration: "none" }}
-            >
-              {categoryName}
-            </a>
-            <span style={{ margin: "0 8px", color: "#666" }}>&gt;</span>
-            <a
-              href={`/${categoryPath}/${subcategory}`}
-              style={{ color: "#007bff", textDecoration: "none" }}
-            >
-              {subcategoryData?.name || subcategory}
-            </a>
-            <span style={{ margin: "0 8px", color: "#666" }}>&gt;</span>
-            <span style={{ color: "#333", fontWeight: "500" }}>
-              {pageData.title}
-            </span>
-          </nav>
-        </div>
-      </div> */}
-
-      {/* Page Content */}
-      <SubHeroDigitalMarketing {...heroProps} />
-      <SubAboutdigital {...aboutProps} />
-      <SubWhydigital {...whyChooseProps} />
+      {/* Page Content - All components ko renderHtml={true} flag ke sath bhejo */}
+      <SubHeroDigitalMarketing {...heroProps} renderHtml={true} />
+      {/* <SubAboutdigital {...aboutProps} renderHtml={true} /> */}
+      <SubWhydigital {...whyChooseProps} renderHtml={true} />
       <SubKeywordsdigital {...keywordsProps} />
-      <SubCalltoactiondigital1 {...cta1Props} />
+      <SubCalltoactiondigital1 {...cta1Props} renderHtml={true} />
       <SeoIndustries {...industriesProps} />
-      <SubCalltoactiondigital2 {...cta2Props} />
+      <SubCalltoactiondigital2 {...cta2Props} renderHtml={true} />
       <Form1 />
       <Carousel />
     </main>
@@ -250,7 +246,5 @@ export default async function UniversalPageRoute({ params }) {
 
 // Generate static params if needed
 export async function generateStaticParams() {
-  // You might want to pre-generate pages for known routes
-  // Return an empty array for dynamic generation
   return [];
 }
