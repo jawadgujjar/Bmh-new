@@ -7,7 +7,8 @@ import Image from 'next/image';
 function SubHeroDigitalMarketing({ 
   backgroundImage = "/images/hero.jpg", 
   heading = "SEO Company Services",
-  description = "Drive more traffic, boost your search engine rankings, and grow your business online with our expert SEO strategies tailored to your industry and audience."
+  description = "Drive more traffic, boost your search engine rankings, and grow your business online with our expert SEO strategies tailored to your industry and audience.",
+  renderHtml = false
 }) {
     return (
         <div className={styles.backheroDigital}>
@@ -23,8 +24,17 @@ function SubHeroDigitalMarketing({
             </div>
 
             <div className={styles.mainHerodigital}>
-                <p className={styles.heroFirstText}>{heading}</p>
-                <p className={styles.growText}>{description}</p>
+                <h1 className={styles.heroFirstText}>{heading}</h1>
+                
+                {/* Description with HTML support */}
+                <div className={styles.growText}>
+                    {renderHtml ? (
+                        <div dangerouslySetInnerHTML={{ __html: description }} />
+                    ) : (
+                        <p className={styles.herodes}>{description}</p>
+                    )}
+                </div>
+                
                 <div className={styles.formDigital}>
                     <Link href="/getaquote" passHref>
                         <Button className={styles.proposalButton}>Get My Free SEO Proposal</Button>

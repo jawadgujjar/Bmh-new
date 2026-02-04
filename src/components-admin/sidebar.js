@@ -25,6 +25,7 @@ export default function AdminSidebar({ active, setActive }) {
     { id: "pages", label: "Pages" },
     { id: "portfolio", label: "Portfolio" },
     { id: "getaquote", label: "Get a Quote" },
+    { id: "selectedpages", label: "Select Category Pages" },
     { id: "calltoactionquote", label: "Call-to-Action Quote" },
     { id: "blogs", label: "Blogs" },
   ];

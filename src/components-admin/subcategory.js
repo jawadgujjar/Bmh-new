@@ -15,6 +15,8 @@ import {
   message,
   Upload,
   Collapse,
+  Row,
+  Col,
 } from "antd";
 import {
   PlusOutlined,
@@ -26,6 +28,27 @@ import {
   GlobalOutlined,
   InfoCircleOutlined,
 } from "@ant-design/icons";
+
+// Dynamically import TipTap to avoid SSR
+import dynamic from 'next/dynamic';
+
+const TiptapEditor = dynamic(() => import('./TipTapEditor').then(mod => mod.default), {
+  ssr: false,
+  loading: () => (
+    <div style={{
+      border: '1px solid #d9d9d9',
+      borderRadius: '8px',
+      minHeight: '150px',
+      padding: '20px',
+      background: '#fafafa',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>
+      Loading editor...
+    </div>
+  )
+});
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -43,6 +66,15 @@ export default function SubCategory() {
   const [isPageModalOpen, setIsPageModalOpen] = useState(false);
   const [selectedSubCategory, setSelectedSubCategory] = useState(null);
   const [pageForm] = Form.useForm();
+  
+  // State for all editor contents
+  const [editorContents, setEditorContents] = useState({
+    topSectionDescription: "",
+    middleSectionDescription1: "",
+    middleSectionDescription2: "",
+    cta1Description: "",
+    cta2Description: "",
+  });
 
   // Fetch SubCategories
   const fetchSubCategories = async () => {
@@ -259,15 +291,96 @@ export default function SubCategory() {
     }
   };
 
+  // Slug generator
+  const generateSlug = (text) => {
+    if (!text) return '';
+    return text
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^\w-]+/g, '')
+      .replace(/--+/g, '-')
+      .replace(/^-+/, '')
+      .replace(/-+$/, '');
+  };
+
+  // Handle editor content change
+  const handleEditorChange = (content, fieldName) => {
+    setEditorContents(prev => ({
+      ...prev,
+      [fieldName]: content
+    }));
+    // Also update form values
+    pageForm.setFieldsValue({
+      [fieldName]: content
+    });
+  };
+
   // NEW: Handle Page Creation
   const handlePageCreate = async () => {
     try {
+      // First get form values
       const values = await pageForm.validateFields();
+      
+      // Merge editor contents with form values
+      const finalValues = {
+        ...values,
+        topSection: {
+          ...values.topSection,
+          description: editorContents.topSectionDescription
+        },
+        middleSection: {
+          ...values.middleSection,
+          description1: editorContents.middleSectionDescription1,
+          description2: editorContents.middleSectionDescription2
+        },
+        cta1: {
+          ...values.cta1,
+          description: editorContents.cta1Description
+        },
+        cta2: {
+          ...values.cta2,
+          description: editorContents.cta2Description
+        }
+      };
+
+      // Ensure slug doesn't have unwanted prefixes
+      let slug = values.slug || '';
+      if (slug.startsWith('/')) {
+        slug = slug.substring(1);
+      }
+
+      // Prepare SEO data for page
+      const seoData = {
+        metaTitle: values.metaTitle || values.title || '',
+        metaDescription: values.metaDescription || values.subcatpagedescr || '',
+        metaKeywords: values.metaKeywords ? 
+          values.metaKeywords.split(',').map(k => k.trim()).filter(k => k) : [],
+        metaSchema: values.metaSchema || null
+      };
+
+      // Prepare final data according to Page model
+      const pageData = {
+        title: finalValues.title,
+        slug: slug,
+        category: selectedSubCategory?.category || "digital-marketing",
+        subcategory: selectedSubCategory?._id,
+        subcatpagedescr: finalValues.subcatpagedescr,
+        metaTitle: seoData.metaTitle,
+        metaDescription: seoData.metaDescription,
+        metaKeywords: seoData.metaKeywords.join(', '),
+        metaSchema: seoData.metaSchema,
+        topSection: finalValues.topSection,
+        middleSection: finalValues.middleSection,
+        cta1: finalValues.cta1,
+        cta2: finalValues.cta2
+      };
+
+      console.log("Creating page with data:", pageData);
 
       const res = await fetch("/api/page", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
+        body: JSON.stringify(pageData),
       });
 
       const data = await res.json();
@@ -275,9 +388,16 @@ export default function SubCategory() {
       if (data.success) {
         message.success("Page created successfully!");
 
-        // Close modal and redirect to pages page
+        // Close modal and reset
         setIsPageModalOpen(false);
         pageForm.resetFields();
+        setEditorContents({
+          topSectionDescription: "",
+          middleSectionDescription1: "",
+          middleSectionDescription2: "",
+          cta1Description: "",
+          cta2Description: "",
+        });
         setSelectedSubCategory(null);
 
         // Redirect to pages page
@@ -312,13 +432,53 @@ export default function SubCategory() {
   // NEW: Open Page Creation Modal
   const openPageModal = (subCategory) => {
     setSelectedSubCategory(subCategory);
-    pageForm.setFieldsValue({
-      subcategory: subCategory._id, // Auto-populate subcategory ID
+    
+    // Generate slug from subcategory name
+    const slug = generateSlug(subCategory.name);
+    
+    // Reset editor contents
+    setEditorContents({
+      topSectionDescription: "",
+      middleSectionDescription1: "",
+      middleSectionDescription2: "",
+      cta1Description: "",
+      cta2Description: "",
     });
+    
+    pageForm.setFieldsValue({
+      title: subCategory.name, // Auto-populate title
+      slug: slug, // Auto-generate slug
+      subcategory: subCategory._id, // Auto-populate subcategory ID
+      category: subCategory.category, // Auto-populate category
+      subcatpagedescr: "", // Reset short description
+      metaTitle: "",
+      metaDescription: "",
+      metaKeywords: "",
+      metaSchema: "",
+      topSection: {
+        heading: "",
+        description: "",
+        backgroundImage: ""
+      },
+      middleSection: {
+        description1: "",
+        description2: "",
+        image1: "",
+        image2: ""
+      },
+      cta1: {
+        heading: "",
+        description: ""
+      },
+      cta2: {
+        heading: "",
+        description: ""
+      }
+    });
+    
     setIsPageModalOpen(true);
   };
 
-  // Table Columns (Updated with Add Page button)
   // Table Columns with SEO Status
   const columns = [
     {
@@ -436,7 +596,7 @@ export default function SubCategory() {
         pagination={{ pageSize: 5 }}
       />
 
-      {/* NEW: PAGE CREATION MODAL */}
+      {/* UPDATED: PAGE CREATION MODAL WITH TIPTAP EDITORS */}
       <Modal
         title={`Add Page for ${selectedSubCategory?.name || "SubCategory"}`}
         open={isPageModalOpen}
@@ -444,103 +604,207 @@ export default function SubCategory() {
           setIsPageModalOpen(false);
           setSelectedSubCategory(null);
           pageForm.resetFields();
+          setEditorContents({
+            topSectionDescription: "",
+            middleSectionDescription1: "",
+            middleSectionDescription2: "",
+            cta1Description: "",
+            cta2Description: "",
+          });
         }}
         onOk={handlePageCreate}
         okText="Create Page"
-        width={800}
+        width={1000}
+        style={{ top: 20 }}
       >
         <Form layout="vertical" form={pageForm}>
-          {/* Title Field */}
-          <Form.Item
-            label="Page Title"
-            name="title"
-            rules={[{ required: true, message: "Please enter page title" }]}
-          >
-            <Input placeholder="Enter page title" />
-          </Form.Item>
+          <Row gutter={24}>
+            {/* Left Column: Basic Info and SEO */}
+            <Col span={12}>
+              <Form.Item
+                label="Page Title"
+                name="title"
+                rules={[{ required: true, message: "Please enter page title" }]}
+              >
+                <Input placeholder="Enter page title" />
+              </Form.Item>
 
-          {/* SubCategory ID (Auto-populated, read-only) */}
-          <Form.Item
-            label="SubCategory"
-            name="subcategory"
-            rules={[{ required: true, message: "SubCategory is required" }]}
-          >
-            <Input
-              disabled
-              value={selectedSubCategory?.name}
-              addonBefore="ID:"
-              addonAfter={selectedSubCategory?.name}
-            />
-          </Form.Item>
+              <Form.Item
+                label="URL Slug"
+                name="slug"
+                rules={[
+                  { required: true, message: "Please enter URL slug" },
+                  { pattern: /^[a-z0-9]+(?:-[a-z0-9]+)*$/, message: 'Only lowercase letters, numbers, and hyphens allowed' }
+                ]}
+                extra="yourdomain.com/your-slug"
+              >
+                <Input 
+                  placeholder="your-slug"
+                  onChange={(e) => {
+                    const slug = generateSlug(e.target.value);
+                    pageForm.setFieldsValue({ slug });
+                  }}
+                />
+              </Form.Item>
 
-          {/* Page Description */}
-          <Form.Item label="Page Description" name="subcatpagedescr">
-            <Input.TextArea placeholder="Enter page description" rows={4} />
-          </Form.Item>
+              <Form.Item
+                label="Category"
+                name="category"
+              >
+                <Input 
+                  disabled 
+                  value={selectedSubCategory?.category}
+                />
+              </Form.Item>
 
-          {/* Top Section */}
-          <Form.Item label="Top Section">
-            <UploadField
-              name={["topSection", "backgroundImage"]}
-              label="Background Image"
-              formType="page"
-            />
-            <Form.Item label="Heading" name={["topSection", "heading"]}>
-              <Input placeholder="Enter top section heading" />
-            </Form.Item>
-            <Form.Item label="Description" name={["topSection", "description"]}>
-              <Input.TextArea
-                placeholder="Enter top section description"
-                rows={3}
-              />
-            </Form.Item>
-          </Form.Item>
+              <Form.Item
+                label="SubCategory"
+                name="subcategory"
+              >
+                <Input
+                  disabled
+                  value={selectedSubCategory?.name}
+                />
+              </Form.Item>
 
-          {/* Middle Section */}
-          <Form.Item label="Middle Section">
-            <Form.Item
-              label="Description 1"
-              name={["middleSection", "description1"]}
-            >
-              <Input.TextArea placeholder="Enter first description" rows={3} />
-            </Form.Item>
-            <UploadField
-              name={["middleSection", "image1"]}
-              label="Image 1"
-              formType="page"
-            />
-            <UploadField
-              name={["middleSection", "image2"]}
-              label="Image 2"
-              formType="page"
-            />
-            <Form.Item
-              label="Description 2"
-              name={["middleSection", "description2"]}
-            >
-              <Input.TextArea placeholder="Enter second description" rows={3} />
-            </Form.Item>
-          </Form.Item>
+              <Form.Item 
+                label="Short Description" 
+                name="subcatpagedescr"
+              >
+                <Input.TextArea placeholder="Enter short description (for meta description)" rows={3} />
+              </Form.Item>
 
-          {/* CTA 1 */}
-          <Form.Item label="Call to Action 1">
-            <Form.Item label="Heading" name={["cta1", "heading"]}>
-              <Input placeholder="Enter CTA 1 heading" />
-            </Form.Item>
-            <Form.Item label="Description" name={["cta1", "description"]}>
-              <Input.TextArea placeholder="Enter CTA 1 description" rows={3} />
-            </Form.Item>
-          </Form.Item>
+              <Collapse ghost defaultActiveKey={['seo']} style={{ marginBottom: 16 }}>
+                <Panel 
+                  header={
+                    <Space>
+                      <GlobalOutlined />
+                      <Text strong>SEO Settings</Text>
+                    </Space>
+                  } 
+                  key="seo"
+                >
+                  <Form.Item 
+                    label="Meta Title" 
+                    name="metaTitle"
+                    extra="Title for search engines (50-60 chars)"
+                  >
+                    <Input placeholder="Enter SEO title" maxLength={70} showCount />
+                  </Form.Item>
 
-          {/* CTA 2 */}
-          <Form.Item label="Call to Action 2">
-            <Form.Item label="Heading" name={["cta2", "heading"]}>
-              <Input placeholder="Enter CTA 2 heading" />
-            </Form.Item>
-            <Form.Item label="Description" name={["cta2", "description"]}>
-              <Input.TextArea placeholder="Enter CTA 2 description" rows={3} />
-            </Form.Item>
-          </Form.Item>
+                  <Form.Item 
+                    label="Meta Description" 
+                    name="metaDescription"
+                    extra="Description for search results (150-160 chars)"
+                  >
+                    <Input.TextArea 
+                      rows={3}
+                      placeholder="Enter SEO description"
+                      maxLength={160}
+                      showCount
+                    />
+                  </Form.Item>
+
+                  <Form.Item 
+                    label="Meta Keywords" 
+                    name="metaKeywords"
+                    extra="Separate with commas"
+                  >
+                    <Input placeholder="Enter keywords" />
+                  </Form.Item>
+
+                  <Form.Item 
+                    label="Schema Markup (JSON-LD)" 
+                    name="metaSchema"
+                    extra="Optional structured data"
+                  >
+                    <Input.TextArea 
+                      rows={4}
+                      placeholder='{"@context":"https://schema.org","@type":"Service",...}'
+                    />
+                  </Form.Item>
+                </Panel>
+              </Collapse>
+
+              {/* Top Section */}
+              <Form.Item label="Top Section">
+                <UploadField
+                  name={["topSection", "backgroundImage"]}
+                  label="Background Image"
+                  formType="page"
+                />
+                <Form.Item label="Heading" name={["topSection", "heading"]}>
+                  <Input placeholder="Enter top section heading" />
+                </Form.Item>
+                <Form.Item label="Description">
+                  <TiptapEditor 
+                    content={editorContents.topSectionDescription}
+                    onChange={(content) => handleEditorChange(content, "topSectionDescription")}
+                    height="150px"
+                  />
+                </Form.Item>
+              </Form.Item>
+
+              {/* Middle Section */}
+              <Form.Item label="Middle Section">
+                <Form.Item label="Description 1">
+                  <TiptapEditor 
+                    content={editorContents.middleSectionDescription1}
+                    onChange={(content) => handleEditorChange(content, "middleSectionDescription1")}
+                    height="150px"
+                  />
+                </Form.Item>
+                <UploadField
+                  name={["middleSection", "image1"]}
+                  label="Image 1"
+                  formType="page"
+                />
+                <UploadField
+                  name={["middleSection", "image2"]}
+                  label="Image 2"
+                  formType="page"
+                />
+                <Form.Item label="Description 2">
+                  <TiptapEditor 
+                    content={editorContents.middleSectionDescription2}
+                    onChange={(content) => handleEditorChange(content, "middleSectionDescription2")}
+                    height="150px"
+                  />
+                </Form.Item>
+              </Form.Item>
+            </Col>
+
+            {/* Right Column: CTAs */}
+            <Col span={12}>
+              {/* CTA 1 */}
+              <Form.Item label="Call to Action 1">
+                <Form.Item label="Heading" name={["cta1", "heading"]}>
+                  <Input placeholder="Enter CTA 1 heading" />
+                </Form.Item>
+                <Form.Item label="Description">
+                  <TiptapEditor 
+                    content={editorContents.cta1Description}
+                    onChange={(content) => handleEditorChange(content, "cta1Description")}
+                    height="150px"
+                  />
+                </Form.Item>
+              </Form.Item>
+
+              {/* CTA 2 */}
+              <Form.Item label="Call to Action 2">
+                <Form.Item label="Heading" name={["cta2", "heading"]}>
+                  <Input placeholder="Enter CTA 2 heading" />
+                </Form.Item>
+                <Form.Item label="Description">
+                  <TiptapEditor 
+                    content={editorContents.cta2Description}
+                    onChange={(content) => handleEditorChange(content, "cta2Description")}
+                    height="150px"
+                  />
+                </Form.Item>
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
       </Modal>
 
@@ -565,16 +829,6 @@ export default function SubCategory() {
         style={{ maxHeight: '80vh', overflowY: 'auto' }}
       >
         <Form layout="vertical" form={form}>
-          {/* Basic Fields */}
-          <Form.Item
-            label="Name"
-            name="name"
-            rules={[
-              { required: true, message: "Please enter sub category name" },
-            ]}
-          >
-            <Input placeholder="Enter sub category name" />
-          </Form.Item>
           <Collapse activeKey={expandedPanels} onChange={setExpandedPanels} ghost>
             {/* Basic Info Panel */}
             <Panel header="Basic Information" key="basic">
@@ -602,167 +856,6 @@ export default function SubCategory() {
               <UploadField name="icon" label="Icon" required />
             </Panel>
 
-          {/* Top Section */}
-          <Form.Item label="Top Section">
-            <UploadField
-              name={["topSection", "backgroundImage"]}
-              label="Background Image"
-            />
-            <Form.Item label="Heading" name={["topSection", "heading"]}>
-              <Input placeholder="Enter top section heading" />
-            </Form.Item>
-            <Form.Item label="Description" name={["topSection", "description"]}>
-              <Input.TextArea
-                placeholder="Enter top section description"
-                rows={4}
-              />
-            </Form.Item>
-          </Form.Item>
-
-          {/* Middle Section */}
-          <Form.Item label="Middle Section">
-            <Form.Item
-              label="Description 1"
-              name={["middleSection", "description1"]}
-            >
-              <Input.TextArea placeholder="Enter first description" rows={4} />
-            </Form.Item>
-            <UploadField name={["middleSection", "image1"]} label="Image 1" />
-            <UploadField name={["middleSection", "image2"]} label="Image 2" />
-            <Form.Item
-              label="Description 2"
-              name={["middleSection", "description2"]}
-            >
-              <Input.TextArea placeholder="Enter second description" rows={4} />
-            </Form.Item>
-          </Form.Item>
-
-          {/* Keywords Section */}
-          <Form.Item label="Keywords Section">
-            <Form.Item label="Heading" name={["keywordsSection", "heading"]}>
-              <Input placeholder="Enter keywords section heading" />
-            </Form.Item>
-            <Form.Item
-              label="Description"
-              name={["keywordsSection", "description"]}
-            >
-              <Input.TextArea
-                placeholder="Enter keywords section description"
-                rows={4}
-              />
-            </Form.Item>
-
-            <Form.Item label="Keywords">
-              <Form.List name={["keywordsSection", "keywords"]}>
-                {(fields, { add, remove }) => (
-                  <>
-                    {fields.map(({ key, name, ...restField }) => (
-                      <Space
-                        key={key}
-                        style={{ display: "flex", marginBottom: 8 }}
-                        align="baseline"
-                      >
-                        <Form.Item
-                          {...restField}
-                          name={name}
-                          rules={[
-                            { required: true, message: "Enter a keyword" },
-                          ]}
-                        >
-                          <Input placeholder="Keyword" />
-                        </Form.Item>
-                        <MinusCircleOutlined onClick={() => remove(name)} />
-                      </Space>
-                    ))}
-                    <Button
-                      type="dashed"
-                      onClick={() => add()}
-                      block
-                      icon={<PlusOutlined />}
-                    >
-                      Add Keyword
-                    </Button>
-                  </>
-                )}
-              </Form.List>
-            </Form.Item>
-
-            <Form.Item label="Related Headings">
-              <Form.List name={["keywordsSection", "relatedHeading"]}>
-                {(fields, { add, remove }) => (
-                  <>
-                    {fields.map(({ key, name, ...restField }) => (
-                      <Space
-                        key={key}
-                        style={{ display: "flex", marginBottom: 8 }}
-                        align="baseline"
-                      >
-                        <Form.Item
-                          {...restField}
-                          name={name}
-                          rules={[
-                            {
-                              required: true,
-                              message: "Enter a related heading",
-                            },
-                          ]}
-                        >
-                          <Input placeholder="Related Heading" />
-                        </Form.Item>
-                        <MinusCircleOutlined onClick={() => remove(name)} />
-                      </Space>
-                    ))}
-                    <Button
-                      type="dashed"
-                      onClick={() => add()}
-                      block
-                      icon={<PlusOutlined />}
-                    >
-                      Add Related Heading
-                    </Button>
-                  </>
-                )}
-              </Form.List>
-            </Form.Item>
-
-            <Form.Item label="Related Descriptions">
-              <Form.List name={["keywordsSection", "relatedDescription"]}>
-                {(fields, { add, remove }) => (
-                  <>
-                    {fields.map(({ key, name, ...restField }) => (
-                      <Space
-                        key={key}
-                        style={{ display: "flex", marginBottom: 8 }}
-                        align="baseline"
-                      >
-                        <Form.Item
-                          {...restField}
-                          name={name}
-                          rules={[
-                            {
-                              required: true,
-                              message: "Enter a related description",
-                            },
-                          ]}
-                        >
-                          <Input placeholder="Related Description" />
-                        </Form.Item>
-                        <MinusCircleOutlined onClick={() => remove(name)} />
-                      </Space>
-                    ))}
-                    <Button
-                      type="dashed"
-                      onClick={() => add()}
-                      block
-                      icon={<PlusOutlined />}
-                    >
-                      Add Related Description
-                    </Button>
-                  </>
-                )}
-              </Form.List>
-            </Form.Item>
-          </Form.Item>
             {/* Top Section Panel */}
             <Panel header="Top Section (Hero)" key="topSection">
               <UploadField name={["topSection", "backgroundImage"]} label="Background Image" />

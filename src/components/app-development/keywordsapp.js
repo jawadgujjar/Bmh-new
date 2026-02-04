@@ -1,62 +1,58 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import styles from "../../styles/app-development/keywordsapp.module.css";
 
-function Keywordsapp() {
-  // Mobile App Development keyword content
-  const keywordContent = {
-    "Native & Cross-Platform Apps": {
-      title: "Native & Cross-Platform App Development",
-      content:
-        "We build high-performance mobile apps for both iOS and Android using native languages (Swift, Kotlin) and cross-platform frameworks like Flutter and React Native."
-    },
-    "UI/UX Design": {
-      title: "Mobile UI/UX Design Services",
-      content:
-        "We craft intuitive and visually appealing interfaces that enhance the user journey across mobile devices, ensuring engagement and retention."
-    },
-    "App Store Optimization (ASO)": {
-      title: "App Store Optimization (ASO)",
-      content:
-        "Improve your app's visibility and downloads with our ASO services — from keyword research to optimizing app titles, descriptions, and visuals."
-    },
-    "Mobile App QA & Testing": {
-      title: "Mobile App Testing & Quality Assurance",
-      content:
-        "Ensure bug-free performance with rigorous manual and automated testing across devices, platforms, and operating systems."
-    },
-    "Push Notifications & Engagement": {
-      title: "Push Notifications & User Engagement",
-      content:
-        "Re-engage users and drive retention through personalized push notifications, in-app messaging, and behavioral triggers."
-    },
-    "Backend & API Integration": {
-      title: "Backend Integration & API Services",
-      content:
-        "We connect your mobile app with powerful backends, third-party APIs, databases, and cloud platforms for seamless functionality."
-    },
-    "Maintenance & Updates": {
-      title: "App Maintenance & Version Updates",
-      content:
-        "Keep your app running smoothly with regular updates, OS compatibility checks, and performance monitoring."
-    },
-    "Ongoing Support": {
-      title: "24/7 App Support & Monitoring",
-      content:
-        "Our team is available around the clock for troubleshooting, analytics monitoring, crash reports, and emergency fixes."
+export default function Keywordsapp() {
+  const router = useRouter();
+  const [pages, setPages] = useState({});
+  const [activePage, setActivePage] = useState(null);
+  const [activeKey, setActiveKey] = useState("");
+
+  // Fetch App Development pages from API
+  const fetchPages = async () => {
+    try {
+      const res = await fetch("/api/selected-pages?category=app-development");
+      const data = await res.json();
+
+      // Transform to { title: {title, description, slug} }
+      const formatted = {};
+      data.forEach((page) => {
+        formatted[page.title] = {
+          title: page.title,
+          description: page.subcatpagedescr || "No description available",
+          slug: page.slug, // ensure slug exists
+        };
+      });
+
+      setPages(formatted);
+
+      // Set first page as active
+      const firstKey = Object.keys(formatted)[0];
+      setActiveKey(firstKey);
+      setActivePage(formatted[firstKey]);
+    } catch (err) {
+      console.error("Error fetching pages:", err);
     }
   };
 
-  const defaultKey = "Native & Cross-Platform Apps";
+  useEffect(() => {
+    fetchPages();
+  }, []);
 
-  const [activeKeyword, setActiveKeyword] = useState(defaultKey);
-  const [activeContent, setActiveContent] = useState(keywordContent[defaultKey]);
-
-  const handleKeywordClick = (keyword) => {
-    setActiveContent(keywordContent[keyword]);
-    setActiveKeyword(keyword);
+  const handleClick = (key) => {
+    setActiveKey(key);
+    setActivePage(pages[key]);
   };
+
+  const handleExploreClick = () => {
+    if (activePage?.slug) {
+      router.push(`/app-development/${activePage.slug}`);
+    }
+  };
+
+  if (!activePage) return <p className="text-center mt-10">Loading pages...</p>;
 
   return (
     <div className={styles.seoContainer}>
@@ -64,7 +60,6 @@ function Keywordsapp() {
         <h1 className={styles.mainTitle}>
           End-to-End Mobile App Development Services
         </h1>
-        
         <div className={styles.subTitleContainer}>
           <h2 className={styles.subTitle}>
             From idea to launch — we build secure, scalable, and stunning mobile apps that users love.
@@ -72,36 +67,38 @@ function Keywordsapp() {
           <div className={styles.titleUnderline}></div>
         </div>
       </div>
-      
-      {/* Keywords buttons row */}
+
+      {/* Pages buttons row */}
       <div className={styles.keywordsRow}>
-        {Object.keys(keywordContent).map((keyword, index) => (
-          <button 
-            key={index} 
-            className={`${styles.keywordButton} ${activeKeyword === keyword ? styles.activeKeyword : ''}`}
-            onClick={() => handleKeywordClick(keyword)}
+        {Object.keys(pages).map((key, index) => (
+          <button
+            key={index}
+            className={`${styles.keywordButton} ${
+              activeKey === key ? styles.activeKeyword : ""
+            }`}
+            onClick={() => handleClick(key)}
           >
-            <span className={styles.keywordText}>{keyword}</span>
-            {activeKeyword === keyword && <div className={styles.activeIndicator}></div>}
+            <span className={styles.keywordText}>{key}</span>
+            {activeKey === key && <div className={styles.activeIndicator}></div>}
           </button>
         ))}
       </div>
-      
+
       <div className={styles.dividerContainer}>
         <div className={styles.dividerLine}></div>
         <div className={styles.dividerIcon}>✦</div>
         <div className={styles.dividerLine}></div>
       </div>
-      
+
       {/* Dynamic content section */}
       <div className={styles.contentSection}>
         <div className={styles.contentHeader}>
-          <h3 className={styles.contentTitle}>{activeContent.title}</h3>
+          <h3 className={styles.contentTitle}>{activePage.title}</h3>
           <div className={styles.contentIcon}>◉</div>
         </div>
-        <p className={styles.contentText}>{activeContent.content}</p>
+        <p className={styles.contentText}>{activePage.description}</p>
         <div className={styles.contentFooter}>
-          <button className={styles.ctaButton}>
+          <button className={styles.ctaButton} onClick={handleExploreClick}>
             Explore Service
             <span className={styles.arrow}>→</span>
           </button>
@@ -110,5 +107,3 @@ function Keywordsapp() {
     </div>
   );
 }
-
-export default Keywordsapp;

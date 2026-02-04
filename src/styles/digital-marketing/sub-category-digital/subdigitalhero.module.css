@@ -43,7 +43,11 @@
     font-size: 2rem;
     font-weight: 700;
     margin-bottom: 1rem;
+    margin-top: 5rem;
 }
+.herodes{
+        font-size: 1rem;
+    }
 
 .growText {
     color: rgb(253, 126, 20);
@@ -81,7 +85,34 @@
     background-color: white !important;
     border: 2px solid rgb(253, 126, 20) !important;
 }
+.growText {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: white;
+  margin-bottom: 30px;
+  max-width: 800px;
+}
 
+.growText img {
+  max-width: 100%;
+  height: auto;
+  margin: 10px 0;
+  border-radius: 8px;
+}
+
+.growText strong,
+.growText b {
+  font-weight: bold;
+}
+
+.growText em,
+.growText i {
+  font-style: italic;
+}
+
+.growText u {
+  text-decoration: underline;
+}
 /* Media Queries */
 @media (max-width: 768px) {
     .backheroDigital {
@@ -93,9 +124,14 @@
     }
 
     .heroFirstText {
-        font-size: 1.8rem;
+        font-size: 1.3rem;
+        margin-top: 3rem;
     }
-
+      .herodes{
+        font-size: 0.8rem;
+    }
+    
+    
     .growText {
         font-size: 1.1rem;
     }
@@ -107,8 +143,12 @@
 }
 
 @media (max-width: 576px) {
-    .heroFirstText {
-        font-size: 1.5rem;
+    .heroFirstText { 
+        font-size: 0.8rem;
+        margin-top: 3rem;
+    }
+    .herodes{
+        font-size: 0.6rem;
     }
 
     .growText {

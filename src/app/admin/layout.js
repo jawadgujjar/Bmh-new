@@ -10,6 +10,7 @@ import GetaQuote from "@/components-admin/getaquote";
 import CallToActionQuote from "@/components-admin/calltoactionquote";
 import Pages from "@/components-admin/pages";
 import BlogAdmin from "@/components-admin/blogs";
+import SelectedCategoryPagesAdmin from "@/components-admin/selectedpages";
 
 export default function AdminLayout() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -44,6 +45,8 @@ export default function AdminLayout() {
         return <GetaQuote />;
       case "blogs":
         return <BlogAdmin />;
+        case "selectedpages":
+        return <SelectedCategoryPagesAdmin />;
       case "calltoactionquote":
         return <CallToActionQuote />;
       default:

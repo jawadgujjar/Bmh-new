@@ -1,4 +1,5 @@
  
+import Digitalservices1 from "@/components/digital-marketing/servicesdigital";
 import Carousel from "@/components/landing/carousel";
 import Form1 from "@/components/landing/getaquote";
 import Heroform from "@/components/landing/heroform";
@@ -18,7 +19,7 @@ export default function WebdevelopmentPage() {
       <Webdevelopment1 />
       <Keywordsweb/>
       <Calltoactionweb1/>
-      <Webservices1/>
+      <Digitalservices1 category="web-development" />
       <Calltoactionweb2/>
       <Form1/>
       <Carousel/>
