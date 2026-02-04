@@ -1,54 +1,74 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import styles from "../../../styles/digital-marketing/sub-category-digital/subkeywordsdigital.module.css";
 
 function SubKeywordsdigital({
-  heading = "Keywords",
+  heading = "Our Specialized Services",
   description = "",
-  keywords = [],
-  relatedHeading = [],
-  relatedDescription = [],
-  images = [], // Keep for optional image
+  subcategoryId = "",
+  category = "", // pass the parent subcategory slug here
+  fallbackKeywords = [],
 }) {
-  const [activeContent, setActiveContent] = useState({
-    title: keywords[0] || "",
-    content: relatedDescription[0] || "",
-    image: images[0] || null, // Default to first image or null
-  });
-  const [activeKeyword, setActiveKeyword] = useState(keywords[0] || "");
+  const router = useRouter();
+  const [pages, setPages] = useState([]);
+  const [activePageIndex, setActivePageIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const handleKeywordClick = (keyword, index) => {
-    const relatedDescriptionIndex = Math.min(index, relatedDescription.length - 1);
-    const imageIndex = Math.min(index, images.length - 1); // Match image to index
-    setActiveContent({
-      title: keyword,
-      content: relatedDescription[relatedDescriptionIndex] || "",
-      image: images[imageIndex] || null,
-    });
-    setActiveKeyword(keyword);
-  };
+  useEffect(() => {
+    const fetchPages = async () => {
+      if (!subcategoryId) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const res = await fetch(`/api/page?subcategory=${subcategoryId}`);
+
+        if (!res.ok) throw new Error("Failed to fetch services");
+
+        const data = await res.json();
+        setPages(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error("Error loading subcategory pages:", err);
+        setError("Could not load services.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPages();
+  }, [subcategoryId]);
+
+  const activePage = pages[activePageIndex];
+
+  if (loading) return <div className={styles.loading}>Loading Services...</div>;
+  if (!pages.length && !loading) return null;
 
   return (
     <div className={styles.seoContainer}>
       <div className={styles.headerSection}>
-        <h1 className={styles.mainTitle}>{heading}</h1>
+        <h2 className={styles.mainTitle}>{heading}</h2>
         {description && (
           <div className={styles.subTitleContainer}>
-            <h2 className={styles.subTitle}>{description}</h2>
+            <p className={styles.subTitle}>{description}</p>
             <div className={styles.titleUnderline}></div>
           </div>
         )}
       </div>
 
+      {/* Pages Buttons Row */}
       <div className={styles.keywordsRow}>
-        {keywords.map((keyword, index) => (
+        {pages.map((page, index) => (
           <button
-            key={index}
-            className={`${styles.keywordButton} ${activeKeyword === keyword ? styles.activeKeyword : ""}`}
-            onClick={() => handleKeywordClick(keyword, index)}
+            key={page._id}
+            className={`${styles.keywordButton} ${activePageIndex === index ? styles.activeKeyword : ""}`}
+            onClick={() => setActivePageIndex(index)}
           >
-            <span className={styles.keywordText}>{keyword}</span>
-            {activeKeyword === keyword && <div className={styles.activeIndicator}></div>}
+            <span className={styles.keywordText}>{page.title}</span>
+            {activePageIndex === index && <div className={styles.activeIndicator}></div>}
           </button>
         ))}
       </div>
@@ -59,19 +79,32 @@ function SubKeywordsdigital({
         <div className={styles.dividerLine}></div>
       </div>
 
-      <div className={styles.contentSection}>
-        <div className={styles.contentHeader}>
-          <h3 className={styles.contentTitle}>{activeContent.title}</h3>
-          <div className={styles.contentIcon}>◉</div>
+      {/* Content Section */}
+      {activePage && (
+        <div className={styles.contentSection}>
+          <div className={styles.contentHeader}>
+            <h3 className={styles.contentTitle}>{activePage.title}</h3>
+            <div className={styles.contentIcon}>◉</div>
+          </div>
+
+          <p className={styles.contentText}>
+            {activePage.subcatpagedescr || activePage.topSection?.description}
+          </p>
+
+          {/* Correct CTA Navigation */}
+          <div className={styles.contentFooter}>
+            <button
+              className={styles.ctaButton}
+              onClick={() => router.push(`/${category}/${activePage.slug}`)}
+            >
+              Learn More About {activePage.title}
+              <span className={styles.arrow}>→</span>
+            </button>
+          </div>
         </div>
-        <p className={styles.contentText}>{activeContent.content || ""}</p>
-        {activeContent.content && ( // Show button only if there’s content
-          <button className={styles.ctaButton}>
-            Explore More
-            <span className={styles.arrow}>→</span>
-          </button>
-        )}
-      </div>
+      )}
+
+      {error && <p className={styles.errorText}>{error}</p>}
     </div>
   );
 }
