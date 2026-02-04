@@ -1,15 +1,16 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import styles from "../../../styles/digital-marketing/sub-category-digital/subkeywordsdigital.module.css";
 
 function SubKeywordsdigital({
   heading = "Our Specialized Services",
   description = "",
   subcategoryId = "",
-  category = "",
-  // Fallbacks in case API fails
-  fallbackKeywords = [], 
+  category = "", // pass the parent subcategory slug here
+  fallbackKeywords = [],
 }) {
+  const router = useRouter();
   const [pages, setPages] = useState([]);
   const [activePageIndex, setActivePageIndex] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -24,11 +25,10 @@ function SubKeywordsdigital({
 
       try {
         setLoading(true);
-        // Direct call to your existing API route
         const res = await fetch(`/api/page?subcategory=${subcategoryId}`);
-        
+
         if (!res.ok) throw new Error("Failed to fetch services");
-        
+
         const data = await res.json();
         setPages(Array.isArray(data) ? data : []);
       } catch (err) {
@@ -45,7 +45,7 @@ function SubKeywordsdigital({
   const activePage = pages[activePageIndex];
 
   if (loading) return <div className={styles.loading}>Loading Services...</div>;
-  if (!pages.length && !loading) return null; // Don't show anything if no pages found
+  if (!pages.length && !loading) return null;
 
   return (
     <div className={styles.seoContainer}>
@@ -59,14 +59,12 @@ function SubKeywordsdigital({
         )}
       </div>
 
-      {/* Pages Selection Row (Buttons) */}
+      {/* Pages Buttons Row */}
       <div className={styles.keywordsRow}>
         {pages.map((page, index) => (
           <button
             key={page._id}
-            className={`${styles.keywordButton} ${
-              activePageIndex === index ? styles.activeKeyword : ""
-            }`}
+            className={`${styles.keywordButton} ${activePageIndex === index ? styles.activeKeyword : ""}`}
             onClick={() => setActivePageIndex(index)}
           >
             <span className={styles.keywordText}>{page.title}</span>
@@ -81,30 +79,32 @@ function SubKeywordsdigital({
         <div className={styles.dividerLine}></div>
       </div>
 
-      {/* Content Section: Showing Title and subcatpagedescr */}
-      <div className={styles.contentSection}>
-        {activePage && (
-          <>
-            <div className={styles.contentHeader}>
-              <h3 className={styles.contentTitle}>{activePage.title}</h3>
-              <div className={styles.contentIcon}>◉</div>
-            </div>
-            
-            <p className={styles.contentText}>
-              {/* Yahan subcatpagedescr show ho raha hai */}
-              {activePage.subcatpagedescr || activePage.topSection?.description}
-            </p>
+      {/* Content Section */}
+      {activePage && (
+        <div className={styles.contentSection}>
+          <div className={styles.contentHeader}>
+            <h3 className={styles.contentTitle}>{activePage.title}</h3>
+            <div className={styles.contentIcon}>◉</div>
+          </div>
 
-            <a 
-              href={`/${activePage.slug}`} 
+          <p className={styles.contentText}>
+            {activePage.subcatpagedescr || activePage.topSection?.description}
+          </p>
+
+          {/* Correct CTA Navigation */}
+          <div className={styles.contentFooter}>
+            <button
               className={styles.ctaButton}
+              onClick={() => router.push(`/${category}/${activePage.slug}`)}
             >
               Learn More About {activePage.title}
               <span className={styles.arrow}>→</span>
-            </a>
-          </>
-        )}
-      </div>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {error && <p className={styles.errorText}>{error}</p>}
     </div>
   );
 }

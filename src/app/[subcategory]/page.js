@@ -96,7 +96,7 @@ export default async function SubcategoryPage({ params }) {
 
       {/* Industries */}
       <SeoIndustries heading="Industries We Transform" industries={[]} />
-
+      
       {/* CTA 2 */}
       <SubCalltoactiondigital2
         title={subcategoryData.cta2?.heading}

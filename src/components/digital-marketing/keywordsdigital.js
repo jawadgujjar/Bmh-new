@@ -1,59 +1,65 @@
 "use client";
 
-import React, { useState } from 'react';
-import styles from '../../styles/digital-marketing/keywordsdigital.module.css';
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import styles from "../../styles/digital-marketing/keywordsdigital.module.css";
 
-function Keywordsdigital() {
-  // SEO keywords with associated content
-  const keywordContent = {
-    "Major Search Engines": {
-      title: "Major Search Engines Optimization",
-      content: "We optimize your website for all major search engines including Google, Bing, and Yahoo to ensure maximum visibility across platforms."
-    },
-    "Google My Business": {
-      title: "Google My Business Optimization",
-      content: "Enhance your local SEO with our expert Google My Business profile optimization services to appear in local searches and Google Maps."
-    },
-    "Different Type Of Seo": {
-      title: "Comprehensive SEO Services",
-      content: "We provide all types of SEO including on-page, off-page, technical, and local SEO tailored to your business needs."
-    },
-    "Seo Audits": {
-      title: "Professional SEO Audits",
-      content: "Our thorough SEO audits identify technical issues, content gaps, and optimization opportunities to improve your search rankings."
-    },
-    "E-Commerce Seo": {
-      title: "E-Commerce SEO Solutions",
-      content: "Specialized SEO strategies for online stores to improve product visibility, category pages, and conversion rates."
-    },
-    "Technical Seo": {
-      title: "Technical SEO Expertise",
-      content: "We fix crawl errors, improve site speed, implement schema markup, and ensure your website meets all technical SEO requirements."
-    },
-    "Other Search Engines": {
-      title: "Multi-Platform Search Optimization",
-      content: "Beyond Google, we optimize for alternative search platforms like YouTube, Amazon, and niche industry-specific search engines."
-    },
-    "Free Seo Tips": {
-      title: "Free SEO Tips & Resources",
-      content: "Of course! Why not. Our WordPress and Shopify SEO experts are dedicated to helping business owners boost their growth and rank better on the search engines without spending a lot of money. Our experts can provide basic SEO knowledge and consultation free of cost to make you understand your site better."
+export default function Keywordsdigital() {
+  const router = useRouter();
+  const [pages, setPages] = useState({});
+  const [activePage, setActivePage] = useState(null);
+  const [activeKey, setActiveKey] = useState("");
+
+  // Fetch pages from API
+  const fetchPages = async () => {
+    try {
+      const res = await fetch("/api/selected-pages?category=digital-marketing");
+      const data = await res.json();
+
+      // Transform to { title: {title, description, slug} }
+      const formatted = {};
+      data.forEach((page) => {
+        formatted[page.title] = {
+          title: page.title,
+          description: page.subcatpagedescr || "No description available",
+          slug: page.slug, // ensure slug exists in API
+        };
+      });
+
+      setPages(formatted);
+
+      // Set first page as active
+      const firstKey = Object.keys(formatted)[0];
+      setActiveKey(firstKey);
+      setActivePage(formatted[firstKey]);
+    } catch (err) {
+      console.error(err);
     }
   };
 
+  useEffect(() => {
+    fetchPages();
+  }, []);
 
-const [activeContent, setActiveContent] = useState(keywordContent["Major Search Engines"]);
-const [activeKeyword, setActiveKeyword] = useState("Major Search Engines");
-
-  const handleKeywordClick = (keyword) => {
-    setActiveContent(keywordContent[keyword]);
-    setActiveKeyword(keyword);
+  const handleClick = (key) => {
+    setActiveKey(key);
+    setActivePage(pages[key]);
   };
+
+  const handleExploreClick = () => {
+    if (activePage?.slug) {
+      router.push(`/digital-marketing/${activePage.slug}`);
+    }
+  };
+
+  if (!activePage) return <p className="text-center mt-10">Loading pages...</p>;
 
   return (
     <div className={styles.seoContainer}>
       <div className={styles.headerSection}>
-        <h1 className={styles.mainTitle}>Premium SEO Solutions That Deliver Results</h1>
-        
+        <h1 className={styles.mainTitle}>
+          Premium SEO Solutions That Deliver Results
+        </h1>
         <div className={styles.subTitleContainer}>
           <h2 className={styles.subTitle}>
             Why Trust Our Expertise With Your Digital Growth?
@@ -61,36 +67,40 @@ const [activeKeyword, setActiveKeyword] = useState("Major Search Engines");
           <div className={styles.titleUnderline}></div>
         </div>
       </div>
-      
-      {/* Keywords buttons row */}
+
+      {/* Pages buttons row */}
       <div className={styles.keywordsRow}>
-        {Object.keys(keywordContent).map((keyword, index) => (
-          <button 
-            key={index} 
-            className={`${styles.keywordButton} ${activeKeyword === keyword ? styles.activeKeyword : ''}`}
-            onClick={() => handleKeywordClick(keyword)}
+        {Object.keys(pages).map((key, index) => (
+          <button
+            key={index}
+            className={`${styles.keywordButton} ${
+              activeKey === key ? styles.activeKeyword : ""
+            }`}
+            onClick={() => handleClick(key)}
           >
-            <span className={styles.keywordText}>{keyword}</span>
-            {activeKeyword === keyword && <div className={styles.activeIndicator}></div>}
+            <span className={styles.keywordText}>{key}</span>
+            {activeKey === key && (
+              <div className={styles.activeIndicator}></div>
+            )}
           </button>
         ))}
       </div>
-      
+
       <div className={styles.dividerContainer}>
         <div className={styles.dividerLine}></div>
         <div className={styles.dividerIcon}>✦</div>
         <div className={styles.dividerLine}></div>
       </div>
-      
+
       {/* Dynamic content section */}
       <div className={styles.contentSection}>
         <div className={styles.contentHeader}>
-          <h3 className={styles.contentTitle}>{activeContent.title}</h3>
+          <h3 className={styles.contentTitle}>{activePage.title}</h3>
           <div className={styles.contentIcon}>◉</div>
         </div>
-        <p className={styles.contentText}>{activeContent.content}</p>
+        <p className={styles.contentText}>{activePage.description}</p>
         <div className={styles.contentFooter}>
-          <button className={styles.ctaButton}>
+          <button className={styles.ctaButton} onClick={handleExploreClick}>
             Explore Service
             <span className={styles.arrow}>→</span>
           </button>
@@ -99,5 +109,3 @@ const [activeKeyword, setActiveKeyword] = useState("Major Search Engines");
     </div>
   );
 }
-
-export default Keywordsdigital;
