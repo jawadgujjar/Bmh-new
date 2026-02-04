@@ -5,6 +5,7 @@ import Faqapp1 from "@/components/app-development/faqsapp";
 import Heroapp1 from "@/components/app-development/heroapp";
 import Keywordsapp from "@/components/app-development/keywordsapp";
 import Appservices1 from "@/components/app-development/servicesapp";
+import Digitalservices1 from "@/components/digital-marketing/servicesdigital";
 import Carousel from "@/components/landing/carousel";
 import Form1 from "@/components/landing/getaquote";
 import Heroform from "@/components/landing/heroform";
@@ -19,7 +20,7 @@ export default function AppdevelopmentPage() {
         <Appdevelopment1/>
         <Keywordsapp/>
         <Calltoactionapp1/>
-        <Appservices1/>
+        <Digitalservices1 category="app-development" />
         <Calltoactionapp2/>
         <Form1/>
         <Carousel/>

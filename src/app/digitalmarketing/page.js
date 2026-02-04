@@ -47,7 +47,7 @@ export default function DigitalmarketingPage() {
       <Whydigital/>
       <Keywordsdigital/>
       <Calltoactiondigital1/>
-      <Digitalservices1/>
+      <Digitalservices1 category="digital-marketing" />
       <Calltoactiondigital2/>
       <Form1/>
       <Carousel/>
