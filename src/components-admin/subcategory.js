@@ -67,8 +67,18 @@ export default function SubCategory() {
   const [selectedSubCategory, setSelectedSubCategory] = useState(null);
   const [pageForm] = Form.useForm();
   
-  // State for all editor contents
-  const [editorContents, setEditorContents] = useState({
+  // State for all editor contents in main modal
+  const [mainEditorContents, setMainEditorContents] = useState({
+    topSectionDescription: "",
+    middleSectionDescription1: "",
+    middleSectionDescription2: "",
+    cta1Description: "",
+    cta2Description: "",
+    keywordsSectionDescription: "",
+  });
+
+  // State for page modal editor contents
+  const [pageEditorContents, setPageEditorContents] = useState({
     topSectionDescription: "",
     middleSectionDescription1: "",
     middleSectionDescription2: "",
@@ -222,6 +232,30 @@ export default function SubCategory() {
     );
   };
 
+  // Handle editor change for main modal
+  const handleMainEditorChange = (content, fieldName) => {
+    setMainEditorContents(prev => ({
+      ...prev,
+      [fieldName]: content
+    }));
+    // Also update form values
+    form.setFieldsValue({
+      [fieldName]: content
+    });
+  };
+
+  // Handle editor change for page modal
+  const handlePageEditorChange = (content, fieldName) => {
+    setPageEditorContents(prev => ({
+      ...prev,
+      [fieldName]: content
+    }));
+    // Also update form values
+    pageForm.setFieldsValue({
+      [fieldName]: content
+    });
+  };
+
   // Add / Edit SubCategory
   const handleOk = async () => {
     try {
@@ -230,14 +264,35 @@ export default function SubCategory() {
       // ✅ Prepare SEO data according to model
       const seoData = {
         metaTitle: values.seo?.metaTitle || values.topSection?.heading || values.name,
-        metaDescription: values.seo?.metaDescription || values.topSection?.description || values.keywordsSection?.description,
+        metaDescription: values.seo?.metaDescription || values.keywordsSection?.description,
         metaKeywords: values.seo?.metaKeywords || values.keywordsSection?.keywords || [],
         schemaMarkup: values.seo?.schemaMarkup || null
       };
 
-      // Combine all values with SEO
+      // Combine all values with SEO and editor contents
       const finalValues = {
         ...values,
+        topSection: {
+          ...values.topSection,
+          description: mainEditorContents.topSectionDescription
+        },
+        middleSection: {
+          ...values.middleSection,
+          description1: mainEditorContents.middleSectionDescription1,
+          description2: mainEditorContents.middleSectionDescription2
+        },
+        keywordsSection: {
+          ...values.keywordsSection,
+          description: mainEditorContents.keywordsSectionDescription
+        },
+        cta1: {
+          ...values.cta1,
+          description: mainEditorContents.cta1Description
+        },
+        cta2: {
+          ...values.cta2,
+          description: mainEditorContents.cta2Description
+        },
         seo: seoData
       };
 
@@ -264,6 +319,14 @@ export default function SubCategory() {
         setEditingSubCat(null);
         setIsModalOpen(false);
         setExpandedPanels(['seo']);
+        setMainEditorContents({
+          topSectionDescription: "",
+          middleSectionDescription1: "",
+          middleSectionDescription2: "",
+          cta1Description: "",
+          cta2Description: "",
+          keywordsSectionDescription: "",
+        });
         fetchSubCategories();
       } else {
         message.error(data.error || "Operation failed");
@@ -303,18 +366,6 @@ export default function SubCategory() {
       .replace(/-+$/, '');
   };
 
-  // Handle editor content change
-  const handleEditorChange = (content, fieldName) => {
-    setEditorContents(prev => ({
-      ...prev,
-      [fieldName]: content
-    }));
-    // Also update form values
-    pageForm.setFieldsValue({
-      [fieldName]: content
-    });
-  };
-
   // NEW: Handle Page Creation
   const handlePageCreate = async () => {
     try {
@@ -326,20 +377,20 @@ export default function SubCategory() {
         ...values,
         topSection: {
           ...values.topSection,
-          description: editorContents.topSectionDescription
+          description: pageEditorContents.topSectionDescription
         },
         middleSection: {
           ...values.middleSection,
-          description1: editorContents.middleSectionDescription1,
-          description2: editorContents.middleSectionDescription2
+          description1: pageEditorContents.middleSectionDescription1,
+          description2: pageEditorContents.middleSectionDescription2
         },
         cta1: {
           ...values.cta1,
-          description: editorContents.cta1Description
+          description: pageEditorContents.cta1Description
         },
         cta2: {
           ...values.cta2,
-          description: editorContents.cta2Description
+          description: pageEditorContents.cta2Description
         }
       };
 
@@ -391,7 +442,7 @@ export default function SubCategory() {
         // Close modal and reset
         setIsPageModalOpen(false);
         pageForm.resetFields();
-        setEditorContents({
+        setPageEditorContents({
           topSectionDescription: "",
           middleSectionDescription1: "",
           middleSectionDescription2: "",
@@ -414,6 +465,17 @@ export default function SubCategory() {
   // Open modal for editing
   const handleEdit = (record) => {
     setEditingSubCat(record);
+    
+    // Set editor contents from record
+    setMainEditorContents({
+      topSectionDescription: record.topSection?.description || "",
+      middleSectionDescription1: record.middleSection?.description1 || "",
+      middleSectionDescription2: record.middleSection?.description2 || "",
+      cta1Description: record.cta1?.description || "",
+      cta2Description: record.cta2?.description || "",
+      keywordsSectionDescription: record.keywordsSection?.description || "",
+    });
+    
     form.setFieldsValue({
       name: record.name,
       category: record.category,
@@ -437,7 +499,7 @@ export default function SubCategory() {
     const slug = generateSlug(subCategory.name);
     
     // Reset editor contents
-    setEditorContents({
+    setPageEditorContents({
       topSectionDescription: "",
       middleSectionDescription1: "",
       middleSectionDescription2: "",
@@ -457,8 +519,7 @@ export default function SubCategory() {
       metaSchema: "",
       topSection: {
         heading: "",
-        description: "",
-        backgroundImage: ""
+        description: ""
       },
       middleSection: {
         description1: "",
@@ -477,6 +538,34 @@ export default function SubCategory() {
     });
     
     setIsPageModalOpen(true);
+  };
+
+  // Reset main modal when closing
+  const resetMainModal = () => {
+    setIsModalOpen(false);
+    setExpandedPanels(['seo']);
+    setMainEditorContents({
+      topSectionDescription: "",
+      middleSectionDescription1: "",
+      middleSectionDescription2: "",
+      cta1Description: "",
+      cta2Description: "",
+      keywordsSectionDescription: "",
+    });
+  };
+
+  // Reset page modal when closing
+  const resetPageModal = () => {
+    setIsPageModalOpen(false);
+    setSelectedSubCategory(null);
+    pageForm.resetFields();
+    setPageEditorContents({
+      topSectionDescription: "",
+      middleSectionDescription1: "",
+      middleSectionDescription2: "",
+      cta1Description: "",
+      cta2Description: "",
+    });
   };
 
   // Table Columns with SEO Status
@@ -581,6 +670,14 @@ export default function SubCategory() {
             form.resetFields();
             setEditingSubCat(null);
             setIsModalOpen(true);
+            setMainEditorContents({
+              topSectionDescription: "",
+              middleSectionDescription1: "",
+              middleSectionDescription2: "",
+              cta1Description: "",
+              cta2Description: "",
+              keywordsSectionDescription: "",
+            });
           }}
         >
           Add Sub Category
@@ -600,18 +697,7 @@ export default function SubCategory() {
       <Modal
         title={`Add Page for ${selectedSubCategory?.name || "SubCategory"}`}
         open={isPageModalOpen}
-        onCancel={() => {
-          setIsPageModalOpen(false);
-          setSelectedSubCategory(null);
-          pageForm.resetFields();
-          setEditorContents({
-            topSectionDescription: "",
-            middleSectionDescription1: "",
-            middleSectionDescription2: "",
-            cta1Description: "",
-            cta2Description: "",
-          });
-        }}
+        onCancel={resetPageModal}
         onOk={handlePageCreate}
         okText="Create Page"
         width={1000}
@@ -738,8 +824,8 @@ export default function SubCategory() {
                 </Form.Item>
                 <Form.Item label="Description">
                   <TiptapEditor 
-                    content={editorContents.topSectionDescription}
-                    onChange={(content) => handleEditorChange(content, "topSectionDescription")}
+                    content={pageEditorContents.topSectionDescription}
+                    onChange={(content) => handlePageEditorChange(content, "topSectionDescription")}
                     height="150px"
                   />
                 </Form.Item>
@@ -749,8 +835,8 @@ export default function SubCategory() {
               <Form.Item label="Middle Section">
                 <Form.Item label="Description 1">
                   <TiptapEditor 
-                    content={editorContents.middleSectionDescription1}
-                    onChange={(content) => handleEditorChange(content, "middleSectionDescription1")}
+                    content={pageEditorContents.middleSectionDescription1}
+                    onChange={(content) => handlePageEditorChange(content, "middleSectionDescription1")}
                     height="150px"
                   />
                 </Form.Item>
@@ -766,8 +852,8 @@ export default function SubCategory() {
                 />
                 <Form.Item label="Description 2">
                   <TiptapEditor 
-                    content={editorContents.middleSectionDescription2}
-                    onChange={(content) => handleEditorChange(content, "middleSectionDescription2")}
+                    content={pageEditorContents.middleSectionDescription2}
+                    onChange={(content) => handlePageEditorChange(content, "middleSectionDescription2")}
                     height="150px"
                   />
                 </Form.Item>
@@ -783,8 +869,8 @@ export default function SubCategory() {
                 </Form.Item>
                 <Form.Item label="Description">
                   <TiptapEditor 
-                    content={editorContents.cta1Description}
-                    onChange={(content) => handleEditorChange(content, "cta1Description")}
+                    content={pageEditorContents.cta1Description}
+                    onChange={(content) => handlePageEditorChange(content, "cta1Description")}
                     height="150px"
                   />
                 </Form.Item>
@@ -797,8 +883,8 @@ export default function SubCategory() {
                 </Form.Item>
                 <Form.Item label="Description">
                   <TiptapEditor 
-                    content={editorContents.cta2Description}
-                    onChange={(content) => handleEditorChange(content, "cta2Description")}
+                    content={pageEditorContents.cta2Description}
+                    onChange={(content) => handlePageEditorChange(content, "cta2Description")}
                     height="150px"
                   />
                 </Form.Item>
@@ -808,7 +894,7 @@ export default function SubCategory() {
         </Form>
       </Modal>
 
-      {/* ORIGINAL SUBCATEGORY MODAL (UNCHANGED) */}
+      {/* UPDATED SUBCATEGORY MODAL WITH TIPTAP EDITORS */}
       <Modal
         title={
           <div>
@@ -819,10 +905,7 @@ export default function SubCategory() {
           </div>
         }
         open={isModalOpen}
-        onCancel={() => {
-          setIsModalOpen(false);
-          setExpandedPanels(['seo']);
-        }}
+        onCancel={resetMainModal}
         onOk={handleOk}
         okText="Save"
         width={900}
@@ -862,35 +945,46 @@ export default function SubCategory() {
               <Form.Item label="Heading" name={["topSection", "heading"]}>
                 <Input placeholder="Enter top section heading" />
               </Form.Item>
-              <Form.Item label="Description" name={["topSection", "description"]}>
-                <Input.TextArea
-                  placeholder="Enter top section description"
-                  rows={4}
-                  maxLength={300}
-                  showCount
+              <Form.Item label="Description">
+                <TiptapEditor 
+                  content={mainEditorContents.topSectionDescription}
+                  onChange={(content) => handleMainEditorChange(content, "topSectionDescription")}
+                  height="150px"
                 />
               </Form.Item>
             </Panel>
 
             {/* Middle Section Panel */}
             <Panel header="Middle Section" key="middleSection">
-              <Form.Item label="Description 1" name={["middleSection", "description1"]}>
-                <Input.TextArea placeholder="Enter first description" rows={4} />
+              <Form.Item label="Description 1">
+                <TiptapEditor 
+                  content={mainEditorContents.middleSectionDescription1}
+                  onChange={(content) => handleMainEditorChange(content, "middleSectionDescription1")}
+                  height="150px"
+                />
               </Form.Item>
               <UploadField name={["middleSection", "image1"]} label="Image 1" />
               <UploadField name={["middleSection", "image2"]} label="Image 2" />
-              <Form.Item label="Description 2" name={["middleSection", "description2"]}>
-                <Input.TextArea placeholder="Enter second description" rows={4} />
+              <Form.Item label="Description 2">
+                <TiptapEditor 
+                  content={mainEditorContents.middleSectionDescription2}
+                  onChange={(content) => handleMainEditorChange(content, "middleSectionDescription2")}
+                  height="150px"
+                />
               </Form.Item>
             </Panel>
 
             {/* Keywords Section Panel */}
-            <Panel header="Keywords Section" key="keywordsSection">
+            {/* <Panel header="Keywords Section" key="keywordsSection">
               <Form.Item label="Heading" name={["keywordsSection", "heading"]}>
                 <Input placeholder="Enter keywords section heading" />
               </Form.Item>
-              <Form.Item label="Description" name={["keywordsSection", "description"]}>
-                <Input.TextArea placeholder="Enter keywords section description" rows={4} />
+              <Form.Item label="Description">
+                <TiptapEditor 
+                  content={mainEditorContents.keywordsSectionDescription}
+                  onChange={(content) => handleMainEditorChange(content, "keywordsSectionDescription")}
+                  height="150px"
+                />
               </Form.Item>
 
               <Form.Item label="Keywords">
@@ -952,22 +1046,30 @@ export default function SubCategory() {
                   )}
                 </Form.List>
               </Form.Item>
-            </Panel>
+            </Panel> */}
 
             {/* CTA Sections Panel */}
             <Panel header="Call to Action Sections" key="ctaSections">
               <Form.Item label="CTA 1 Heading" name={["cta1", "heading"]}>
                 <Input placeholder="Enter CTA 1 heading" />
               </Form.Item>
-              <Form.Item label="CTA 1 Description" name={["cta1", "description"]}>
-                <Input.TextArea placeholder="Enter CTA 1 description" rows={4} />
+              <Form.Item label="CTA 1 Description">
+                <TiptapEditor 
+                  content={mainEditorContents.cta1Description}
+                  onChange={(content) => handleMainEditorChange(content, "cta1Description")}
+                  height="150px"
+                />
               </Form.Item>
 
               <Form.Item label="CTA 2 Heading" name={["cta2", "heading"]}>
                 <Input placeholder="Enter CTA 2 heading" />
               </Form.Item>
-              <Form.Item label="CTA 2 Description" name={["cta2", "description"]}>
-                <Input.TextArea placeholder="Enter CTA 2 description" rows={4} />
+              <Form.Item label="CTA 2 Description">
+                <TiptapEditor 
+                  content={mainEditorContents.cta2Description}
+                  onChange={(content) => handleMainEditorChange(content, "cta2Description")}
+                  height="150px"
+                />
               </Form.Item>
             </Panel>
 

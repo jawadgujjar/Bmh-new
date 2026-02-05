@@ -1,16 +1,24 @@
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
-import SubCategory from "@/models/subcategory"; // Adjust path as needed
+import SubCategory from "@/models/subcategory";
 
-// ✅ Connect to MongoDB
-await mongoose.connect(process.env.MONGODB_URI);
+// ✅ VERY IMPORTANT (Next.js 15 + Vercel)
+export const dynamic = "force-dynamic";
 
-// ✅ GET - Fetch single subcategory by ID
+// ✅ MongoDB connect function (NO top-level await)
+async function dbConnect() {
+  if (mongoose.connection.readyState >= 1) return;
+
+  await mongoose.connect(process.env.MONGODB_URI);
+}
+
+// ✅ GET - Fetch single subcategory
 export async function GET(request, { params }) {
   try {
-    // ✅ FIX: Await params first
-    const { id } = await params;
-    
+    await dbConnect();
+
+    const { id } = await params; // ✅ correct in Next 15
+
     if (!id) {
       return NextResponse.json(
         { success: false, error: "ID is required" },
@@ -19,7 +27,7 @@ export async function GET(request, { params }) {
     }
 
     const subcategory = await SubCategory.findById(id);
-    
+
     if (!subcategory) {
       return NextResponse.json(
         { success: false, error: "SubCategory not found" },
@@ -29,7 +37,6 @@ export async function GET(request, { params }) {
 
     return NextResponse.json({ success: true, data: subcategory });
   } catch (error) {
-    console.error("GET Error:", error);
     return NextResponse.json(
       { success: false, error: error.message },
       { status: 500 }
@@ -40,19 +47,11 @@ export async function GET(request, { params }) {
 // ✅ PUT - Update subcategory
 export async function PUT(request, { params }) {
   try {
-    // ✅ FIX: Await params first
-    const { id } = await params;
-    
-    if (!id) {
-      return NextResponse.json(
-        { success: false, error: "ID is required" },
-        { status: 400 }
-      );
-    }
+    await dbConnect();
 
+    const { id } = await params;
     const body = await request.json();
 
-    // Ensure SEO object exists
     body.seo = body.seo || {};
 
     const updated = await SubCategory.findByIdAndUpdate(id, body, {
@@ -67,13 +66,12 @@ export async function PUT(request, { params }) {
       );
     }
 
-    return NextResponse.json({ 
-      success: true, 
+    return NextResponse.json({
+      success: true,
       message: "SubCategory updated successfully",
-      data: updated 
+      data: updated,
     });
   } catch (error) {
-    console.error("PUT Error:", error);
     return NextResponse.json(
       { success: false, error: error.message },
       { status: 500 }
@@ -84,15 +82,9 @@ export async function PUT(request, { params }) {
 // ✅ DELETE - Delete subcategory
 export async function DELETE(request, { params }) {
   try {
-    // ✅ FIX: Await params first
+    await dbConnect();
+
     const { id } = await params;
-    
-    if (!id) {
-      return NextResponse.json(
-        { success: false, error: "ID is required" },
-        { status: 400 }
-      );
-    }
 
     const deleted = await SubCategory.findByIdAndDelete(id);
 
@@ -103,12 +95,11 @@ export async function DELETE(request, { params }) {
       );
     }
 
-    return NextResponse.json({ 
-      success: true, 
-      message: "SubCategory deleted successfully" 
+    return NextResponse.json({
+      success: true,
+      message: "SubCategory deleted successfully",
     });
   } catch (error) {
-    console.error("DELETE Error:", error);
     return NextResponse.json(
       { success: false, error: error.message },
       { status: 500 }
