@@ -9,6 +9,18 @@ import Carousel from "@/components/landing/carousel";
 import Form1 from "@/components/landing/getaquote";
 import SeoIndustries from "@/components/landing/seoindustries";
 
+// HTML renderer component
+function HtmlContent({ content, className = "" }) {
+  if (!content) return null;
+
+  return (
+    <div
+      className={className}
+      dangerouslySetInnerHTML={{ __html: content }}
+    />
+  );
+}
+
 async function getSubCategoryData(slug) {
   try {
     const res = await fetch(
@@ -26,7 +38,7 @@ async function getSubCategoryData(slug) {
 }
 
 export default async function SubcategoryPage({ params }) {
-  const { subcategory } = params;
+  const { subcategory } = await params;
 
   // 1. Fetch Subcategory Data
   const subcategoryData = await getSubCategoryData(subcategory);
@@ -40,67 +52,91 @@ export default async function SubcategoryPage({ params }) {
     );
   }
 
-  // 2. Determine Category Paths (for links/breadcrumbs if needed)
-  let categoryPath = "digital-marketing";
-  if (subcategoryData.category === "web-development")
-    categoryPath = "web-development";
-  if (subcategoryData.category === "app-development")
-    categoryPath = "app-development";
-
-  // 3. Prepare Props for Hero
-  const heroProps = {
-    backgroundImage:
-      subcategoryData.topSection?.backgroundImage || "/default-bg.jpg",
-    heading: subcategoryData.topSection?.heading || subcategoryData.name,
-    description: subcategoryData.topSection?.description || "",
-  };
-
-  // 4. Prepare Props for Dynamic Services Section (Previously Keywords)
-  const serviceKeywordsProps = {
-    heading: `Specialized ${subcategoryData.name} Services`,
-    description:
-      subcategoryData.keywordsSection?.description ||
-      "Explore our wide range of tailored solutions.",
-    subcategoryId: subcategoryData._id, // Passing ID for internal fetch
-    category: subcategoryData.category,
-  };
-
-  // 5. Why Choose Us Props
-  const whyChooseProps = {
-    heading:
-      subcategoryData.keywordsSection?.relatedHeading?.[0] || "Why Choose Us",
-    description: subcategoryData.middleSection?.description1 || "",
-    description2: subcategoryData.middleSection?.description2 || "",
-    conclusion: subcategoryData.keywordsSection?.relatedDescription?.[1] || "",
-    image1: subcategoryData.middleSection?.image1 || "/default-image.jpg",
-    image2: subcategoryData.middleSection?.image2 || "/default-image.jpg",
-    buttonText: "Get Started",
-  };
+  // HTML content کو render کرنے کے لیے helper function
+  const renderHtml = (content, className = "") => (
+    <div
+      className={className}
+      dangerouslySetInnerHTML={{ __html: content || "" }}
+    />
+  );
 
   return (
     <main>
       {/* Hero Section */}
-      <SubHeroDigitalMarketing {...heroProps} />
+      <SubHeroDigitalMarketing
+        backgroundImage={subcategoryData.topSection?.backgroundImage || "/default-bg.jpg"}
+        heading={subcategoryData.topSection?.heading || subcategoryData.name}
+        description={
+          <div
+            dangerouslySetInnerHTML={{
+              __html: subcategoryData.topSection?.description || ""
+            }}
+          />
+        }
+      />
 
-      {/* Dynamic Services Section (Now using your updated component) */}
+      {/* Dynamic Services Section */}
+      <SubKeywordsdigital
+        heading={`Specialized ${subcategoryData.name} Services`}
+        description={
+          <HtmlContent
+            content={subcategoryData.keywordsSection?.description}
+            className="keywords-description"
+          />
+        }
+        subcategoryId={subcategoryData._id}
+        category={subcategoryData.category}
+      />
 
       {/* Why Choose Section */}
-      <SubWhydigital {...whyChooseProps} />
-      <SubKeywordsdigital {...serviceKeywordsProps} />
+      <SubWhydigital
+        heading={subcategoryData.keywordsSection?.relatedHeading?.[0] || "Why Choose Us"}
+        description={
+          <HtmlContent
+            content={subcategoryData.middleSection?.description1}
+            className="why-description"
+          />
+        }
+        description2={
+          <HtmlContent
+            content={subcategoryData.middleSection?.description2}
+            className="why-description2"
+          />
+        }
+        conclusion={
+          <HtmlContent
+            content={subcategoryData.keywordsSection?.relatedDescription?.[1]}
+            className="conclusion"
+          />
+        }
+        image1={subcategoryData.middleSection?.image1 || "/default-image.jpg"}
+        image2={subcategoryData.middleSection?.image2 || "/default-image.jpg"}
+        buttonText="Get Started"
+      />
 
       {/* CTA 1 */}
       <SubCalltoactiondigital1
         title={subcategoryData.cta1?.heading}
-        description={subcategoryData.cta1?.description}
+        description={
+          <HtmlContent
+            content={subcategoryData.cta1?.description}
+            className="cta-description"
+          />
+        }
       />
 
       {/* Industries */}
       <SeoIndustries heading="Industries We Transform" industries={[]} />
-      
+
       {/* CTA 2 */}
       <SubCalltoactiondigital2
         title={subcategoryData.cta2?.heading}
-        description={subcategoryData.cta2?.description}
+        description={
+          <HtmlContent
+            content={subcategoryData.cta2?.description}
+            className="cta-description"
+          />
+        }
         phoneNumber="+123-456-7890"
       />
 
