@@ -22,7 +22,7 @@
 }
 
 .navLeft { flex: 0 0 auto; }
-.logo { width: 100px; height: auto; transition: 0.3s; }
+.logo { width: 125px !important; height: auto; transition: 0.3s; }
 
 .navCollapse {
   flex: 1;
