@@ -9,12 +9,12 @@ const Faqwebdevelopment1 = () => {
 
     const faqs = [
         {
-            question: "What is the difference between front-end and back-end development?",
-            answer: "Front-end Development: Focuses on the visual and interactive aspects of a website that users see and interact with directly. It involves technologies like HTML, CSS, and JavaScript to create layouts, design, and user interfaces. Back-end Development: Deals with the server-side functionality of a website, including databases, server logic, and application performance. It involves programming languages like PHP, Python, Ruby, and frameworks like Node.js or Django to manage data and server interactions."
+            question: "How much does it cost to pay someone to build my website?",
+            answer: "The cost of building a website in the USA varies depending on complexity, design, and functionality. A simple small business website can cost around $1,500 – $5,000, while a custom or e-commerce website can range from $5,000 – $25,000 or more. Professional agencies, like Brand Marketing Hub, offer solutions tailored to your needs, ensuring quality, performance, and scalability."
         },
         {
-            question: "How long does it take to develop a website?",
-            answer: "The timeline for website development varies based on factors such as complexity, design requirements, features, and the development team's expertise. A basic website might take a few weeks, while a more complex site with custom features could take several months. Planning and clear communication can help in setting realistic timelines."
+            question: "Can AI redesign an existing website?",
+            answer: "Yes, AI tools can help analyze website structure, suggest design improvements, and even generate layouts. However, AI cannot fully replace human expertise. A professional website redesign service combines AI recommendations with human creativity, technical knowledge, and user-experience optimization to deliver a website that is visually appealing, functional, and aligned with business goals."
         },
         {
             question: "What are the key elements of a successful website?",

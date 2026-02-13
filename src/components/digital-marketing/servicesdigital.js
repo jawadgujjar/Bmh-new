@@ -14,9 +14,7 @@ export default function Digitalservices1({ category }) {
 
     const fetchData = async () => {
       try {
-        const res = await fetch(
-          `/api/subcategories?category=${category}`
-        );
+        const res = await fetch(`/api/subcategories?category=${category}`);
         const data = await res.json();
         setServices(data);
       } catch (err) {
@@ -40,9 +38,7 @@ export default function Digitalservices1({ category }) {
 
       <div className={styles.cardsContainer}>
         {!services.length ? (
-          <p className={styles.noData}>
-            No data found
-          </p>
+          <p className={styles.noData}>No data found</p>
         ) : (
           <Row gutter={[16, 16]} justify="center">
             {services.map((service, index) => {
