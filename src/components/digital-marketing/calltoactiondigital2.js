@@ -4,7 +4,9 @@ import styles from '../../styles/digital-marketing/calltoactiondigital2.module.c
 
 function Calltoactiondigital2() {
   return (
-    <div className={styles.ctaContainer}>
+    <div>
+      
+       <div className={styles.ctaContainer}>
       <div className={styles.ctaContent}>
         <div className={styles.titleWrapper}>
           <span className={styles.circle}></span>
@@ -42,6 +44,8 @@ function Calltoactiondigital2() {
       
       <div className={styles.animatedLine}></div>
     </div>
+    </div>
+   
   );
 }
 

@@ -34,7 +34,7 @@
     color: white;
     position: relative;
     width: 90%;
-    max-width: 800px;
+    max-width: auto;
     margin: 0 auto;
     padding: 0 1rem;
 }
