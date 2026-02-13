@@ -27,9 +27,13 @@ export default function Digitalservices1({ category }) {
 
   return (
     <div className={styles.container}>
-      <p className={styles.text1}>Our Web Development Services </p>
+      <p className={styles.text1}>
+        Custom Digital Marketing Solutions for Startups and Small Businesses
+      </p>
       <p className={styles.text2}>
-        Build Brand Recognition as an Industry Leader and Increase Profitability
+        Startups and small businesses require flexibility and precision. Brand Marketing Hub delivers custom digital marketing solutions that adapt as your business grows. We do not push pre-built packages or unnecessary services. Instead, we analyze your market position, growth stage, and objectives before designing a strategy that fits.
+        As an affordable digital marketing agency, we help startups compete intelligently without overspending. Our focus is on building strong digital foundations that support scalability, whether through organic growth, paid acquisition, or brand positioning. This makes us a reliable marketing agency for small business owners who want clarity and control over their marketing investment.
+
       </p>
 
       <div className={styles.cardsContainer}>
@@ -45,10 +49,13 @@ export default function Digitalservices1({ category }) {
                   <Card
                     hoverable
                     bordered={false}
-                    className={`${styles.card} ${
-                      isBlack ? styles.cardBlack : styles.cardWhite
-                    }`}
-                    onClick={() => router.push(`/${service.slug}`)}
+                    className={`${styles.card} ${isBlack
+                        ? styles.cardBlack
+                        : styles.cardWhite
+                      }`}
+                    onClick={() =>
+                      router.push(`/${service.slug}`)
+                    }
                   >
                     <div className={styles.cardHeader}>
                       <h3

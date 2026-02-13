@@ -2,6 +2,7 @@ import Aboutdigital from "@/components/digital-marketing/aboutdigital";
 import Calltoactiondigital1 from "@/components/digital-marketing/calltoactiondigital1";
 import Calltoactiondigital2 from "@/components/digital-marketing/calltoactiondigital2";
 import HeroDigitalMarketing from "@/components/digital-marketing/digitalhero";
+import FAQdigital from "@/components/digital-marketing/faqsdigital";
 import Keywordsdigital from "@/components/digital-marketing/keywordsdigital";
 import Digitalservices1 from "@/components/digital-marketing/servicesdigital";
 import Whydigital from "@/components/digital-marketing/whydigital";
@@ -51,6 +52,7 @@ export default function DigitalmarketingPage() {
       <Calltoactiondigital2/>
       <Form1/>
       <Carousel/>
+      <FAQdigital/>
     </main>
   );
 };
