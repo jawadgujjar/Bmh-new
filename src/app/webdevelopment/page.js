@@ -19,7 +19,7 @@ export default function WebdevelopmentPage() {
       <Webdevelopment1 />
       <Keywordsweb/>
       <Calltoactionweb1/>
-      <Digitalservices1 category="web-development" />
+      <Webservices1 category="web-development" />
       <Calltoactionweb2/>
       <Form1/>
       <Carousel/>
