@@ -14,9 +14,7 @@ export default function Digitalservices1({ category }) {
 
     const fetchData = async () => {
       try {
-        const res = await fetch(
-          `/api/subcategories?category=${category}`
-        );
+        const res = await fetch(`/api/subcategories?category=${category}`);
         const data = await res.json();
         setServices(data);
       } catch (err) {
@@ -29,18 +27,14 @@ export default function Digitalservices1({ category }) {
 
   return (
     <div className={styles.container}>
-      <p className={styles.text1}>
-        Brand&apos;s Digital Marketing Services
-      </p>
+      <p className={styles.text1}>Our Web Development Services </p>
       <p className={styles.text2}>
         Build Brand Recognition as an Industry Leader and Increase Profitability
       </p>
 
       <div className={styles.cardsContainer}>
         {!services.length ? (
-          <p className={styles.noData}>
-            No data found
-          </p>
+          <p className={styles.noData}>No data found</p>
         ) : (
           <Row gutter={[16, 16]} justify="center">
             {services.map((service, index) => {
@@ -52,13 +46,9 @@ export default function Digitalservices1({ category }) {
                     hoverable
                     bordered={false}
                     className={`${styles.card} ${
-                      isBlack
-                        ? styles.cardBlack
-                        : styles.cardWhite
+                      isBlack ? styles.cardBlack : styles.cardWhite
                     }`}
-                    onClick={() =>
-                      router.push(`/${service.slug}`)
-                    }
+                    onClick={() => router.push(`/${service.slug}`)}
                   >
                     <div className={styles.cardHeader}>
                       <h3
