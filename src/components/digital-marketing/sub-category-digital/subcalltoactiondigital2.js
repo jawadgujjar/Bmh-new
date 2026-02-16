@@ -5,7 +5,7 @@ import styles from '../../../styles/digital-marketing/sub-category-digital/subca
 function SubCalltoactiondigital2({ 
   title = "Ready To Transform Your Digital Presence?",
   description = "Our team of digital experts is ready to elevate your brand with tailored strategies that deliver exceptional results.",
-  phoneNumber = "(213) 416-7355",
+  phoneNumber = "18132140535",
   renderHtml = false
 }) {
   return (

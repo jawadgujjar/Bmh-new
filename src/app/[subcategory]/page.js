@@ -8,6 +8,7 @@ import SubWhydigital from "@/components/digital-marketing/sub-category-digital/s
 import Carousel from "@/components/landing/carousel";
 import Form1 from "@/components/landing/getaquote";
 import SeoIndustries from "@/components/landing/seoindustries";
+import Heroform from "@/components/landing/heroform";
 
 // HTML renderer component
 function HtmlContent({ content, className = "" }) {
@@ -75,6 +76,7 @@ export default async function SubcategoryPage({ params }) {
         }
       />
 
+      <Heroform />
       {/* Dynamic Services Section */}
       <SubKeywordsdigital
         heading={`Specialized ${subcategoryData.name} Services`}
@@ -137,7 +139,7 @@ export default async function SubcategoryPage({ params }) {
             className="cta-description"
           />
         }
-        phoneNumber="+123-456-7890"
+        phoneNumber="(813) 214-0535"
       />
 
       {/* Standard Layout Elements */}

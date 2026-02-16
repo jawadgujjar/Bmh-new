@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { CiMobile3 } from "react-icons/ci";
-import { FaChevronRight } from "react-icons/fa";
+import { FaChevronRight, FaWhatsapp } from "react-icons/fa";
 import styles from "../../styles/navbar.module.css";
 
 function NavbarBmh() {
@@ -226,16 +226,29 @@ function NavbarBmh() {
           <div className={styles.navRight}>
             <div className={styles.actionSection}>
               <a
-                href="tel:+1234567890"
+                href="tel:+18132140535"
                 className={styles.phoneBox}
                 onClick={closeMenu}
               >
                 <CiMobile3 size={24} color="#ffa500" />
                 <div className={styles.phoneText}>
-                  <span>+123-456-7890</span>
+                  <span>(813) 214-0535</span>
                   <small>Speak with Expert</small>
                 </div>
               </a>
+              
+              {/* WhatsApp Icon */}
+              <a
+                href="https://wa.me/18132140535"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.whatsappBox}
+                onClick={closeMenu}
+                aria-label="Chat on WhatsApp"
+              >
+                <FaWhatsapp size={24} color="#25D366" />
+              </a>
+
               <Link href="/getaquote" onClick={closeMenu}>
                 <Button className={styles.quoteBtn}>Get a Quote</Button>
               </Link>
