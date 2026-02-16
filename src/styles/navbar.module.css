@@ -137,7 +137,56 @@
   position: relative;
   transform-origin: 1px;
 }
+.whatsappBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(37, 211, 102, 0.1);
+  transition: all 0.3s ease;
+  margin: 0 5px;
+}
 
+.whatsappBox:hover {
+  background-color: rgba(37, 211, 102, 0.2);
+  transform: scale(1.1);
+}
+
+/* If you want to maintain the same layout as the phone box, you can use this alternative */
+.whatsappBoxAlt {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.whatsappBoxAlt:hover {
+  background-color: rgba(37, 211, 102, 0.1);
+}
+
+/* Make sure your actionSection has proper flex alignment */
+.actionSection {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 991px) {
+  .actionSection {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .whatsappBox {
+    margin: 0 10px;
+  }
+}
 @media (max-width: 991px) {
   .customToggle { display: flex; }
 

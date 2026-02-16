@@ -95,7 +95,7 @@ export default async function SubCategoryPage({ params }) {
   const cta2Props = {
     title: subcategory.cta2?.heading || "",
     description: subcategory.cta2?.description || "",
-    phoneNumber: "+123-456-7890",
+    phoneNumber: "(813) 214-0535",
   };
 
   const industriesProps = {

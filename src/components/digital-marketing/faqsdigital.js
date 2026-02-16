@@ -168,7 +168,7 @@ function FAQdigital() {
                     <h2>Still have questions?</h2>
                     <p>
                         Contact us directly at <a href="mailto:support@example.com">support@example.com</a>
-                        or call <a href="tel:+1234567890">(123) 456-7890</a>
+                        or call <a href="tel:+18132140535">(813) 214-0535</a>
                     </p>
                 </div>
             </div>
