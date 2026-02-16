@@ -139,7 +139,7 @@ export default async function SubcategoryPage({ params }) {
             className="cta-description"
           />
         }
-        phoneNumber="+123-456-7890"
+        phoneNumber="(813) 214-0535"
       />
 
       {/* Standard Layout Elements */}

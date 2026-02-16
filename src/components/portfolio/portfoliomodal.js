@@ -80,8 +80,8 @@ const PortfolioModal1 = ({ isVisible, onClose, url }) => {
             <div className={styles.contactInfo}>
               <p className={styles.fontsizeCall}>
                 <span className={styles.callusText}>Call Us</span> at
-                <a href="tel:+1234567890" className={styles.phoneLink}>
-                  +123-456-7890
+                <a href="tel:+18132140535" className={styles.phoneLink}>
+                  (813) 214-0535
                 </a>
               </p>
               <Button
