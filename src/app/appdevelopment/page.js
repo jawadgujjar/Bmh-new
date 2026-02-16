@@ -20,7 +20,7 @@ export default function AppdevelopmentPage() {
         <Appdevelopment1/>
         <Keywordsapp/>
         <Calltoactionapp1/>
-        <Digitalservices1 category="app-development" />
+        <Appservices1 category="app-development" />
         <Calltoactionapp2/>
         <Form1/>
         <Carousel/>

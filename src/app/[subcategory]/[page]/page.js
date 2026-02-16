@@ -8,6 +8,7 @@ import SubWhydigital from "@/components/digital-marketing/sub-category-digital/s
 import Carousel from "@/components/landing/carousel";
 import Form1 from "@/components/landing/getaquote";
 import SeoIndustries from "@/components/landing/seoindustries";
+import Heroform from "@/components/landing/heroform";
 
 // Simple HTML sanitizer (remove only dangerous tags/attributes)
 const sanitizeHtml = (html) => {
@@ -122,8 +123,8 @@ export async function generateMetadata({ params }) {
   // Meta description کے لیے HTML tags remove کریں
   const cleanMetaDescription = stripHtmlTagsForMeta(
     pageData.metaDescription ||
-      pageData.topSection?.description ||
-      pageData.subcatpagedescr,
+    pageData.topSection?.description ||
+    pageData.subcatpagedescr,
   );
 
   return {
@@ -167,17 +168,18 @@ export default async function UniversalPageRoute({ params }) {
     ),
     description: sanitizeHtml(
       pageData.topSection?.description ||
-        pageData.metaDescription ||
-        "Description not available",
+      pageData.metaDescription ||
+      "Description not available",
     ),
   };
+  <Heroform />
 
   const aboutProps = {
     heading: pageData.title, // Always use page title for heading
     description1: sanitizeHtml(
       pageData.middleSection?.description1 ||
-        pageData.subcatpagedescr ||
-        "Detailed description",
+      pageData.subcatpagedescr ||
+      "Detailed description",
     ),
     image1: pageData.middleSection?.image1 || "/default-image.jpg",
     image2: pageData.middleSection?.image2 || "/default-image2.jpg",
