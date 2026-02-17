@@ -172,7 +172,6 @@ export default async function UniversalPageRoute({ params }) {
       "Description not available",
     ),
   };
-  <Heroform />
 
   const aboutProps = {
     heading: pageData.title, // Always use page title for heading
@@ -234,6 +233,7 @@ export default async function UniversalPageRoute({ params }) {
     <main>
       {/* Page Content - All components ko renderHtml={true} flag ke sath bhejo */}
       <SubHeroDigitalMarketing {...heroProps} renderHtml={true} />
+      <Heroform />
       {/* <SubAboutdigital {...aboutProps} renderHtml={true} /> */}
       <SubWhydigital {...whyChooseProps} renderHtml={true} />
       {/* <SubKeywordsdigital {...keywordsProps} /> */}
