@@ -1,82 +1,167 @@
 import mongoose from "mongoose";
 
-const keywordSchema = new mongoose.Schema(
+/* ================================
+   CTA Reference Schema
+================================ */
+const ctaRefSchema = new mongoose.Schema(
   {
-    heading: String,
-    description: String,
-    keywords: [String],
-    relatedHeading: [String],
-    relatedDescription: [String],
+    ctaId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "CTA",
+      required: [true, "CTA ID is required if CTA object exists"]
+    },
+    buttonVariant: {
+      type: String,
+      default: "primary"
+    }
   },
   { _id: false }
 );
 
-// ✅ SEO Schema
+/* ================================
+   Section Schema
+================================ */
+const sectionSchema = new mongoose.Schema(
+  {
+    layoutType: {
+      type: String,
+      required: true,
+      enum: ["image-left", "image-right", "description-only"],
+      default: "description-only"
+    },
+    heading: { type: String, default: "" },
+    description: { type: String, default: "" },
+    image: { 
+      type: String, 
+      default: "" 
+      // Individual field validation ko array level par handle karenge for better reliability
+    },
+    // cta ko required: false rakha hai taake empty hone par error na de
+    cta: {
+      type: ctaRefSchema,
+      required: false,
+      default: null
+    },
+    order: { type: Number, default: 0 }
+  },
+  { _id: false }
+);
+
+/* ================================
+   Top Section (Hero) Schema
+================================ */
+const topSectionSchema = new mongoose.Schema(
+  {
+    backgroundImage: { type: String, default: "" },
+    heading: { type: String, default: "" },
+    description: { type: String, default: "" },
+    cta: {
+      type: ctaRefSchema,
+      required: false,
+      default: null
+    }
+  },
+  { _id: false }
+);
+
+/* ================================
+   SEO Schema
+================================ */
 const seoSchema = new mongoose.Schema(
   {
-    metaTitle: String,
-    metaDescription: String,
-    metaKeywords: [String],
-    schemaMarkup: Object,
+    metaTitle: { type: String, default: "" },
+    metaDescription: { type: String, default: "" },
+    metaKeywords: [{ type: String }],
+    schemaMarkup: { type: Object, default: {} },
   },
   { _id: false }
 );
 
+/* ================================
+   Main SubCategory Schema
+================================ */
 const subCategorySchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
-
+    name: { 
+      type: String, 
+      required: [true, "Name is required"],
+      trim: true 
+    },
     slug: {
       type: String,
-      required: true,
+      required: [true, "Slug is required"],
       unique: true,
+      lowercase: true,
+      trim: true
     },
-
     category: {
       type: String,
-      required: true,
-      enum: ["digital-marketing", "web-development", "app-development"],
+      required: [true, "Category is required"],
+      enum: {
+        values: ["digital-marketing", "web-development", "app-development"],
+        message: "{VALUE} is not a valid category"
+      },
     },
-
-    icon: { type: String, required: true },
-
+    icon: { 
+      type: String, 
+      required: [true, "Icon is required"],
+      default: "default-icon.png" 
+    },
     topSection: {
-      backgroundImage: String,
-      heading: String,
-      description: String,
+      type: topSectionSchema,
+      default: () => ({})
     },
-
-    middleSection: {
-      description1: String,
-      image1: String,
-      image2: String,
-      description2: String,
+    // 🔥 Dynamic Sections Array with Robust Validation
+    sections: {
+      type: [sectionSchema],
+      default: [],
+      validate: {
+        validator: function(sectionsArr) {
+          // Agar array khali hai toh valid hai
+          if (!sectionsArr || sectionsArr.length === 0) return true;
+          
+          return sectionsArr.every(section => {
+            // Sirf image layouts check karo
+            if (section.layoutType === "image-left" || section.layoutType === "image-right") {
+              // Check if image exists and is not just whitespace
+              return typeof section.image === 'string' && section.image.trim().length > 0;
+            }
+            return true;
+          });
+        },
+        message: "All image-left and image-right sections must have a valid image URL"
+      }
     },
-
-    keywordsSection: keywordSchema,
-
-    cta1: {
-      heading: String,
-      description: String,
+    seo: {
+      type: seoSchema,
+      default: () => ({})
     },
-
-    cta2: {
-      heading: String,
-      description: String,
+    isActive: {
+      type: Boolean,
+      default: true
     },
-
-    // ✅ SEO
-    seo: seoSchema,
+    createdBy: {
+      type: String,
+      default: "admin"
+    }
   },
-  { timestamps: true }
+  { 
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+  }
 );
 
-// ✅ Auto slug normalize
+// Indexes
+subCategorySchema.index({ slug: 1 });
+subCategorySchema.index({ category: 1, isActive: 1 });
+subCategorySchema.index({ name: "text", "sections.heading": "text" });
+
+// Auto-generate slug
 subCategorySchema.pre("save", function (next) {
   if (!this.slug || this.slug.trim() === "") {
     this.slug = this.name;
   }
-
   this.slug = this.slug
     .toLowerCase()
     .replace(/\s+/g, "-")
@@ -84,9 +169,17 @@ subCategorySchema.pre("save", function (next) {
     .replace(/\-\-+/g, "-")
     .replace(/^-+/, "")
     .replace(/-+$/, "");
-
   next();
 });
 
-export default mongoose.models.SubCategory ||
+// Virtuals
+subCategorySchema.virtual("url").get(function() {
+  return `/${this.category}/${this.slug}`;
+});
+
+subCategorySchema.virtual("sectionsCount").get(function() {
+  return this.sections?.length || 0;
+});
+
+export default mongoose.models.SubCategory || 
   mongoose.model("SubCategory", subCategorySchema);

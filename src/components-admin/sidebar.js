@@ -28,6 +28,7 @@ export default function AdminSidebar({ active, setActive }) {
     { id: "selectedpages", label: "Select Category Pages" },
     { id: "calltoactionquote", label: "Call-to-Action Quote" },
     { id: "blogs", label: "Blogs" },
+    {id:"ctas",label:"Call-To-Actions"}
   ];
 
   return (

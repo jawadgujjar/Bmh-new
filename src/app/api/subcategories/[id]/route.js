@@ -1,50 +1,44 @@
 import { NextResponse } from "next/server";
-import mongoose from "mongoose";
+import dbConnect from "@/lib/mongodb";
 import SubCategory from "@/models/subcategory";
+import CTA from "@/models/cta";
 
-// ✅ VERY IMPORTANT (Next.js 15 + Vercel)
-export const dynamic = "force-dynamic";
+// Helper to check if string is valid MongoDB ID
+const isValidObjectId = (id) => /^[0-9a-fA-F]{24}$/.test(id);
 
-// ✅ MongoDB connect function (NO top-level await)
-async function dbConnect() {
-  if (mongoose.connection.readyState >= 1) return;
-
-  await mongoose.connect(process.env.MONGODB_URI);
-}
-
-// ✅ GET - Fetch single subcategory
 export async function GET(request, { params }) {
   try {
     await dbConnect();
 
-    const { id } = await params; // ✅ correct in Next 15
+    // Folder [id] hai toh yahan 'id' hi nikalna hai
+    const { id } = await params;
 
     if (!id) {
       return NextResponse.json(
-        { success: false, error: "ID is required" },
-        { status: 400 }
+        { error: "ID or Slug is required" },
+        { status: 400 },
       );
     }
 
-    const subcategory = await SubCategory.findById(id);
+    // Agar 'id' valid MongoDB ID hai toh _id se dhoondo, warna slug se
+    const query = isValidObjectId(id) ? { _id: id } : { slug: id };
 
-    if (!subcategory) {
+    const subcategory = await SubCategory.findOne(query)
+      .populate("topSection.cta.ctaId sections.cta.ctaId")
+      .lean();
+
+    if (!subcategory)
       return NextResponse.json(
-        { success: false, error: "SubCategory not found" },
-        { status: 404 }
+        { error: "Data nahi mila database mein" },
+        { status: 404 },
       );
-    }
 
-    return NextResponse.json({ success: true, data: subcategory });
-  } catch (error) {
-    return NextResponse.json(
-      { success: false, error: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json(subcategory, { status: 200 });
+  } catch (err) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
 
-// ✅ PUT - Update subcategory
 export async function PUT(request, { params }) {
   try {
     await dbConnect();
@@ -52,57 +46,59 @@ export async function PUT(request, { params }) {
     const { id } = await params;
     const body = await request.json();
 
-    body.seo = body.seo || {};
+    const query = isValidObjectId(id) ? { _id: id } : { slug: id };
 
-    const updated = await SubCategory.findByIdAndUpdate(id, body, {
-      new: true,
-      runValidators: true,
-    });
-
-    if (!updated) {
-      return NextResponse.json(
-        { success: false, error: "SubCategory not found" },
-        { status: 404 }
-      );
+    // --- DATA CLEANING ---
+    if (body.topSection && !body.topSection.cta?.ctaId) {
+      body.topSection.cta = undefined;
     }
 
-    return NextResponse.json({
-      success: true,
-      message: "SubCategory updated successfully",
-      data: updated,
-    });
-  } catch (error) {
-    return NextResponse.json(
-      { success: false, error: error.message },
-      { status: 500 }
-    );
+    if (body.sections && Array.isArray(body.sections)) {
+      body.sections = body.sections.map((s) => {
+        if (!s.cta?.ctaId) s.cta = undefined;
+        return s;
+      });
+    }
+
+    const updated = await SubCategory.findOneAndUpdate(query, body, {
+      new: true,
+      runValidators: true,
+    })
+      .populate("topSection.cta.ctaId sections.cta.ctaId")
+      .lean();
+
+    if (!updated)
+      return NextResponse.json(
+        { error: "Update karne ke liye record nahi mila" },
+        { status: 404 },
+      );
+
+    return NextResponse.json(updated);
+  } catch (err) {
+    return NextResponse.json({ error: err.message }, { status: 400 });
   }
 }
 
-// ✅ DELETE - Delete subcategory
 export async function DELETE(request, { params }) {
   try {
     await dbConnect();
 
     const { id } = await params;
 
-    const deleted = await SubCategory.findByIdAndDelete(id);
+    const query = isValidObjectId(id) ? { _id: id } : { slug: id };
 
-    if (!deleted) {
+    const deleted = await SubCategory.findOneAndDelete(query);
+
+    if (!deleted)
       return NextResponse.json(
-        { success: false, error: "SubCategory not found" },
-        { status: 404 }
+        { error: "Delete karne ke liye record nahi mila" },
+        { status: 404 },
       );
-    }
 
     return NextResponse.json({
-      success: true,
-      message: "SubCategory deleted successfully",
+      message: "Gayab! Delete ho gaya successfully.",
     });
-  } catch (error) {
-    return NextResponse.json(
-      { success: false, error: error.message },
-      { status: 500 }
-    );
+  } catch (err) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
