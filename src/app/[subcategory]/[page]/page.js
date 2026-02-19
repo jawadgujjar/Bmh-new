@@ -10,6 +10,9 @@ import Form1 from "@/components/landing/getaquote";
 import SeoIndustries from "@/components/landing/seoindustries";
 import Heroform from "@/components/landing/heroform";
 
+// Import the new DescriptionAndFormSection component
+import DescriptionAndFormSection from "@/components/descriptionandformsection/descriptionform";
+
 // Simple HTML sanitizer (remove only dangerous tags/attributes)
 const sanitizeHtml = (html) => {
   if (!html) return "";
@@ -229,14 +232,87 @@ export default async function UniversalPageRoute({ params }) {
     industries: [],
   };
 
+  // Check if there are dynamic sections from the new model
+  const hasDynamicSections = pageData.sections && pageData.sections.length > 0;
+
   return (
     <main>
-      {/* Page Content - All components ko renderHtml={true} flag ke sath bhejo */}
+      {/* Hero Section - Always show */}
       <SubHeroDigitalMarketing {...heroProps} renderHtml={true} />
       <Heroform />
-      {/* <SubAboutdigital {...aboutProps} renderHtml={true} /> */}
-      <SubWhydigital {...whyChooseProps} renderHtml={true} />
-      {/* <SubKeywordsdigital {...keywordsProps} /> */}
+      
+      {/* Dynamic Sections from new model - Only if they exist */}
+      {hasDynamicSections && (
+        <>
+          {pageData.sections.map((section, index) => {
+            switch(section.layoutType) {
+              case 'image-left':
+                return (
+                  <SubAboutdigital
+                    key={`section-${index}`}
+                    heading={section.heading}
+                    description1={sanitizeHtml(section.description)}
+                    image1={section.image || "/default-image.jpg"}
+                    image2={pageData.middleSection?.image2 || "/default-image2.jpg"}
+                    description2=""
+                    renderHtml={true}
+                  />
+                );
+              
+              case 'image-right':
+                return (
+                  <SubWhydigital
+                    key={`section-${index}`}
+                    heading={section.heading}
+                    description={sanitizeHtml(section.description)}
+                    description2=""
+                    conclusion=""
+                    image1={section.image || "/default-image.jpg"}
+                    image2={pageData.middleSection?.image2 || "/default-image2.jpg"}
+                    buttonText="Learn More"
+                    renderHtml={true}
+                  />
+                );
+              
+              case 'description-only':
+                return (
+                  <SubAboutdigital
+                    key={`section-${index}`}
+                    heading={section.heading}
+                    description1={sanitizeHtml(section.description)}
+                    image1={pageData.middleSection?.image1 || "/default-image.jpg"}
+                    image2={pageData.middleSection?.image2 || "/default-image2.jpg"}
+                    description2=""
+                    renderHtml={true}
+                  />
+                );
+              
+              case 'description-and-form':
+                return (
+                  <DescriptionAndFormSection
+                    key={`section-${index}`}
+                    heading={section.heading}
+                    descriptions={section.descriptions || []}
+                  />
+                );
+              
+              default:
+                return null;
+            }
+          })}
+        </>
+      )}
+
+      {/* If no dynamic sections, show old components for backward compatibility */}
+      {!hasDynamicSections && (
+        <>
+          {/* <SubAboutdigital {...aboutProps} renderHtml={true} /> */}
+          <SubWhydigital {...whyChooseProps} renderHtml={true} />
+          {/* <SubKeywordsdigital {...keywordsProps} /> */}
+        </>
+      )}
+      
+      {/* CTA Sections - Always show */}
       <SubCalltoactiondigital1 {...cta1Props} renderHtml={true} />
       <SeoIndustries {...industriesProps} />
       <SubCalltoactiondigital2 {...cta2Props} renderHtml={true} />

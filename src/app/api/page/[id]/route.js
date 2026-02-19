@@ -2,82 +2,120 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import Page from "@/models/page";
 
-// GET single page by ID
+/* ==================================================
+   GET: Single Page By ID
+================================================== */
 export async function GET(req, { params }) {
   try {
     await dbConnect();
-    const page = await Page.findById(params.id);
+
+    const page = await Page.findById(params.id)
+      .populate("subcategory")
+      .populate("sections.cta.ctaId")
+      .populate("topSection.cta.ctaId");
+
     if (!page)
-      return NextResponse.json({ error: "Not found" }, { status: 404 });
-    return NextResponse.json(page);
-  } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+      return NextResponse.json(
+        { success: false, message: "Page not found" },
+        { status: 404 }
+      );
+
+    return NextResponse.json({ success: true, data: page });
+
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, message: error.message },
+      { status: 500 }
+    );
   }
 }
 
-// UPDATE page by ID
+
+/* ==================================================
+   PUT: Update Page
+================================================== */
 export async function PUT(req, { params }) {
   try {
     await dbConnect();
     const body = await req.json();
 
-    // Ensure SEO fields exist
-    if (!body.metaTitle) body.metaTitle = "";
-    if (!body.metaDescription) body.metaDescription = "";
-    if (!body.metaKeywords) body.metaKeywords = "";
-    if (!body.metaSchema) body.metaSchema = "";
-    if (!body.subcatpagedescr) body.subcatpagedescr = "";
-
-    // Validate category if provided
+    // 🔥 Validate category if provided
     if (body.category) {
       const validCategories = [
         "digital-marketing",
         "web-development",
         "app-development",
       ];
+
       if (!validCategories.includes(body.category)) {
         return NextResponse.json(
-          { error: "Invalid category" },
-          { status: 400 },
+          { success: false, message: "Invalid category" },
+          { status: 400 }
         );
       }
     }
 
-    if (body.middleSection) {
-      const { description, images, extraDescription, ...rest } =
-        body.middleSection;
-      body.middleSection = {
-        description1: description || body.middleSection.description1 || "",
-        image1: images?.[0] || body.middleSection.image1 || "",
-        image2: images?.[1] || body.middleSection.image2 || "",
-        description2: extraDescription || body.middleSection.description2 || "",
-        ...rest,
-      };
+    // 🔥 Maintain order logic
+    if (body.sections) {
+      body.sections = body.sections.map((sec, index) => ({
+        ...sec,
+        order: sec.order ?? index
+      }));
     }
 
-    const page = await Page.findByIdAndUpdate(params.id, body, {
+    if (body.faqs) {
+      body.faqs = body.faqs.map((faq, index) => ({
+        ...faq,
+        order: faq.order ?? index
+      }));
+    }
+
+    const updated = await Page.findByIdAndUpdate(params.id, body, {
       new: true,
       runValidators: true,
     });
-    if (!page)
-      return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-    return NextResponse.json(page);
-  } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 400 });
+    if (!updated)
+      return NextResponse.json(
+        { success: false, message: "Page not found" },
+        { status: 404 }
+      );
+
+    return NextResponse.json({ success: true, data: updated });
+
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, message: error.message },
+      { status: 400 }
+    );
   }
 }
 
-// DELETE page by ID
+
+/* ==================================================
+   DELETE: Remove Page
+================================================== */
 export async function DELETE(req, { params }) {
   try {
     await dbConnect();
-    const deleted = await Page.findByIdAndDelete(params.id);
-    if (!deleted)
-      return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-    return NextResponse.json({ message: "Deleted successfully" });
-  } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    const deleted = await Page.findByIdAndDelete(params.id);
+
+    if (!deleted)
+      return NextResponse.json(
+        { success: false, message: "Page not found" },
+        { status: 404 }
+      );
+
+    return NextResponse.json({
+      success: true,
+      message: "Page deleted successfully"
+    });
+
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, message: error.message },
+      { status: 500 }
+    );
   }
 }

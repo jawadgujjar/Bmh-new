@@ -23,7 +23,7 @@ const ctaRefSchema = new mongoose.Schema(
 ================================ */
 const sectionSchema = new mongoose.Schema(
   {
-    layoutType: {
+    layoutType: { 
       type: String,
       required: true,
       enum: ["image-left", "image-right", "description-only"],
