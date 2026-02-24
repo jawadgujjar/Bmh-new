@@ -227,7 +227,7 @@ const FAQItem = ({ field, index, remove, move }) => (
   </Card>
 );
 
-// --- Description Item Component (for description-and-form layout) ---
+// --- Description Item Component (with TipTap Editor) ---
 const DescriptionItem = ({ field, index, remove, move, form }) => {
   // Safe way to get field name
   const fieldName = Array.isArray(field.name) ? field.name : [field.name];
@@ -271,7 +271,12 @@ const DescriptionItem = ({ field, index, remove, move, form }) => {
             label="Description Text"
             rules={[{ required: true, message: "Please enter description text" }]}
           >
-            <Input.TextArea rows={2} placeholder="Enter description text" />
+            <TiptapEditor
+              content={form.getFieldValue([...fieldName, "text"]) || ""}
+              onChange={(html) =>
+                form.setFieldValue([...fieldName, "text"], html)
+              }
+            />
           </Form.Item>
         </Col>
         <Col span={8}>
@@ -443,7 +448,7 @@ const SectionItem = ({
                 style={{ background: "#f0f5ff", borderColor: "#1890ff" }}
               >
                 <Text strong style={{ display: 'block', marginBottom: 16 }}>
-                  Description Points with Icons
+                  Description Points with Icons (Rich Text Supported)
                 </Text>
                 
                 <Form.List name={[...fieldName, "descriptions"]}>
@@ -546,7 +551,6 @@ export default function Pages() {
       setLoading(true);
       const res = await fetch("/api/page");
       
-      // Check if response is JSON
       const contentType = res.headers.get("content-type");
       if (!contentType || !contentType.includes("application/json")) {
         const text = await res.text();
@@ -556,11 +560,13 @@ export default function Pages() {
       }
       
       const data = await res.json();
-      if (Array.isArray(data)) {
-        setPages(data);
-      } else if (data.success && Array.isArray(data.data)) {
+      
+      if (data.success && Array.isArray(data.data)) {
         setPages(data.data);
+      } else if (Array.isArray(data)) {
+        setPages(data);
       } else {
+        console.error("Unexpected data format:", data);
         message.error("Failed to load pages");
       }
     } catch (error) {
@@ -637,7 +643,7 @@ export default function Pages() {
         if (s.layoutType === "description-and-form") {
           if (s.descriptions && s.descriptions.length > 0) {
             sectionData.descriptions = s.descriptions.map((d, dIdx) => ({
-              text: d.text,
+              text: d.text, // This will now contain HTML from TipTap
               icon: d.icon || "",
               order: d.order ?? dIdx,
             }));
@@ -797,7 +803,7 @@ export default function Pages() {
       if (s.layoutType === "description-and-form") {
         if (s.descriptions && s.descriptions.length > 0) {
           sectionBase.descriptions = s.descriptions.map(d => ({
-            text: d.text,
+            text: d.text, // This will contain HTML from TipTap
             icon: d.icon || "",
             order: d.order,
           }));
