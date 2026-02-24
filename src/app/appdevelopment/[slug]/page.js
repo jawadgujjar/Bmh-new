@@ -3,7 +3,7 @@ import SubCalltoactiondigital1 from "@/components/digital-marketing/sub-category
 import SubCalltoactiondigital2 from "@/components/digital-marketing/sub-category-digital/subcalltoactiondigital2"; // Replace if needed
 import SubHeroDigitalMarketing from "@/components/digital-marketing/sub-category-digital/subdigitalhero"; // Replace with app-specific if needed
 import SubKeywordsdigital from "@/components/digital-marketing/sub-category-digital/subkeywordsdigital"; // Replace if needed
-import SubWhydigital from "@/components/digital-marketing/sub-category-digital/subwhydigital"; // Replace if needed
+import SubWhydigital from "@/components/digital-marketing/sub-category-digital/subdynamicsection"; // Replace if needed
 import Carousel from "@/components/landing/carousel";
 import Form1 from "@/components/landing/getaquote";
 import Heroform from "@/components/landing/heroform";

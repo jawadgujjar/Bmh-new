@@ -4,7 +4,7 @@ import SubCalltoactiondigital1 from "@/components/digital-marketing/sub-category
 import SubCalltoactiondigital2 from "@/components/digital-marketing/sub-category-digital/subcalltoactiondigital2";
 import SubHeroDigitalMarketing from "@/components/digital-marketing/sub-category-digital/subdigitalhero";
 import SubKeywordsdigital from "@/components/digital-marketing/sub-category-digital/subkeywordsdigital";
-import SubWhydigital from "@/components/digital-marketing/sub-category-digital/subwhydigital";
+import SubWhydigital from "@/components/digital-marketing/sub-category-digital/subdynamicsection";
 import Carousel from "@/components/landing/carousel";
 import Form1 from "@/components/landing/getaquote";
 import SeoIndustries from "@/components/landing/seoindustries";
@@ -14,7 +14,6 @@ import Heroform from "@/components/landing/heroform";
 const sanitizeHtml = (html) => {
   if (!html) return "";
 
-  // Remove script, style, iframe, and other dangerous tags
   let cleanHtml = html
     .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
     .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, "")
