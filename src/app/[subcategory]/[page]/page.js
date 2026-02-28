@@ -10,6 +10,7 @@ import Form1 from "@/components/landing/getaquote";
 import SeoIndustries from "@/components/landing/seoindustries";
 import Heroform from "@/components/landing/heroform";
 import DescriptionAndFormSection from "@/components/descriptionandformsection/descriptionform";
+import FaqSection from "@/components/faqspage/faqsection"; // ✅ Import FAQ component
 
 // Simple HTML sanitizer
 const sanitizeHtml = (html) => {
@@ -82,7 +83,7 @@ async function getPageBySlug(slug) {
     if (response && response.success && response.data) {
       return response.data;
     }
-    
+
     // Fallback for other response structures
     if (response && typeof response === "object") {
       if (Array.isArray(response)) {
@@ -110,12 +111,12 @@ async function getSubCategoryBySlug(slug) {
     if (!res.ok) return null;
 
     const response = await res.json();
-    
+
     // ✅ FIX: Handle the API response structure
     if (response && response.success && response.data) {
       return response.data;
     }
-    
+
     return Array.isArray(response) ? response[0] : response;
   } catch (error) {
     console.error("Error fetching subcategory:", error);
@@ -219,20 +220,32 @@ export default async function UniversalPageRoute({ params }) {
   // Check if there are dynamic sections
   const hasDynamicSections = pageData.sections && pageData.sections.length > 0;
 
+  // ✅ Prepare FAQ data
+  const faqHeading = pageData.faqs?.heading || "Frequently Asked Questions";
+  const faqDescription = pageData.faqs?.description || "Find answers to common questions about our services";
+  
+  // Handle different API structures for FAQs
+  let faqItems = [];
+  if (pageData.faqs?.items && Array.isArray(pageData.faqs.items)) {
+    faqItems = pageData.faqs.items;
+  } else if (Array.isArray(pageData.faqs)) {
+    faqItems = pageData.faqs;
+  } else if (pageData.faqs && typeof pageData.faqs === 'object') {
+    faqItems = pageData.faqs.faqs || pageData.faqs.questions || [];
+  }
+
   return (
     <main>
       {/* Hero Section */}
       <SubHeroDigitalMarketing {...heroProps} renderHtml={true} />
-      
-      {/* ✅ REMOVED: Extra Heroform component that was showing twice */}
-      
+
       {/* Dynamic Sections */}
       {hasDynamicSections && (
         <>
           {pageData.sections.map((section, index) => {
             console.log("Rendering section:", section.layoutType, section);
-            
-            switch(section.layoutType) {
+
+            switch (section.layoutType) {
               case 'image-left':
                 return (
                   <SubAboutdigital
@@ -245,7 +258,7 @@ export default async function UniversalPageRoute({ params }) {
                     renderHtml={true}
                   />
                 );
-              
+
               case 'image-right':
                 return (
                   <SubWhydigital
@@ -260,7 +273,7 @@ export default async function UniversalPageRoute({ params }) {
                     renderHtml={true}
                   />
                 );
-              
+
               case 'description-only':
                 return (
                   <SubAboutdigital
@@ -273,7 +286,7 @@ export default async function UniversalPageRoute({ params }) {
                     renderHtml={true}
                   />
                 );
-              
+
               case 'description-and-form':
                 return (
                   <DescriptionAndFormSection
@@ -282,7 +295,7 @@ export default async function UniversalPageRoute({ params }) {
                     descriptions={section.descriptions || []}
                   />
                 );
-              
+
               default:
                 return null;
             }
@@ -296,13 +309,20 @@ export default async function UniversalPageRoute({ params }) {
           <SubWhydigital {...whyChooseProps} renderHtml={true} />
         </>
       )}
-      
+
       {/* CTA Sections */}
       <SubCalltoactiondigital1 {...cta1Props} renderHtml={true} />
       <SeoIndustries {...industriesProps} />
       <SubCalltoactiondigital2 {...cta2Props} renderHtml={true} />
       <Form1 />
       <Carousel />
+
+      {/* ✅ FAQs Section - Shows either FAQs or "No FAQs Found" message */}
+      <FaqSection 
+        heading={faqHeading}
+        description={faqDescription}
+        faqs={faqItems}
+      />
     </main>
   );
 }

@@ -167,70 +167,72 @@ const CTAFields = ({ namePath, label, ctas }) => (
 );
 
 // --- FAQ Item Component ---
-const FAQItem = ({ field, index, remove, move }) => (
-  <Card
-    size="small"
-    style={{ marginBottom: 16, background: "#fafafa", borderLeft: "4px solid #52c41a" }}
-    title={`FAQ #${index + 1}`}
-    extra={
-      <Space.Compact>
-        <Button
-          size="small"
-          icon={<ArrowUpOutlined />}
-          onClick={() => move(index, index - 1)}
-          disabled={index === 0}
-        />
-        <Button
-          size="small"
-          icon={<ArrowDownOutlined />}
-          onClick={() => move(index, index + 1)}
-        />
-        <Button
-          size="small"
-          danger
-          icon={<DeleteOutlined />}
-          onClick={() => remove(index)}
-        />
-      </Space.Compact>
-    }
-  >
-    <Row gutter={16}>
-      <Col span={12}>
-        <Form.Item
-          {...field}
-          name={[field.name, "question"]}
-          label="Question"
-          rules={[{ required: true, message: "Please enter question" }]}
-        >
-          <Input placeholder="Enter FAQ question" />
-        </Form.Item>
-      </Col>
-      <Col span={12}>
-        <Form.Item
-          {...field}
-          name={[field.name, "answer"]}
-          label="Answer"
-          rules={[{ required: true, message: "Please enter answer" }]}
-        >
-          <Input.TextArea rows={2} placeholder="Enter FAQ answer" />
-        </Form.Item>
-      </Col>
-    </Row>
-    <Form.Item
-      {...field}
-      name={[field.name, "order"]}
-      label="Order"
-      initialValue={index}
+const FAQItem = ({ field, index, remove, move }) => {
+  return (
+    <Card
+      size="small"
+      style={{ marginBottom: 16, background: "#fafafa", borderLeft: "4px solid #52c41a" }}
+      title={`FAQ #${index + 1}`}
+      extra={
+        <Space.Compact>
+          <Button
+            size="small"
+            icon={<ArrowUpOutlined />}
+            onClick={() => move(index, index - 1)}
+            disabled={index === 0}
+          />
+          <Button
+            size="small"
+            icon={<ArrowDownOutlined />}
+            onClick={() => move(index, index + 1)}
+          />
+          <Button
+            size="small"
+            danger
+            icon={<DeleteOutlined />}
+            onClick={() => remove(index)}
+          />
+        </Space.Compact>
+      }
     >
-      <Input type="number" min={0} />
-    </Form.Item>
-  </Card>
-);
+      <Row gutter={16}>
+        <Col span={12}>
+          <Form.Item
+            {...field}
+            name={[field.name, "question"]}
+            label="Question"
+            rules={[{ required: true, message: "Please enter question" }]}
+          >
+            <Input placeholder="Enter FAQ question" />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            {...field}
+            name={[field.name, "answer"]}
+            label="Answer"
+            rules={[{ required: true, message: "Please enter answer" }]}
+          >
+            <Input.TextArea rows={2} placeholder="Enter FAQ answer" />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Form.Item
+        {...field}
+        name={[field.name, "order"]}
+        label="Order"
+        initialValue={index}
+      >
+        <Input type="number" min={0} />
+      </Form.Item>
+    </Card>
+  );
+};
 
 // --- Description Item Component (with TipTap Editor) ---
 const DescriptionItem = ({ field, index, remove, move, form }) => {
-  // Safe way to get field name
-  const fieldName = Array.isArray(field.name) ? field.name : [field.name];
+  // Get the current value
+  const textValue = form.getFieldValue([field.name, "text"]);
   
   return (
     <Card
@@ -267,34 +269,37 @@ const DescriptionItem = ({ field, index, remove, move, form }) => {
       <Row gutter={16}>
         <Col span={16}>
           <Form.Item
-            name={[...fieldName, "text"]}
+            {...field}
+            name={[field.name, "text"]}
             label="Description Text"
             rules={[{ required: true, message: "Please enter description text" }]}
           >
             <TiptapEditor
-              content={form.getFieldValue([...fieldName, "text"]) || ""}
-              onChange={(html) =>
-                form.setFieldValue([...fieldName, "text"], html)
-              }
+              content={textValue}
+              onChange={(html) => {
+                form.setFieldValue([field.name, "text"], html);
+              }}
             />
           </Form.Item>
         </Col>
         <Col span={8}>
           <Form.Item
-            name={[...fieldName, "icon"]}
+            {...field}
+            name={[field.name, "icon"]}
             label="Icon"
           >
             <ImageUploadField 
               label="Icon"
               required={false}
-              value={form?.getFieldValue([...fieldName, "icon"])}
-              onChange={(url) => form?.setFieldValue([...fieldName, "icon"], url)}
+              value={form.getFieldValue([field.name, "icon"])}
+              onChange={(url) => form.setFieldValue([field.name, "icon"], url)}
             />
           </Form.Item>
         </Col>
       </Row>
       <Form.Item
-        name={[...fieldName, "order"]}
+        {...field}
+        name={[field.name, "order"]}
         label="Order"
         initialValue={index}
         hidden
@@ -316,12 +321,7 @@ const SectionItem = ({
 }) => {
   const layout = Form.useWatch(["sections", field.name, "layoutType"], form);
   const currentImageUrl = Form.useWatch(["sections", field.name, "image"], form);
-  
-  const isImageRequired = layout === "image-left" || layout === "image-right";
-  const isDescriptionAndForm = layout === "description-and-form";
-
-  // Safe field name
-  const fieldName = Array.isArray(field.name) ? field.name : [field.name];
+  const descriptionValue = form.getFieldValue(["sections", field.name, "description"]);
 
   return (
     <Card
@@ -354,7 +354,8 @@ const SectionItem = ({
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
-            name={[...fieldName, "layoutType"]}
+            {...field}
+            name={[field.name, "layoutType"]}
             label="Layout Type"
             initialValue="description-only"
             rules={[{ required: true, message: "Please select layout type" }]}
@@ -369,7 +370,8 @@ const SectionItem = ({
         </Col>
         <Col span={12}>
           <Form.Item
-            name={[...fieldName, "order"]}
+            {...field}
+            name={[field.name, "order"]}
             label="Order"
             initialValue={index}
           >
@@ -379,7 +381,8 @@ const SectionItem = ({
       </Row>
 
       <Form.Item
-        name={[...fieldName, "heading"]}
+        {...field}
+        name={[field.name, "heading"]}
         label="Section Heading"
         rules={[
           { required: true, message: "Heading is required" },
@@ -389,41 +392,10 @@ const SectionItem = ({
         <Input placeholder="Section Title" />
       </Form.Item>
 
-      {layout === "image-left" || layout === "image-right" ? (
-        // Image Layouts
-        <>
-          <Form.Item
-            name={[...fieldName, "description"]}
-            label="Description"
-            rules={[
-              { required: true, message: "Description is required" },
-              { min: 10, message: "Description must be at least 10 characters" }
-            ]}
-          >
-            <TiptapEditor
-              content={form.getFieldValue([...fieldName, "description"]) || ""}
-              onChange={(html) =>
-                form.setFieldValue([...fieldName, "description"], html)
-              }
-            />
-          </Form.Item>
-
-          <Form.Item
-            name={[...fieldName, "image"]}
-            rules={[{ required: true, message: "Image is required for this layout" }]}
-          >
-            <ImageUploadField 
-              label="Section Image" 
-              required={true}
-              value={currentImageUrl}
-              onChange={(url) => form.setFieldValue([...fieldName, "image"], url)}
-            />
-          </Form.Item>
-        </>
-      ) : layout === "description-only" ? (
-        // Description Only Layout
+      {layout !== "description-and-form" && (
         <Form.Item
-          name={[...fieldName, "description"]}
+          {...field}
+          name={[field.name, "description"]}
           label="Description"
           rules={[
             { required: true, message: "Description is required" },
@@ -431,14 +403,30 @@ const SectionItem = ({
           ]}
         >
           <TiptapEditor
-            content={form.getFieldValue([...fieldName, "description"]) || ""}
-            onChange={(html) =>
-              form.setFieldValue([...fieldName, "description"], html)
-            }
+            content={descriptionValue}
+            onChange={(html) => {
+              form.setFieldValue(["sections", field.name, "description"], html);
+            }}
           />
         </Form.Item>
-      ) : layout === "description-and-form" ? (
-        // Description & Form Layout
+      )}
+
+      {(layout === "image-left" || layout === "image-right") && (
+        <Form.Item
+          {...field}
+          name={[field.name, "image"]}
+          rules={[{ required: true, message: "Image is required for this layout" }]}
+        >
+          <ImageUploadField 
+            label="Section Image" 
+            required={true}
+            value={currentImageUrl}
+            onChange={(url) => form.setFieldValue(["sections", field.name, "image"], url)}
+          />
+        </Form.Item>
+      )}
+
+      {layout === "description-and-form" && (
         <div>
           <Row gutter={24}>
             <Col span={12}>
@@ -451,25 +439,19 @@ const SectionItem = ({
                   Description Points with Icons (Rich Text Supported)
                 </Text>
                 
-                <Form.List name={[...fieldName, "descriptions"]}>
+                <Form.List name={[field.name, "descriptions"]}>
                   {(descFields, { add: addDesc, remove: removeDesc, move: moveDesc }) => (
                     <>
-                      {descFields.map((descField, descIndex) => {
-                        // Create a unique key for each description item
-                        const descKey = `${field.key}-desc-${descIndex}`;
-                        
-                        return (
-                          <div key={descKey}>
-                            <DescriptionItem
-                              field={descField}
-                              index={descIndex}
-                              remove={removeDesc}
-                              move={moveDesc}
-                              form={form}
-                            />
-                          </div>
-                        );
-                      })}
+                      {descFields.map((descField, descIndex) => (
+                        <DescriptionItem
+                          key={descField.key}
+                          field={descField}
+                          index={descIndex}
+                          remove={removeDesc}
+                          move={moveDesc}
+                          form={form}
+                        />
+                      ))}
                       <Button
                         type="dashed"
                         block
@@ -499,7 +481,6 @@ const SectionItem = ({
                   This form will be displayed on the frontend
                 </Text>
                 
-                {/* Hard Coded Form Preview - Using div instead of Form to avoid nested forms */}
                 <div style={{ padding: 16, background: "#ffffff", borderRadius: 8 }}>
                   <div style={{ marginBottom: 16 }}>
                     <div style={{ marginBottom: 8 }}>Name</div>
@@ -529,9 +510,9 @@ const SectionItem = ({
             </Col>
           </Row>
         </div>
-      ) : null}
+      )}
 
-      <CTAFields namePath={fieldName.concat("cta")} label="Section" ctas={ctas} />
+      <CTAFields namePath={[field.name, "cta"]} label="Section" ctas={ctas} />
     </Card>
   );
 };
@@ -550,27 +531,14 @@ export default function Pages() {
     try {
       setLoading(true);
       const res = await fetch("/api/page");
-      
-      const contentType = res.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        const text = await res.text();
-        console.error("Received non-JSON response:", text);
-        message.error("Server returned invalid response");
-        return;
-      }
-      
       const data = await res.json();
       
       if (data.success && Array.isArray(data.data)) {
         setPages(data.data);
       } else if (Array.isArray(data)) {
         setPages(data);
-      } else {
-        console.error("Unexpected data format:", data);
-        message.error("Failed to load pages");
       }
     } catch (error) {
-      console.error("Error fetching pages:", error);
       message.error("Error fetching pages");
     } finally {
       setLoading(false);
@@ -639,11 +607,10 @@ export default function Pages() {
           order: s.order ?? idx,
         };
 
-        // Handle descriptions based on layout type
         if (s.layoutType === "description-and-form") {
           if (s.descriptions && s.descriptions.length > 0) {
             sectionData.descriptions = s.descriptions.map((d, dIdx) => ({
-              text: d.text, // This will now contain HTML from TipTap
+              text: d.text,
               icon: d.icon || "",
               order: d.order ?? dIdx,
             }));
@@ -775,6 +742,9 @@ export default function Pages() {
   const handleEdit = (record) => {
     setEditingPage(record);
     
+    // Reset form first
+    form.resetFields();
+    
     const metaKeywordsString = record.seo?.metaKeywords?.join(', ') || '';
     
     let schemaMarkupString = '';
@@ -790,68 +760,71 @@ export default function Pages() {
     
     const sectionsData = (record.sections || []).map(s => {
       const sectionBase = {
-        layoutType: s.layoutType,
-        heading: s.heading,
-        image: s.image || "",
+        layoutType: s.layoutType || 'description-only',
+        heading: s.heading || '',
+        image: s.image || '',
         cta: {
-          ctaId: s.cta?.ctaId?._id || s.cta?.ctaId,
-          buttonVariant: s.cta?.buttonVariant,
+          ctaId: s.cta?.ctaId?._id || s.cta?.ctaId || '',
+          buttonVariant: s.cta?.buttonVariant || 'primary',
         },
-        order: s.order,
+        order: s.order || 0,
       };
 
       if (s.layoutType === "description-and-form") {
         if (s.descriptions && s.descriptions.length > 0) {
           sectionBase.descriptions = s.descriptions.map(d => ({
-            text: d.text, // This will contain HTML from TipTap
-            icon: d.icon || "",
-            order: d.order,
+            text: d.text || '',
+            icon: d.icon || '',
+            order: d.order || 0,
           }));
-          sectionBase.description = "";
+          sectionBase.description = '';
         } else {
-          sectionBase.description = s.description || "";
+          sectionBase.description = s.description || '';
           sectionBase.descriptions = [];
         }
       } else {
-        sectionBase.description = s.description || "";
+        sectionBase.description = s.description || '';
         sectionBase.descriptions = [];
       }
 
       return sectionBase;
     });
     
+    // Set form values
     form.setFieldsValue({
-      title: record.title,
-      slug: record.slug,
-      category: record.category,
-      subcategory: record.subcategory?._id || record.subcategory,
-      subcatpagedescr: record.subcatpagedescr || "",
-      isActive: record.isActive,
+      title: record.title || '',
+      slug: record.slug || '',
+      category: record.category || '',
+      subcategory: record.subcategory?._id || record.subcategory || '',
+      subcatpagedescr: record.subcatpagedescr || '',
+      isActive: record.isActive !== undefined ? record.isActive : true,
       
       topSection: {
-        backgroundImage: record.topSection?.backgroundImage || "",
-        heading: record.topSection?.heading || "",
-        description: record.topSection?.description || "",
+        backgroundImage: record.topSection?.backgroundImage || '',
+        heading: record.topSection?.heading || '',
+        description: record.topSection?.description || '',
         cta: {
-          ctaId: record.topSection?.cta?.ctaId?._id || record.topSection?.cta?.ctaId,
-          buttonVariant: record.topSection?.cta?.buttonVariant,
+          ctaId: record.topSection?.cta?.ctaId?._id || record.topSection?.cta?.ctaId || '',
+          buttonVariant: record.topSection?.cta?.buttonVariant || 'primary',
         },
       },
 
       sections: sectionsData,
       faqs: (record.faqs || []).map(f => ({
-        question: f.question,
-        answer: f.answer,
-        order: f.order,
+        question: f.question || '',
+        answer: f.answer || '',
+        order: f.order || 0,
       })),
 
       seo: {
-        metaTitle: record.seo?.metaTitle,
-        metaDescription: record.seo?.metaDescription,
+        metaTitle: record.seo?.metaTitle || '',
+        metaDescription: record.seo?.metaDescription || '',
         metaKeywords: metaKeywordsString,
         schemaMarkup: schemaMarkupString,
       },
     });
+    
+    // Open modal
     setIsModalOpen(true);
   };
 
@@ -898,13 +871,7 @@ export default function Pages() {
       dataIndex: "category",
       key: "category",
       render: (category) => (
-        <Tag color={
-          category === "digital-marketing" ? "blue" :
-          category === "web-development" ? "green" :
-          category === "app-development" ? "orange" : "default"
-        }>
-          {category || "N/A"}
-        </Tag>
+        <Tag color="blue">{category || "N/A"}</Tag>
       ),
     },
     {
@@ -935,25 +902,6 @@ export default function Pages() {
       ),
     },
     {
-      title: "SEO",
-      key: "seoStatus",
-      render: (_, record) => (
-        <Tag color={record.seo?.metaTitle ? "green" : "orange"}>
-          {record.seo?.metaTitle ? "✓ SEO Set" : "No SEO"}
-        </Tag>
-      ),
-    },
-    {
-      title: "Created",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      render: (date) => (
-        <Text type="secondary">
-          {date ? new Date(date).toLocaleDateString() : "N/A"}
-        </Text>
-      ),
-    },
-    {
       title: "Actions",
       key: "actions",
       width: 220,
@@ -962,35 +910,24 @@ export default function Pages() {
           <Button
             icon={<EyeOutlined />}
             onClick={() => handleView(record.slug)}
-            title="View Page"
             size="small"
           />
           <Button 
             icon={<EditOutlined />} 
             onClick={() => handleEdit(record)}
-            title="Edit Page"
             size="small"
+            type="primary"
           />
           <Button
             icon={<CopyOutlined />}
             onClick={() => copyUrl(record.slug)}
-            title="Copy URL"
             size="small"
           />
           <Popconfirm
             title="Delete this page?"
-            description="Are you sure you want to delete this page?"
             onConfirm={() => handleDelete(record._id)}
-            okText="Yes"
-            cancelText="No"
-            okButtonProps={{ danger: true }}
           >
-            <Button 
-              danger 
-              icon={<DeleteOutlined />} 
-              title="Delete Page"
-              size="small"
-            />
+            <Button danger icon={<DeleteOutlined />} size="small" />
           </Popconfirm>
         </Space.Compact>
       ),
@@ -999,84 +936,26 @@ export default function Pages() {
 
   return (
     <div style={{ padding: 24 }}>
-      <Breadcrumb
-        style={{ marginBottom: 24 }}
-        items={[
-          {
-            href: "/",
-            title: <HomeOutlined />,
-          },
-          {
-            title: "Pages",
-          },
-        ]}
-      />
+      <Breadcrumb style={{ marginBottom: 24 }} items={[{ href: "/", title: <HomeOutlined /> }, { title: "Pages" }]} />
       
-      <Card
-        style={{
-          background: "#fff",
-          borderRadius: 12,
-          boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-        }}
-      >
+      <Card>
         <Row justify="space-between" align="middle" style={{ marginBottom: 24 }}>
           <Col>
-            <Title level={2} style={{ margin: 0, color: "#1890ff" }}>
-              📄 Pages Management
-            </Title>
-            <Text type="secondary">Manage all your pages with dynamic sections and FAQs</Text>
+            <Title level={2}>📄 Pages Management</Title>
           </Col>
           <Col>
-            <Button
-              type="primary"
-              icon={<PlusOutlined />}
-              onClick={openAddModal}
-              size="large"
-            >
+            <Button type="primary" icon={<PlusOutlined />} onClick={openAddModal} size="large">
               Add New Page
             </Button>
           </Col>
         </Row>
 
-        <Table
-          columns={columns}
-          dataSource={pages}
-          rowKey="_id"
+        <Table 
+          columns={columns} 
+          dataSource={pages} 
+          rowKey="_id" 
           loading={loading}
-          bordered
-          pagination={{ pageSize: 10, showSizeChanger: true }}
-          expandable={{
-            expandedRowRender: (record) => (
-              <div style={{ padding: 16, background: '#fafafa', borderRadius: 8 }}>
-                <Row gutter={24}>
-                  <Col span={8}>
-                    <Text strong>Page Description:</Text>
-                    <p style={{ marginTop: 8 }}>
-                      {record.subcatpagedescr || "No description"}
-                    </p>
-                  </Col>
-                  <Col span={8}>
-                    <Text strong>Hero Section:</Text>
-                    <p style={{ marginTop: 8, marginBottom: 0 }}>
-                      <strong>Heading:</strong> {record.topSection?.heading || "No heading"}
-                    </p>
-                    <p style={{ marginTop: 4, marginBottom: 0 }}>
-                      <strong>Background:</strong> {record.topSection?.backgroundImage ? "✓" : "✗"}
-                    </p>
-                  </Col>
-                  <Col span={8}>
-                    <Text strong>SEO Info:</Text>
-                    <p style={{ marginTop: 8, marginBottom: 0 }}>
-                      <strong>Meta Title:</strong> {record.seo?.metaTitle ? "✓" : "✗"}
-                    </p>
-                    <p style={{ marginTop: 4, marginBottom: 0 }}>
-                      <strong>Meta Desc:</strong> {record.seo?.metaDescription ? "✓" : "✗"}
-                    </p>
-                  </Col>
-                </Row>
-              </div>
-            ),
-          }}
+          pagination={{ pageSize: 10 }}
         />
 
         {/* Page Modal */}
@@ -1090,9 +969,9 @@ export default function Pages() {
           }}
           onOk={handleOk}
           okText={editingPage ? "Update" : "Create"}
-          cancelText="Cancel"
           width={1200}
           style={{ top: 20 }}
+          destroyOnClose={true}
         >
           <Form form={form} layout="vertical">
             <Tabs
@@ -1124,11 +1003,7 @@ export default function Pages() {
                           <Form.Item
                             label="URL Slug"
                             name="slug"
-                            rules={[
-                              { required: true, message: "Please enter URL slug" },
-                              { pattern: /^[a-z0-9]+(?:-[a-z0-9]+)*$/, message: 'Only lowercase letters, numbers, and hyphens allowed' }
-                            ]}
-                            extra="yourdomain.com/your-slug"
+                            rules={[{ required: true, message: "Please enter URL slug" }]}
                           >
                             <Input placeholder="your-slug" />
                           </Form.Item>
@@ -1155,14 +1030,10 @@ export default function Pages() {
                             name="subcategory"
                             rules={[{ required: true, message: "Please select a subcategory" }]}
                           >
-                            <Select 
-                              placeholder="Select subcategory" 
-                              showSearch
-                              optionFilterProp="children"
-                            >
+                            <Select placeholder="Select subcategory">
                               {subCategories.map((subcat) => (
                                 <Option key={subcat._id} value={subcat._id}>
-                                  {subcat.name} ({subcat.category})
+                                  {subcat.name}
                                 </Option>
                               ))}
                             </Select>
@@ -1178,10 +1049,7 @@ export default function Pages() {
                             valuePropName="checked"
                             initialValue={true}
                           >
-                            <Switch
-                              checkedChildren="Active"
-                              unCheckedChildren="Inactive"
-                            />
+                            <Switch checkedChildren="Active" unCheckedChildren="Inactive" />
                           </Form.Item>
                         </Col>
                       </Row>
@@ -1189,13 +1057,8 @@ export default function Pages() {
                       <Form.Item
                         label="Page Short Description"
                         name="subcatpagedescr"
-                        extra="Short description for meta tags and preview"
                       >
-                        <Input.TextArea 
-                          placeholder="Enter short description" 
-                          rows={3}
-                          style={{ borderRadius: 8 }}
-                        />
+                        <Input.TextArea rows={3} placeholder="Enter short description" />
                       </Form.Item>
                     </>
                   ),
@@ -1205,10 +1068,7 @@ export default function Pages() {
                   label: "Hero Section",
                   children: (
                     <>
-                      <Form.Item
-                        name={["topSection", "backgroundImage"]}
-                        label="Hero Background Image"
-                      >
+                      <Form.Item name={["topSection", "backgroundImage"]} label="Hero Background Image">
                         <ImageUploadField 
                           value={form.getFieldValue(['topSection', 'backgroundImage'])}
                           onChange={(url) => form.setFieldValue(['topSection', 'backgroundImage'], url)}
@@ -1216,22 +1076,16 @@ export default function Pages() {
                         />
                       </Form.Item>
                       
-                      <Form.Item
-                        name={["topSection", "heading"]}
-                        label="Hero Heading"
-                      >
+                      <Form.Item name={["topSection", "heading"]} label="Hero Heading">
                         <Input placeholder="Enter hero heading" />
                       </Form.Item>
 
-                      <Form.Item
-                        name={["topSection", "description"]}
-                        label="Hero Description"
-                      >
+                      <Form.Item name={["topSection", "description"]} label="Hero Description">
                         <TiptapEditor
-                          content={form.getFieldValue(["topSection", "description"]) || ""}
-                          onChange={(html) =>
-                            form.setFieldValue(["topSection", "description"], html)
-                          }
+                          content={form.getFieldValue(["topSection", "description"])}
+                          onChange={(html) => {
+                            form.setFieldValue(["topSection", "description"], html);
+                          }}
                         />
                       </Form.Item>
 
@@ -1267,6 +1121,7 @@ export default function Pages() {
                                 image: "",
                                 description: "",
                                 descriptions: [],
+                                cta: { ctaId: '', buttonVariant: 'primary' },
                                 order: fields.length 
                               })
                             }
@@ -1300,7 +1155,11 @@ export default function Pages() {
                             block
                             icon={<PlusOutlined />}
                             onClick={() =>
-                              add({ order: fields.length })
+                              add({ 
+                                question: '', 
+                                answer: '', 
+                                order: fields.length 
+                              })
                             }
                             style={{ height: 60, marginTop: 10 }}
                           >
@@ -1316,47 +1175,20 @@ export default function Pages() {
                   label: "SEO Settings",
                   children: (
                     <Card size="small" style={{ background: "#f5f5f5" }}>
-                      <Form.Item
-                        name={["seo", "metaTitle"]}
-                        label="Meta Title"
-                        extra="Title for search engines (50-60 characters)"
-                      >
+                      <Form.Item name={["seo", "metaTitle"]} label="Meta Title">
                         <Input maxLength={70} showCount />
                       </Form.Item>
 
-                      <Form.Item
-                        name={["seo", "metaDescription"]}
-                        label="Meta Description"
-                        extra="Description for search results (150-160 characters)"
-                      >
+                      <Form.Item name={["seo", "metaDescription"]} label="Meta Description">
                         <Input.TextArea rows={3} maxLength={160} showCount />
                       </Form.Item>
 
-                      <Form.Item
-                        name={["seo", "metaKeywords"]}
-                        label="Meta Keywords"
-                        extra="Separate with commas (e.g., keyword1, keyword2, keyword3)"
-                      >
-                        <Input placeholder="Enter SEO keywords" />
+                      <Form.Item name={["seo", "metaKeywords"]} label="Meta Keywords">
+                        <Input placeholder="keyword1, keyword2, keyword3" />
                       </Form.Item>
 
-                      <Form.Item
-                        name={["seo", "schemaMarkup"]}
-                        label="Schema Markup (JSON-LD)"
-                        extra={
-                          <div>
-                            <InfoCircleOutlined /> Optional: Add structured data in JSON format
-                          </div>
-                        }
-                      >
-                        <Input.TextArea
-                          rows={5}
-                          placeholder={`{
-  "@context": "https://schema.org",
-  "@type": "Service",
-  "name": "Your Service Name"
-}`}
-                        />
+                      <Form.Item name={["seo", "schemaMarkup"]} label="Schema Markup">
+                        <Input.TextArea rows={5} placeholder='{"@context": "https://schema.org"}' />
                       </Form.Item>
                     </Card>
                   ),
@@ -1369,3 +1201,4 @@ export default function Pages() {
     </div>
   );
 }
+  
