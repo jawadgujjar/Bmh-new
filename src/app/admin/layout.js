@@ -11,6 +11,7 @@ import CallToActionQuote from "@/components-admin/calltoactionquote";
 import Pages from "@/components-admin/pages";
 import BlogAdmin from "@/components-admin/blogs";
 import SelectedCategoryPagesAdmin from "@/components-admin/selectedpages";
+import CTAManagement from "@/components-admin/calltoactions";
 
 export default function AdminLayout() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -35,9 +36,11 @@ export default function AdminLayout() {
     switch (activeComponent) {
       case "dashboard":
         return <Dashboard />;
+      case "ctas":
+        return <CTAManagement />;
       case "sub-category":
         return <SubCategory />;
-        case "pages":
+      case "pages":
         return <Pages />;
       case "portfolio":
         return <Portfolio />;
@@ -45,7 +48,7 @@ export default function AdminLayout() {
         return <GetaQuote />;
       case "blogs":
         return <BlogAdmin />;
-        case "selectedpages":
+      case "selectedpages":
         return <SelectedCategoryPagesAdmin />;
       case "calltoactionquote":
         return <CallToActionQuote />;
@@ -57,9 +60,7 @@ export default function AdminLayout() {
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
       <AdminSidebar active={activeComponent} setActive={setActiveComponent} />
-      <main style={{ flex: 1, padding: "20px" }}>
-        {renderComponent()}
-      </main>
+      <main style={{ flex: 1, padding: "20px" }}>{renderComponent()}</main>
     </div>
   );
 }

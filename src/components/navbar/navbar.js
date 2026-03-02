@@ -55,22 +55,23 @@ function NavbarBmh() {
     fetchCats();
   }, []);
 
-  const prefetchPages = useCallback(
-    async (subId) => {
-      if (!subId || pagesBySub[subId]) return;
-      try {
-        const res = await fetch(`/api/page?subcategory=${subId}`);
-        const data = await res.json();
-        setPagesBySub((prev) => ({
-          ...prev,
-          [subId]: Array.isArray(data) ? data : data.data ? [data.data] : [],
-        }));
-      } catch (e) {
-        console.error(e);
-      }
-    },
-    [pagesBySub],
-  );
+const prefetchPages = useCallback(
+  async (subId) => {
+    if (!subId || pagesBySub[subId]) return;
+    try {
+      const res = await fetch(`/api/page?subcategory=${subId}`);
+      const json = await res.json();
+      const pages = json?.data || []; // ✅ Correctly extract array
+      setPagesBySub((prev) => ({
+        ...prev,
+        [subId]: pages,
+      }));
+    } catch (e) {
+      console.error(e);
+    }
+  },
+  [pagesBySub]
+);
 
   const handleOpen = (id) => {
     if (window.innerWidth < 992) return;

@@ -1,149 +1,101 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import SubCategory from "@/models/subcategory";
+import CTA from "@/models/cta";
 
-// GET ALL / FILTER
+// 1. GET ALL / FILTER
 export async function GET(request) {
   try {
     await dbConnect();
-
     const { searchParams } = new URL(request.url);
     const category = searchParams.get("category");
     const slug = searchParams.get("slug");
+    const isActive = searchParams.get("isActive");
 
     let query = {};
+    if (category) query.category = category.toLowerCase();
+    if (slug) query.slug = slug.toLowerCase();
+    if (isActive !== null) query.isActive = isActive === "true";
 
-    if (category) {
-      query.category = category.toLowerCase();
-    }
+    const subcategories = await SubCategory.find(query)
+      .populate({ path: "topSection.cta.ctaId", model: CTA })
+      .populate({ path: "sections.cta.ctaId", model: CTA })
+      .lean();
 
-    if (slug) {
-      query.slug = slug.toLowerCase();
-    }
-
-    const subcategories = await SubCategory.find(query).lean();
+    // Debug: Check FAQs in response
+    console.log(
+      "FAQs in response:",
+      subcategories.map((s) => ({
+        name: s.name,
+        faqsCount: s.faqs?.length || 0,
+      })),
+    );
 
     return NextResponse.json(subcategories || [], { status: 200 });
   } catch (err) {
+    console.error("GET Error:", err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
 
-// CREATE
+// 2. CREATE (POST)
 export async function POST(req) {
   try {
     await dbConnect();
     const body = await req.json();
 
-    // Generate slug if missing
-    if (!body.slug && body.name) {
-      body.slug = body.name;
+    // Slug fallback
+    if (!body.slug && body.name) body.slug = body.name;
+
+    // --- DATA CLEANING (Normalization) ---
+    // Top Section cleaning
+    if (body.topSection) {
+      if (!body.topSection.cta?.ctaId) {
+        delete body.topSection.cta;
+      }
     }
 
-    // Normalize middleSection
-    if (body.middleSection) {
-      const { description, images, extraDescription } = body.middleSection;
-
-      body.middleSection = {
-        description1: description || "",
-        image1: images?.[0] || "",
-        image2: images?.[1] || "",
-        description2: extraDescription || "",
-      };
+    // Sections cleaning
+    if (body.sections && Array.isArray(body.sections)) {
+      body.sections = body.sections.map((section, index) => {
+        const cleanSection = {
+          ...section,
+          order: section.order !== undefined ? section.order : index,
+        };
+        if (!cleanSection.cta?.ctaId) {
+          delete cleanSection.cta;
+        }
+        return cleanSection;
+      });
     }
 
-    // Normalize CTA1
-    body.cta1 = {
-      heading: body.cta1?.heading || "",
-      description: body.cta1?.description || "",
-    };
-
-    // Normalize CTA2
-    body.cta2 = {
-      heading: body.cta2?.heading || "",
-      description: body.cta2?.description || "",
-    };
-
-    // Ensure SEO exists
-    body.seo = body.seo || {};
+    // ✅ FAQS CLEANING - ADD THIS
+    if (body.faqs && Array.isArray(body.faqs)) {
+      body.faqs = body.faqs.map((faq, index) => ({
+        question: faq.question,
+        answer: faq.answer,
+        order: faq.order !== undefined ? faq.order : index,
+        isActive: faq.isActive !== undefined ? faq.isActive : true,
+      }));
+      console.log("FAQs being saved:", body.faqs); // Debug log
+    }
 
     const subcategory = new SubCategory(body);
     await subcategory.save();
 
-    return NextResponse.json(subcategory, { status: 201 });
-  } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 400 });
-  }
-}
+    const populated = await SubCategory.findById(subcategory._id)
+      .populate({ path: "topSection.cta.ctaId", model: CTA })
+      .populate({ path: "sections.cta.ctaId", model: CTA })
+      .lean();
 
-// UPDATE
-export async function PUT(req) {
-  try {
-    await dbConnect();
-    const body = await req.json();
-
-    if (!body._id) {
-      return NextResponse.json({ error: "ID required" }, { status: 400 });
-    }
-
-    // Normalize middleSection
-    if (body.middleSection) {
-      const { description, images, extraDescription } = body.middleSection;
-
-      body.middleSection = {
-        description1: description || "",
-        image1: images?.[0] || "",
-        image2: images?.[1] || "",
-        description2: extraDescription || "",
-      };
-    }
-
-    body.cta1 = {
-      heading: body.cta1?.heading || "",
-      description: body.cta1?.description || "",
-    };
-
-    body.cta2 = {
-      heading: body.cta2?.heading || "",
-      description: body.cta2?.description || "",
-    };
-
-    body.seo = body.seo || {};
-
-    const updated = await SubCategory.findByIdAndUpdate(body._id, body, {
-      new: true,
-      runValidators: true,
+    console.log("Saved subcategory with FAQs:", {
+      name: populated.name,
+      faqsCount: populated.faqs?.length,
     });
 
-    if (!updated) {
-      return NextResponse.json({ error: "Not found" }, { status: 404 });
-    }
-
-    return NextResponse.json(updated);
+    return NextResponse.json(populated, { status: 201 });
   } catch (err) {
+    console.error("POST Error:", err);
     return NextResponse.json({ error: err.message }, { status: 400 });
-  }
-}
-
-// DELETE
-export async function DELETE(req) {
-  try {
-    await dbConnect();
-    const { searchParams } = new URL(req.url);
-    const id = searchParams.get("id");
-
-    if (!id) {
-      return NextResponse.json({ error: "ID required" }, { status: 400 });
-    }
-
-    const deleted = await SubCategory.findByIdAndDelete(id);
-
-    if (!deleted) {
-      return NextResponse.json({ error: "Not found" }, { status: 404 });
-    }
-
-    return NextResponse.json({ message: "Deleted successfully" });
-  } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

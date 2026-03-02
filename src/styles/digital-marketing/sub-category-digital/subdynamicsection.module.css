@@ -1,0 +1,137 @@
+.sectionWrapper {
+  padding: 60px 0;
+  width: 100%;
+  background-color: #ffffff;
+}
+
+.layout-image-left,
+.layout-image-right {
+  background-color: #f9f9f9;
+}
+
+.layout-image-left:nth-child(even),
+.layout-image-right:nth-child(even) {
+  background-color: #ffffff;
+}
+
+.dynamicSection {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.sectionHeading {
+  font-size: 32px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.layout-image-left .sectionHeading,
+.layout-image-right .sectionHeading {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.contentContainer {
+  padding: 20px;
+}
+
+.descriptionContent {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #666;
+  margin-bottom: 25px;
+}
+
+.descriptionContent p {
+  margin-bottom: 15px;
+}
+
+.descriptionContent ul,
+.descriptionContent ol {
+  margin: 15px 0;
+  padding-left: 20px;
+}
+
+.descriptionContent li {
+  margin-bottom: 8px;
+}
+
+.imageContainer {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.ctaContainer {
+  margin-top: 30px;
+}
+
+.dynamicCtaButton {
+  height: 48px !important;
+  padding: 0 32px !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  border-radius: 6px !important;
+  transition: all 0.3s ease !important;
+}
+
+.dynamicCtaButton.primary {
+  background-color: #1890ff !important;
+  color: white !important;
+  border: none !important;
+}
+
+.dynamicCtaButton.primary:hover {
+  background-color: #40a9ff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(24, 144, 255, 0.3);
+}
+
+.dynamicCtaButton.secondary {
+  background-color: transparent !important;
+  color: #1890ff !important;
+  border: 2px solid #1890ff !important;
+}
+
+.dynamicCtaButton.secondary:hover {
+  background-color: #1890ff !important;
+  color: white !important;
+}
+
+.dynamicCtaButton.outline {
+  background-color: transparent !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+}
+
+.dynamicCtaButton.outline:hover {
+  border-color: #1890ff !important;
+  color: #1890ff !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sectionWrapper {
+    padding: 40px 0;
+  }
+  
+  .sectionHeading {
+    font-size: 24px;
+  }
+  
+  .contentContainer {
+    padding: 15px 0;
+  }
+  
+  .layout-image-left .row,
+  .layout-image-right .row {
+    flex-direction: column;
+  }
+  
+  .layout-image-left .imageContainer,
+  .layout-image-right .imageContainer {
+    order: 0;
+  }
+}

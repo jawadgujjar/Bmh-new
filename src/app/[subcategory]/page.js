@@ -4,21 +4,21 @@ import SubCalltoactiondigital1 from "@/components/digital-marketing/sub-category
 import SubCalltoactiondigital2 from "@/components/digital-marketing/sub-category-digital/subcalltoactiondigital2";
 import SubHeroDigitalMarketing from "@/components/digital-marketing/sub-category-digital/subdigitalhero";
 import SubKeywordsdigital from "@/components/digital-marketing/sub-category-digital/subkeywordsdigital";
-import SubWhydigital from "@/components/digital-marketing/sub-category-digital/subwhydigital";
+// import SubWhydigital from "@/components/digital-marketing/sub-category-digital/subwhydigital"; // Remove this
 import Carousel from "@/components/landing/carousel";
 import Form1 from "@/components/landing/getaquote";
 import SeoIndustries from "@/components/landing/seoindustries";
 import Heroform from "@/components/landing/heroform";
+import SubDynamicSection from "@/components/digital-marketing/sub-category-digital/subdynamicsection";
+import SubFaqs from "../../components/digital-marketing/sub-category-digital/subfaqs";
+
 
 // HTML renderer component
 function HtmlContent({ content, className = "" }) {
   if (!content) return null;
 
   return (
-    <div
-      className={className}
-      dangerouslySetInnerHTML={{ __html: content }}
-    />
+    <div className={className} dangerouslySetInnerHTML={{ __html: content }} />
   );
 }
 
@@ -53,30 +53,30 @@ export default async function SubcategoryPage({ params }) {
     );
   }
 
-  // HTML content کو render کرنے کے لیے helper function
-  const renderHtml = (content, className = "") => (
-    <div
-      className={className}
-      dangerouslySetInnerHTML={{ __html: content || "" }}
-    />
-  );
+  // Sort sections by order
+  const sortedSections =
+    subcategoryData.sections?.sort((a, b) => (a.order || 0) - (b.order || 0)) ||
+    [];
 
   return (
     <main>
       {/* Hero Section */}
       <SubHeroDigitalMarketing
-        backgroundImage={subcategoryData.topSection?.backgroundImage || "/default-bg.jpg"}
+        backgroundImage={
+          subcategoryData.topSection?.backgroundImage || "/default-bg.jpg"
+        }
         heading={subcategoryData.topSection?.heading || subcategoryData.name}
         description={
           <div
             dangerouslySetInnerHTML={{
-              __html: subcategoryData.topSection?.description || ""
+              __html: subcategoryData.topSection?.description || "",
             }}
           />
         }
       />
 
       <Heroform />
+
       {/* Dynamic Services Section */}
       <SubKeywordsdigital
         heading={`Specialized ${subcategoryData.name} Services`}
@@ -90,31 +90,18 @@ export default async function SubcategoryPage({ params }) {
         category={subcategoryData.category}
       />
 
-      {/* Why Choose Section */}
-      <SubWhydigital
-        heading={subcategoryData.keywordsSection?.relatedHeading?.[0] || "Why Choose Us"}
-        description={
-          <HtmlContent
-            content={subcategoryData.middleSection?.description1}
-            className="why-description"
-          />
-        }
-        description2={
-          <HtmlContent
-            content={subcategoryData.middleSection?.description2}
-            className="why-description2"
-          />
-        }
-        conclusion={
-          <HtmlContent
-            content={subcategoryData.keywordsSection?.relatedDescription?.[1]}
-            className="conclusion"
-          />
-        }
-        image1={subcategoryData.middleSection?.image1 || "/default-image.jpg"}
-        image2={subcategoryData.middleSection?.image2 || "/default-image.jpg"}
-        buttonText="Get Started"
-      />
+      {/* 🔥 DYNAMIC SECTIONS RENDERING - This replaces SubWhydigital */}
+      {sortedSections.map((section, index) => (
+        <SubDynamicSection
+          key={index}
+          layoutType={section.layoutType}
+          heading={section.heading}
+          description={section.description}
+          image={section.image}
+          cta={section.cta}
+          index={index}
+        />
+      ))}
 
       {/* CTA 1 */}
       <SubCalltoactiondigital1
@@ -146,6 +133,11 @@ export default async function SubcategoryPage({ params }) {
       <Form1 />
       <Carousel />
 
+      {/* 📝 FAQS SECTION - ADDED HERE (AFTER CAROUSEL) */}
+      <SubFaqs 
+        faqs={subcategoryData.faqs || []} 
+        title={`Frequently Asked Questions About ${subcategoryData.name}`}
+      />
       {/* Production hidden debug */}
       <div style={{ display: "none" }}>
         <pre>{JSON.stringify(subcategoryData, null, 2)}</pre>

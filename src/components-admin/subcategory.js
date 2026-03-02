@@ -14,629 +14,637 @@ import {
   Popconfirm,
   message,
   Upload,
-  Collapse,
   Row,
   Col,
+  Switch,
+  Tabs,
 } from "antd";
 import {
   PlusOutlined,
   EditOutlined,
-  EyeOutlined,
   DeleteOutlined,
-  MinusCircleOutlined,
   UploadOutlined,
-  GlobalOutlined,
-  InfoCircleOutlined,
+  ArrowUpOutlined,
+  ArrowDownOutlined,
 } from "@ant-design/icons";
+import dynamic from "next/dynamic";
 
-// Dynamically import TipTap to avoid SSR
-import dynamic from 'next/dynamic';
-
-const TiptapEditor = dynamic(() => import('./TipTapEditor').then(mod => mod.default), {
-  ssr: false,
-  loading: () => (
-    <div style={{
-      border: '1px solid #d9d9d9',
-      borderRadius: '8px',
-      minHeight: '150px',
-      padding: '20px',
-      background: '#fafafa',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center'
-    }}>
-      Loading editor...
-    </div>
-  )
-});
+const TiptapEditor = dynamic(
+  () => import("./TipTapEditor").then((mod) => mod.default),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        style={{
+          padding: "20px",
+          background: "#fafafa",
+          border: "1px solid #d9d9d9",
+          borderRadius: "8px",
+        }}
+      >
+        Loading editor...
+      </div>
+    ),
+  },
+);
 
 const { Title, Text } = Typography;
 const { Option } = Select;
-const { Panel } = Collapse;
 
+// --- Image Upload Component ---
+const ImageUploadField = ({ value, onChange, label, required = false }) => {
+  const [fileList, setFileList] = useState([]);
+
+  useEffect(() => {
+    if (value && typeof value === "string" && value.trim() !== "") {
+      setFileList([
+        {
+          uid: "-1",
+          name: "image.png",
+          status: "done",
+          url: value,
+        },
+      ]);
+    } else {
+      setFileList([]);
+    }
+  }, [value]);
+
+  const handleUpload = async (file) => {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        onChange(data.url);
+        message.success("Image uploaded successfully");
+      } else {
+        message.error(data.error || "Failed to upload image");
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      message.error("Error uploading image");
+    }
+  };
+
+  return (
+    <Form.Item
+      label={label}
+      required={required}
+      rules={
+        required ? [{ required: true, message: `Please upload ${label}` }] : []
+      }
+    >
+      <Upload
+        listType="picture"
+        fileList={fileList}
+        beforeUpload={async (file) => {
+          await handleUpload(file);
+          return Upload.LIST_IGNORE;
+        }}
+        onRemove={() => {
+          onChange("");
+          setFileList([]);
+        }}
+      >
+        <Button icon={<UploadOutlined />}>
+          {value ? "Replace Image" : "Upload Image"}
+        </Button>
+      </Upload>
+    </Form.Item>
+  );
+};
+
+// --- Sub-component for CTA Fields ---
+const CTAFields = ({ namePath, label, ctas }) => (
+  <Card
+    size="small"
+    title={`${label} CTA (Optional)`}
+    style={{
+      marginBottom: 16,
+      background: "#f9f9f9",
+      border: "1px dashed #d9d9d9",
+    }}
+  >
+    <Row gutter={16}>
+      <Col span={12}>
+        <Form.Item label="Select CTA" name={[...namePath, "ctaId"]}>
+          <Select placeholder="Link to existing CTA" allowClear>
+            {ctas.map((c) => (
+              <Option key={c._id} value={c._id}>
+                {c.name}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+      </Col>
+      <Col span={12}>
+        <Form.Item
+          label="Button Style"
+          name={[...namePath, "buttonVariant"]}
+          initialValue="primary"
+        >
+          <Select>
+            <Option value="primary">Primary</Option>
+            <Option value="secondary">Secondary</Option>
+            <Option value="outline">Outline</Option>
+            <Option value="ghost">Ghost</Option>
+          </Select>
+        </Form.Item>
+      </Col>
+    </Row>
+  </Card>
+);
+
+// --- Section Item Component (Rendered inside Form.List) ---
+const SectionItem = ({ field, index, remove, move, form, ctas }) => {
+  const layout = Form.useWatch(["sections", field.name, "layoutType"], form);
+  const currentImageUrl = Form.useWatch(
+    ["sections", field.name, "image"],
+    form,
+  );
+  const isImageRequired = layout === "image-left" || layout === "image-right";
+
+  return (
+    <Card
+      size="small"
+      style={{ marginBottom: 20, borderLeft: "4px solid #1890ff" }}
+      title={<Text strong>Section #{index + 1}</Text>}
+      extra={
+        <Space>
+          <Button
+            size="small"
+            icon={<ArrowUpOutlined />}
+            onClick={() => move(index, index - 1)}
+            disabled={index === 0}
+          />
+          <Button
+            size="small"
+            icon={<ArrowDownOutlined />}
+            onClick={() => move(index, index + 1)}
+            disabled={
+              index === (form.getFieldValue("sections")?.length || 0) - 1
+            }
+          />
+          <Button
+            size="small"
+            danger
+            icon={<DeleteOutlined />}
+            onClick={() => remove(index)}
+          />
+        </Space>
+      }
+    >
+      <Row gutter={16}>
+        <Col span={12}>
+          <Form.Item
+            {...field}
+            label="Layout Type"
+            name={[field.name, "layoutType"]}
+            initialValue="description-only"
+          >
+            <Select>
+              <Option value="image-left">Image Left</Option>
+              <Option value="image-right">Image Right</Option>
+              <Option value="description-only">Description Only</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            {...field}
+            label="Order"
+            name={[field.name, "order"]}
+            initialValue={index}
+          >
+            <Input type="number" min={0} />
+          </Form.Item>
+        </Col>
+      </Row>
+
+      <Form.Item
+        {...field}
+        label="Heading"
+        name={[field.name, "heading"]}
+        rules={[{ required: true, message: "Heading is required" }]}
+      >
+        <Input placeholder="Section Title" />
+      </Form.Item>
+
+      <Form.Item
+        {...field}
+        label="Description"
+        name={[field.name, "description"]}
+      >
+        <TiptapEditor
+          content={
+            form.getFieldValue(["sections", field.name, "description"]) || ""
+          }
+          onChange={(html) =>
+            form.setFieldValue(["sections", field.name, "description"], html)
+          }
+        />
+      </Form.Item>
+
+      {isImageRequired && (
+        <Form.Item
+          name={[field.name, "image"]}
+          rules={[{ required: true, message: "Image is required" }]}
+        >
+          <ImageUploadField
+            label="Section Image"
+            required={true}
+            value={currentImageUrl}
+            onChange={(url) =>
+              form.setFieldValue(["sections", field.name, "image"], url)
+            }
+          />
+        </Form.Item>
+      )}
+
+      <CTAFields namePath={[field.name, "cta"]} label="Section" ctas={ctas} />
+    </Card>
+  );
+};
+
+// --- FAQ Item Component ---
+const FAQItem = ({ field, index, remove, move, form }) => {
+  return (
+    <Card
+      size="small"
+      style={{ marginBottom: 20, borderLeft: "4px solid #52c41a" }}
+      title={<Text strong>FAQ #{index + 1}</Text>}
+      extra={
+        <Space>
+          <Button
+            size="small"
+            icon={<ArrowUpOutlined />}
+            onClick={() => move(index, index - 1)}
+            disabled={index === 0}
+          />
+          <Button
+            size="small"
+            icon={<ArrowDownOutlined />}
+            onClick={() => move(index, index + 1)}
+            disabled={index === (form.getFieldValue("faqs")?.length || 0) - 1}
+          />
+          <Button
+            size="small"
+            danger
+            icon={<DeleteOutlined />}
+            onClick={() => remove(index)}
+          />
+        </Space>
+      }
+    >
+      <Row gutter={16}>
+        <Col span={12}>
+          <Form.Item
+            {...field}
+            label="Question"
+            name={[field.name, "question"]}
+            rules={[
+              { required: true, message: "Question is required" },
+              { min: 5, message: "Question must be at least 5 characters" },
+            ]}
+          >
+            <Input placeholder="e.g., What is your return policy?" />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            {...field}
+            label="Order"
+            name={[field.name, "order"]}
+            initialValue={index}
+          >
+            <Input type="number" min={0} />
+          </Form.Item>
+        </Col>
+      </Row>
+
+      <Form.Item
+        {...field}
+        label="Answer"
+        name={[field.name, "answer"]}
+        rules={[
+          { required: true, message: "Answer is required" },
+          { min: 10, message: "Answer must be at least 10 characters" },
+        ]}
+      >
+        <Input.TextArea
+          rows={3}
+          placeholder="Provide a detailed answer to the question"
+        />
+      </Form.Item>
+
+      <Form.Item
+        {...field}
+        label="Active Status"
+        name={[field.name, "isActive"]}
+        valuePropName="checked"
+        initialValue={true}
+      >
+        <Switch checkedChildren="Active" unCheckedChildren="Inactive" />
+      </Form.Item>
+    </Card>
+  );
+};
+
+// --- Main Component ---
 export default function SubCategory() {
+  const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [subCategories, setSubCategories] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingSubCat, setEditingSubCat] = useState(null);
-  const [form] = Form.useForm();
-  const [expandedPanels, setExpandedPanels] = useState(['seo']);
+  const [ctas, setCtas] = useState([]);
+  const [activeTab, setActiveTab] = useState("1");
 
-  // NEW STATES FOR PAGE MODAL
-  const [isPageModalOpen, setIsPageModalOpen] = useState(false);
-  const [selectedSubCategory, setSelectedSubCategory] = useState(null);
-  const [pageForm] = Form.useForm();
-  
-  // State for all editor contents in main modal
-  const [mainEditorContents, setMainEditorContents] = useState({
-    topSectionDescription: "",
-    middleSectionDescription1: "",
-    middleSectionDescription2: "",
-    cta1Description: "",
-    cta2Description: "",
-    keywordsSectionDescription: "",
-  });
-
-  // State for page modal editor contents
-  const [pageEditorContents, setPageEditorContents] = useState({
-    topSectionDescription: "",
-    middleSectionDescription1: "",
-    middleSectionDescription2: "",
-    cta1Description: "",
-    cta2Description: "",
-  });
-
-  // Fetch SubCategories
   const fetchSubCategories = async () => {
     try {
       setLoading(true);
       const res = await fetch("/api/subcategories");
       const data = await res.json();
-      if (Array.isArray(data)) {
-        setSubCategories(data);
-      } else if (data.success && Array.isArray(data.data)) {
-        setSubCategories(data.data);
-      } else {
-        message.error("Failed to load subcategories");
-      }
+      setSubCategories(Array.isArray(data) ? data : data.data || []);
     } catch (error) {
-      console.error("Error fetching subcategories:", error);
-      message.error("Error fetching subcategories");
+      message.error("Failed to fetch subcategories");
     } finally {
       setLoading(false);
     }
   };
 
+  const fetchCTAs = async () => {
+    try {
+      const res = await fetch("/api/ctas");
+      const data = await res.json();
+      if (data.success) setCtas(data.data);
+    } catch (error) {
+      console.error("CTA fetch error:", error);
+    }
+  };
+
   useEffect(() => {
     fetchSubCategories();
+    fetchCTAs();
   }, []);
 
-  // Handle file upload to backend -> Cloudinary
-  const handleUpload = async (file, fieldName) => {
-    const formData = new FormData();
-    formData.append("image", file);
+  const generateSlug = (text) =>
+    text
+      ?.toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^\w-]+/g, "")
+      .replace(/--+/g, "-");
 
-    try {
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await res.json();
+  // Save current form state before tab change
+  const handleTabChange = (key) => {
+    // Get current form values
+    const currentValues = form.getFieldsValue(true);
 
-      if (data.success) {
-        if (Array.isArray(fieldName)) {
-          let nestedValue = data.url;
-          for (let i = fieldName.length - 1; i >= 0; i--) {
-            nestedValue = { [fieldName[i]]: nestedValue };
-          }
-          form.setFieldsValue(nestedValue);
-        } else {
-          form.setFieldsValue({ [fieldName]: data.url });
-        }
-        message.success("Image uploaded successfully");
-        return data.url;
-      } else {
-        message.error(data.error || "Failed to upload image");
-        return false;
-      }
-    } catch (error) {
-      console.error("Upload error:", error);
-      message.error("Error uploading image");
-      return false;
-    }
-  };
-
-  // Handle file upload for Page Modal
-  const handlePageUpload = async (file, fieldName) => {
-    const formData = new FormData();
-    formData.append("image", file);
-
-    try {
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await res.json();
-
-      if (data.success) {
-        if (Array.isArray(fieldName)) {
-          let nestedValue = data.url;
-          for (let i = fieldName.length - 1; i >= 0; i--) {
-            nestedValue = { [fieldName[i]]: nestedValue };
-          }
-          pageForm.setFieldsValue(nestedValue);
-        } else {
-          pageForm.setFieldsValue({ [fieldName]: data.url });
-        }
-        message.success("Image uploaded successfully");
-        return data.url;
-      } else {
-        message.error(data.error || "Failed to upload image");
-        return false;
-      }
-    } catch (error) {
-      console.error("Upload error:", error);
-      message.error("Error uploading image");
-      return false;
-    }
-  };
-
-  // Custom Upload Component with preview (FOR SUBCATEGORY MODAL)
-  const UploadField = ({ name, label, formType = "subcategory" }) => {
-    const [fileList, setFileList] = useState([]);
-    const currentForm = formType === "page" ? pageForm : form;
-    const isModalOpenState =
-      formType === "page" ? isPageModalOpen : isModalOpen;
-    const uploadHandler = formType === "page" ? handlePageUpload : handleUpload;
-
-    useEffect(() => {
-      const currentValue = currentForm.getFieldValue(name);
-      if (currentValue) {
-        setFileList([
-          {
-            uid: "-1",
-            name: "image.png",
-            status: "done",
-            url: currentValue,
-          },
-        ]);
-      }
-    }, [currentForm, name, isModalOpenState]);
-
-    return (
-      <Form.Item
-        label={label}
-        name={name}
-        rules={[{ required: true, message: `Please upload ${label}` }]}
-      >
-        <Upload
-          listType="picture"
-          fileList={fileList}
-          beforeUpload={async (file) => {
-            const url = await uploadHandler(file, name);
-            if (url) {
-              setFileList([
-                { uid: "-1", name: file.name, status: "done", url },
-              ]);
-            }
-            return Upload.LIST_IGNORE;
-          }}
-          onRemove={() => {
-            currentForm.setFieldsValue({ [name]: "" });
-            setFileList([]);
-          }}
-        >
-          <Button icon={<UploadOutlined />}>Upload {label}</Button>
-        </Upload>
-      </Form.Item>
+    // Store in session storage or state if needed
+    sessionStorage.setItem(
+      "subcategoryFormDraft",
+      JSON.stringify(currentValues),
     );
+
+    setActiveTab(key);
   };
 
-  // Handle editor change for main modal
-  const handleMainEditorChange = (content, fieldName) => {
-    setMainEditorContents(prev => ({
-      ...prev,
-      [fieldName]: content
-    }));
-    // Also update form values
-    form.setFieldsValue({
-      [fieldName]: content
-    });
-  };
+  // Load form data when modal opens
+  useEffect(() => {
+    if (isModalOpen && !editingSubCat) {
+      // For new item, check if there's a draft
+      const draft = sessionStorage.getItem("subcategoryFormDraft");
+      if (draft) {
+        try {
+          const parsedDraft = JSON.parse(draft);
+          form.setFieldsValue(parsedDraft);
+        } catch (e) {
+          console.error("Error parsing draft:", e);
+        }
+      }
+    }
+  }, [isModalOpen, editingSubCat, form]);
 
-  // Handle editor change for page modal
-  const handlePageEditorChange = (content, fieldName) => {
-    setPageEditorContents(prev => ({
-      ...prev,
-      [fieldName]: content
-    }));
-    // Also update form values
-    pageForm.setFieldsValue({
-      [fieldName]: content
-    });
-  };
-
-  // Add / Edit SubCategory
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
 
-      // ✅ Prepare SEO data according to model
-      const seoData = {
-        metaTitle: values.seo?.metaTitle || values.topSection?.heading || values.name,
-        metaDescription: values.seo?.metaDescription || values.keywordsSection?.description,
-        metaKeywords: values.seo?.metaKeywords || values.keywordsSection?.keywords || [],
-        schemaMarkup: values.seo?.schemaMarkup || null
-      };
+      // Process sections
+      const processedSections =
+        values.sections?.map((s, idx) => ({
+          layoutType: s.layoutType || "description-only",
+          heading: s.heading || "",
+          description: s.description || "",
+          image: s.image || "",
+          cta: s.cta?.ctaId
+            ? {
+                ctaId: s.cta.ctaId,
+                buttonVariant: s.cta.buttonVariant || "primary",
+              }
+            : null,
+          order: s.order ?? idx,
+        })) || [];
 
-      // Combine all values with SEO and editor contents
-      const finalValues = {
-        ...values,
+      // Process FAQs
+      const processedFAQs =
+        values.faqs?.map((faq, idx) => ({
+          question: faq.question,
+          answer: faq.answer,
+          order: faq.order ?? idx,
+          isActive: faq.isActive !== undefined ? faq.isActive : true,
+        })) || [];
+
+      const payload = {
+        name: values.name,
+        slug: values.slug || generateSlug(values.name),
+        category: values.category,
+        icon: values.icon || "",
+        isActive: values.isActive !== undefined ? values.isActive : true,
         topSection: {
-          ...values.topSection,
-          description: mainEditorContents.topSectionDescription
+          backgroundImage: values.topSection?.backgroundImage || "",
+          heading: values.topSection?.heading || "",
+          description: values.topSection?.description || "",
+          cta: values.topSection?.cta?.ctaId
+            ? {
+                ctaId: values.topSection.cta.ctaId,
+                buttonVariant: values.topSection.cta.buttonVariant || "primary",
+              }
+            : null,
         },
-        middleSection: {
-          ...values.middleSection,
-          description1: mainEditorContents.middleSectionDescription1,
-          description2: mainEditorContents.middleSectionDescription2
+        sections: processedSections,
+        faqs: processedFAQs,
+        seo: {
+          metaTitle: values.seo?.metaTitle || values.name,
+          metaDescription: values.seo?.metaDescription || "",
+          metaKeywords:
+            typeof values.seo?.metaKeywords === "string"
+              ? values.seo.metaKeywords
+                  .split(",")
+                  .map((k) => k.trim())
+                  .filter((k) => k)
+              : values.seo?.metaKeywords || [],
+          schemaMarkup: values.seo?.schemaMarkup || null,
         },
-        keywordsSection: {
-          ...values.keywordsSection,
-          description: mainEditorContents.keywordsSectionDescription
-        },
-        cta1: {
-          ...values.cta1,
-          description: mainEditorContents.cta1Description
-        },
-        cta2: {
-          ...values.cta2,
-          description: mainEditorContents.cta2Description
-        },
-        seo: seoData
       };
 
-      let url = "/api/subcategories";
-      let method = "POST";
+      // Log payload for debugging
+      console.log("Submitting payload:", {
+        sectionsCount: payload.sections.length,
+        faqsCount: payload.faqs.length,
+        payload,
+      });
 
-      if (editingSubCat) {
-        url = `/api/subcategories/${editingSubCat._id}`;
-        method = "PUT";
-      }
+      const url = editingSubCat
+        ? `/api/subcategories/${editingSubCat._id}`
+        : "/api/subcategories";
+      const method = editingSubCat ? "PUT" : "POST";
 
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(finalValues),
+        body: JSON.stringify(payload),
       });
-      const data = await res.json();
 
-      if (data.success) {
+      const result = await res.json();
+
+      if (res.ok || result.success || result._id) {
         message.success(
-          editingSubCat ? "SubCategory updated!" : "SubCategory added!",
+          editingSubCat ? "Updated successfully" : "Created successfully",
         );
-        form.resetFields();
-        setEditingSubCat(null);
         setIsModalOpen(false);
-        setExpandedPanels(['seo']);
-        setMainEditorContents({
-          topSectionDescription: "",
-          middleSectionDescription1: "",
-          middleSectionDescription2: "",
-          cta1Description: "",
-          cta2Description: "",
-          keywordsSectionDescription: "",
-        });
+        form.resetFields();
+        // Clear draft
+        sessionStorage.removeItem("subcategoryFormDraft");
         fetchSubCategories();
       } else {
-        message.error(data.error || "Operation failed");
+        message.error(result.error || "Save failed.");
       }
-    } catch (err) {
-      console.error("Error saving subcategory:", err);
-      message.error("Error saving subcategory");
+    } catch (error) {
+      console.error("Validation error:", error);
+      message.error("Validation failed – check required fields.");
     }
   };
 
-  // Delete SubCategory
-  const handleDelete = async (id) => {
-    try {
-      const res = await fetch(`/api/subcategories/${id}`, { method: "DELETE" });
-      const data = await res.json();
-      if (data.success) {
-        message.success("Deleted successfully");
-        fetchSubCategories();
-      } else {
-        message.error("Failed to delete");
-      }
-    } catch (err) {
-      console.error("Error deleting subcategory:", err);
-      message.error("Error deleting");
-    }
-  };
-
-  // Slug generator
-  const generateSlug = (text) => {
-    if (!text) return '';
-    return text
-      .toLowerCase()
-      .replace(/\s+/g, '-')
-      .replace(/[^\w-]+/g, '')
-      .replace(/--+/g, '-')
-      .replace(/^-+/, '')
-      .replace(/-+$/, '');
-  };
-
-  // NEW: Handle Page Creation
-  const handlePageCreate = async () => {
-    try {
-      // First get form values
-      const values = await pageForm.validateFields();
-      
-      // Merge editor contents with form values
-      const finalValues = {
-        ...values,
-        topSection: {
-          ...values.topSection,
-          description: pageEditorContents.topSectionDescription
-        },
-        middleSection: {
-          ...values.middleSection,
-          description1: pageEditorContents.middleSectionDescription1,
-          description2: pageEditorContents.middleSectionDescription2
-        },
-        cta1: {
-          ...values.cta1,
-          description: pageEditorContents.cta1Description
-        },
-        cta2: {
-          ...values.cta2,
-          description: pageEditorContents.cta2Description
-        }
-      };
-
-      // Ensure slug doesn't have unwanted prefixes
-      let slug = values.slug || '';
-      if (slug.startsWith('/')) {
-        slug = slug.substring(1);
-      }
-
-      // Prepare SEO data for page
-      const seoData = {
-        metaTitle: values.metaTitle || values.title || '',
-        metaDescription: values.metaDescription || values.subcatpagedescr || '',
-        metaKeywords: values.metaKeywords ? 
-          values.metaKeywords.split(',').map(k => k.trim()).filter(k => k) : [],
-        metaSchema: values.metaSchema || null
-      };
-
-      // Prepare final data according to Page model
-      const pageData = {
-        title: finalValues.title,
-        slug: slug,
-        category: selectedSubCategory?.category || "digital-marketing",
-        subcategory: selectedSubCategory?._id,
-        subcatpagedescr: finalValues.subcatpagedescr,
-        metaTitle: seoData.metaTitle,
-        metaDescription: seoData.metaDescription,
-        metaKeywords: seoData.metaKeywords.join(', '),
-        metaSchema: seoData.metaSchema,
-        topSection: finalValues.topSection,
-        middleSection: finalValues.middleSection,
-        cta1: finalValues.cta1,
-        cta2: finalValues.cta2
-      };
-
-      console.log("Creating page with data:", pageData);
-
-      const res = await fetch("/api/page", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(pageData),
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        message.success("Page created successfully!");
-
-        // Close modal and reset
-        setIsPageModalOpen(false);
-        pageForm.resetFields();
-        setPageEditorContents({
-          topSectionDescription: "",
-          middleSectionDescription1: "",
-          middleSectionDescription2: "",
-          cta1Description: "",
-          cta2Description: "",
-        });
-        setSelectedSubCategory(null);
-
-        // Redirect to pages page
-        window.location.href = "/pages";
-      } else {
-        message.error(data.error || "Failed to create page");
-      }
-    } catch (err) {
-      console.error("Error creating page:", err);
-      message.error("Error creating page");
-    }
-  };
-
-  // Open modal for editing
-  const handleEdit = (record) => {
-    setEditingSubCat(record);
-    
-    // Set editor contents from record
-    setMainEditorContents({
-      topSectionDescription: record.topSection?.description || "",
-      middleSectionDescription1: record.middleSection?.description1 || "",
-      middleSectionDescription2: record.middleSection?.description2 || "",
-      cta1Description: record.cta1?.description || "",
-      cta2Description: record.cta2?.description || "",
-      keywordsSectionDescription: record.keywordsSection?.description || "",
-    });
-    
-    form.setFieldsValue({
-      name: record.name,
-      category: record.category,
-      icon: record.icon,
-      topSection: record.topSection || {},
-      middleSection: record.middleSection || {},
-      keywordsSection: record.keywordsSection || {},
-      cta1: record.cta1 || {},
-      cta2: record.cta2 || {},
-      // ✅ SEO Fields (model ke hisab se)
-      seo: record.seo || {}
-    });
-    setIsModalOpen(true);
-  };
-
-  // NEW: Open Page Creation Modal
-  const openPageModal = (subCategory) => {
-    setSelectedSubCategory(subCategory);
-    
-    // Generate slug from subcategory name
-    const slug = generateSlug(subCategory.name);
-    
-    // Reset editor contents
-    setPageEditorContents({
-      topSectionDescription: "",
-      middleSectionDescription1: "",
-      middleSectionDescription2: "",
-      cta1Description: "",
-      cta2Description: "",
-    });
-    
-    pageForm.setFieldsValue({
-      title: subCategory.name, // Auto-populate title
-      slug: slug, // Auto-generate slug
-      subcategory: subCategory._id, // Auto-populate subcategory ID
-      category: subCategory.category, // Auto-populate category
-      subcatpagedescr: "", // Reset short description
-      metaTitle: "",
-      metaDescription: "",
-      metaKeywords: "",
-      metaSchema: "",
-      topSection: {
-        heading: "",
-        description: ""
-      },
-      middleSection: {
-        description1: "",
-        description2: "",
-        image1: "",
-        image2: ""
-      },
-      cta1: {
-        heading: "",
-        description: ""
-      },
-      cta2: {
-        heading: "",
-        description: ""
-      }
-    });
-    
-    setIsPageModalOpen(true);
-  };
-
-  // Reset main modal when closing
-  const resetMainModal = () => {
+  const handleCancel = () => {
     setIsModalOpen(false);
-    setExpandedPanels(['seo']);
-    setMainEditorContents({
-      topSectionDescription: "",
-      middleSectionDescription1: "",
-      middleSectionDescription2: "",
-      cta1Description: "",
-      cta2Description: "",
-      keywordsSectionDescription: "",
-    });
+    form.resetFields();
+    // Clear draft on cancel
+    sessionStorage.removeItem("subcategoryFormDraft");
   };
 
-  // Reset page modal when closing
-  const resetPageModal = () => {
-    setIsPageModalOpen(false);
-    setSelectedSubCategory(null);
-    pageForm.resetFields();
-    setPageEditorContents({
-      topSectionDescription: "",
-      middleSectionDescription1: "",
-      middleSectionDescription2: "",
-      cta1Description: "",
-      cta2Description: "",
-    });
-  };
-
-  // Table Columns with SEO Status
+  // Table columns
   const columns = [
     {
       title: "Icon",
       dataIndex: "icon",
-      key: "icon",
       render: (icon) => (
         <img
-          src={icon || "https://via.placeholder.com/35"}
-          alt="icon"
-          style={{ width: 35, height: 35, borderRadius: 6 }}
-          onError={(e) => (e.target.src = "https://via.placeholder.com/35")}
+          src={icon || "https://via.placeholder.com/30"}
+          style={{ width: 30, height: 30, borderRadius: 4 }}
+          alt=""
         />
       ),
     },
-    {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-      render: (text) => <b>{text}</b>,
-    },
+    { title: "Name", dataIndex: "name", render: (t) => <b>{t}</b> },
     {
       title: "Category",
       dataIndex: "category",
-      key: "category",
-      render: (cat) => <Tag color="blue">{cat || "N/A"}</Tag>,
+      render: (c) => <Tag color="blue">{c}</Tag>,
     },
     {
-      title: "SEO Status",
-      key: "seoStatus",
-      render: (_, record) => {
-        const seo = record.seo || {};
-        return (
-          <div>
-            {seo.metaTitle ? (
-              <Tag color="green">✓ SEO Set</Tag>
-            ) : (
-              <Tag color="orange">No SEO</Tag>
-            )}
-            {seo.metaDescription && (
-              <div style={{ fontSize: '11px', color: '#666', marginTop: '2px' }}>
-                {seo.metaDescription.substring(0, 40)}...
-              </div>
-            )}
-          </div>
-        );
-      },
+      title: "Sections",
+      render: (_, record) => (
+        <Tag color="purple">{record.sections?.length || 0}</Tag>
+      ),
+    },
+    {
+      title: "FAQs",
+      render: (_, record) => (
+        <Tag color="green">{record.faqs?.length || 0}</Tag>
+      ),
+    },
+    {
+      title: "Status",
+      dataIndex: "isActive",
+      render: (act) => (
+        <Tag color={act ? "green" : "red"}>{act ? "Active" : "Draft"}</Tag>
+      ),
     },
     {
       title: "Actions",
-      key: "actions",
       render: (_, record) => (
         <Space>
           <Button
-            icon={<EyeOutlined />}
-            onClick={() => window.open(`/${record.category}/${record.slug || record.name.toLowerCase().replace(/\s+/g, '-')}`, '_blank')}
-            title="View Page"
+            icon={<EditOutlined />}
+            onClick={() => {
+              setEditingSubCat(record);
+
+              // Prepare form values
+              const formValues = {
+                name: record.name,
+                slug: record.slug,
+                category: record.category,
+                icon: record.icon,
+                isActive: record.isActive,
+                topSection: {
+                  backgroundImage: record.topSection?.backgroundImage,
+                  heading: record.topSection?.heading,
+                  description: record.topSection?.description,
+                  cta: record.topSection?.cta?.ctaId
+                    ? {
+                        ctaId:
+                          record.topSection.cta.ctaId._id ||
+                          record.topSection.cta.ctaId,
+                        buttonVariant: record.topSection.cta.buttonVariant,
+                      }
+                    : undefined,
+                },
+                sections: (record.sections || []).map((s) => ({
+                  layoutType: s.layoutType,
+                  heading: s.heading,
+                  description: s.description,
+                  image: s.image || "",
+                  cta: s.cta?.ctaId
+                    ? {
+                        ctaId: s.cta.ctaId._id || s.cta.ctaId,
+                        buttonVariant: s.cta.buttonVariant,
+                      }
+                    : undefined,
+                  order: s.order,
+                })),
+                faqs: (record.faqs || []).map((f) => ({
+                  question: f.question,
+                  answer: f.answer,
+                  order: f.order,
+                  isActive: f.isActive,
+                })),
+                seo: {
+                  metaTitle: record.seo?.metaTitle,
+                  metaDescription: record.seo?.metaDescription,
+                  metaKeywords: record.seo?.metaKeywords?.join(", ") || "",
+                  schemaMarkup: record.seo?.schemaMarkup,
+                },
+              };
+
+              form.setFieldsValue(formValues);
+              setIsModalOpen(true);
+            }}
           />
-          <Button icon={<EditOutlined />} onClick={() => handleEdit(record)} />
-          <Button
-            type="primary"
-            onClick={() => openPageModal(record)}
-            style={{ marginLeft: 8 }}
-          >
-            Add Page
-          </Button>
           <Popconfirm
-            title="Delete SubCategory?"
-            onConfirm={() => handleDelete(record._id)}
+            title="Delete this subcategory?"
+            onConfirm={async () => {
+              await fetch(`/api/subcategories/${record._id}`, {
+                method: "DELETE",
+              });
+              fetchSubCategories();
+            }}
           >
             <Button danger icon={<DeleteOutlined />} />
           </Popconfirm>
@@ -646,505 +654,335 @@ export default function SubCategory() {
   ];
 
   return (
-    <Card
-      style={{
-        background: "#fff",
-        borderRadius: 12,
-        boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-      }}
-    >
-      <Space
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginBottom: 20,
-        }}
+    <div style={{ padding: "24px" }}>
+      <Card
+        title={
+          <Title level={3} style={{ margin: 0 }}>
+            📂 SubCategory Management
+          </Title>
+        }
+        extra={
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={() => {
+              form.resetFields();
+              setEditingSubCat(null);
+              // Set default values
+              form.setFieldsValue({
+                isActive: true,
+                sections: [],
+                faqs: [],
+                topSection: {},
+                seo: {},
+              });
+              setIsModalOpen(true);
+            }}
+          >
+            Add SubCategory
+          </Button>
+        }
       >
-        <Title level={3} style={{ margin: 0, color: "#1890ff" }}>
-          📂 Sub Categories Management
-        </Title>
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          onClick={() => {
-            form.resetFields();
-            setEditingSubCat(null);
-            setIsModalOpen(true);
-            setMainEditorContents({
-              topSectionDescription: "",
-              middleSectionDescription1: "",
-              middleSectionDescription2: "",
-              cta1Description: "",
-              cta2Description: "",
-              keywordsSectionDescription: "",
-            });
-          }}
-        >
-          Add Sub Category
-        </Button>
-      </Space>
+        <Table
+          loading={loading}
+          dataSource={subCategories}
+          rowKey="_id"
+          columns={columns}
+        />
+      </Card>
 
-      <Table
-        columns={columns}
-        dataSource={subCategories}
-        rowKey="_id"
-        loading={loading}
-        bordered
-        pagination={{ pageSize: 5 }}
-      />
-
-      {/* UPDATED: PAGE CREATION MODAL WITH TIPTAP EDITORS */}
-      <Modal
-        title={`Add Page for ${selectedSubCategory?.name || "SubCategory"}`}
-        open={isPageModalOpen}
-        onCancel={resetPageModal}
-        onOk={handlePageCreate}
-        okText="Create Page"
-        width={1000}
-        style={{ top: 20 }}
-      >
-        <Form layout="vertical" form={pageForm}>
-          <Row gutter={24}>
-            {/* Left Column: Basic Info and SEO */}
-            <Col span={12}>
-              <Form.Item
-                label="Page Title"
-                name="title"
-                rules={[{ required: true, message: "Please enter page title" }]}
-              >
-                <Input placeholder="Enter page title" />
-              </Form.Item>
-
-              <Form.Item
-                label="URL Slug"
-                name="slug"
-                rules={[
-                  { required: true, message: "Please enter URL slug" },
-                  { pattern: /^[a-z0-9]+(?:-[a-z0-9]+)*$/, message: 'Only lowercase letters, numbers, and hyphens allowed' }
-                ]}
-                extra="yourdomain.com/your-slug"
-              >
-                <Input 
-                  placeholder="your-slug"
-                  onChange={(e) => {
-                    const slug = generateSlug(e.target.value);
-                    pageForm.setFieldsValue({ slug });
-                  }}
-                />
-              </Form.Item>
-
-              <Form.Item
-                label="Category"
-                name="category"
-              >
-                <Input 
-                  disabled 
-                  value={selectedSubCategory?.category}
-                />
-              </Form.Item>
-
-              <Form.Item
-                label="SubCategory"
-                name="subcategory"
-              >
-                <Input
-                  disabled
-                  value={selectedSubCategory?.name}
-                />
-              </Form.Item>
-
-              <Form.Item 
-                label="Short Description" 
-                name="subcatpagedescr"
-              >
-                <Input.TextArea placeholder="Enter short description (for meta description)" rows={3} />
-              </Form.Item>
-
-              <Collapse ghost defaultActiveKey={['seo']} style={{ marginBottom: 16 }}>
-                <Panel 
-                  header={
-                    <Space>
-                      <GlobalOutlined />
-                      <Text strong>SEO Settings</Text>
-                    </Space>
-                  } 
-                  key="seo"
-                >
-                  <Form.Item 
-                    label="Meta Title" 
-                    name="metaTitle"
-                    extra="Title for search engines (50-60 chars)"
-                  >
-                    <Input placeholder="Enter SEO title" maxLength={70} showCount />
-                  </Form.Item>
-
-                  <Form.Item 
-                    label="Meta Description" 
-                    name="metaDescription"
-                    extra="Description for search results (150-160 chars)"
-                  >
-                    <Input.TextArea 
-                      rows={3}
-                      placeholder="Enter SEO description"
-                      maxLength={160}
-                      showCount
-                    />
-                  </Form.Item>
-
-                  <Form.Item 
-                    label="Meta Keywords" 
-                    name="metaKeywords"
-                    extra="Separate with commas"
-                  >
-                    <Input placeholder="Enter keywords" />
-                  </Form.Item>
-
-                  <Form.Item 
-                    label="Schema Markup (JSON-LD)" 
-                    name="metaSchema"
-                    extra="Optional structured data"
-                  >
-                    <Input.TextArea 
-                      rows={4}
-                      placeholder='{"@context":"https://schema.org","@type":"Service",...}'
-                    />
-                  </Form.Item>
-                </Panel>
-              </Collapse>
-
-              {/* Top Section */}
-              <Form.Item label="Top Section">
-                <UploadField
-                  name={["topSection", "backgroundImage"]}
-                  label="Background Image"
-                  formType="page"
-                />
-                <Form.Item label="Heading" name={["topSection", "heading"]}>
-                  <Input placeholder="Enter top section heading" />
-                </Form.Item>
-                <Form.Item label="Description">
-                  <TiptapEditor 
-                    content={pageEditorContents.topSectionDescription}
-                    onChange={(content) => handlePageEditorChange(content, "topSectionDescription")}
-                    height="150px"
-                  />
-                </Form.Item>
-              </Form.Item>
-
-              {/* Middle Section */}
-              <Form.Item label="Middle Section">
-                <Form.Item label="Description 1">
-                  <TiptapEditor 
-                    content={pageEditorContents.middleSectionDescription1}
-                    onChange={(content) => handlePageEditorChange(content, "middleSectionDescription1")}
-                    height="150px"
-                  />
-                </Form.Item>
-                <UploadField
-                  name={["middleSection", "image1"]}
-                  label="Image 1"
-                  formType="page"
-                />
-                <UploadField
-                  name={["middleSection", "image2"]}
-                  label="Image 2"
-                  formType="page"
-                />
-                <Form.Item label="Description 2">
-                  <TiptapEditor 
-                    content={pageEditorContents.middleSectionDescription2}
-                    onChange={(content) => handlePageEditorChange(content, "middleSectionDescription2")}
-                    height="150px"
-                  />
-                </Form.Item>
-              </Form.Item>
-            </Col>
-
-            {/* Right Column: CTAs */}
-            <Col span={12}>
-              {/* CTA 1 */}
-              <Form.Item label="Call to Action 1">
-                <Form.Item label="Heading" name={["cta1", "heading"]}>
-                  <Input placeholder="Enter CTA 1 heading" />
-                </Form.Item>
-                <Form.Item label="Description">
-                  <TiptapEditor 
-                    content={pageEditorContents.cta1Description}
-                    onChange={(content) => handlePageEditorChange(content, "cta1Description")}
-                    height="150px"
-                  />
-                </Form.Item>
-              </Form.Item>
-
-              {/* CTA 2 */}
-              <Form.Item label="Call to Action 2">
-                <Form.Item label="Heading" name={["cta2", "heading"]}>
-                  <Input placeholder="Enter CTA 2 heading" />
-                </Form.Item>
-                <Form.Item label="Description">
-                  <TiptapEditor 
-                    content={pageEditorContents.cta2Description}
-                    onChange={(content) => handlePageEditorChange(content, "cta2Description")}
-                    height="150px"
-                  />
-                </Form.Item>
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form>
-      </Modal>
-
-      {/* UPDATED SUBCATEGORY MODAL WITH TIPTAP EDITORS */}
       <Modal
         title={
-          <div>
-            {editingSubCat ? "✏️ Edit Sub Category" : "➕ Add Sub Category"}
-            <div style={{ fontSize: '14px', fontWeight: 'normal', color: '#666', marginTop: '4px' }}>
-              Complete all sections including SEO for better search rankings
-            </div>
-          </div>
+          editingSubCat ? "✏️ Edit SubCategory" : "➕ Create New SubCategory"
         }
         open={isModalOpen}
-        onCancel={resetMainModal}
         onOk={handleOk}
-        okText="Save"
-        width={900}
-        style={{ maxHeight: '80vh', overflowY: 'auto' }}
+        onCancel={handleCancel}
+        width={1200}
+        okText="Save Everything"
+        destroyOnClose={false} // Changed to false to preserve form state
+        maskClosable={false}
       >
-        <Form layout="vertical" form={form}>
-          <Collapse activeKey={expandedPanels} onChange={setExpandedPanels} ghost>
-            {/* Basic Info Panel */}
-            <Panel header="Basic Information" key="basic">
-              <Form.Item
-                label="Name"
-                name="name"
-                rules={[{ required: true, message: "Please enter sub category name" }]}
-                extra="This will be the main title of your sub-category page"
-              >
-                <Input placeholder="Enter sub category name (e.g., SEO Services, E-commerce Development)" />
-              </Form.Item>
-
-              <Form.Item
-                label="Category"
-                name="category"
-                rules={[{ required: true, message: "Please select a category" }]}
-              >
-                <Select placeholder="Select category">
-                  <Option value="digital-marketing">Digital Marketing</Option>
-                  <Option value="web-development">Web Development</Option>
-                  <Option value="app-development">App Development</Option>
-                </Select>
-              </Form.Item>
-
-              <UploadField name="icon" label="Icon" required />
-            </Panel>
-
-            {/* Top Section Panel */}
-            <Panel header="Top Section (Hero)" key="topSection">
-              <UploadField name={["topSection", "backgroundImage"]} label="Background Image" />
-              <Form.Item label="Heading" name={["topSection", "heading"]}>
-                <Input placeholder="Enter top section heading" />
-              </Form.Item>
-              <Form.Item label="Description">
-                <TiptapEditor 
-                  content={mainEditorContents.topSectionDescription}
-                  onChange={(content) => handleMainEditorChange(content, "topSectionDescription")}
-                  height="150px"
-                />
-              </Form.Item>
-            </Panel>
-
-            {/* Middle Section Panel */}
-            <Panel header="Middle Section" key="middleSection">
-              <Form.Item label="Description 1">
-                <TiptapEditor 
-                  content={mainEditorContents.middleSectionDescription1}
-                  onChange={(content) => handleMainEditorChange(content, "middleSectionDescription1")}
-                  height="150px"
-                />
-              </Form.Item>
-              <UploadField name={["middleSection", "image1"]} label="Image 1" />
-              <UploadField name={["middleSection", "image2"]} label="Image 2" />
-              <Form.Item label="Description 2">
-                <TiptapEditor 
-                  content={mainEditorContents.middleSectionDescription2}
-                  onChange={(content) => handleMainEditorChange(content, "middleSectionDescription2")}
-                  height="150px"
-                />
-              </Form.Item>
-            </Panel>
-
-            {/* Keywords Section Panel */}
-            {/* <Panel header="Keywords Section" key="keywordsSection">
-              <Form.Item label="Heading" name={["keywordsSection", "heading"]}>
-                <Input placeholder="Enter keywords section heading" />
-              </Form.Item>
-              <Form.Item label="Description">
-                <TiptapEditor 
-                  content={mainEditorContents.keywordsSectionDescription}
-                  onChange={(content) => handleMainEditorChange(content, "keywordsSectionDescription")}
-                  height="150px"
-                />
-              </Form.Item>
-
-              <Form.Item label="Keywords">
-                <Form.List name={["keywordsSection", "keywords"]}>
-                  {(fields, { add, remove }) => (
-                    <>
-                      {fields.map(({ key, name, ...restField }) => (
-                        <Space key={key} style={{ display: "flex", marginBottom: 8 }} align="baseline">
-                          <Form.Item {...restField} name={name} rules={[{ required: true, message: "Enter a keyword" }]}>
-                            <Input placeholder="Keyword (e.g., SEO, Digital Marketing)" />
-                          </Form.Item>
-                          <MinusCircleOutlined onClick={() => remove(name)} />
-                        </Space>
-                      ))}
-                      <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                        Add Keyword
-                      </Button>
-                    </>
-                  )}
-                </Form.List>
-              </Form.Item>
-
-              <Form.Item label="Related Headings">
-                <Form.List name={["keywordsSection", "relatedHeading"]}>
-                  {(fields, { add, remove }) => (
-                    <>
-                      {fields.map(({ key, name, ...restField }) => (
-                        <Space key={key} style={{ display: "flex", marginBottom: 8 }} align="baseline">
-                          <Form.Item {...restField} name={name} rules={[{ required: true, message: "Enter a related heading" }]}>
-                            <Input placeholder="Related Heading" />
-                          </Form.Item>
-                          <MinusCircleOutlined onClick={() => remove(name)} />
-                        </Space>
-                      ))}
-                      <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                        Add Related Heading
-                      </Button>
-                    </>
-                  )}
-                </Form.List>
-              </Form.Item>
-
-              <Form.Item label="Related Descriptions">
-                <Form.List name={["keywordsSection", "relatedDescription"]}>
-                  {(fields, { add, remove }) => (
-                    <>
-                      {fields.map(({ key, name, ...restField }) => (
-                        <Space key={key} style={{ display: "flex", marginBottom: 8 }} align="baseline">
-                          <Form.Item {...restField} name={name} rules={[{ required: true, message: "Enter a related description" }]}>
-                            <Input.TextArea placeholder="Related Description" rows={2} />
-                          </Form.Item>
-                          <MinusCircleOutlined onClick={() => remove(name)} />
-                        </Space>
-                      ))}
-                      <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                        Add Related Description
-                      </Button>
-                    </>
-                  )}
-                </Form.List>
-              </Form.Item>
-            </Panel> */}
-
-            {/* CTA Sections Panel */}
-            <Panel header="Call to Action Sections" key="ctaSections">
-              <Form.Item label="CTA 1 Heading" name={["cta1", "heading"]}>
-                <Input placeholder="Enter CTA 1 heading" />
-              </Form.Item>
-              <Form.Item label="CTA 1 Description">
-                <TiptapEditor 
-                  content={mainEditorContents.cta1Description}
-                  onChange={(content) => handleMainEditorChange(content, "cta1Description")}
-                  height="150px"
-                />
-              </Form.Item>
-
-              <Form.Item label="CTA 2 Heading" name={["cta2", "heading"]}>
-                <Input placeholder="Enter CTA 2 heading" />
-              </Form.Item>
-              <Form.Item label="CTA 2 Description">
-                <TiptapEditor 
-                  content={mainEditorContents.cta2Description}
-                  onChange={(content) => handleMainEditorChange(content, "cta2Description")}
-                  height="150px"
-                />
-              </Form.Item>
-            </Panel>
-
-            {/* ✅ SEO Panel (Model ke hisab se) */}
-            <Panel
-              header={
-                <Space>
-                  <GlobalOutlined />
-                  <Text strong>SEO Settings</Text>
-                </Space>
-              }
-              key="seo"
-            >
-              <Form.Item
-                label="Meta Title"
-                name={["seo", "metaTitle"]}
-                extra="Title for search engines (recommended: 50-60 characters)"
-              >
-                <Input
-                  placeholder="Enter SEO title for this sub-category"
-                  maxLength={70}
-                  showCount
-                />
-              </Form.Item>
-
-              <Form.Item
-                label="Meta Description"
-                name={["seo", "metaDescription"]}
-                extra="Description for search results (recommended: 150-160 characters)"
-              >
-                <Input.TextArea
-                  rows={3}
-                  placeholder="Enter SEO description for this sub-category"
-                  maxLength={160}
-                  showCount
-                />
-              </Form.Item>
-
-              <Form.Item
-                label="Meta Keywords"
-                name={["seo", "metaKeywords"]}
-                extra="Separate with commas (e.g., keyword1, keyword2, keyword3)"
-              >
-                <Input
-                  placeholder="Enter SEO keywords"
-                />
-              </Form.Item>
-
-              <Form.Item
-                label="Schema Markup (JSON-LD)"
-                name={["seo", "schemaMarkup"]}
-                extra={
-                  <div>
-                    <InfoCircleOutlined /> Optional: Add structured data in JSON format
-                  </div>
-                }
-              >
-                <Input.TextArea
-                  rows={5}
-                  placeholder={`{
-  "@context": "https://schema.org",
-  "@type": "Service",
-  "name": "Your Service Name",
-  "description": "Service description here",
-  "provider": {
-    "@type": "Organization",
-    "name": "Your Company"
-  }
-}`}
-                />
-              </Form.Item>
-            </Panel>
-          </Collapse>
+        <Form
+          form={form}
+          layout="vertical"
+          preserve={true} // Preserve form state
+        >
+          <Tabs
+            activeKey={activeTab}
+            onChange={handleTabChange}
+            items={[
+              {
+                key: "1",
+                label: "General Info",
+                children: (
+                  <Row gutter={16}>
+                    <Col span={12}>
+                      <Form.Item
+                        name="name"
+                        label="SubCategory Name"
+                        rules={[
+                          { required: true, message: "Please enter name" },
+                        ]}
+                      >
+                        <Input
+                          onChange={(e) =>
+                            !editingSubCat &&
+                            form.setFieldValue(
+                              "slug",
+                              generateSlug(e.target.value),
+                            )
+                          }
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                      <Form.Item
+                        name="slug"
+                        label="URL Slug"
+                        rules={[
+                          { required: true, message: "Please enter slug" },
+                        ]}
+                      >
+                        <Input />
+                      </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                      <Form.Item
+                        name="category"
+                        label="Parent Category"
+                        rules={[
+                          { required: true, message: "Please select category" },
+                        ]}
+                      >
+                        <Select>
+                          <Option value="digital-marketing">
+                            Digital Marketing
+                          </Option>
+                          <Option value="web-development">
+                            Web Development
+                          </Option>
+                          <Option value="app-development">
+                            App Development
+                          </Option>
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                      <Form.Item
+                        name="isActive"
+                        label="Status"
+                        valuePropName="checked"
+                        initialValue={true}
+                      >
+                        <Switch
+                          checkedChildren="Active"
+                          unCheckedChildren="Inactive"
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col span={24}>
+                      <Form.Item name="icon" label="Icon">
+                        <ImageUploadField
+                          value={form.getFieldValue("icon")}
+                          onChange={(url) => form.setFieldValue("icon", url)}
+                          label="Icon"
+                        />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                ),
+              },
+              {
+                key: "2",
+                label: "Hero Section",
+                children: (
+                  <>
+                    <Form.Item
+                      name={["topSection", "backgroundImage"]}
+                      label="Hero Background Image"
+                    >
+                      <ImageUploadField
+                        value={form.getFieldValue([
+                          "topSection",
+                          "backgroundImage",
+                        ])}
+                        onChange={(url) =>
+                          form.setFieldValue(
+                            ["topSection", "backgroundImage"],
+                            url,
+                          )
+                        }
+                        label="Background Image"
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      name={["topSection", "heading"]}
+                      label="Hero Heading"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter hero heading",
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+                    <Form.Item
+                      name={["topSection", "description"]}
+                      label="Hero Description"
+                    >
+                      <TiptapEditor
+                        content={
+                          form.getFieldValue(["topSection", "description"]) ||
+                          ""
+                        }
+                        onChange={(html) =>
+                          form.setFieldValue(
+                            ["topSection", "description"],
+                            html,
+                          )
+                        }
+                      />
+                    </Form.Item>
+                    <CTAFields
+                      namePath={["topSection", "cta"]}
+                      label="Hero"
+                      ctas={ctas}
+                    />
+                  </>
+                ),
+              },
+              {
+                key: "3",
+                label: "Content Sections",
+                children: (
+                  <Form.List name="sections">
+                    {(fields, { add, remove, move }) => (
+                      <>
+                        {fields.map((field, index) => (
+                          <SectionItem
+                            key={field.key}
+                            field={field}
+                            index={index}
+                            remove={remove}
+                            move={move}
+                            form={form}
+                            ctas={ctas}
+                          />
+                        ))}
+                        <Button
+                          type="dashed"
+                          block
+                          icon={<PlusOutlined />}
+                          onClick={() => {
+                            // Get current sections
+                            const currentSections =
+                              form.getFieldValue("sections") || [];
+                            add({
+                              layoutType: "description-only",
+                              image: "",
+                              order: currentSections.length,
+                            });
+                          }}
+                          style={{ height: 60, marginTop: 10 }}
+                        >
+                          Add New Content Section
+                        </Button>
+                      </>
+                    )}
+                  </Form.List>
+                ),
+              },
+              {
+                key: "4",
+                label: "FAQs",
+                children: (
+                  <Card
+                    size="small"
+                    style={{
+                      background: "#f6ffed",
+                      border: "1px solid #b7eb8f",
+                    }}
+                  >
+                    <Form.List name="faqs">
+                      {(fields, { add, remove, move }) => (
+                        <>
+                          {fields.map((field, index) => (
+                            <FAQItem
+                              key={field.key}
+                              field={field}
+                              index={index}
+                              remove={remove}
+                              move={move}
+                              form={form}
+                            />
+                          ))}
+                          <Button
+                            type="dashed"
+                            block
+                            icon={<PlusOutlined />}
+                            onClick={() => {
+                              // Get current FAQs
+                              const currentFaqs =
+                                form.getFieldValue("faqs") || [];
+                              add({
+                                isActive: true,
+                                order: currentFaqs.length,
+                              });
+                            }}
+                            style={{ height: 60, marginTop: 10 }}
+                          >
+                            Add New FAQ
+                          </Button>
+                        </>
+                      )}
+                    </Form.List>
+                  </Card>
+                ),
+              },
+              {
+                key: "5",
+                label: "SEO Settings",
+                children: (
+                  <Card size="small" style={{ background: "#f0f2f5" }}>
+                    <Form.Item
+                      name={["seo", "metaTitle"]}
+                      label="Meta Title"
+                      extra="Title for search engines (50-60 chars)"
+                    >
+                      <Input maxLength={70} showCount />
+                    </Form.Item>
+                    <Form.Item
+                      name={["seo", "metaDescription"]}
+                      label="Meta Description"
+                      extra="Description for search results (150-160 chars)"
+                    >
+                      <Input.TextArea rows={3} maxLength={160} showCount />
+                    </Form.Item>
+                    <Form.Item
+                      name={["seo", "metaKeywords"]}
+                      label="Keywords (comma separated)"
+                      extra="e.g., keyword1, keyword2, keyword3"
+                    >
+                      <Input />
+                    </Form.Item>
+                    <Form.Item
+                      name={["seo", "schemaMarkup"]}
+                      label="Schema Markup (JSON)"
+                    >
+                      <Input.TextArea
+                        rows={4}
+                        placeholder='{"@context": "https://schema.org"}'
+                      />
+                    </Form.Item>
+                  </Card>
+                ),
+              },
+            ]}
+          />
         </Form>
       </Modal>
-    </Card>
+    </div>
   );
 }
