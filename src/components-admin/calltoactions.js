@@ -1,4 +1,3 @@
-// app/admin/ctas/page.js
 "use client";
 import React, { useEffect, useState } from "react";
 import {
@@ -19,7 +18,6 @@ import {
   Switch,
   Tabs,
   Tooltip,
-  Badge,
 } from "antd";
 import {
   PlusOutlined,
@@ -46,28 +44,20 @@ export default function CTAManagement() {
   const [searchText, setSearchText] = useState("");
   const [filterActive, setFilterActive] = useState(null);
 
-  // Fetch CTAs
+  // Re-render preview on form change
+  const [previewValues, setPreviewValues] = useState({});
+
   const fetchCTAs = async () => {
     try {
       setLoading(true);
       let url = "/api/ctas";
       const params = new URLSearchParams();
-      
-      if (filterActive !== null) {
-        params.append("isActive", filterActive);
-      }
-      
-      if (searchText) {
-        params.append("search", searchText);
-      }
-      
-      if (params.toString()) {
-        url += `?${params.toString()}`;
-      }
-      
+      if (filterActive !== null) params.append("isActive", filterActive);
+      if (searchText) params.append("search", searchText);
+      if (params.toString()) url += `?${params.toString()}`;
+
       const res = await fetch(url);
       const data = await res.json();
-      
       if (data.success) {
         setCtas(data.data);
       } else {
@@ -85,23 +75,17 @@ export default function CTAManagement() {
     fetchCTAs();
   }, [filterActive, searchText]);
 
-  // Create/Update CTA
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
-
       const payload = {
         ...values,
         isActive: values.isActive !== undefined ? values.isActive : true,
       };
 
-      let url = "/api/ctas";
-      let method = "POST";
-
-      if (editingCTA) {
-        payload._id = editingCTA._id;
-        method = "PUT";
-      }
+      // FIXED: URL logic for Edit vs Create
+      const url = editingCTA ? `/api/ctas/${editingCTA._id}` : "/api/ctas";
+      const method = editingCTA ? "PUT" : "POST";
 
       const res = await fetch(url, {
         method,
@@ -112,110 +96,74 @@ export default function CTAManagement() {
       const data = await res.json();
 
       if (data.success) {
-        message.success(
-          editingCTA ? "CTA updated successfully!" : "CTA created successfully!"
-        );
-        form.resetFields();
-        setEditingCTA(null);
-        setIsModalOpen(false);
+        message.success(editingCTA ? "CTA updated!" : "CTA created!");
+        resetModal();
         fetchCTAs();
       } else {
         message.error(data.error || "Operation failed");
       }
     } catch (err) {
-      console.error("Error saving CTA:", err);
-      message.error("Error saving CTA");
+      message.error("Validation failed");
     }
   };
 
-  // Delete CTA
   const handleDelete = async (id) => {
     try {
-      const res = await fetch(`/api/ctas?id=${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/ctas/${id}`, { method: "DELETE" });
       const data = await res.json();
-      
       if (data.success) {
         message.success("CTA deleted successfully");
         fetchCTAs();
       } else {
-        message.error("Failed to delete CTA");
+        message.error("Failed to delete");
       }
     } catch (err) {
-      console.error("Error deleting CTA:", err);
       message.error("Error deleting CTA");
     }
   };
 
-  // Toggle active status
   const toggleActive = async (id, currentStatus) => {
     try {
+      // FIXED: Using PUT on [id] endpoint instead of PATCH
       const res = await fetch(`/api/ctas/${id}`, {
-        method: "PATCH",
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isActive: !currentStatus }),
       });
-      
       const data = await res.json();
-      
       if (data.success) {
-        message.success(`CTA ${!currentStatus ? 'activated' : 'deactivated'}`);
+        message.success(`CTA ${!currentStatus ? "activated" : "deactivated"}`);
         fetchCTAs();
-      } else {
-        message.error("Failed to update status");
       }
     } catch (error) {
-      console.error("Error toggling status:", error);
       message.error("Error updating status");
     }
   };
 
-  // Duplicate CTA
-  const handleDuplicate = (record) => {
-    const duplicateData = {
-      ...record,
-      name: `${record.name} (Copy)`,
-      title: `${record.title} (Copy)`,
-    };
-    delete duplicateData._id;
-    delete duplicateData.createdAt;
-    delete duplicateData.updatedAt;
-    
-    setEditingCTA(null);
-    form.setFieldsValue(duplicateData);
-    setIsModalOpen(true);
-  };
-
-  // Open modal for editing
   const handleEdit = (record) => {
     setEditingCTA(record);
-    form.setFieldsValue({
-      name: record.name,
-      title: record.title,
-      description: record.description,
-      buttonText: record.buttonText,
-      buttonLink: record.buttonLink,
-      buttonVariant: record.buttonVariant,
-      isActive: record.isActive,
-      style: record.style || {},
-    });
+    form.setFieldsValue(record);
+    setPreviewValues(record); // Set initial preview
     setIsModalOpen(true);
   };
 
-  // Reset modal
+  const handleDuplicate = (record) => {
+    const { _id, createdAt, updatedAt, ...duplicateData } = record;
+    duplicateData.name = `${record.name}-copy`;
+    duplicateData.title = `${record.title} (Copy)`;
+    setEditingCTA(null);
+    form.setFieldsValue(duplicateData);
+    setPreviewValues(duplicateData);
+    setIsModalOpen(true);
+  };
+
   const resetModal = () => {
     setIsModalOpen(false);
     setEditingCTA(null);
+    setPreviewValues({});
     form.resetFields();
   };
 
-  // Copy to clipboard
-  const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text)
-      .then(() => message.success("Copied to clipboard!"))
-      .catch(() => message.error("Failed to copy"));
-  };
-
-  // Table Columns
   const columns = [
     {
       title: "Status",
@@ -232,24 +180,19 @@ export default function CTAManagement() {
       ),
     },
     {
-      title: "Name",
+      title: "Name/Variant",
       dataIndex: "name",
       key: "name",
       render: (text, record) => (
-        <div>
+        <Space direction="vertical" size={0}>
           <Text strong>{text}</Text>
-          <div>
-            <Tag color="blue">{record.buttonVariant}</Tag>
-          </div>
-        </div>
+          <Tag color="blue" style={{ fontSize: "10px" }}>
+            {record.buttonVariant}
+          </Tag>
+        </Space>
       ),
     },
-    {
-      title: "Title",
-      dataIndex: "title",
-      key: "title",
-      render: (text) => <Text>{text}</Text>,
-    },
+    { title: "Title", dataIndex: "title", key: "title" },
     {
       title: "Button",
       key: "button",
@@ -260,70 +203,29 @@ export default function CTAManagement() {
       ),
     },
     {
-      title: "Description",
-      dataIndex: "description",
-      key: "description",
-      render: (text) => (
-        <Text type="secondary" style={{ maxWidth: 200 }} ellipsis>
-          {text || "No description"}
-        </Text>
-      ),
-    },
-    {
-      title: "Usage",
-      key: "usage",
-      render: () => (
-        <Tag color="purple">0</Tag>
-      ),
-    },
-    {
-      title: "Created",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      render: (date) => (
-        <Text type="secondary">
-          {date ? new Date(date).toLocaleDateString() : "N/A"}
-        </Text>
-      ),
-    },
-    {
       title: "Actions",
       key: "actions",
-      width: 200,
+      width: 150,
       render: (_, record) => (
-        <Space size="small">
-          <Button 
-            icon={<EditOutlined />} 
+        <Space>
+          <Button
+            icon={<EditOutlined />}
             onClick={() => handleEdit(record)}
             size="small"
-            title="Edit"
           />
-          <Button 
-            icon={<CopyOutlined />} 
+          <Button
+            icon={<CopyOutlined />}
             onClick={() => handleDuplicate(record)}
             size="small"
-            title="Duplicate"
-          />
-          <Button 
-            icon={<CopyOutlined />} 
-            onClick={() => copyToClipboard(record._id)}
-            size="small"
-            title="Copy ID"
           />
           <Popconfirm
-            title="Delete this CTA?"
-            description="Are you sure you want to delete this CTA?"
+            title="Delete?"
             onConfirm={() => handleDelete(record._id)}
             okText="Yes"
             cancelText="No"
             okButtonProps={{ danger: true }}
           >
-            <Button 
-              danger 
-              icon={<DeleteOutlined />} 
-              size="small"
-              title="Delete"
-            />
+            <Button danger icon={<DeleteOutlined />} size="small" />
           </Popconfirm>
         </Space>
       ),
@@ -333,19 +235,19 @@ export default function CTAManagement() {
   return (
     <div style={{ padding: 24 }}>
       <Card
-        style={{
-          background: "#fff",
-          borderRadius: 12,
-          boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-        }}
+        bordered={false}
+        style={{ borderRadius: 12, boxShadow: "0 4px 12px rgba(0,0,0,0.05)" }}
       >
-        {/* Header */}
-        <Row justify="space-between" align="middle" style={{ marginBottom: 24 }}>
+        <Row
+          justify="space-between"
+          align="middle"
+          style={{ marginBottom: 24 }}
+        >
           <Col>
-            <Title level={2} style={{ margin: 0, color: "#1890ff" }}>
-              🎯 Call to Actions Management
+            <Title level={2} style={{ margin: 0 }}>
+              🎯 CTA Management
             </Title>
-            <Text type="secondary">Create and manage reusable CTAs for your pages</Text>
+            <Text type="secondary">Manage all Call to Action components</Text>
           </Col>
           <Col>
             <Button
@@ -353,7 +255,6 @@ export default function CTAManagement() {
               icon={<PlusOutlined />}
               onClick={() => {
                 form.resetFields();
-                setEditingCTA(null);
                 setIsModalOpen(true);
               }}
               size="large"
@@ -363,11 +264,10 @@ export default function CTAManagement() {
           </Col>
         </Row>
 
-        {/* Filters */}
-        <Row gutter={16} style={{ marginBottom: 16 }}>
+        <Row gutter={16} style={{ marginBottom: 24 }}>
           <Col span={8}>
             <Input
-              placeholder="Search by name, title or button text"
+              placeholder="Search CTAs..."
               prefix={<SearchOutlined />}
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
@@ -376,176 +276,119 @@ export default function CTAManagement() {
           </Col>
           <Col span={6}>
             <Select
-              placeholder="Filter by status"
+              placeholder="Filter Status"
               style={{ width: "100%" }}
               value={filterActive}
               onChange={setFilterActive}
               allowClear
             >
-              <Option value={true}>Active Only</Option>
-              <Option value={false}>Inactive Only</Option>
+              <Option value={true}>Active</Option>
+              <Option value={false}>Inactive</Option>
             </Select>
           </Col>
-          <Col span={6}>
-            <Button 
-              icon={<ReloadOutlined />} 
+          <Col>
+            <Button
+              icon={<ReloadOutlined />}
               onClick={() => {
                 setSearchText("");
                 setFilterActive(null);
-                fetchCTAs();
               }}
             >
-              Reset Filters
+              Reset
             </Button>
           </Col>
         </Row>
 
-        {/* Stats */}
-        <Row gutter={16} style={{ marginBottom: 16 }}>
-          <Col span={6}>
-            <Card size="small">
-              <Text type="secondary">Total CTAs</Text>
-              <Title level={4}>{ctas.length}</Title>
-            </Card>
-          </Col>
-          <Col span={6}>
-            <Card size="small">
-              <Text type="secondary">Active</Text>
-              <Title level={4} style={{ color: "#52c41a" }}>
-                {ctas.filter(c => c.isActive).length}
-              </Title>
-            </Card>
-          </Col>
-          <Col span={6}>
-            <Card size="small">
-              <Text type="secondary">Inactive</Text>
-              <Title level={4} style={{ color: "#ff4d4f" }}>
-                {ctas.filter(c => !c.isActive).length}
-              </Title>
-            </Card>
-          </Col>
-          <Col span={6}>
-            <Card size="small">
-              <Text type="secondary">Variants</Text>
-              <Title level={4}>
-                {new Set(ctas.map(c => c.buttonVariant)).size}
-              </Title>
-            </Card>
-          </Col>
-        </Row>
-
-        {/* Table */}
         <Table
           columns={columns}
           dataSource={ctas}
           rowKey="_id"
           loading={loading}
-          bordered
-          pagination={{ 
-            pageSize: 10,
-            showSizeChanger: true,
-            showTotal: (total) => `Total ${total} CTAs`
-          }}
+          pagination={{ pageSize: 8 }}
         />
 
-        {/* CTA Modal */}
         <Modal
-          title={editingCTA ? "✏️ Edit CTA" : "➕ Add New CTA"}
+          title={editingCTA ? "Edit CTA" : "Create New CTA"}
           open={isModalOpen}
           onCancel={resetModal}
           onOk={handleOk}
-          okText={editingCTA ? "Update" : "Create"}
-          cancelText="Cancel"
-          width={800}
+          width={700}
+          destroyOnClose
         >
-          <Form layout="vertical" form={form}>
-            <Tabs defaultActiveKey="basic">
-              {/* Basic Info Tab */}
-              <TabPane tab="Basic Info" key="basic">
+          <Form
+            layout="vertical"
+            form={form}
+            onValuesChange={(_, all) => setPreviewValues(all)}
+          >
+            <Tabs defaultActiveKey="1">
+              <TabPane tab="Content" key="1">
                 <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item
-                      label="Internal Name"
                       name="name"
-                      rules={[
-                        { required: true, message: "Please enter internal name" },
-                        { pattern: /^[a-z0-9-]+$/, message: "Only lowercase letters, numbers, and hyphens allowed" }
-                      ]}
-                      extra="Used for identification (e.g., free-consultation)"
+                      label="Slug Name"
+                      rules={[{ required: true }]}
                     >
-                      <Input placeholder="free-consultation" />
+                      <Input placeholder="e.g. hero-cta" />
                     </Form.Item>
                   </Col>
                   <Col span={12}>
                     <Form.Item
-                      label="Display Title"
                       name="title"
-                      rules={[{ required: true, message: "Please enter display title" }]}
-                      extra="Shown to users (e.g., Get Free Consultation)"
+                      label="Title"
+                      rules={[{ required: true }]}
                     >
-                      <Input placeholder="Get Free Consultation" />
+                      <Input placeholder="Grab the offer!" />
                     </Form.Item>
                   </Col>
                 </Row>
-
-                <Form.Item
-                  label="Description"
-                  name="description"
-                  extra="Optional description for the CTA"
-                >
-                  <TextArea 
-                    rows={3} 
-                    placeholder="Enter description..."
-                  />
+                <Form.Item name="description" label="Description">
+                  <TextArea rows={2} />
                 </Form.Item>
-
                 <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item
-                      label="Button Text"
                       name="buttonText"
-                      rules={[{ required: true, message: "Please enter button text" }]}
+                      label="Button Text"
+                      rules={[{ required: true }]}
                     >
-                      <Input placeholder="Book Now" />
+                      <Input />
                     </Form.Item>
                   </Col>
                   <Col span={12}>
                     <Form.Item
-                      label="Button Link"
                       name="buttonLink"
-                      rules={[{ required: true, message: "Please enter button link" }]}
-                      extra="/contact or https://example.com"
+                      label="Button Link"
+                      rules={[{ required: true }]}
                     >
                       <Input placeholder="/contact" />
                     </Form.Item>
                   </Col>
                 </Row>
-
                 <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item
-                      label="Button Variant"
                       name="buttonVariant"
+                      label="Variant"
                       initialValue="primary"
                     >
                       <Select>
-                        <Option value="primary">Primary (Blue)</Option>
-                        <Option value="secondary">Secondary (Grey)</Option>
+                        <Option value="primary">Primary</Option>
+                        <Option value="secondary">Secondary</Option>
+                        <Option value="danger">Danger</Option>
                         <Option value="outline">Outline</Option>
-                        <Option value="ghost">Ghost</Option>
-                        <Option value="danger">Danger (Red)</Option>
                       </Select>
                     </Form.Item>
                   </Col>
                   <Col span={12}>
                     <Form.Item
-                      label="Status"
                       name="isActive"
+                      label="Status"
                       valuePropName="checked"
                       initialValue={true}
                     >
-                      <Switch 
-                        checkedChildren="Active" 
+                      <Switch
+                        checkedChildren="Active"
                         unCheckedChildren="Inactive"
                       />
                     </Form.Item>
@@ -553,73 +396,55 @@ export default function CTAManagement() {
                 </Row>
               </TabPane>
 
-              {/* Styling Tab */}
-              <TabPane tab="Styling (Optional)" key="styling">
+              <TabPane tab="Style" key="2">
                 <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item
-                      label="Background Color"
                       name={["style", "backgroundColor"]}
-                    >
-                      <Input placeholder="#1890ff" />
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <Form.Item
-                      label="Text Color"
-                      name={["style", "textColor"]}
+                      label="Background Color"
                     >
                       <Input placeholder="#ffffff" />
                     </Form.Item>
                   </Col>
-                </Row>
-
-                <Row gutter={16}>
                   <Col span={12}>
-                    <Form.Item
-                      label="Border Radius"
-                      name={["style", "borderRadius"]}
-                    >
-                      <Input placeholder="4px" />
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <Form.Item
-                      label="Padding"
-                      name={["style", "padding"]}
-                    >
-                      <Input placeholder="8px 16px" />
+                    <Form.Item name={["style", "textColor"]} label="Text Color">
+                      <Input placeholder="#000000" />
                     </Form.Item>
                   </Col>
                 </Row>
               </TabPane>
 
-              {/* Preview Tab */}
-              <TabPane tab="Preview" key="preview">
-                <Card style={{ 
-                  display: 'flex', 
-                  justifyContent: 'center', 
-                  alignItems: 'center',
-                  minHeight: 200,
-                  background: '#f5f5f5'
-                }}>
-                  <div style={{ textAlign: 'center' }}>
-                    <Title level={4}>
-                      {form.getFieldValue('title') || 'CTA Title'}
-                    </Title>
-                    <Text type="secondary">
-                      {form.getFieldValue('description') || 'CTA description will appear here'}
-                    </Text>
-                    <div style={{ marginTop: 16 }}>
-                      <Button 
-                        type={form.getFieldValue('buttonVariant') || 'primary'}
-                        size="large"
-                      >
-                        {form.getFieldValue('buttonText') || 'Button Text'}
-                      </Button>
-                    </div>
-                  </div>
-                </Card>
+              <TabPane tab="Preview" key="3">
+                <div
+                  style={{
+                    padding: "40px",
+                    background:
+                      previewValues.style?.backgroundColor || "#f0f2f5",
+                    color: previewValues.style?.textColor || "inherit",
+                    textAlign: "center",
+                    borderRadius: "8px",
+                    border: "1px solid #ddd",
+                  }}
+                >
+                  <Title level={3} style={{ color: "inherit" }}>
+                    {previewValues.title || "Title Preview"}
+                  </Title>
+                  <p>
+                    {previewValues.description ||
+                      "Description will appear here..."}
+                  </p>
+                  <Button
+                    type={
+                      previewValues.buttonVariant === "outline"
+                        ? "default"
+                        : previewValues.buttonVariant || "primary"
+                    }
+                    danger={previewValues.buttonVariant === "danger"}
+                    size="large"
+                  >
+                    {previewValues.buttonText || "Button"}
+                  </Button>
+                </div>
               </TabPane>
             </Tabs>
           </Form>
