@@ -65,6 +65,33 @@ const topSectionSchema = new mongoose.Schema(
 );
 
 /* ================================
+   FAQ Schema
+================================ */
+const faqSchema = new mongoose.Schema(
+  {
+    question: {
+      type: String,
+      required: [true, "FAQ question is required"],
+      trim: true
+    },
+    answer: {
+      type: String,
+      required: [true, "FAQ answer is required"],
+      trim: true
+    },
+    order: {
+      type: Number,
+      default: 0
+    },
+    isActive: {
+      type: Boolean,
+      default: true
+    }
+  },
+  { _id: false }
+);
+
+/* ================================
    SEO Schema
 ================================ */
 const seoSchema = new mongoose.Schema(
@@ -132,6 +159,26 @@ const subCategorySchema = new mongoose.Schema(
         message: "All image-left and image-right sections must have a valid image URL"
       }
     },
+    // 📝 FAQs Array
+    faqs: {
+      type: [faqSchema],
+      default: [],
+      validate: {
+        validator: function(faqsArr) {
+          // Agar array khali hai toh valid hai
+          if (!faqsArr || faqsArr.length === 0) return true;
+          
+          // Check for duplicate questions (case insensitive)
+          const questions = faqsArr
+            .filter(faq => faq.question) // Filter out empty questions
+            .map(faq => faq.question.toLowerCase().trim());
+          
+          const uniqueQuestions = new Set(questions);
+          return questions.length === uniqueQuestions.size;
+        },
+        message: "FAQ questions must be unique (case insensitive)"
+      }
+    },
     seo: {
       type: seoSchema,
       default: () => ({})
@@ -156,6 +203,8 @@ const subCategorySchema = new mongoose.Schema(
 subCategorySchema.index({ slug: 1 });
 subCategorySchema.index({ category: 1, isActive: 1 });
 subCategorySchema.index({ name: "text", "sections.heading": "text" });
+// FAQ search ke liye index
+subCategorySchema.index({ "faqs.question": "text", "faqs.answer": "text" });
 
 // Auto-generate slug
 subCategorySchema.pre("save", function (next) {
@@ -180,6 +229,15 @@ subCategorySchema.virtual("url").get(function() {
 subCategorySchema.virtual("sectionsCount").get(function() {
   return this.sections?.length || 0;
 });
+
+subCategorySchema.virtual("faqsCount").get(function() {
+  return this.faqs?.filter(faq => faq.isActive)?.length || 0;
+});
+
+// Method to get active FAQs
+subCategorySchema.methods.getActiveFAQs = function() {
+  return this.faqs?.filter(faq => faq.isActive) || [];
+};
 
 export default mongoose.models.SubCategory || 
   mongoose.model("SubCategory", subCategorySchema);

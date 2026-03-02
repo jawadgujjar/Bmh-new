@@ -10,6 +10,8 @@ import Form1 from "@/components/landing/getaquote";
 import SeoIndustries from "@/components/landing/seoindustries";
 import Heroform from "@/components/landing/heroform";
 import SubDynamicSection from "@/components/digital-marketing/sub-category-digital/subdynamicsection";
+import SubFaqs from "../../components/digital-marketing/sub-category-digital/subfaqs";
+
 
 // HTML renderer component
 function HtmlContent({ content, className = "" }) {
@@ -131,6 +133,11 @@ export default async function SubcategoryPage({ params }) {
       <Form1 />
       <Carousel />
 
+      {/* 📝 FAQS SECTION - ADDED HERE (AFTER CAROUSEL) */}
+      <SubFaqs 
+        faqs={subcategoryData.faqs || []} 
+        title={`Frequently Asked Questions About ${subcategoryData.name}`}
+      />
       {/* Production hidden debug */}
       <div style={{ display: "none" }}>
         <pre>{JSON.stringify(subcategoryData, null, 2)}</pre>

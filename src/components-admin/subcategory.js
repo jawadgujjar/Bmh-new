@@ -56,12 +56,12 @@ const ImageUploadField = ({ value, onChange, label, required = false }) => {
   const [fileList, setFileList] = useState([]);
 
   useEffect(() => {
-    if (value && typeof value === 'string' && value.trim() !== '') {
+    if (value && typeof value === "string" && value.trim() !== "") {
       setFileList([
         {
-          uid: '-1',
-          name: 'image.png',
-          status: 'done',
+          uid: "-1",
+          name: "image.png",
+          status: "done",
           url: value,
         },
       ]);
@@ -97,7 +97,9 @@ const ImageUploadField = ({ value, onChange, label, required = false }) => {
     <Form.Item
       label={label}
       required={required}
-      rules={required ? [{ required: true, message: `Please upload ${label}` }] : []}
+      rules={
+        required ? [{ required: true, message: `Please upload ${label}` }] : []
+      }
     >
       <Upload
         listType="picture"
@@ -107,12 +109,12 @@ const ImageUploadField = ({ value, onChange, label, required = false }) => {
           return Upload.LIST_IGNORE;
         }}
         onRemove={() => {
-          onChange('');
+          onChange("");
           setFileList([]);
         }}
       >
         <Button icon={<UploadOutlined />}>
-          {value ? 'Replace Image' : 'Upload Image'}
+          {value ? "Replace Image" : "Upload Image"}
         </Button>
       </Upload>
     </Form.Item>
@@ -161,15 +163,7 @@ const CTAFields = ({ namePath, label, ctas }) => (
 );
 
 // --- Section Item Component (Rendered inside Form.List) ---
-const SectionItem = ({
-  field,
-  index,
-  remove,
-  move,
-  form,
-  ctas,
-}) => {
-  // Fix for 'Instance not connected' error: pass 'form' instance to useWatch
+const SectionItem = ({ field, index, remove, move, form, ctas }) => {
   const layout = Form.useWatch(["sections", field.name, "layoutType"], form);
   const currentImageUrl = Form.useWatch(
     ["sections", field.name, "image"],
@@ -263,16 +257,102 @@ const SectionItem = ({
           name={[field.name, "image"]}
           rules={[{ required: true, message: "Image is required" }]}
         >
-          <ImageUploadField 
-            label="Section Image" 
+          <ImageUploadField
+            label="Section Image"
             required={true}
             value={currentImageUrl}
-            onChange={(url) => form.setFieldValue(["sections", field.name, "image"], url)}
+            onChange={(url) =>
+              form.setFieldValue(["sections", field.name, "image"], url)
+            }
           />
         </Form.Item>
       )}
 
       <CTAFields namePath={[field.name, "cta"]} label="Section" ctas={ctas} />
+    </Card>
+  );
+};
+
+// --- FAQ Item Component ---
+const FAQItem = ({ field, index, remove, move, form }) => {
+  return (
+    <Card
+      size="small"
+      style={{ marginBottom: 20, borderLeft: "4px solid #52c41a" }}
+      title={<Text strong>FAQ #{index + 1}</Text>}
+      extra={
+        <Space>
+          <Button
+            size="small"
+            icon={<ArrowUpOutlined />}
+            onClick={() => move(index, index - 1)}
+            disabled={index === 0}
+          />
+          <Button
+            size="small"
+            icon={<ArrowDownOutlined />}
+            onClick={() => move(index, index + 1)}
+            disabled={index === (form.getFieldValue("faqs")?.length || 0) - 1}
+          />
+          <Button
+            size="small"
+            danger
+            icon={<DeleteOutlined />}
+            onClick={() => remove(index)}
+          />
+        </Space>
+      }
+    >
+      <Row gutter={16}>
+        <Col span={12}>
+          <Form.Item
+            {...field}
+            label="Question"
+            name={[field.name, "question"]}
+            rules={[
+              { required: true, message: "Question is required" },
+              { min: 5, message: "Question must be at least 5 characters" },
+            ]}
+          >
+            <Input placeholder="e.g., What is your return policy?" />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            {...field}
+            label="Order"
+            name={[field.name, "order"]}
+            initialValue={index}
+          >
+            <Input type="number" min={0} />
+          </Form.Item>
+        </Col>
+      </Row>
+
+      <Form.Item
+        {...field}
+        label="Answer"
+        name={[field.name, "answer"]}
+        rules={[
+          { required: true, message: "Answer is required" },
+          { min: 10, message: "Answer must be at least 10 characters" },
+        ]}
+      >
+        <Input.TextArea
+          rows={3}
+          placeholder="Provide a detailed answer to the question"
+        />
+      </Form.Item>
+
+      <Form.Item
+        {...field}
+        label="Active Status"
+        name={[field.name, "isActive"]}
+        valuePropName="checked"
+        initialValue={true}
+      >
+        <Switch checkedChildren="Active" unCheckedChildren="Inactive" />
+      </Form.Item>
     </Card>
   );
 };
@@ -285,6 +365,7 @@ export default function SubCategory() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingSubCat, setEditingSubCat] = useState(null);
   const [ctas, setCtas] = useState([]);
+  const [activeTab, setActiveTab] = useState("1");
 
   const fetchSubCategories = async () => {
     try {
@@ -321,39 +402,64 @@ export default function SubCategory() {
       .replace(/[^\w-]+/g, "")
       .replace(/--+/g, "-");
 
-  const handleFileUpload = async (file) => {
-    const formData = new FormData();
-    formData.append("image", file);
-    try {
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await res.json();
-      if (data.success) return data.url;
-      throw new Error("Upload failed");
-    } catch (error) {
-      message.error("Image upload failed");
-      return null;
-    }
+  // Save current form state before tab change
+  const handleTabChange = (key) => {
+    // Get current form values
+    const currentValues = form.getFieldsValue(true);
+
+    // Store in session storage or state if needed
+    sessionStorage.setItem(
+      "subcategoryFormDraft",
+      JSON.stringify(currentValues),
+    );
+
+    setActiveTab(key);
   };
+
+  // Load form data when modal opens
+  useEffect(() => {
+    if (isModalOpen && !editingSubCat) {
+      // For new item, check if there's a draft
+      const draft = sessionStorage.getItem("subcategoryFormDraft");
+      if (draft) {
+        try {
+          const parsedDraft = JSON.parse(draft);
+          form.setFieldsValue(parsedDraft);
+        } catch (e) {
+          console.error("Error parsing draft:", e);
+        }
+      }
+    }
+  }, [isModalOpen, editingSubCat, form]);
 
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
-      
-      // Process sections to ensure images are strings
-      const processedSections = values.sections?.map((s, idx) => ({
-        layoutType: s.layoutType || "description-only",
-        heading: s.heading || "",
-        description: s.description || "",
-        image: s.image || "",
-        cta: s.cta?.ctaId ? {
-          ctaId: s.cta.ctaId,
-          buttonVariant: s.cta.buttonVariant || "primary",
-        } : null,
-        order: s.order ?? idx,
-      })) || [];
+
+      // Process sections
+      const processedSections =
+        values.sections?.map((s, idx) => ({
+          layoutType: s.layoutType || "description-only",
+          heading: s.heading || "",
+          description: s.description || "",
+          image: s.image || "",
+          cta: s.cta?.ctaId
+            ? {
+                ctaId: s.cta.ctaId,
+                buttonVariant: s.cta.buttonVariant || "primary",
+              }
+            : null,
+          order: s.order ?? idx,
+        })) || [];
+
+      // Process FAQs
+      const processedFAQs =
+        values.faqs?.map((faq, idx) => ({
+          question: faq.question,
+          answer: faq.answer,
+          order: faq.order ?? idx,
+          isActive: faq.isActive !== undefined ? faq.isActive : true,
+        })) || [];
 
       const payload = {
         name: values.name,
@@ -361,28 +467,39 @@ export default function SubCategory() {
         category: values.category,
         icon: values.icon || "",
         isActive: values.isActive !== undefined ? values.isActive : true,
-        
         topSection: {
           backgroundImage: values.topSection?.backgroundImage || "",
           heading: values.topSection?.heading || "",
           description: values.topSection?.description || "",
-          cta: values.topSection?.cta?.ctaId ? {
-            ctaId: values.topSection.cta.ctaId,
-            buttonVariant: values.topSection.cta.buttonVariant || "primary",
-          } : null,
+          cta: values.topSection?.cta?.ctaId
+            ? {
+                ctaId: values.topSection.cta.ctaId,
+                buttonVariant: values.topSection.cta.buttonVariant || "primary",
+              }
+            : null,
         },
-
         sections: processedSections,
-
+        faqs: processedFAQs,
         seo: {
           metaTitle: values.seo?.metaTitle || values.name,
           metaDescription: values.seo?.metaDescription || "",
-          metaKeywords: typeof values.seo?.metaKeywords === "string"
-            ? values.seo.metaKeywords.split(",").map((k) => k.trim()).filter(k => k)
-            : values.seo?.metaKeywords || [],
+          metaKeywords:
+            typeof values.seo?.metaKeywords === "string"
+              ? values.seo.metaKeywords
+                  .split(",")
+                  .map((k) => k.trim())
+                  .filter((k) => k)
+              : values.seo?.metaKeywords || [],
           schemaMarkup: values.seo?.schemaMarkup || null,
         },
       };
+
+      // Log payload for debugging
+      console.log("Submitting payload:", {
+        sectionsCount: payload.sections.length,
+        faqsCount: payload.faqs.length,
+        payload,
+      });
 
       const url = editingSubCat
         ? `/api/subcategories/${editingSubCat._id}`
@@ -403,6 +520,8 @@ export default function SubCategory() {
         );
         setIsModalOpen(false);
         form.resetFields();
+        // Clear draft
+        sessionStorage.removeItem("subcategoryFormDraft");
         fetchSubCategories();
       } else {
         message.error(result.error || "Save failed.");
@@ -412,6 +531,127 @@ export default function SubCategory() {
       message.error("Validation failed – check required fields.");
     }
   };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    form.resetFields();
+    // Clear draft on cancel
+    sessionStorage.removeItem("subcategoryFormDraft");
+  };
+
+  // Table columns
+  const columns = [
+    {
+      title: "Icon",
+      dataIndex: "icon",
+      render: (icon) => (
+        <img
+          src={icon || "https://via.placeholder.com/30"}
+          style={{ width: 30, height: 30, borderRadius: 4 }}
+          alt=""
+        />
+      ),
+    },
+    { title: "Name", dataIndex: "name", render: (t) => <b>{t}</b> },
+    {
+      title: "Category",
+      dataIndex: "category",
+      render: (c) => <Tag color="blue">{c}</Tag>,
+    },
+    {
+      title: "Sections",
+      render: (_, record) => (
+        <Tag color="purple">{record.sections?.length || 0}</Tag>
+      ),
+    },
+    {
+      title: "FAQs",
+      render: (_, record) => (
+        <Tag color="green">{record.faqs?.length || 0}</Tag>
+      ),
+    },
+    {
+      title: "Status",
+      dataIndex: "isActive",
+      render: (act) => (
+        <Tag color={act ? "green" : "red"}>{act ? "Active" : "Draft"}</Tag>
+      ),
+    },
+    {
+      title: "Actions",
+      render: (_, record) => (
+        <Space>
+          <Button
+            icon={<EditOutlined />}
+            onClick={() => {
+              setEditingSubCat(record);
+
+              // Prepare form values
+              const formValues = {
+                name: record.name,
+                slug: record.slug,
+                category: record.category,
+                icon: record.icon,
+                isActive: record.isActive,
+                topSection: {
+                  backgroundImage: record.topSection?.backgroundImage,
+                  heading: record.topSection?.heading,
+                  description: record.topSection?.description,
+                  cta: record.topSection?.cta?.ctaId
+                    ? {
+                        ctaId:
+                          record.topSection.cta.ctaId._id ||
+                          record.topSection.cta.ctaId,
+                        buttonVariant: record.topSection.cta.buttonVariant,
+                      }
+                    : undefined,
+                },
+                sections: (record.sections || []).map((s) => ({
+                  layoutType: s.layoutType,
+                  heading: s.heading,
+                  description: s.description,
+                  image: s.image || "",
+                  cta: s.cta?.ctaId
+                    ? {
+                        ctaId: s.cta.ctaId._id || s.cta.ctaId,
+                        buttonVariant: s.cta.buttonVariant,
+                      }
+                    : undefined,
+                  order: s.order,
+                })),
+                faqs: (record.faqs || []).map((f) => ({
+                  question: f.question,
+                  answer: f.answer,
+                  order: f.order,
+                  isActive: f.isActive,
+                })),
+                seo: {
+                  metaTitle: record.seo?.metaTitle,
+                  metaDescription: record.seo?.metaDescription,
+                  metaKeywords: record.seo?.metaKeywords?.join(", ") || "",
+                  schemaMarkup: record.seo?.schemaMarkup,
+                },
+              };
+
+              form.setFieldsValue(formValues);
+              setIsModalOpen(true);
+            }}
+          />
+          <Popconfirm
+            title="Delete this subcategory?"
+            onConfirm={async () => {
+              await fetch(`/api/subcategories/${record._id}`, {
+                method: "DELETE",
+              });
+              fetchSubCategories();
+            }}
+          >
+            <Button danger icon={<DeleteOutlined />} />
+          </Popconfirm>
+        </Space>
+      ),
+    },
+  ];
 
   return (
     <div style={{ padding: "24px" }}>
@@ -428,6 +668,14 @@ export default function SubCategory() {
             onClick={() => {
               form.resetFields();
               setEditingSubCat(null);
+              // Set default values
+              form.setFieldsValue({
+                isActive: true,
+                sections: [],
+                faqs: [],
+                topSection: {},
+                seo: {},
+              });
               setIsModalOpen(true);
             }}
           >
@@ -439,98 +687,7 @@ export default function SubCategory() {
           loading={loading}
           dataSource={subCategories}
           rowKey="_id"
-          columns={[
-            {
-              title: "Icon",
-              dataIndex: "icon",
-              render: (icon) => (
-                <img 
-                  src={icon || "https://via.placeholder.com/30"} 
-                  style={{ width: 30, height: 30, borderRadius: 4 }} 
-                  alt="" 
-                />
-              ),
-            },
-            { title: "Name", dataIndex: "name", render: (t) => <b>{t}</b> },
-            {
-              title: "Category",
-              dataIndex: "category",
-              render: (c) => <Tag color="blue">{c}</Tag>,
-            },
-            {
-              title: "Sections",
-              render: (_, record) => (
-                <Tag color="purple">{record.sections?.length || 0}</Tag>
-              ),
-            },
-            {
-              title: "Status",
-              dataIndex: "isActive",
-              render: (act) => (
-                <Tag color={act ? "green" : "red"}>
-                  {act ? "Active" : "Draft"}
-                </Tag>
-              ),
-            },
-            {
-              title: "Actions",
-              render: (_, record) => (
-                <Space>
-                  <Button
-                    icon={<EditOutlined />}
-                    onClick={() => {
-                      setEditingSubCat(record);
-                      form.setFieldsValue({
-                        name: record.name,
-                        slug: record.slug,
-                        category: record.category,
-                        icon: record.icon,
-                        isActive: record.isActive,
-                        topSection: {
-                          backgroundImage: record.topSection?.backgroundImage,
-                          heading: record.topSection?.heading,
-                          description: record.topSection?.description,
-                          cta: {
-                            ctaId: record.topSection?.cta?.ctaId?._id || record.topSection?.cta?.ctaId,
-                            buttonVariant: record.topSection?.cta?.buttonVariant,
-                          },
-                        },
-                        sections: (record.sections || []).map((s) => ({
-                          layoutType: s.layoutType,
-                          heading: s.heading,
-                          description: s.description,
-                          image: s.image || "",
-                          cta: {
-                            ctaId: s.cta?.ctaId?._id || s.cta?.ctaId,
-                            buttonVariant: s.cta?.buttonVariant,
-                          },
-                          order: s.order,
-                        })),
-                        seo: {
-                          metaTitle: record.seo?.metaTitle,
-                          metaDescription: record.seo?.metaDescription,
-                          metaKeywords: record.seo?.metaKeywords?.join(", ") || "",
-                          schemaMarkup: record.seo?.schemaMarkup,
-                        },
-                      });
-                      setIsModalOpen(true);
-                    }}
-                  />
-                  <Popconfirm
-                    title="Delete this subcategory?"
-                    onConfirm={async () => {
-                      await fetch(`/api/subcategories/${record._id}`, {
-                        method: "DELETE",
-                      });
-                      fetchSubCategories();
-                    }}
-                  >
-                    <Button danger icon={<DeleteOutlined />} />
-                  </Popconfirm>
-                </Space>
-              ),
-            },
-          ]}
+          columns={columns}
         />
       </Card>
 
@@ -540,14 +697,20 @@ export default function SubCategory() {
         }
         open={isModalOpen}
         onOk={handleOk}
-        onCancel={() => setIsModalOpen(false)}
-        width={1100}
+        onCancel={handleCancel}
+        width={1200}
         okText="Save Everything"
-        destroyOnClose={true} // Fixed: was destroyOnHidden
+        destroyOnClose={false} // Changed to false to preserve form state
+        maskClosable={false}
       >
-        <Form form={form} layout="vertical">
+        <Form
+          form={form}
+          layout="vertical"
+          preserve={true} // Preserve form state
+        >
           <Tabs
-            defaultActiveKey="1"
+            activeKey={activeTab}
+            onChange={handleTabChange}
             items={[
               {
                 key: "1",
@@ -558,7 +721,9 @@ export default function SubCategory() {
                       <Form.Item
                         name="name"
                         label="SubCategory Name"
-                        rules={[{ required: true, message: "Please enter name" }]}
+                        rules={[
+                          { required: true, message: "Please enter name" },
+                        ]}
                       >
                         <Input
                           onChange={(e) =>
@@ -575,7 +740,9 @@ export default function SubCategory() {
                       <Form.Item
                         name="slug"
                         label="URL Slug"
-                        rules={[{ required: true, message: "Please enter slug" }]}
+                        rules={[
+                          { required: true, message: "Please enter slug" },
+                        ]}
                       >
                         <Input />
                       </Form.Item>
@@ -584,7 +751,9 @@ export default function SubCategory() {
                       <Form.Item
                         name="category"
                         label="Parent Category"
-                        rules={[{ required: true, message: "Please select category" }]}
+                        rules={[
+                          { required: true, message: "Please select category" },
+                        ]}
                       >
                         <Select>
                           <Option value="digital-marketing">
@@ -614,9 +783,9 @@ export default function SubCategory() {
                     </Col>
                     <Col span={24}>
                       <Form.Item name="icon" label="Icon">
-                        <ImageUploadField 
-                          value={form.getFieldValue('icon')}
-                          onChange={(url) => form.setFieldValue('icon', url)}
+                        <ImageUploadField
+                          value={form.getFieldValue("icon")}
+                          onChange={(url) => form.setFieldValue("icon", url)}
                           label="Icon"
                         />
                       </Form.Item>
@@ -633,16 +802,29 @@ export default function SubCategory() {
                       name={["topSection", "backgroundImage"]}
                       label="Hero Background Image"
                     >
-                      <ImageUploadField 
-                        value={form.getFieldValue(['topSection', 'backgroundImage'])}
-                        onChange={(url) => form.setFieldValue(['topSection', 'backgroundImage'], url)}
+                      <ImageUploadField
+                        value={form.getFieldValue([
+                          "topSection",
+                          "backgroundImage",
+                        ])}
+                        onChange={(url) =>
+                          form.setFieldValue(
+                            ["topSection", "backgroundImage"],
+                            url,
+                          )
+                        }
                         label="Background Image"
                       />
                     </Form.Item>
                     <Form.Item
                       name={["topSection", "heading"]}
                       label="Hero Heading"
-                      rules={[{ required: true, message: "Please enter hero heading" }]}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter hero heading",
+                        },
+                      ]}
                     >
                       <Input />
                     </Form.Item>
@@ -663,7 +845,11 @@ export default function SubCategory() {
                         }
                       />
                     </Form.Item>
-                    <CTAFields namePath={["topSection", "cta"]} label="Hero" ctas={ctas} />
+                    <CTAFields
+                      namePath={["topSection", "cta"]}
+                      label="Hero"
+                      ctas={ctas}
+                    />
                   </>
                 ),
               },
@@ -681,7 +867,7 @@ export default function SubCategory() {
                             index={index}
                             remove={remove}
                             move={move}
-                            form={form} // Crucial to pass form instance
+                            form={form}
                             ctas={ctas}
                           />
                         ))}
@@ -689,13 +875,16 @@ export default function SubCategory() {
                           type="dashed"
                           block
                           icon={<PlusOutlined />}
-                          onClick={() =>
-                            add({ 
-                              layoutType: "description-only", 
+                          onClick={() => {
+                            // Get current sections
+                            const currentSections =
+                              form.getFieldValue("sections") || [];
+                            add({
+                              layoutType: "description-only",
                               image: "",
-                              order: fields.length 
-                            })
-                          }
+                              order: currentSections.length,
+                            });
+                          }}
                           style={{ height: 60, marginTop: 10 }}
                         >
                           Add New Content Section
@@ -707,11 +896,58 @@ export default function SubCategory() {
               },
               {
                 key: "4",
+                label: "FAQs",
+                children: (
+                  <Card
+                    size="small"
+                    style={{
+                      background: "#f6ffed",
+                      border: "1px solid #b7eb8f",
+                    }}
+                  >
+                    <Form.List name="faqs">
+                      {(fields, { add, remove, move }) => (
+                        <>
+                          {fields.map((field, index) => (
+                            <FAQItem
+                              key={field.key}
+                              field={field}
+                              index={index}
+                              remove={remove}
+                              move={move}
+                              form={form}
+                            />
+                          ))}
+                          <Button
+                            type="dashed"
+                            block
+                            icon={<PlusOutlined />}
+                            onClick={() => {
+                              // Get current FAQs
+                              const currentFaqs =
+                                form.getFieldValue("faqs") || [];
+                              add({
+                                isActive: true,
+                                order: currentFaqs.length,
+                              });
+                            }}
+                            style={{ height: 60, marginTop: 10 }}
+                          >
+                            Add New FAQ
+                          </Button>
+                        </>
+                      )}
+                    </Form.List>
+                  </Card>
+                ),
+              },
+              {
+                key: "5",
                 label: "SEO Settings",
                 children: (
                   <Card size="small" style={{ background: "#f0f2f5" }}>
-                    <Form.Item 
-                      name={["seo", "metaTitle"]} 
+                    <Form.Item
+                      name={["seo", "metaTitle"]}
                       label="Meta Title"
                       extra="Title for search engines (50-60 chars)"
                     >
@@ -735,7 +971,10 @@ export default function SubCategory() {
                       name={["seo", "schemaMarkup"]}
                       label="Schema Markup (JSON)"
                     >
-                      <Input.TextArea rows={4} placeholder='{"@context": "https://schema.org"}' />
+                      <Input.TextArea
+                        rows={4}
+                        placeholder='{"@context": "https://schema.org"}'
+                      />
                     </Form.Item>
                   </Card>
                 ),
