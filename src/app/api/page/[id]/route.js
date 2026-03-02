@@ -246,10 +246,12 @@ export async function PUT(req, { params }) {
 /* ==================================================
    DELETE: Remove Page By ID (Soft Delete)
 ================================================== */
-export async function DELETE(req, { params }) {
+export async function DELETE(req, context) {
   try {
     await dbConnect();
 
+    // ✅ Next.js 15 fix
+    const { params } = await context;
     const { id } = params;
 
     // Validate ID format
@@ -260,13 +262,10 @@ export async function DELETE(req, { params }) {
       );
     }
 
-    // Option 1: Hard delete (permanently remove)
-    // const deleted = await Page.findByIdAndDelete(id);
-    
-    // Option 2: Soft delete (just deactivate) - Recommended
+    // ✅ Soft delete (recommended)
     const deleted = await Page.findByIdAndUpdate(
-      id, 
-      { isActive: false }, 
+      id,
+      { isActive: false },
       { new: true }
     ).lean();
 
@@ -280,13 +279,14 @@ export async function DELETE(req, { params }) {
     return NextResponse.json({
       success: true,
       message: "Page deactivated successfully",
-      data: deleted
+      data: deleted,
     });
 
   } catch (error) {
     console.error("Error in DELETE /api/page/[id]:", error);
+
     return NextResponse.json(
-      { success: false, message: error.message },
+      { success: false, message: "Internal server error" },
       { status: 500 }
     );
   }
