@@ -1,144 +1,105 @@
-import React from "react";
-import styles from "../../../styles/digital-marketing/sub-category-digital/subdynamicsection.module.css";
-import Link from "next/link";
-import { Row, Col, Button } from "antd";
-import Image from "next/image";
+"use client";
 
-function SubDynamicSection({
+import React, { useState } from "react";
+import styles from "../../../styles/digital-marketing/sub-category-digital/subdynamicsection.module.css";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowRightOutlined } from "@ant-design/icons";
+
+// Premium CTA Component using your specific data structure
+function GlobalCTA({ ctaData }) {
+  if (!ctaData) return null;
+
+  return (
+    <div className={styles.fullWidthCtaWrapper}>
+      <div className={styles.ctaContainer}>
+        <div className={styles.animatedLine}></div>
+
+        <div className={styles.initialStep}>
+          {/* 1. Title Uper */}
+          <div className={styles.titleWrapper}>
+            <div className={styles.circle}></div>
+            <h4 className={styles.ctaTitle}>
+              {ctaData.title || "Get a Quote"}
+            </h4>
+            <div className={styles.circle}></div>
+          </div>
+
+          {/* 2. Description Neeche */}
+          <div className={styles.ctaSubtitleWrapper}>
+            <p className={styles.ctaDescriptionText}>
+              {ctaData.description || "Get Consultation with Us"}
+            </p>
+          </div>
+
+          {/* 3. Button with Link & Text */}
+          <Link href={ctaData.buttonLink || "/getaquote"} passHref>
+            <button className={styles.quoteButton}>
+              {ctaData.buttonText || "Get a Quote"}
+              <ArrowRightOutlined className={styles.arrowIcon} />
+            </button>
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function SubDynamicSection({
   layoutType = "description-only",
   heading = "",
   description = "",
   image = "",
   cta = null,
-  index = 0
+  index = 0,
 }) {
-  
-  // Render description with HTML support
-  const renderDescription = () => {
-    if (!description) return null;
-    
-    return (
-      <div className={styles.descriptionContent}>
-        <div dangerouslySetInnerHTML={{ __html: description }} />
-      </div>
-    );
-  };
-
-  // Render CTA button if available
-  const renderCTA = () => {
-    if (!cta?.ctaId) return null;
-    
-    // You can access cta.ctaId data here (populated from backend)
-    // For now using buttonVariant from ctaRef
-    return (
-      <div className={styles.ctaContainer}>
-        <Link href={cta.ctaId?.link || "/getaquote"} passHref>
-          <Button 
-            className={`${styles.dynamicCtaButton} ${styles[cta.buttonVariant || 'primary']}`}
-          >
-            {cta.ctaId?.text || "Learn More"}
-          </Button>
-        </Link>
-      </div>
-    );
-  };
-
-  // Image layout component
-  const renderImageLayout = (imagePosition) => {
-    const isImageLeft = imagePosition === "left";
-    
-    return (
-      <Row justify="center" align="middle" gutter={[30, 30]} className={styles.dynamicSection}>
-        {heading && (
-          <Col span={24}>
-            <h2 className={styles.sectionHeading}>{heading}</h2>
-          </Col>
-        )}
-        
-        {isImageLeft ? (
-          <>
-            {/* Image Left */}
-            <Col xs={22} sm={22} md={10} lg={10} xl={10}>
-              <div className={styles.imageContainer}>
-                <Image
-                  src={image || "/default-image.jpg"}
-                  alt={heading || "Section image"}
-                  width={500}
-                  height={400}
-                  layout="responsive"
-                  quality={100}
-                />
-              </div>
-            </Col>
-            
-            {/* Description Right */}
-            <Col xs={22} sm={22} md={10} lg={10} xl={10}>
-              <div className={styles.contentContainer}>
-                {renderDescription()}
-                {renderCTA()}
-              </div>
-            </Col>
-          </>
-        ) : (
-          <>
-            {/* Description Left */}
-            <Col xs={22} sm={22} md={10} lg={10} xl={10}>
-              <div className={styles.contentContainer}>
-                {renderDescription()}
-                {renderCTA()}
-              </div>
-            </Col>
-            
-            {/* Image Right */}
-            <Col xs={22} sm={22} md={10} lg={10} xl={10}>
-              <div className={styles.imageContainer}>
-                <Image
-                  src={image || "/default-image.jpg"}
-                  alt={heading || "Section image"}
-                  width={500}
-                  height={400}
-                  layout="responsive"
-                  quality={100}
-                />
-              </div>
-            </Col>
-          </>
-        )}
-      </Row>
-    );
-  };
-
-  // Description only layout
-  const renderDescriptionOnly = () => {
-    return (
-      <Row justify="center" className={styles.dynamicSection}>
-        <Col xs={22} sm={22} md={16} lg={14} xl={12}>
-          {heading && <h2 className={styles.sectionHeading}>{heading}</h2>}
-          {renderDescription()}
-          {renderCTA()}
-        </Col>
-      </Row>
-    );
-  };
-
-  // Main render based on layout type
-  const renderSection = () => {
-    switch(layoutType) {
-      case "image-left":
-        return renderImageLayout("left");
-      case "image-right":
-        return renderImageLayout("right");
-      case "description-only":
-      default:
-        return renderDescriptionOnly();
-    }
-  };
+  // Extracting data from your object structure
+  const ctaData = cta?.ctaId || cta || null;
 
   return (
-    <div className={`${styles.sectionWrapper} ${styles[`layout-${layoutType}`]}`}>
-      {renderSection()}
-    </div>
+    <>
+      <section
+        className={`${styles.sectionWrapper} ${index % 2 !== 0 ? styles.alternateBg : ""}`}
+      >
+        <div className={styles.mainContainer}>
+          {layoutType === "description-only" ? (
+            <div className={styles.centeredContent}>
+              <h2 className={styles.mainHeading}>{heading}</h2>
+              <div
+                className={styles.mainDescription}
+                dangerouslySetInnerHTML={{ __html: description }}
+              />
+            </div>
+          ) : (
+            <div
+              className={`${styles.flexRow} ${layoutType === "image-right" ? styles.rowReverse : ""}`}
+            >
+              <div className={styles.imageCol}>
+                <div className={styles.imageBox}>
+                  <Image
+                    src={image || "/default.jpg"}
+                    alt={heading}
+                    width={600}
+                    height={450}
+                    layout="responsive"
+                    className={styles.actualImg}
+                  />
+                </div>
+              </div>
+              <div className={styles.textCol}>
+                <h2 className={styles.sideHeading}>{heading}</h2>
+                <div
+                  className={styles.sideDescription}
+                  dangerouslySetInnerHTML={{ __html: description }}
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Full Width CTA appearing separately */}
+      {ctaData && <GlobalCTA ctaData={ctaData} />}
+    </>
   );
 }
-
-export default SubDynamicSection;
