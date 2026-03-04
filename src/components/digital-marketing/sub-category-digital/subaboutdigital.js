@@ -1,95 +1,184 @@
 import React from "react";
 import styles from "../../../styles/digital-marketing/sub-category-digital/subaboutdigital.module.css";
-import { Row, Col } from "antd";
+import { Row, Col, Button } from "antd";
 import Image from "next/image";
+import Link from "next/link";
 
 function SubAboutdigital({
+  layoutType = "image-right",
   heading = "About This Service",
-  description1 = "No about description", // Main description
-  image1 = "/default-image.jpg", // First image from database
-  image2 = "/default-image2.jpg", // Second image from database
-  description2 = "", // Second description
+  description1 = "No about description",
+  image1 = "",
+  image2 = "",
+  description2 = "",
+  cta = null,
   renderHtml = false
 }) {
+  
+  // Determine if this is description-only layout
+  const isDescriptionOnly = layoutType === "description-only";
+  
+  // Determine image position for image layouts
+  const isImageLeft = layoutType === "image-left";
+  
+  // Render CTA button - UPDATED to match DescriptionAndFormSection style
+  const renderCTA = () => {
+    if (!cta?.ctaId) return null;
+    
+    // API se button text
+    const buttonText = cta.ctaId?.buttonText || cta.ctaId?.title || cta.ctaId?.text || cta.ctaId?.name || "Learn More";
+    const buttonLink = cta.ctaId?.buttonLink || cta.ctaId?.link || cta.ctaId?.url || "/getaquote";
+    
+    return (
+      <div className={styles.ctaWrapper}>
+        <div className={styles.ctaGradient}>
+          {/* Animated Line */}
+          <div className={styles.animatedLine}></div>
+          
+          <div className={styles.titleWrapper}>
+            <span className={styles.circle}></span>
+            <h2 className={styles.ctaMainTitle}>
+              {cta.ctaId?.title || "Take Your Business to Next Level"}
+            </h2>
+            <span className={styles.circle}></span>
+          </div>
+
+          <p className={styles.ctaDescription}>
+            {cta.ctaId?.description || "Get started with our professional services today"}
+          </p>
+          
+          <Link href={buttonLink} passHref legacyBehavior>
+            <Button className={styles.ctaButton}>
+              {buttonText}
+              <span className={styles.arrowIcon}>→</span>
+            </Button>
+          </Link>
+        </div>
+      </div>
+    );
+  };
+  
   return (
     <div className={styles.aboutdigitalMain}>
-      <Row justify="center">
-        <Col
-          xs={18}
-          sm={18}
-          md={12}
-          lg={10}
-          xl={10}
-        >
+      {/* Main section with heading and description */}
+      <div className={styles.container}>
+        <Row justify="center" align="middle" gutter={[30, 30]}>
           {/* Heading */}
-          <h2 className={styles.provenTextDigital}>{heading}</h2> 
-          
-          {/* First Description with HTML support */}
-          <div className={styles.allTextDigital}>
-            {renderHtml ? (
-              <div dangerouslySetInnerHTML={{ __html: description1 }} />
-            ) : (
-              <p>{description1}</p>
-            )}
-          </div>
-        </Col>
-        
-        <Col
-          xs={22}
-          sm={22}
-          md={10}
-          lg={10}
-          xl={10}
-        >
-          <div className={styles.imageContainer}>
-            <div>
-              <Image
-                src={image1}
-                alt="image-1"
-                width={500}
-                height={400}
-                layout="responsive"
-                quality={100}
-              />
-            </div>
-          </div>
-        </Col>
-      </Row>
-      
-      {/* Second Description (if available) */}
-      {description2 && (
-        <Row justify="center" style={{ marginTop: "40px" }}>
-          <Col xs={22} sm={22} md={20} lg={20} xl={20}>
-            <div className={styles.allTextDigital}>
-              {renderHtml ? (
-                <div dangerouslySetInnerHTML={{ __html: description2 }} />
-              ) : (
-                <p>{description2}</p>
-              )}
+          <Col xs={24} md={22} lg={20}>
+            <div className={styles.headingWrapper}>
+              <h2 className={styles.provenTextDigital}>{heading}</h2>
             </div>
           </Col>
+          
+          {isDescriptionOnly ? (
+            // Description Only Layout
+            <Col xs={24} md={20} lg={16}>
+              <div className={styles.allTextDigital}>
+                {renderHtml ? (
+                  <div dangerouslySetInnerHTML={{ __html: description1 }} />
+                ) : (
+                  <p>{description1}</p>
+                )}
+              </div>
+            </Col>
+          ) : isImageLeft ? (
+            // Image Left, Description Right
+            <>
+              {image1 && (
+                <Col xs={24} md={11}>
+                  <div className={styles.imageBox}>
+                    <Image
+                      src={image1}
+                      alt={heading}
+                      width={600}
+                      height={450}
+                      layout="responsive"
+                      className={styles.actualImg}
+                      quality={100}
+                    />
+                  </div>
+                </Col>
+              )}
+              
+              <Col xs={24} md={11}>
+                <div className={styles.allTextDigital}>
+                  {renderHtml ? (
+                    <div dangerouslySetInnerHTML={{ __html: description1 }} />
+                  ) : (
+                    <p>{description1}</p>
+                  )}
+                </div>
+              </Col>
+            </>
+          ) : (
+            // Image Right, Description Left
+            <>
+              <Col xs={24} md={11}>
+                <div className={styles.allTextDigital}>
+                  {renderHtml ? (
+                    <div dangerouslySetInnerHTML={{ __html: description1 }} />
+                  ) : (
+                    <p>{description1}</p>
+                  )}
+                </div>
+              </Col>
+              
+              {image1 && (
+                <Col xs={24} md={11}>
+                  <div className={styles.imageBox}>
+                    <Image
+                      src={image1}
+                      alt={heading}
+                      width={600}
+                      height={450}
+                      layout="responsive"
+                      className={styles.actualImg}
+                      quality={100}
+                    />
+                  </div>
+                </Col>
+              )}
+            </>
+          )}
         </Row>
-      )}
-      
-      {/* Second Image (if available) */}
-      {image2 && (
-        <Row justify="center" style={{ marginTop: "30px" }}>
-          <Col xs={22} sm={22} md={10} lg={10} xl={10}>
-            <div className={styles.imageContainer}>
-              <div>
+        
+        {/* Second Description */}
+        {description2 && !isDescriptionOnly && (
+          <Row justify="center" style={{ marginTop: "40px" }}>
+            <Col xs={24} md={22} lg={20}>
+              <div className={styles.allTextDigital}>
+                {renderHtml ? (
+                  <div dangerouslySetInnerHTML={{ __html: description2 }} />
+                ) : (
+                  <p>{description2}</p>
+                )}
+              </div>
+            </Col>
+          </Row>
+        )}
+        
+        {/* Second Image */}
+        {image2 && !isDescriptionOnly && (
+          <Row justify="center" style={{ marginTop: "30px" }}>
+            <Col xs={24} md={11}>
+              <div className={styles.imageBox}>
                 <Image
                   src={image2}
                   alt="image-2"
-                  width={500}
-                  height={400}
+                  width={600}
+                  height={450}
                   layout="responsive"
+                  className={styles.actualImg}
                   quality={100}
                 />
               </div>
-            </div>
-          </Col>
-        </Row>
-      )}
+            </Col>
+          </Row>
+        )}
+      </div>
+
+      {/* CTA Section */}
+      {renderCTA()}
     </div>
   );
 }

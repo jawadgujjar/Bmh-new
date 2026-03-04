@@ -104,7 +104,7 @@ export default async function SubcategoryPage({ params }) {
       ))}
 
       {/* CTA 1 */}
-      <SubCalltoactiondigital1
+      {/* <SubCalltoactiondigital1
         title={subcategoryData.cta1?.heading}
         description={
           <HtmlContent
@@ -112,13 +112,13 @@ export default async function SubcategoryPage({ params }) {
             className="cta-description"
           />
         }
-      />
+      /> */}
 
       {/* Industries */}
       <SeoIndustries heading="Industries We Transform" industries={[]} />
 
       {/* CTA 2 */}
-      <SubCalltoactiondigital2
+      {/* <SubCalltoactiondigital2
         title={subcategoryData.cta2?.heading}
         description={
           <HtmlContent
@@ -127,7 +127,7 @@ export default async function SubcategoryPage({ params }) {
           />
         }
         phoneNumber="(813) 214-0535"
-      />
+      /> */}
 
       {/* Standard Layout Elements */}
       <Form1 />

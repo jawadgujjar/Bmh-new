@@ -244,32 +244,35 @@ export default async function UniversalPageRoute({ params }) {
         <>
           {pageData.sections.map((section, index) => {
             console.log("Rendering section:", section.layoutType, section);
+            console.log("Section CTA:", section.cta); // Debug log for CTA
 
             switch (section.layoutType) {
               case 'image-left':
                 return (
                   <SubAboutdigital
                     key={`section-${index}`}
+                    layoutType="image-left"
                     heading={section.heading || "About Us"}
                     description1={sanitizeHtml(section.description || "")}
                     image1={section.image || "/default-image.jpg"}
-                    image2={pageData.sections?.[1]?.image || "/default-image2.jpg"}
+                    image2=""
                     description2=""
+                    cta={section.cta || null} // ✅ ADDED CTA PROP
                     renderHtml={true}
                   />
                 );
 
               case 'image-right':
                 return (
-                  <SubWhydigital
+                  <SubAboutdigital
                     key={`section-${index}`}
-                    heading={section.heading || "Why Choose Us"}
-                    description={sanitizeHtml(section.description || "")}
-                    description2=""
-                    conclusion=""
+                    layoutType="image-right"
+                    heading={section.heading || "About Us"}
+                    description1={sanitizeHtml(section.description || "")}
                     image1={section.image || "/default-image.jpg"}
-                    image2={pageData.sections?.[0]?.image || "/default-image2.jpg"}
-                    buttonText="Learn More"
+                    image2=""
+                    description2=""
+                    cta={section.cta || null} // ✅ ADDED CTA PROP
                     renderHtml={true}
                   />
                 );
@@ -278,11 +281,13 @@ export default async function UniversalPageRoute({ params }) {
                 return (
                   <SubAboutdigital
                     key={`section-${index}`}
+                    layoutType="description-only"
                     heading={section.heading || "About Us"}
                     description1={sanitizeHtml(section.description || "")}
-                    image1={pageData.sections?.[0]?.image || "/default-image.jpg"}
-                    image2={pageData.sections?.[1]?.image || "/default-image2.jpg"}
+                    image1=""
+                    image2=""
                     description2=""
+                    cta={section.cta || null} // ✅ ADDED CTA PROP
                     renderHtml={true}
                   />
                 );
@@ -293,6 +298,7 @@ export default async function UniversalPageRoute({ params }) {
                     key={`section-${index}`}
                     heading={section.heading || "Our Services"}
                     descriptions={section.descriptions || []}
+                    cta={section.cta || null} // ✅ ADDED CTA PROP
                   />
                 );
 
@@ -311,9 +317,9 @@ export default async function UniversalPageRoute({ params }) {
       )}
 
       {/* CTA Sections */}
-      <SubCalltoactiondigital1 {...cta1Props} renderHtml={true} />
+      {/* <SubCalltoactiondigital1 {...cta1Props} renderHtml={true} /> */}
       <SeoIndustries {...industriesProps} />
-      <SubCalltoactiondigital2 {...cta2Props} renderHtml={true} />
+      {/* <SubCalltoactiondigital2 {...cta2Props} renderHtml={true} /> */}
       <Form1 />
       <Carousel />
 
