@@ -86,13 +86,14 @@ function SubAboutdigital({
             <>
               {image1 && (
                 <Col xs={24} md={11}>
-                  <div className={styles.imageContainer}>
+                  <div className={styles.imageBox}>
                     <Image
                       src={image1}
                       alt={heading}
-                      width={500}
-                      height={400}
+                      width={600}
+                      height={450}
                       layout="responsive"
+                      className={styles.actualImg}
                       quality={100}
                     />
                   </div>
@@ -124,13 +125,14 @@ function SubAboutdigital({
               
               {image1 && (
                 <Col xs={24} md={11}>
-                  <div className={styles.imageContainer}>
+                  <div className={styles.imageBox}>
                     <Image
                       src={image1}
                       alt={heading}
-                      width={500}
-                      height={400}
+                      width={600}
+                      height={450}
                       layout="responsive"
+                      className={styles.actualImg}
                       quality={100}
                     />
                   </div>
@@ -159,13 +161,14 @@ function SubAboutdigital({
         {image2 && !isDescriptionOnly && (
           <Row justify="center" style={{ marginTop: "30px" }}>
             <Col xs={24} md={11}>
-              <div className={styles.imageContainer}>
+              <div className={styles.imageBox}>
                 <Image
                   src={image2}
                   alt="image-2"
-                  width={500}
-                  height={400}
+                  width={600}
+                  height={450}
                   layout="responsive"
+                  className={styles.actualImg}
                   quality={100}
                 />
               </div>

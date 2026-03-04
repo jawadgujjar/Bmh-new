@@ -12,238 +12,143 @@ export default function SubFaqs({
 }) {
   const [activeKey, setActiveKey] = useState([]);
 
-  // Debug: Log received FAQs
-  useEffect(() => {
-    console.log("📝 SubFaqs Component Received:", {
-      faqsCount: faqs?.length,
-      faqsData: faqs,
-      title: title,
-    });
-  }, [faqs, title]);
-
-  // If no FAQs at all
-  if (!faqs || faqs.length === 0) {
-    console.log("⚠️ No FAQs array provided or empty array");
-    return null; // Don't render anything
-  }
-
   // Filter only active FAQs and sort by order
   const activeFaqs = faqs
-    .filter((faq) => {
-      // Check if faq exists and isActive is not false
-      const isActive = faq.isActive !== false;
-      if (!isActive) {
-        console.log("⏸️ Skipping inactive FAQ:", faq.question);
-      }
-      return isActive;
-    })
+    .filter((faq) => faq.isActive !== false)
     .sort((a, b) => (a.order || 0) - (b.order || 0));
 
-  console.log("✅ Active FAQs after filtering:", {
-    total: faqs.length,
-    active: activeFaqs.length,
-    inactive: faqs.length - activeFaqs.length,
-    activeFaqs: activeFaqs,
-  });
-
-  if (activeFaqs.length === 0) {
-    console.log("⚠️ No active FAQs to display");
-    return null; // Don't render if no active FAQs
-  }
+  if (!activeFaqs || activeFaqs.length === 0) return null;
 
   return (
     <section
       style={{
-        padding: "80px 20px",
-        background: "#f8fafc",
-        position: "relative",
-        overflow: "hidden",
+        maxWidth: "800px",
+        margin: "0 auto",
+        padding: "40px 20px",
+        fontFamily:
+          "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+        backgroundColor: "#ffffff",
       }}
     >
-      {/* Background decoration */}
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          right: 0,
-          width: "300px",
-          height: "300px",
-          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-          opacity: 0.05,
-          borderRadius: "50%",
-          transform: "translate(100px, -100px)",
-        }}
-      />
-
-      <div
-        style={{
-          maxWidth: "1000px",
-          margin: "0 auto",
-          position: "relative",
-          zIndex: 1,
-        }}
-      >
-        {/* Section Title */}
-        <div style={{ textAlign: "center", marginBottom: "50px" }}>
-          <h2
-            style={{
-              fontSize: "clamp(28px, 5vw, 36px)",
-              fontWeight: "700",
-              color: "#1a1a1a",
-              marginBottom: "16px",
-              position: "relative",
-              display: "inline-block",
-            }}
-          >
-            {title}
-            <div
-              style={{
-                position: "absolute",
-                bottom: "-10px",
-                left: "50%",
-                transform: "translateX(-50%)",
-                width: "80px",
-                height: "4px",
-                background: "linear-gradient(90deg, #667eea 0%, #764ba2 100%)",
-                borderRadius: "2px",
-              }}
-            />
-          </h2>
-          <p
-            style={{
-              fontSize: "16px",
-              color: "#666",
-              maxWidth: "600px",
-              margin: "20px auto 0",
-            }}
-          >
-            Find answers to common questions about our services
-          </p>
-        </div>
-
-        {/* FAQs Accordion */}
-        <Collapse
-          bordered={false}
-          expandIcon={({ isActive }) => (
-            <div
-              style={{
-                fontSize: "16px",
-                color: "#1890ff",
-                transition: "transform 0.3s",
-                transform: isActive ? "rotate(45deg)" : "none",
-              }}
-            >
-              {isActive ? <MinusOutlined /> : <PlusOutlined />}
-            </div>
-          )}
-          expandIconPosition="end"
-          activeKey={activeKey}
-          onChange={setActiveKey}
+      {/* Header Section */}
+      <div style={{ textAlign: "center", marginBottom: "40px" }}>
+        <h1
           style={{
-            background: "transparent",
-            boxShadow: "none",
+            fontSize: "2.5rem",
+            color: "#000000",
+            marginBottom: "10px",
+            fontWeight: "700",
           }}
         >
-          {activeFaqs.map((faq, index) => (
+          {/* "Frequently" word ko orange karne ke liye logic */}
+          {title.includes("Frequently") ? (
+            <>
+              <span style={{ color: "#FD7E14" }}>Frequently</span>{" "}
+              {title.replace("Frequently", "")}
+            </>
+          ) : (
+            title
+          )}
+        </h1>
+        <p style={{ fontSize: "1.1rem", color: "#666" }}>
+          Find answers to common questions about our services
+        </p>
+      </div>
+
+      {/* FAQs Accordion */}
+      <Collapse
+        bordered={false}
+        activeKey={activeKey}
+        onChange={setActiveKey}
+        expandIconPosition="end"
+        style={{ background: "transparent" }}
+        expandIcon={({ isActive }) => (
+          <span
+            style={{ fontSize: "1.5rem", color: "#FD7E14", fontWeight: "300" }}
+          >
+            {isActive ? "-" : "+"}
+          </span>
+        )}
+      >
+        {activeFaqs.map((faq, index) => {
+          const isActive = activeKey.includes(index.toString());
+
+          return (
             <Panel
               key={index}
               header={
-                <span
+                <h3
                   style={{
-                    fontSize: "18px",
+                    margin: 0,
+                    fontSize: "1.1rem",
                     fontWeight: "600",
-                    color: "#2d3748",
-                    padding: "8px 0",
+                    color: "#000000",
+                    padding: "10px 0",
                   }}
                 >
                   {faq.question}
-                </span>
+                </h3>
               }
               style={{
                 marginBottom: "16px",
-                background: "#ffffff",
-                borderRadius: "12px !important",
+                backgroundColor: isActive ? "#ffffff" : "#f8f8f8",
+                borderRadius: "8px",
+                border: isActive ? "1px solid #FD7E14" : "1px solid #e2e8f0",
+                boxShadow: isActive
+                  ? "0 4px 6px rgba(253, 126, 20, 0.1)"
+                  : "none",
                 overflow: "hidden",
-                border: "1px solid #e9ecef",
-                boxShadow: "0 4px 12px rgba(0,0,0,0.03)",
+                transition: "all 0.3s ease",
               }}
             >
               <div
                 style={{
-                  padding: "16px 24px 24px 24px",
+                  padding: "0px 10px 20px 10px",
+                  lineHeight: "1.6",
+                  color: "#333",
                   fontSize: "16px",
-                  lineHeight: "1.8",
-                  color: "#4a5568",
-                  borderTop: "1px solid #e9ecef",
                   background: "#ffffff",
                 }}
               >
                 {faq.answer}
               </div>
             </Panel>
-          ))}
-        </Collapse>
+          );
+        })}
+      </Collapse>
 
-        {/* Still have questions? */}
-        <div
-          style={{
-            textAlign: "center",
-            marginTop: "40px",
-            padding: "30px",
-            background: "linear-gradient(135deg, #f8fafc 0%, #ffffff 100%)",
-            borderRadius: "16px",
-            border: "1px dashed #667eea",
-          }}
-        >
-          <h3
-            style={{
-              fontSize: "20px",
-              fontWeight: "600",
-              color: "#2d3748",
-              marginBottom: "12px",
-            }}
-          >
-            Still have questions?
-          </h3>
-          <p
-            style={{
-              fontSize: "16px",
-              color: "#666",
-              marginBottom: "20px",
-            }}
-          >
-            Can't find the answer you're looking for? Please chat with our
-            friendly team.
-          </p>
+      {/* Contact Section */}
+      <div
+        style={{
+          textAlign: "center",
+          padding: "30px",
+          backgroundColor: "#f8f8f8",
+          borderRadius: "8px",
+          border: "1px solid #e2e8f0",
+          marginTop: "40px",
+        }}
+      >
+        <h2 style={{ margin: "0 0 15px 0", color: "#000000" }}>
+          Still have questions?
+        </h2>
+        <p style={{ margin: 0, color: "#666" }}>
+          Can't find the answer you're looking for? Please{" "}
           <a
             href="/contact"
             style={{
-              display: "inline-block",
-              padding: "12px 30px",
-              background: "linear-gradient(90deg, #667eea 0%, #764ba2 100%)",
-              color: "#ffffff",
+              color: "#FD7E14",
               textDecoration: "none",
-              borderRadius: "50px",
               fontWeight: "500",
-              fontSize: "16px",
-              transition: "all 0.3s ease",
-              boxShadow: "0 4px 15px rgba(102, 126, 234, 0.3)",
             }}
-            onMouseEnter={(e) => {
-              e.target.style.transform = "translateY(-2px)";
-              e.target.style.boxShadow = "0 6px 20px rgba(102, 126, 234, 0.4)";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.transform = "translateY(0)";
-              e.target.style.boxShadow = "0 4px 15px rgba(102, 126, 234, 0.3)";
-            }}
+            onMouseOver={(e) => (e.target.style.textDecoration = "underline")}
+            onMouseOut={(e) => (e.target.style.textDecoration = "none")}
           >
             Contact Us
           </a>
-        </div>
+        </p>
       </div>
 
-      {/* Schema.org structured data for SEO */}
+      {/* SEO Schema */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -255,7 +160,7 @@ export default function SubFaqs({
               name: faq.question,
               acceptedAnswer: {
                 "@type": "Answer",
-                text: faq.answer.replace(/<[^>]*>/g, ""), // Strip HTML tags for schema
+                text: faq.answer.replace(/<[^>]*>/g, ""),
               },
             })),
           }),

@@ -67,13 +67,24 @@
   text-decoration: none;
 }
 
-/* Image Container */
-.imageContainer {
+/* Image Box - Updated to match SubDynamicSection */
+.imageBox {
   position: relative;
   width: 100%;
-  border-radius: 12px;
+  border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.actualImg {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.imageBox:hover .actualImg {
+  transform: scale(1.02);
 }
 
 /* ========== UPDATED CTA SECTION - MATCHING DescriptionAndFormSection ========== */
@@ -272,15 +283,15 @@
     padding: 0 2rem;
     font-size: 1rem;
   }
+  
+  .imageBox {
+    margin-bottom: 20px;
+  }
 }
 
 @media (max-width: 480px) {
   .ctaMainTitle {
     font-size: 1.5rem;
-  }
-  
-  .ctaCard {
-    padding: 2rem 1rem;
   }
   
   .ctaButton {
@@ -291,6 +302,10 @@
   
   .arrowIcon {
     font-size: 1rem;
+  }
+  
+  .imageBox {
+    border-radius: 12px;
   }
 }
 
