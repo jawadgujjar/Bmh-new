@@ -1,26 +1,27 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
-import GetaQuote from "@/models/getaquote";
+import HeroForm from "@/models/heroform";
 
-// DELETE - delete single proposal by ID
 export async function DELETE(req, { params }) {
   try {
     await dbConnect();
+
     const { id } = params;
 
-    const deletedQuote = await GetaQuote.findByIdAndDelete(id);
+    const deletedForm = await HeroForm.findByIdAndDelete(id);
 
-    if (!deletedQuote) {
+    if (!deletedForm) {
       return NextResponse.json(
-        { success: false, error: "Quote not found" },
+        { success: false, error: "Form submission not found" },
         { status: 404 }
       );
     }
 
     return NextResponse.json({
       success: true,
-      message: "Quote deleted successfully",
+      message: "Form deleted successfully",
     });
+
   } catch (error) {
     return NextResponse.json(
       { success: false, error: error.message },

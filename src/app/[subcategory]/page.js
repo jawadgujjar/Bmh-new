@@ -58,6 +58,10 @@ export default async function SubcategoryPage({ params }) {
     subcategoryData.sections?.sort((a, b) => (a.order || 0) - (b.order || 0)) ||
     [];
 
+  // Check if this is a digital marketing subcategory
+  const isDigitalMarketing = subcategoryData.category === "digital-marketing" || 
+                            subcategoryData.category === "Digital Marketing";
+
   return (
     <main>
       {/* Hero Section */}
@@ -75,7 +79,8 @@ export default async function SubcategoryPage({ params }) {
         }
       />
 
-      <Heroform />
+      {/* Only show Heroform for digital marketing subcategories */}
+      {isDigitalMarketing && <Heroform />}
 
       {/* Dynamic Services Section */}
       <SubKeywordsdigital

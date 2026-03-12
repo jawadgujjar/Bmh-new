@@ -104,6 +104,19 @@ export default function GetaQuote() {
       ),
     },
     {
+      title: "Source Page",
+      dataIndex: "sourcePage",
+      key: "sourcePage",
+      render: (text) =>
+        text ? (
+          <a href={text} target="_blank" rel="noopener noreferrer">
+            {text}
+          </a>
+        ) : (
+          <Tag>N/A</Tag>
+        ),
+    },
+    {
       title: "Actions",
       key: "actions",
       render: (_, record) => (
@@ -192,6 +205,20 @@ export default function GetaQuote() {
 
             <Descriptions.Item label="Project Details">
               {selectedQuote.projectDetails}
+            </Descriptions.Item>
+
+            <Descriptions.Item label="Source Page">
+              {selectedQuote.sourcePage ? (
+                <a
+                  href={selectedQuote.sourcePage}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {selectedQuote.sourcePage}
+                </a>
+              ) : (
+                "N/A"
+              )}
             </Descriptions.Item>
           </Descriptions>
         )}
