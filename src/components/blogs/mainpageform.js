@@ -19,6 +19,9 @@ export default function MainpageForm() {
   const handleFinish = async (values) => {
     setLoading(true);
 
+    // Capture current page URL
+    const currentPageUrl = window.location.href;
+
     const submitData = {
       firstName: values.firstName,
       lastName: values.lastName,
@@ -27,6 +30,7 @@ export default function MainpageForm() {
       websiteUrl: values.websiteUrl || '',
       monthlyBudget: values.monthlyBudget,
       projectDetails: values.projectDetails,
+      sourcePage: currentPageUrl, // ✅ Page URL added here
     };
 
     try {
