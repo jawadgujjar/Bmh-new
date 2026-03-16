@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { Form, Input, Button, InputNumber, message } from 'antd';
+import { Form, Input, Button, InputNumber } from 'antd';
 import styles from '../../styles/landing/getaquote.module.css';
 
 const { TextArea } = Input;
@@ -8,9 +8,11 @@ const { TextArea } = Input;
 function Form1() {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("");
 
     const onFinish = async (values) => {
         setLoading(true);
+
         try {
             const submitData = {
                 firstName: values.firstName,
@@ -20,6 +22,9 @@ function Form1() {
                 websiteUrl: values.websiteUrl || '',
                 monthlyBudget: values.monthlyBudget,
                 projectDetails: values.projectDetails,
+
+                // ✅ capture page URL
+                sourcePage: window.location.href
             };
 
             const res = await fetch("/api/getaquote", {
@@ -29,14 +34,21 @@ function Form1() {
             });
 
             if (res.ok) {
-                message.success("Thank you for your quote request! Our team will contact you within 24 hours.");
+                setSuccessMessage("Form submitted successfully!");
                 form.resetFields();
+
+                // hide message after 3 seconds
+                setTimeout(() => {
+                    setSuccessMessage("");
+                }, 3000);
+
             } else {
                 const errorData = await res.json();
-                message.error(errorData.error || "Failed to submit form. Please check your inputs and try again.");
+                setSuccessMessage(errorData.error || "Failed to submit form.");
             }
+
         } catch (error) {
-            message.error("Something went wrong. Please try again later.");
+            setSuccessMessage("Something went wrong. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -46,11 +58,13 @@ function Form1() {
         <div className={styles.formWrapper}>
             <div className={styles.formContainer}>
                 <h2 className={styles.formHeading}>Get Your Free Proposal</h2>
-                <Form 
+
+                <Form
                     form={form}
-                    layout="vertical" 
+                    layout="vertical"
                     onFinish={onFinish}
                 >
+
                     <div className={styles.formItemRow}>
                         <Form.Item
                             label={<span className={styles.formLabel}>First Name</span>}
@@ -112,6 +126,7 @@ function Form1() {
                                 className={styles.customInputNumber}
                                 formatter={value => `$ ${value}`}
                                 parser={value => value.replace('$ ', '')}
+                                style={{ width: "100%" }}
                             />
                         </Form.Item>
                     </div>
@@ -129,21 +144,38 @@ function Form1() {
                     </Form.Item>
 
                     <Form.Item>
-                        <Button 
-                            type="primary" 
-                            htmlType="submit" 
-                            block 
-                            className={styles.submitButton} 
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            block
+                            className={styles.submitButton}
                             loading={loading}
                             disabled={loading}
                         >
                             {loading ? 'Submitting...' : 'Submit'}
                         </Button>
+
+                        {/* ✅ success message */}
+                        {successMessage && (
+                            <p
+                                style={{
+                                    color: "#16a34a",
+                                    marginTop: "10px",
+                                    fontWeight: "500"
+                                }}
+                            >
+                                {successMessage}
+                            </p>
+                        )}
                     </Form.Item>
+
                 </Form>
+
                 <h6 className={styles.h6Form}>
-                    In a Hurry? Give us a call at <a href="tel:+1234567890" className={styles.callLink}>+123-456-7890</a>
+                    In a Hurry? Give us a call at
+                    <a href="tel:+1234567890" className={styles.callLink}> +123-456-7890</a>
                 </h6>
+
                 <hr />
             </div>
         </div>
