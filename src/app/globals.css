@@ -87,3 +87,57 @@ a {
   }
 }
  
+/* Breadcrumbs Overlay Styling */
+.breadcrumb-container-main {
+  position: absolute; /* Hero image ke ooper overlay karne ke liye */
+  top: 95px;         /* Navbar 85px hai, to thoda gap de kar 95px par set kiya */
+  left: 0;
+  width: 100%;
+  z-index: 10;       /* Navbar se neechay par content se ooper */
+  background: transparent;
+}
+
+.breadcrumb-list-custom {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 16px; /* Size 13px se barha kar 16px kar diya */
+  font-weight: 600; /* Thoda bold taake readability behtar ho */
+  letter-spacing: 0.3px;
+}
+.b-link {
+  color: rgba(255, 255, 255, 0.8); /* White with transparency */
+  text-decoration: none;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+}
+
+.b-link:hover {
+  color: #ffa500; /* Aapka theme orange */
+}
+
+.separator {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.b-current {
+  color: #ffa500; /* Active page orange mein */
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+/* Scrolled Navbar adjustment */
+.scrolled ~ .breadcrumb-container-main {
+  top: 80px; /* Jab navbar chota ho jaye */
+}
+
+/* Mobile responsive */
+@media (max-width: 991px) {
+  .breadcrumb-container-main {
+    top: 75px;
+    padding-left: 15px;
+  }
+}
