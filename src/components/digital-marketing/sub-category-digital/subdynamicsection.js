@@ -1,22 +1,17 @@
 "use client";
-
-import React, { useState } from "react";
+import React from "react";
 import styles from "../../../styles/digital-marketing/sub-category-digital/subdynamicsection.module.css";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightOutlined } from "@ant-design/icons";
 
-// Premium CTA Component using your specific data structure
 function GlobalCTA({ ctaData }) {
   if (!ctaData) return null;
-
   return (
     <div className={styles.fullWidthCtaWrapper}>
       <div className={styles.ctaContainer}>
         <div className={styles.animatedLine}></div>
-
         <div className={styles.initialStep}>
-          {/* 1. Title Uper */}
           <div className={styles.titleWrapper}>
             <div className={styles.circle}></div>
             <h4 className={styles.ctaTitle}>
@@ -24,15 +19,9 @@ function GlobalCTA({ ctaData }) {
             </h4>
             <div className={styles.circle}></div>
           </div>
-
-          {/* 2. Description Neeche */}
-          <div className={styles.ctaSubtitleWrapper}>
-            <p className={styles.ctaDescriptionText}>
-              {ctaData.description || "Get Consultation with Us"}
-            </p>
-          </div>
-
-          {/* 3. Button with Link & Text */}
+          <p className={styles.ctaDescriptionText}>
+            {ctaData.description || "Get Consultation with Us"}
+          </p>
           <Link href={ctaData.buttonLink || "/getaquote"} passHref>
             <button className={styles.quoteButton}>
               {ctaData.buttonText || "Get a Quote"}
@@ -53,11 +42,10 @@ export default function SubDynamicSection({
   cta = null,
   index = 0,
 }) {
-  // Extracting data from your object structure
   const ctaData = cta?.ctaId || cta || null;
 
   return (
-    <>
+    <div className="w-full">
       <section
         className={`${styles.sectionWrapper} ${index % 2 !== 0 ? styles.alternateBg : ""}`}
       >
@@ -97,9 +85,7 @@ export default function SubDynamicSection({
           )}
         </div>
       </section>
-
-      {/* Full Width CTA appearing separately */}
       {ctaData && <GlobalCTA ctaData={ctaData} />}
-    </>
+    </div>
   );
 }

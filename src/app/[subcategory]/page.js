@@ -1,10 +1,6 @@
 import { notFound } from "next/navigation";
-import SubAboutdigital from "@/components/digital-marketing/sub-category-digital/subaboutdigital";
-import SubCalltoactiondigital1 from "@/components/digital-marketing/sub-category-digital/subcalltoactiondigital1";
-import SubCalltoactiondigital2 from "@/components/digital-marketing/sub-category-digital/subcalltoactiondigital2";
 import SubHeroDigitalMarketing from "@/components/digital-marketing/sub-category-digital/subdigitalhero";
 import SubKeywordsdigital from "@/components/digital-marketing/sub-category-digital/subkeywordsdigital";
-// import SubWhydigital from "@/components/digital-marketing/sub-category-digital/subwhydigital"; // Remove this
 import Carousel from "@/components/landing/carousel";
 import Form1 from "@/components/landing/getaquote";
 import SeoIndustries from "@/components/landing/seoindustries";
@@ -12,13 +8,13 @@ import Heroform from "@/components/landing/heroform";
 import SubDynamicSection from "@/components/digital-marketing/sub-category-digital/subdynamicsection";
 import SubFaqs from "../../components/digital-marketing/sub-category-digital/subfaqs";
 
-
-// HTML renderer component
 function HtmlContent({ content, className = "" }) {
   if (!content) return null;
-
   return (
-    <div className={className} dangerouslySetInnerHTML={{ __html: content }} />
+    <div
+      className={`${className} leading-snug`}
+      dangerouslySetInnerHTML={{ __html: content }}
+    />
   );
 }
 
@@ -28,43 +24,26 @@ async function getSubCategoryData(slug) {
       `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"}/api/subcategories?slug=${slug}`,
       { cache: "no-store" },
     );
-
-    if (!res.ok) throw new Error("Failed to fetch subcategory");
+    if (!res.ok) throw new Error("Failed to fetch");
     const data = await res.json();
     return Array.isArray(data) ? data[0] : data;
   } catch (error) {
-    console.error("Error fetching subcategory:", error);
     return null;
   }
 }
 
 export default async function SubcategoryPage({ params }) {
   const { subcategory } = await params;
-
-  // 1. Fetch Subcategory Data
   const subcategoryData = await getSubCategoryData(subcategory);
 
-  if (!subcategoryData) {
-    return (
-      <div style={{ padding: "100px 20px", textAlign: "center" }}>
-        <h1>Subcategory not found</h1>
-        <p>The requested subcategory "{subcategory}" does not exist.</p>
-      </div>
-    );
-  }
+  if (!subcategoryData) return notFound();
 
-  // Sort sections by order
   const sortedSections =
     subcategoryData.sections?.sort((a, b) => (a.order || 0) - (b.order || 0)) ||
     [];
 
-  // Check if this is a digital marketing subcategory
-  const isDigitalMarketing = subcategoryData.category === "digital-marketing" || 
-                            subcategoryData.category === "Digital Marketing";
-
   return (
-    <main>
-      {/* Hero Section */}
+    <main className="flex flex-col w-full p-0 m-0 overflow-x-hidden">
       <SubHeroDigitalMarketing
         backgroundImage={
           subcategoryData.topSection?.backgroundImage || "/default-bg.jpg"
@@ -79,23 +58,21 @@ export default async function SubcategoryPage({ params }) {
         }
       />
 
-      {/* Only show Heroform for digital marketing subcategories */}
-      {isDigitalMarketing && <Heroform />}
+      <Heroform />
 
-      {/* Dynamic Services Section */}
-      <SubKeywordsdigital
-        heading={`Specialized ${subcategoryData.name} Services`}
-        description={
-          <HtmlContent
-            content={subcategoryData.keywordsSection?.description}
-            className="keywords-description"
-          />
-        }
-        subcategoryId={subcategoryData._id}
-        category={subcategoryData.category}
-      />
+      <div className="py-10 bg-white">
+        <SubKeywordsdigital
+          heading={`Specialized ${subcategoryData.name} Services`}
+          description={
+            <HtmlContent
+              content={subcategoryData.keywordsSection?.description}
+            />
+          }
+          subcategoryId={subcategoryData._id}
+          category={subcategoryData.category}
+        />
+      </div>
 
-      {/* 🔥 DYNAMIC SECTIONS RENDERING - This replaces SubWhydigital */}
       {sortedSections.map((section, index) => (
         <SubDynamicSection
           key={index}
@@ -108,44 +85,19 @@ export default async function SubcategoryPage({ params }) {
         />
       ))}
 
-      {/* CTA 1 */}
-      {/* <SubCalltoactiondigital1
-        title={subcategoryData.cta1?.heading}
-        description={
-          <HtmlContent
-            content={subcategoryData.cta1?.description}
-            className="cta-description"
-          />
-        }
-      /> */}
-
-      {/* Industries */}
       <SeoIndustries heading="Industries We Transform" industries={[]} />
 
-      {/* CTA 2 */}
-      {/* <SubCalltoactiondigital2
-        title={subcategoryData.cta2?.heading}
-        description={
-          <HtmlContent
-            content={subcategoryData.cta2?.description}
-            className="cta-description"
-          />
-        }
-        phoneNumber="(813) 214-0535"
-      /> */}
+      <div className="py-0 my-0">
+        <Form1 />
+      </div>
 
-      {/* Standard Layout Elements */}
-      <Form1 />
       <Carousel />
 
-      {/* 📝 FAQS SECTION - ADDED HERE (AFTER CAROUSEL) */}
-      <SubFaqs 
-        faqs={subcategoryData.faqs || []} 
-        title={`Frequently Asked Questions About ${subcategoryData.name}`}
-      />
-      {/* Production hidden debug */}
-      <div style={{ display: "none" }}>
-        <pre>{JSON.stringify(subcategoryData, null, 2)}</pre>
+      <div className="py-10">
+        <SubFaqs
+          faqs={subcategoryData.faqs || []}
+          title={`Frequently Asked Questions About ${subcategoryData.name}`}
+        />
       </div>
     </main>
   );

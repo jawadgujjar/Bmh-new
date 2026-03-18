@@ -1,6 +1,7 @@
 .sectionWrapper {
-  padding: 100px 0;
+  padding: 50px 0; /* Bohat zyada gap yahan se tha (100px), isay 50px kar diya */
   background: #fff;
+  margin: 0;
 }
 
 .alternateBg { background: #f9fafb; }
@@ -11,92 +12,78 @@
   padding: 0 20px;
 }
 
-/* Flexbox Professional Layout (Left/Right) */
 .flexRow {
   display: flex;
   align-items: center;
-  gap: 60px;
+  gap: 40px;
 }
 
 .rowReverse { flex-direction: row-reverse; }
-
 .imageCol, .textCol { flex: 1; }
 
 .imageBox {
   border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 
 .sideHeading {
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 800;
   color: #0f172a;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .sideDescription {
-  font-size: 17px;
-  line-height: 1.8;
+  font-size: 16px;
+  line-height: 1.6;
   color: #475569;
 }
 
-/* Centered Description Only Layout */
 .centeredContent {
   text-align: center;
-  max-width: 850px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
-.mainHeading { font-size: 40px; font-weight: 800; margin-bottom: 20px; }
-.mainDescription { font-size: 18px; line-height: 1.8; color: #475569; }
+.mainHeading { font-size: 34px; font-weight: 800; margin-bottom: 15px; }
+.mainDescription { font-size: 17px; line-height: 1.6; color: #475569; }
 
-/* FULL WIDTH CTA WRAPPER */
+/* CTA WRAPPER - Gap Fix */
 .fullWidthCtaWrapper {
   width: 100%;
-  padding: 60px 0;
-  background: #fff; /* Section sy alag dikhny k liye */
+  padding: 10px 0 50px 0; /* Top padding bilkul kam kar di */
+  background: transparent;
 }
 
 .ctaContainer {
   background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   border-radius: 20px;
-  padding: 4.5rem 2rem;
+  padding: 3rem 2rem;
   color: white;
-  max-width: 1100px; /* Thora bara krdiya width full rkhny k liye */
+  max-width: 1100px;
   margin: 0 auto;
   position: relative;
   overflow: hidden;
   text-align: center;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
 }
 
-/* Aapki baki saari CTA CSS yahan same rahy gi */
-.titleWrapper { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 1rem; }
-.circle { width: 10px; height: 10px; border-radius: 50%; background: #fd7e14; }
-.ctaTitle { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; color: #e2e8f0; }
-.ctaSubtitle { font-size: 2.5rem; font-weight: 700; background: linear-gradient(90deg, #fd7e14, #f59e0b); -webkit-background-clip: text; color: transparent; margin-bottom: 1.5rem; }
-.ctaDescription { font-size: 1.1rem; color: #cbd5e1; margin-bottom: 2rem; }
+.titleWrapper { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 0.5rem; }
+.circle { width: 8px; height: 8px; border-radius: 50%; background: #fd7e14; }
+.ctaTitle { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; color: #e2e8f0; }
+.ctaDescriptionText { font-size: 1.8rem; font-weight: 700; color: #fff; margin-bottom: 1.5rem; }
 
 .quoteButton {
   background: linear-gradient(135deg, #fd7e14 0%, #f59e0b 100%);
-  color: white; padding: 1.2rem 2.5rem; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;
+  color: white; padding: 1rem 2rem; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 10px;
 }
-
-/* Form Styles */
-.quoteForm { max-width: 700px; margin: 0 auto; text-align: left; }
-.formRow { display: flex; gap: 20px; margin-bottom: 15px; }
-.inputGroup { flex: 1; margin-bottom: 15px; }
-.formInput, .formTextarea { width: 100%; padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid #334155; }
-.formActions { display: flex; justify-content: space-between; margin-top: 20px; }
-.backButton { background: transparent; color: #94a3b8; border: 1px solid #334155; padding: 10px 20px; border-radius: 8px; }
-.submitFormButton { background: #fd7e14; color: #fff; border: none; padding: 10px 25px; border-radius: 8px; font-weight: 600; }
 
 .animatedLine { position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: linear-gradient(90deg, transparent, #fd7e14, transparent); animation: lineMove 3s infinite; }
 @keyframes lineMove { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 
 @media (max-width: 768px) {
-  .flexRow { flex-direction: column; gap: 30px; }
-  .ctaSubtitle { font-size: 1.8rem; }
-  .formRow { flex-direction: column; gap: 0; }
+  .flexRow { flex-direction: column; gap: 20px; }
+  .sectionWrapper { padding: 30px 0; }
+  .ctaDescriptionText { font-size: 1.4rem; }
 }
