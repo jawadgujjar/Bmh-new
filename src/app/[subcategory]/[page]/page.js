@@ -105,7 +105,7 @@ async function getSubCategoryBySlug(slug) {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
     const res = await fetch(
       `${baseUrl}/api/subcategories?slug=${slug}`,
-      { cache: "no-store" },
+      { cache: "no-store" },  
     );
 
     if (!res.ok) return null;
