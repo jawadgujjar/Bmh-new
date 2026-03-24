@@ -9,6 +9,7 @@ const GetaQuoteSchema = new mongoose.Schema(
     websiteUrl: { type: String }, // optional
     monthlyBudget: { type: Number, required: true },
     projectDetails: { type: String, required: true },
+    sourcePage: { type: String }, // ✅ add this line
   },
   { timestamps: true }
 );

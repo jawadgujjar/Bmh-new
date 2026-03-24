@@ -15,7 +15,7 @@ export default function WebdevelopmentPage() {
   return (
     <main>
       <Heroweb1/>
-      <Heroform/>
+      {/* <Heroform/> */}
       <Webdevelopment1 />
       <Keywordsweb/>
       <Calltoactionweb1/>

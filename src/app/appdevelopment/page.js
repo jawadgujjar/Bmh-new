@@ -16,7 +16,7 @@ export default function AppdevelopmentPage() {
   return (
     <main>
         <Heroapp1/>
-        <Heroform/>
+        {/* <Heroform/> */}
         <Appdevelopment1/>
         <Keywordsapp/>
         <Calltoactionapp1/>

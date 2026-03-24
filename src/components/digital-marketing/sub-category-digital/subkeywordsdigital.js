@@ -29,8 +29,19 @@ function SubKeywordsdigital({
 
         if (!res.ok) throw new Error("Failed to fetch services");
 
-        const data = await res.json();
-        setPages(Array.isArray(data) ? data : []);
+        const result = await res.json();
+
+        // Fix: Handle the response structure correctly
+        let pagesData = [];
+        if (result.success && Array.isArray(result.data)) {
+          pagesData = result.data;
+        } else if (Array.isArray(result)) {
+          pagesData = result;
+        } else {
+          pagesData = [];
+        }
+
+        setPages(pagesData);
       } catch (err) {
         console.error("Error loading subcategory pages:", err);
         setError("Could not load services.");
@@ -53,7 +64,7 @@ function SubKeywordsdigital({
         <h2 className={styles.mainTitle}>{heading}</h2>
         {description && (
           <div className={styles.subTitleContainer}>
-            <p className={styles.subTitle}>{description}</p>
+            <div className={styles.subTitle}>{description}</div>
             <div className={styles.titleUnderline}></div>
           </div>
         )}

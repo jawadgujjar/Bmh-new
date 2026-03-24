@@ -72,7 +72,7 @@ function SubAboutdigital({
           
           {isDescriptionOnly ? (
             // Description Only Layout
-            <Col xs={24} md={20} lg={16}>
+            <Col xs={24} md={22} lg={20}>
               <div className={styles.allTextDigital}>
                 {renderHtml ? (
                   <div dangerouslySetInnerHTML={{ __html: description1 }} />

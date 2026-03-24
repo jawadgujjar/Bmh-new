@@ -14,6 +14,7 @@ const FirstPageBlog = () => {
   const [blogPosts, setBlogPosts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const ORANGE_COLOR = '#FD7E14';
   const ORANGE_LIGHT = '#FFA94D';
@@ -65,6 +66,19 @@ const FirstPageBlog = () => {
   const handleReadMore = (post) => {
     if (!post?.slug) return;
     router.push(`/blogs/${post.slug}`);
+  };
+
+  const handleSearch = (value) => {
+    if (value.trim()) {
+      // You can implement search functionality here
+      // For now, just logging
+      console.log('Searching for:', value);
+      // router.push(`/blogs?search=${encodeURIComponent(value)}`);
+    }
+  };
+
+  const handleCategoryClick = (category) => {
+    router.push(`/blogs?category=${encodeURIComponent(category)}`);
   };
 
   // ================= LOADING =================
@@ -167,7 +181,7 @@ const FirstPageBlog = () => {
         {/* ================= RIGHT SIDEBAR ================= */}
         <Col xs={24} md={8} lg={7}>
 
-          {/* SEARCH */}
+          {/* SEARCH - Fixed Button */}
           <Card
             title={<span style={{ color: ORANGE_COLOR }}>Search Blog</span>}
             style={{ marginBottom: 24 }}
@@ -175,21 +189,27 @@ const FirstPageBlog = () => {
             <Search
               placeholder="Search articles..."
               allowClear
+              onSearch={handleSearch}
               enterButton={
-                <div
-                  style={{
+                <Button 
+                  type="primary" 
+                  icon={<SearchOutlined />}
+                  style={{ 
                     backgroundColor: ORANGE_COLOR,
-                    color: '#fff',
-                    padding: '0 14px',
+                    borderColor: ORANGE_COLOR,
+                    height: '32px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
                   }}
                 >
-                  <SearchOutlined />
-                </div>
+                  Search
+                </Button>
               }
             />
           </Card>
 
-          {/* CATEGORIES */}
+          {/* CATEGORIES - Clickable */}
           <Card
             title={<span style={{ color: ORANGE_COLOR }}>Categories</span>}
           >
@@ -201,7 +221,10 @@ const FirstPageBlog = () => {
               <List
                 dataSource={categories}
                 renderItem={(item) => (
-                  <List.Item style={{ cursor: 'pointer' }}>
+                  <List.Item 
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => handleCategoryClick(item.name)}
+                  >
                     <div
                       style={{
                         display: 'flex',
@@ -214,6 +237,7 @@ const FirstPageBlog = () => {
                         style={{
                           backgroundColor: ORANGE_LIGHT,
                           border: 'none',
+                          color: '#000',
                         }}
                       >
                         {item.count}
