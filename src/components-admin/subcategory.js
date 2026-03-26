@@ -551,7 +551,7 @@ export default function SubCategory() {
                           <Option value="web-development">
                             Web Development
                           </Option>
-                   <Option value="app-development">
+                          <Option value="app-development">
                             App Development
                           </Option>
                         </Select>
