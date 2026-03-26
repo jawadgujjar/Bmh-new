@@ -1,3 +1,5 @@
+import "@/models/subcategory"; // ✅ FIX
+import "@/models/cta";    
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 import dbConnect from "@/lib/mongodb";
@@ -19,13 +21,13 @@ export async function GET(request) {
 
     // 🔥 CASE 1: GET SINGLE PAGE BY SLUG
     if (slug) {
-      const page = await Page.findOne({ 
-        slug, 
-        isActive: isActive !== null ? isActive === "true" : true 
+      const page = await Page.findOne({
+        slug,
+        isActive: isActive !== null ? isActive === "true" : true,
       })
         .populate({
           path: "subcategory",
-          select: "name slug icon category topSection sections seo"
+          select: "name slug icon category topSection sections seo",
         })
         .populate("sections.cta.ctaId")
         .populate("topSection.cta.ctaId")
@@ -34,32 +36,33 @@ export async function GET(request) {
       if (!page) {
         return NextResponse.json(
           { success: false, message: "Page not found" },
-          { status: 404 }
+          { status: 404 },
         );
       }
 
       // Sort sections & faqs by order
       if (page.sections) {
-        page.sections = page.sections.sort((a, b) => (a.order || 0) - (b.order || 0));
+        page.sections = page.sections.sort(
+          (a, b) => (a.order || 0) - (b.order || 0),
+        );
       }
       if (page.faqs) {
         page.faqs = page.faqs.sort((a, b) => (a.order || 0) - (b.order || 0));
       }
 
-      return NextResponse.json({ 
-        success: true, 
-        data: page 
+      return NextResponse.json({
+        success: true,
+        data: page,
       });
     }
 
     // 🔥 CASE 2: FILTER PAGES BY CATEGORY OR SUBCATEGORY
     let query = {};
-    
-    // Only apply isActive filter if explicitly provided
+
     if (isActive !== null) {
       query.isActive = isActive === "true";
     } else {
-      query.isActive = true; // Default to active only
+      query.isActive = true;
     }
 
     if (subcategory) {
@@ -68,55 +71,57 @@ export async function GET(request) {
       } catch (e) {
         return NextResponse.json(
           { success: false, message: "Invalid subcategory ID format" },
-          { status: 400 }
+          { status: 400 },
         );
       }
     }
-    
+
     if (category) {
-      const validCategories = ["digital-marketing", "web-development", "app-development"];
+      const validCategories = [
+        "digital-marketing",
+        "web-development",
+        "app-development",
+      ];
       if (!validCategories.includes(category)) {
         return NextResponse.json(
           { success: false, message: "Invalid category" },
-          { status: 400 }
+          { status: 400 },
         );
       }
       query.category = category;
     }
 
-    // Build query with pagination
     let pagesQuery = Page.find(query)
       .populate("subcategory", "name slug icon category")
       .sort({ createdAt: -1 });
 
-    // Apply limit if provided
     if (limit && !isNaN(parseInt(limit))) {
       pagesQuery = pagesQuery.limit(parseInt(limit));
     }
 
     const pages = await pagesQuery.lean();
 
-    // Sort sections for each page
-    pages.forEach(page => {
+    pages.forEach((page) => {
       if (page.sections) {
-        page.sections = page.sections.sort((a, b) => (a.order || 0) - (b.order || 0));
+        page.sections = page.sections.sort(
+          (a, b) => (a.order || 0) - (b.order || 0),
+        );
       }
       if (page.faqs) {
         page.faqs = page.faqs.sort((a, b) => (a.order || 0) - (b.order || 0));
       }
     });
 
-    return NextResponse.json({ 
-      success: true, 
+    return NextResponse.json({
+      success: true,
       data: pages,
-      count: pages.length
+      count: pages.length,
     });
-
   } catch (error) {
     console.error("Error in GET /api/page:", error);
     return NextResponse.json(
       { success: false, message: error.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -133,8 +138,15 @@ export async function POST(req) {
     if (!body.title) {
       return NextResponse.json(
         { success: false, message: "Title is required" },
-        { status: 400 }
+        { status: 400 },
       );
+    }
+
+    // ✅ Keyword Title Cleaning & Fallback
+    if (body.keywordstitle) {
+      body.keywordstitle = body.keywordstitle.trim();
+    } else {
+      body.keywordstitle = body.title; // Default to title if empty
     }
 
     // Validate category
@@ -147,19 +159,18 @@ export async function POST(req) {
     if (!body.category || !validCategories.includes(body.category)) {
       return NextResponse.json(
         { success: false, message: "Invalid or missing category" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    // Validate subcategory
     if (!body.subcategory) {
       return NextResponse.json(
         { success: false, message: "Subcategory is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    // 🔥 Generate slug if not provided
+    // 🔥 Generate slug
     if (!body.slug && body.title) {
       body.slug = body.title
         .toLowerCase()
@@ -170,55 +181,47 @@ export async function POST(req) {
         .replace(/-+$/, "");
     }
 
-    // 🔥 Check for duplicate slug
-    if (body.slug) {
-      const existingPage = await Page.findOne({ slug: body.slug });
-      if (existingPage) {
-        return NextResponse.json(
-          { success: false, message: "Page with this slug already exists" },
-          { status: 400 }
-        );
-      }
+    // 🔥 Check duplicate slug
+    const existingPage = await Page.findOne({ slug: body.slug });
+    if (existingPage) {
+      return NextResponse.json(
+        { success: false, message: "Page with this slug already exists" },
+        { status: 400 },
+      );
     }
 
-    // 🔥 Set default values
+    // Default values
     if (body.isActive === undefined) body.isActive = true;
     if (!body.createdBy) body.createdBy = "admin";
 
-    // 🔥 Initialize arrays if not present
+    // Arrays initialization
     body.sections = body.sections || [];
     body.faqs = body.faqs || [];
 
-    // 🔥 Auto assign order to sections and FAQs
-    if (body.sections.length > 0) {
-      body.sections = body.sections.map((sec, index) => ({
-        ...sec,
-        order: sec.order !== undefined ? sec.order : index
-      }));
-    }
+    // Auto assign order
+    body.sections = body.sections.map((sec, index) => ({
+      ...sec,
+      order: sec.order !== undefined ? sec.order : index,
+    }));
 
-    if (body.faqs.length > 0) {
-      body.faqs = body.faqs.map((faq, index) => ({
-        ...faq,
-        order: faq.order !== undefined ? faq.order : index
-      }));
-    }
+    body.faqs = body.faqs.map((faq, index) => ({
+      ...faq,
+      order: faq.order !== undefined ? faq.order : index,
+    }));
 
-    // 🔥 Initialize SEO if not present
+    // SEO fallback
     if (!body.seo) {
       body.seo = {
-        metaTitle: body.title,
+        metaTitle: body.keywordstitle || body.title,
         metaDescription: body.subcatpagedescr || "",
         metaKeywords: [],
-        schemaMarkup: {}
+        schemaMarkup: {},
       };
     }
 
-    // Create page
     const page = new Page(body);
     await page.save();
 
-    // Fetch populated page
     const populatedPage = await Page.findById(page._id)
       .populate("subcategory")
       .populate("sections.cta.ctaId")
@@ -227,28 +230,19 @@ export async function POST(req) {
 
     return NextResponse.json(
       { success: true, data: populatedPage },
-      { status: 201 }
+      { status: 201 },
     );
-
   } catch (error) {
     console.error("Error in POST /api/page:", error);
-    
-    // Handle duplicate key error
     if (error.code === 11000) {
       return NextResponse.json(
-        { success: false, message: "Page with this slug already exists" },
-        { status: 400 }
+        { success: false, message: "Duplicate key error" },
+        { status: 400 },
       );
     }
-    
     return NextResponse.json(
       { success: false, message: error.message },
-      { status: 400 }
+      { status: 400 },
     );
   }
 }
-
-/* ==================================================
-   Note: PUT and DELETE methods are in [id]/route.js
-   This file only handles collection operations
-================================================== */

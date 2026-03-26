@@ -62,7 +62,7 @@ export default async function SubcategoryPage({ params }) {
 
       <div className="py-10 bg-white">
         <SubKeywordsdigital
-          heading={`Specialized ${subcategoryData.name} Services`}
+          heading={` ${subcategoryData.keywordstitle} `}
           description={
             <HtmlContent
               content={subcategoryData.keywordsSection?.description}

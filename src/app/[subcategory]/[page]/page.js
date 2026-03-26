@@ -1,7 +1,5 @@
 import { notFound } from "next/navigation";
 import SubAboutdigital from "@/components/digital-marketing/sub-category-digital/subaboutdigital";
-import SubCalltoactiondigital1 from "@/components/digital-marketing/sub-category-digital/subcalltoactiondigital1";
-import SubCalltoactiondigital2 from "@/components/digital-marketing/sub-category-digital/subcalltoactiondigital2";
 import SubHeroDigitalMarketing from "@/components/digital-marketing/sub-category-digital/subdigitalhero";
 import SubKeywordsdigital from "@/components/digital-marketing/sub-category-digital/subkeywordsdigital";
 import SubWhydigital from "@/components/digital-marketing/sub-category-digital/subdynamicsection";
@@ -11,6 +9,7 @@ import SeoIndustries from "@/components/landing/seoindustries";
 import Heroform from "@/components/landing/heroform";
 import DescriptionAndFormSection from "@/components/descriptionandformsection/descriptionform";
 import FaqSection from "@/components/faqspage/faqsection"; // ✅ Import FAQ component
+import PageKeywordsdigital from "@/components/digital-marketing/pagekeyword-digital/pagekeywordsdigital";
 
 // HTML Content Component
 function HtmlContent({ content, className = "" }) {
@@ -70,15 +69,12 @@ async function getPageBySlug(slug) {
     console.log(`Fetching page with slug: ${slug}`);
 
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
-    const res = await fetch(
-      `${baseUrl}/api/page?slug=${slug}`,
-      {
-        cache: "no-store",
-        headers: {
-          "Content-Type": "application/json",
-        },
+    const res = await fetch(`${baseUrl}/api/page?slug=${slug}`, {
+      cache: "no-store",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+    });
 
     console.log(`Response status: ${res.status}`);
 
@@ -114,10 +110,9 @@ async function getPageBySlug(slug) {
 async function getSubCategoryBySlug(slug) {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
-    const res = await fetch(
-      `${baseUrl}/api/subcategories?slug=${slug}`,
-      { cache: "no-store" },
-    );
+    const res = await fetch(`${baseUrl}/api/subcategories?slug=${slug}`, {
+      cache: "no-store",
+    });
 
     if (!res.ok) return null;
 
@@ -151,9 +146,9 @@ export async function generateMetadata({ params }) {
 
   const cleanMetaDescription = stripHtmlTagsForMeta(
     pageData.seo?.metaDescription ||
-    pageData.topSection?.description ||
-    pageData.subcatpagedescr ||
-    "Professional services"
+      pageData.topSection?.description ||
+      pageData.subcatpagedescr ||
+      "Professional services",
   );
 
   return {
@@ -197,8 +192,8 @@ export default async function UniversalPageRoute({ params }) {
     ),
     description: sanitizeHtml(
       pageData.topSection?.description ||
-      pageData.seo?.metaDescription ||
-      "Description not available",
+        pageData.seo?.metaDescription ||
+        "Description not available",
     ),
   };
 
@@ -233,7 +228,9 @@ export default async function UniversalPageRoute({ params }) {
 
   // ✅ Prepare FAQ data
   const faqHeading = pageData.faqs?.heading || "Frequently Asked Questions";
-  const faqDescription = pageData.faqs?.description || "Find answers to common questions about our services";
+  const faqDescription =
+    pageData.faqs?.description ||
+    "Find answers to common questions about our services";
 
   // Handle different API structures for FAQs
   let faqItems = [];
@@ -241,7 +238,7 @@ export default async function UniversalPageRoute({ params }) {
     faqItems = pageData.faqs.items;
   } else if (Array.isArray(pageData.faqs)) {
     faqItems = pageData.faqs;
-  } else if (pageData.faqs && typeof pageData.faqs === 'object') {
+  } else if (pageData.faqs && typeof pageData.faqs === "object") {
     faqItems = pageData.faqs.faqs || pageData.faqs.questions || [];
   }
 
@@ -256,15 +253,15 @@ export default async function UniversalPageRoute({ params }) {
       {/* ✅ SubKeywordsdigital Section - Added from first file */}
       {subcategoryData && (
         <div className="py-10 bg-white">
-          <SubKeywordsdigital
-            heading={`Specialized ${subcategoryData.name} Services`}
-            description={
-              <HtmlContent
-                content={subcategoryData.keywordsSection?.description}
-              />
-            }
-            subcategoryId={subcategoryData._id}
-            category={subcategoryData.category}
+          <PageKeywordsdigital
+            // AGAR field SubCategory schema mein hai toh niche wala line use karein:
+            heading={pageData?.keywordstitle || "Related Services"}
+            // AGAR field Page schema mein hai toh ye use karein:
+            // heading={pageData?.keywordstitle || "Related Services"}
+
+            subcategoryId={subcategoryData?._id}
+            category="digital-marketing"
+            currentPageSlug={pageData?.slug}
           />
         </div>
       )}
@@ -277,7 +274,7 @@ export default async function UniversalPageRoute({ params }) {
             console.log("Section CTA:", section.cta); // Debug log for CTA
 
             switch (section.layoutType) {
-              case 'image-left':
+              case "image-left":
                 return (
                   <SubAboutdigital
                     key={`section-${index}`}
@@ -292,7 +289,7 @@ export default async function UniversalPageRoute({ params }) {
                   />
                 );
 
-              case 'image-right':
+              case "image-right":
                 return (
                   <SubAboutdigital
                     key={`section-${index}`}
@@ -307,7 +304,7 @@ export default async function UniversalPageRoute({ params }) {
                   />
                 );
 
-              case 'description-only':
+              case "description-only":
                 return (
                   <SubAboutdigital
                     key={`section-${index}`}
@@ -322,7 +319,7 @@ export default async function UniversalPageRoute({ params }) {
                   />
                 );
 
-              case 'description-and-form':
+              case "description-and-form":
                 return (
                   <DescriptionAndFormSection
                     key={`section-${index}`}
@@ -346,10 +343,8 @@ export default async function UniversalPageRoute({ params }) {
         </>
       )}
 
-      
       {/* <SeoIndustries {...industriesProps} /> */}
-       
-      
+
       {/* Form and Carousel Sections */}
       {/* <Form1 />
       <Carousel /> */}

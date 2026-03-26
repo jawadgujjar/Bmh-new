@@ -19,6 +19,7 @@ import {
   Breadcrumb,
   Switch,
   Tabs,
+  Alert,
 } from "antd";
 import {
   PlusOutlined,
@@ -31,28 +32,34 @@ import {
   InfoCircleOutlined,
   ArrowUpOutlined,
   ArrowDownOutlined,
+  WarningOutlined,
 } from "@ant-design/icons";
 
 // Dynamically import TipTap to avoid SSR
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 
-const TiptapEditor = dynamic(() => import('@/components-admin/TipTapEditor').then(mod => mod.default), {
-  ssr: false,
-  loading: () => (
-    <div style={{
-      border: '1px solid #d9d9d9',
-      borderRadius: '8px',
-      minHeight: '150px',
-      padding: '20px',
-      background: '#fafafa',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center'
-    }}>
-      Loading editor...
-    </div>
-  )
-});
+const TiptapEditor = dynamic(
+  () => import("@/components-admin/TipTapEditor").then((mod) => mod.default),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        style={{
+          border: "1px solid #d9d9d9",
+          borderRadius: "8px",
+          minHeight: "150px",
+          padding: "20px",
+          background: "#fafafa",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        Loading editor...
+      </div>
+    ),
+  },
+);
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -62,12 +69,12 @@ const ImageUploadField = ({ value, onChange, label, required = false }) => {
   const [fileList, setFileList] = useState([]);
 
   useEffect(() => {
-    if (value && typeof value === 'string' && value.trim() !== '') {
+    if (value && typeof value === "string" && value.trim() !== "") {
       setFileList([
         {
-          uid: '-1',
-          name: 'image.png',
-          status: 'done',
+          uid: "-1",
+          name: "image.png",
+          status: "done",
           url: value,
         },
       ]);
@@ -103,7 +110,9 @@ const ImageUploadField = ({ value, onChange, label, required = false }) => {
     <Form.Item
       label={label}
       required={required}
-      rules={required ? [{ required: true, message: `Please upload ${label}` }] : []}
+      rules={
+        required ? [{ required: true, message: `Please upload ${label}` }] : []
+      }
     >
       <Upload
         listType="picture"
@@ -113,12 +122,12 @@ const ImageUploadField = ({ value, onChange, label, required = false }) => {
           return Upload.LIST_IGNORE;
         }}
         onRemove={() => {
-          onChange('');
+          onChange("");
           setFileList([]);
         }}
       >
         <Button icon={<UploadOutlined />}>
-          {value ? 'Replace Image' : 'Upload Image'}
+          {value ? "Replace Image" : "Upload Image"}
         </Button>
       </Upload>
     </Form.Item>
@@ -171,7 +180,11 @@ const FAQItem = ({ field, index, remove, move }) => {
   return (
     <Card
       size="small"
-      style={{ marginBottom: 16, background: "#fafafa", borderLeft: "4px solid #52c41a" }}
+      style={{
+        marginBottom: 16,
+        background: "#fafafa",
+        borderLeft: "4px solid #52c41a",
+      }}
       title={`FAQ #${index + 1}`}
       extra={
         <Space.Compact>
@@ -201,7 +214,7 @@ const FAQItem = ({ field, index, remove, move }) => {
             {...field}
             name={[field.name, "question"]}
             label="Question"
-            rules={[{ required: true, message: "Please enter question" }]}
+            rules={[{ required: true, message: "Please enter FAQ question" }]}
           >
             <Input placeholder="Enter FAQ question" />
           </Form.Item>
@@ -211,7 +224,7 @@ const FAQItem = ({ field, index, remove, move }) => {
             {...field}
             name={[field.name, "answer"]}
             label="Answer"
-            rules={[{ required: true, message: "Please enter answer" }]}
+            rules={[{ required: true, message: "Please enter FAQ answer" }]}
           >
             <Input.TextArea rows={2} placeholder="Enter FAQ answer" />
           </Form.Item>
@@ -233,15 +246,15 @@ const FAQItem = ({ field, index, remove, move }) => {
 const DescriptionItem = ({ field, index, remove, move, form }) => {
   // Get the current value
   const textValue = form.getFieldValue([field.name, "text"]);
-  
+
   return (
     <Card
       size="small"
-      style={{ 
-        marginBottom: 12, 
-        background: "#fffbe6", 
+      style={{
+        marginBottom: 12,
+        background: "#fffbe6",
         borderLeft: "4px solid #faad14",
-        borderTop: "1px dashed #d9d9d9"
+        borderTop: "1px dashed #d9d9d9",
       }}
       title={`Description Point #${index + 1}`}
       extra={
@@ -272,7 +285,9 @@ const DescriptionItem = ({ field, index, remove, move, form }) => {
             {...field}
             name={[field.name, "text"]}
             label="Description Text"
-            rules={[{ required: true, message: "Please enter description text" }]}
+            rules={[
+              { required: true, message: "Please enter description text" },
+            ]}
           >
             <TiptapEditor
               content={textValue}
@@ -283,12 +298,8 @@ const DescriptionItem = ({ field, index, remove, move, form }) => {
           </Form.Item>
         </Col>
         <Col span={8}>
-          <Form.Item
-            {...field}
-            name={[field.name, "icon"]}
-            label="Icon"
-          >
-            <ImageUploadField 
+          <Form.Item {...field} name={[field.name, "icon"]} label="Icon">
+            <ImageUploadField
               label="Icon"
               required={false}
               value={form.getFieldValue([field.name, "icon"])}
@@ -311,14 +322,7 @@ const DescriptionItem = ({ field, index, remove, move, form }) => {
 };
 
 // --- Section Item Component ---
-const SectionItem = ({
-  field,
-  index,
-  remove,
-  move,
-  form,
-  ctas,
-}) => {
+const SectionItem = ({ field, index, remove, move, form, ctas }) => {
   const layout = Form.useWatch(["sections", field.name, "layoutType"], form);
   const currentImageUrl = Form.useWatch(["sections", field.name, "image"], form);
   const descriptionValue = form.getFieldValue(["sections", field.name, "description"]);
@@ -340,7 +344,9 @@ const SectionItem = ({
             size="small"
             icon={<ArrowDownOutlined />}
             onClick={() => move(index, index + 1)}
-            disabled={index === (form.getFieldValue("sections")?.length || 0) - 1}
+            disabled={
+              index === (form.getFieldValue("sections")?.length || 0) - 1
+            }
           />
           <Button
             size="small"
@@ -358,7 +364,7 @@ const SectionItem = ({
             name={[field.name, "layoutType"]}
             label="Layout Type"
             initialValue="description-only"
-            rules={[{ required: true, message: "Please select layout type" }]}
+            rules={[{ required: true, message: "Please select layout type for section" }]}
           >
             <Select>
               <Option value="image-left">Image Left</Option>
@@ -417,11 +423,13 @@ const SectionItem = ({
           name={[field.name, "image"]}
           rules={[{ required: true, message: "Image is required for this layout" }]}
         >
-          <ImageUploadField 
-            label="Section Image" 
+          <ImageUploadField
+            label="Section Image"
             required={true}
             value={currentImageUrl}
-            onChange={(url) => form.setFieldValue(["sections", field.name, "image"], url)}
+            onChange={(url) =>
+              form.setFieldValue(["sections", field.name, "image"], url)
+            }
           />
         </Form.Item>
       )}
@@ -430,17 +438,20 @@ const SectionItem = ({
         <div>
           <Row gutter={24}>
             <Col span={12}>
-              <Card 
-                size="small" 
-                title="Description Side (Admin Editable)" 
+              <Card
+                size="small"
+                title="Description Side (Admin Editable)"
                 style={{ background: "#f0f5ff", borderColor: "#1890ff" }}
               >
-                <Text strong style={{ display: 'block', marginBottom: 16 }}>
+                <Text strong style={{ display: "block", marginBottom: 16 }}>
                   Description Points with Icons (Rich Text Supported)
                 </Text>
-                
+
                 <Form.List name={[field.name, "descriptions"]}>
-                  {(descFields, { add: addDesc, remove: removeDesc, move: moveDesc }) => (
+                  {(
+                    descFields,
+                    { add: addDesc, remove: removeDesc, move: moveDesc },
+                  ) => (
                     <>
                       {descFields.map((descField, descIndex) => (
                         <DescriptionItem
@@ -456,11 +467,13 @@ const SectionItem = ({
                         type="dashed"
                         block
                         icon={<PlusOutlined />}
-                        onClick={() => addDesc({ 
-                          text: "", 
-                          icon: "", 
-                          order: descFields.length 
-                        })}
+                        onClick={() =>
+                          addDesc({
+                            text: "",
+                            icon: "",
+                            order: descFields.length,
+                          })
+                        }
                         style={{ marginTop: 8 }}
                       >
                         Add Description Point
@@ -470,18 +483,27 @@ const SectionItem = ({
                 </Form.List>
               </Card>
             </Col>
-            
+
             <Col span={12}>
-              <Card 
-                size="small" 
-                title="Form Side (Hard Coded)" 
+              <Card
+                size="small"
+                title="Form Side (Hard Coded)"
                 style={{ background: "#fff7e6", borderColor: "#fa8c16" }}
               >
-                <Text type="secondary" style={{ display: 'block', marginBottom: 16 }}>
+                <Text
+                  type="secondary"
+                  style={{ display: "block", marginBottom: 16 }}
+                >
                   This form will be displayed on the frontend
                 </Text>
-                
-                <div style={{ padding: 16, background: "#ffffff", borderRadius: 8 }}>
+
+                <div
+                  style={{
+                    padding: 16,
+                    background: "#ffffff",
+                    borderRadius: 8,
+                  }}
+                >
                   <div style={{ marginBottom: 16 }}>
                     <div style={{ marginBottom: 8 }}>Name</div>
                     <Input placeholder="Your name" disabled />
@@ -496,15 +518,23 @@ const SectionItem = ({
                   </div>
                   <div style={{ marginBottom: 16 }}>
                     <div style={{ marginBottom: 8 }}>Message</div>
-                    <Input.TextArea rows={3} placeholder="Your message" disabled />
+                    <Input.TextArea
+                      rows={3}
+                      placeholder="Your message"
+                      disabled
+                    />
                   </div>
                   <Button type="primary" block disabled>
                     Submit
                   </Button>
                 </div>
-                
-                <Text type="secondary" style={{ display: 'block', marginTop: 16, fontSize: 12 }}>
-                  ⚡ Form fields are hard-coded and cannot be edited from admin panel
+
+                <Text
+                  type="secondary"
+                  style={{ display: "block", marginTop: 16, fontSize: 12 }}
+                >
+                  ⚡ Form fields are hard-coded and cannot be edited from admin
+                  panel
                 </Text>
               </Card>
             </Col>
@@ -525,6 +555,8 @@ export default function Pages() {
   const [ctas, setCtas] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPage, setEditingPage] = useState(null);
+  const [validationErrors, setValidationErrors] = useState([]);
+  const [showAlert, setShowAlert] = useState(false);
 
   // Fetch Pages
   const fetchPages = async () => {
@@ -532,7 +564,7 @@ export default function Pages() {
       setLoading(true);
       const res = await fetch("/api/page");
       const data = await res.json();
-      
+
       if (data.success && Array.isArray(data.data)) {
         setPages(data.data);
       } else if (Array.isArray(data)) {
@@ -579,66 +611,175 @@ export default function Pages() {
 
   // Slug generator
   const generateSlug = (text) => {
-    if (!text) return '';
+    if (!text) return "";
     return text
       .toLowerCase()
-      .replace(/\s+/g, '-')
-      .replace(/[^\w-]+/g, '')
-      .replace(/--+/g, '-')
-      .replace(/^-+/, '')
-      .replace(/-+$/, '');
+      .replace(/\s+/g, "-")
+      .replace(/[^\w-]+/g, "")
+      .replace(/--+/g, "-")
+      .replace(/^-+/, "")
+      .replace(/-+$/, "");
+  };
+
+  // Validate all sections for required fields
+  const validateSections = (sections) => {
+    const errors = [];
+    
+    if (!sections || sections.length === 0) {
+      errors.push("❌ At least one content section is required");
+      return errors;
+    }
+    
+    sections.forEach((section, idx) => {
+      const sectionNum = idx + 1;
+      
+      if (!section.heading || section.heading.trim() === '') {
+        errors.push(`❌ Section #${sectionNum}: Heading is required`);
+      } else if (section.heading.trim().length < 3) {
+        errors.push(`❌ Section #${sectionNum}: Heading must be at least 3 characters`);
+      }
+      
+      if (section.layoutType === "description-and-form") {
+        if (!section.descriptions || section.descriptions.length === 0) {
+          errors.push(`❌ Section #${sectionNum}: At least one description point is required when using "Description & Form" layout`);
+        } else {
+          section.descriptions.forEach((desc, descIdx) => {
+            if (!desc.text || desc.text.trim() === '') {
+              errors.push(`❌ Section #${sectionNum}, Description Point #${descIdx + 1}: Description text is required`);
+            }
+          });
+        }
+      } else {
+        if (!section.description || section.description.trim() === '') {
+          errors.push(`❌ Section #${sectionNum}: Description is required`);
+        } else if (section.description.trim().length < 10) {
+          errors.push(`❌ Section #${sectionNum}: Description must be at least 10 characters`);
+        }
+      }
+      
+      if ((section.layoutType === "image-left" || section.layoutType === "image-right") && (!section.image || section.image.trim() === '')) {
+        errors.push(`❌ Section #${sectionNum}: Image is required for "${section.layoutType}" layout`);
+      }
+    });
+    
+    return errors;
+  };
+  
+  // Validate FAQs
+  const validateFaqs = (faqs) => {
+    const errors = [];
+    
+    if (faqs && faqs.length > 0) {
+      faqs.forEach((faq, idx) => {
+        if (!faq.question || faq.question.trim() === '') {
+          errors.push(`❌ FAQ #${idx + 1}: Question is required`);
+        }
+        if (!faq.answer || faq.answer.trim() === '') {
+          errors.push(`❌ FAQ #${idx + 1}: Answer is required`);
+        }
+      });
+    }
+    
+    return errors;
+  };
+  
+  // Validate all form fields
+  const validateFormFields = (values) => {
+    const errors = [];
+    
+    // Basic required fields
+    if (!values.title || values.title.trim() === '') {
+      errors.push("❌ Page Title is required");
+    }
+    
+    if (!values.slug || values.slug.trim() === '') {
+      errors.push("❌ URL Slug is required");
+    }
+    
+    if (!values.category || values.category.trim() === '') {
+      errors.push("❌ Category is required");
+    }
+    
+    if (!values.subcategory || values.subcategory.trim() === '') {
+      errors.push("❌ Subcategory is required");
+    }
+    
+    // Hero section validation
+    if (values.topSection) {
+      if (values.topSection.heading && values.topSection.heading.trim() === '') {
+        errors.push("⚠️ Hero Heading is empty (optional but recommended)");
+      }
+    }
+    
+    // Validate sections
+    const sectionErrors = validateSections(values.sections);
+    errors.push(...sectionErrors);
+    
+    // Validate FAQs
+    const faqErrors = validateFaqs(values.faqs);
+    errors.push(...faqErrors);
+    
+    return errors;
   };
 
   // Add / Edit Page
   const handleOk = async () => {
     try {
+      // First, validate the form fields
       const values = await form.validateFields();
       
       // Process sections to ensure proper structure
-      const processedSections = values.sections?.map((s, idx) => {
-        const sectionData = {
-          layoutType: s.layoutType || "description-only",
-          heading: s.heading || "",
-          image: s.image || "",
-          cta: s.cta?.ctaId ? {
-            ctaId: s.cta.ctaId,
-            buttonVariant: s.cta.buttonVariant || "primary",
-          } : null,
-          order: s.order ?? idx,
-        };
+      const processedSections =
+        values.sections?.map((s, idx) => {
+          const sectionData = {
+            layoutType: s.layoutType || "description-only",
+            heading: s.heading || "",
+            image: s.image || "",
+            cta: s.cta?.ctaId
+              ? {
+                  ctaId: s.cta.ctaId,
+                  buttonVariant: s.cta.buttonVariant || "primary",
+                }
+              : null,
+            order: s.order ?? idx,
+          };
 
-        if (s.layoutType === "description-and-form") {
-          if (s.descriptions && s.descriptions.length > 0) {
-            sectionData.descriptions = s.descriptions.map((d, dIdx) => ({
-              text: d.text,
-              icon: d.icon || "",
-              order: d.order ?? dIdx,
-            }));
-            sectionData.description = "";
+          if (s.layoutType === "description-and-form") {
+            if (s.descriptions && s.descriptions.length > 0) {
+              sectionData.descriptions = s.descriptions.map((d, dIdx) => ({
+                text: d.text,
+                icon: d.icon || "",
+                order: d.order ?? dIdx,
+              }));
+              sectionData.description = "";
+            } else {
+              sectionData.description = s.description || "";
+              sectionData.descriptions = [];
+            }
           } else {
             sectionData.description = s.description || "";
             sectionData.descriptions = [];
           }
-        } else {
-          sectionData.description = s.description || "";
-          sectionData.descriptions = [];
-        }
 
-        return sectionData;
-      }) || [];
+          return sectionData;
+        }) || [];
 
       // Process FAQs
-      const processedFaqs = values.faqs?.map((f, idx) => ({
-        question: f.question,
-        answer: f.answer,
-        order: f.order ?? idx,
-      })) || [];
+      const processedFaqs =
+        values.faqs?.map((f, idx) => ({
+          question: f.question,
+          answer: f.answer,
+          order: f.order ?? idx,
+        })) || [];
 
       // Process meta keywords
       let metaKeywords = [];
       if (values.seo?.metaKeywords) {
-        if (typeof values.seo.metaKeywords === 'string') {
-          metaKeywords = values.seo.metaKeywords.split(',').map(k => k.trim()).filter(k => k);
+        if (typeof values.seo.metaKeywords === "string") {
+          metaKeywords = values.seo.metaKeywords
+            .split(",")
+            .map((k) => k.trim())
+            .filter((k) => k);
         } else if (Array.isArray(values.seo.metaKeywords)) {
           metaKeywords = values.seo.metaKeywords;
         }
@@ -648,9 +789,10 @@ export default function Pages() {
       let schemaMarkup = {};
       if (values.seo?.schemaMarkup) {
         try {
-          schemaMarkup = typeof values.seo.schemaMarkup === 'string' 
-            ? JSON.parse(values.seo.schemaMarkup) 
-            : values.seo.schemaMarkup;
+          schemaMarkup =
+            typeof values.seo.schemaMarkup === "string"
+              ? JSON.parse(values.seo.schemaMarkup)
+              : values.seo.schemaMarkup;
         } catch (e) {
           console.warn("Invalid schema markup JSON");
         }
@@ -661,17 +803,20 @@ export default function Pages() {
         slug: values.slug || generateSlug(values.title),
         category: values.category,
         subcategory: values.subcategory,
+        keywordstitle: values.keywordstitle || "", // Added keywordstitle field
         subcatpagedescr: values.subcatpagedescr || "",
         isActive: values.isActive !== undefined ? values.isActive : true,
-        
+
         topSection: {
           backgroundImage: values.topSection?.backgroundImage || "",
           heading: values.topSection?.heading || "",
           description: values.topSection?.description || "",
-          cta: values.topSection?.cta?.ctaId ? {
-            ctaId: values.topSection.cta.ctaId,
-            buttonVariant: values.topSection.cta.buttonVariant || "primary",
-          } : null,
+          cta: values.topSection?.cta?.ctaId
+            ? {
+                ctaId: values.topSection.cta.ctaId,
+                buttonVariant: values.topSection.cta.buttonVariant || "primary",
+              }
+            : null,
         },
 
         sections: processedSections,
@@ -698,7 +843,7 @@ export default function Pages() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(pageData),
       });
-      
+
       const data = await res.json();
 
       if (res.ok || data.success || data._id) {
@@ -707,27 +852,48 @@ export default function Pages() {
         );
         form.resetFields();
         setEditingPage(null);
+        setShowAlert(false);
+        setValidationErrors([]);
         setIsModalOpen(false);
         fetchPages();
       } else {
         message.error(data.error || "Operation failed");
+        // Show server-side validation errors if any
+        if (data.errors && Array.isArray(data.errors)) {
+          setValidationErrors(data.errors);
+          setShowAlert(true);
+        }
       }
     } catch (err) {
       console.error("Error saving page:", err);
-      message.error("Error saving page");
+      
+      // Handle validation errors from Ant Design form
+      if (err.errorFields && err.errorFields.length > 0) {
+        const fieldErrors = err.errorFields.map(field => 
+          `❌ ${field.name.join(' > ')}: ${field.errors.join(', ')}`
+        );
+        setValidationErrors(fieldErrors);
+        setShowAlert(true);
+        message.error({
+          content: `Please fix ${fieldErrors.length} validation error(s)`,
+          duration: 3,
+        });
+      } else {
+        message.error("Error saving page");
+      }
     }
   };
 
   // Delete Page
   const handleDelete = async (id) => {
     try {
-      const res = await fetch(`/api/page/${id}`, { 
-        method: "DELETE" 
+      const res = await fetch(`/api/page/${id}`, {
+        method: "DELETE",
       });
       const data = await res.json();
-      
+
       if (res.ok || data.success) {
-        message.success("Page deleted successfully");
+        message.success("✅ Page deleted successfully");
         fetchPages();
       } else {
         message.error(data.error || "Failed to delete page");
@@ -744,107 +910,115 @@ export default function Pages() {
     
     // Reset form first
     form.resetFields();
-    
-    const metaKeywordsString = record.seo?.metaKeywords?.join(', ') || '';
-    
-    let schemaMarkupString = '';
+
+    const metaKeywordsString = record.seo?.metaKeywords?.join(", ") || "";
+
+    let schemaMarkupString = "";
     if (record.seo?.schemaMarkup) {
       try {
-        schemaMarkupString = typeof record.seo.schemaMarkup === 'string' 
-          ? record.seo.schemaMarkup 
-          : JSON.stringify(record.seo.schemaMarkup, null, 2);
+        schemaMarkupString =
+          typeof record.seo.schemaMarkup === "string"
+            ? record.seo.schemaMarkup
+            : JSON.stringify(record.seo.schemaMarkup, null, 2);
       } catch (e) {
-        schemaMarkupString = '';
+        schemaMarkupString = "";
       }
     }
-    
-    const sectionsData = (record.sections || []).map(s => {
+
+    const sectionsData = (record.sections || []).map((s) => {
       const sectionBase = {
-        layoutType: s.layoutType || 'description-only',
-        heading: s.heading || '',
-        image: s.image || '',
+        layoutType: s.layoutType || "description-only",
+        heading: s.heading || "",
+        image: s.image || "",
         cta: {
-          ctaId: s.cta?.ctaId?._id || s.cta?.ctaId || '',
-          buttonVariant: s.cta?.buttonVariant || 'primary',
+          ctaId: s.cta?.ctaId?._id || s.cta?.ctaId || "",
+          buttonVariant: s.cta?.buttonVariant || "primary",
         },
         order: s.order || 0,
       };
 
       if (s.layoutType === "description-and-form") {
         if (s.descriptions && s.descriptions.length > 0) {
-          sectionBase.descriptions = s.descriptions.map(d => ({
-            text: d.text || '',
-            icon: d.icon || '',
+          sectionBase.descriptions = s.descriptions.map((d) => ({
+            text: d.text || "",
+            icon: d.icon || "",
             order: d.order || 0,
           }));
-          sectionBase.description = '';
+          sectionBase.description = "";
         } else {
-          sectionBase.description = s.description || '';
+          sectionBase.description = s.description || "";
           sectionBase.descriptions = [];
         }
       } else {
-        sectionBase.description = s.description || '';
+        sectionBase.description = s.description || "";
         sectionBase.descriptions = [];
       }
 
       return sectionBase;
     });
-    
+
     // Set form values
     form.setFieldsValue({
-      title: record.title || '',
-      slug: record.slug || '',
-      category: record.category || '',
-      subcategory: record.subcategory?._id || record.subcategory || '',
-      subcatpagedescr: record.subcatpagedescr || '',
+      title: record.title || "",
+      slug: record.slug || "",
+      category: record.category || "",
+      subcategory: record.subcategory?._id || record.subcategory || "",
+      keywordstitle: record.keywordstitle || "", // Added keywordstitle field
+      subcatpagedescr: record.subcatpagedescr || "",
       isActive: record.isActive !== undefined ? record.isActive : true,
-      
+
       topSection: {
-        backgroundImage: record.topSection?.backgroundImage || '',
-        heading: record.topSection?.heading || '',
-        description: record.topSection?.description || '',
+        backgroundImage: record.topSection?.backgroundImage || "",
+        heading: record.topSection?.heading || "",
+        description: record.topSection?.description || "",
         cta: {
-          ctaId: record.topSection?.cta?.ctaId?._id || record.topSection?.cta?.ctaId || '',
-          buttonVariant: record.topSection?.cta?.buttonVariant || 'primary',
+          ctaId:
+            record.topSection?.cta?.ctaId?._id ||
+            record.topSection?.cta?.ctaId ||
+            "",
+          buttonVariant: record.topSection?.cta?.buttonVariant || "primary",
         },
       },
 
       sections: sectionsData,
-      faqs: (record.faqs || []).map(f => ({
-        question: f.question || '',
-        answer: f.answer || '',
+      faqs: (record.faqs || []).map((f) => ({
+        question: f.question || "",
+        answer: f.answer || "",
         order: f.order || 0,
       })),
 
       seo: {
-        metaTitle: record.seo?.metaTitle || '',
-        metaDescription: record.seo?.metaDescription || '',
+        metaTitle: record.seo?.metaTitle || "",
+        metaDescription: record.seo?.metaDescription || "",
         metaKeywords: metaKeywordsString,
         schemaMarkup: schemaMarkupString,
       },
     });
-    
+
     // Open modal
     setIsModalOpen(true);
   };
 
   // View Page in new tab
   const handleView = (slug) => {
-    window.open(`/page/${slug}`, '_blank');
+    window.open(`/page/${slug}`, "_blank");
   };
 
   // Copy URL to clipboard
   const copyUrl = (slug) => {
     const url = `${window.location.origin}/page/${slug}`;
-    navigator.clipboard.writeText(url)
-      .then(() => message.success('URL copied to clipboard!'))
-      .catch(() => message.error('Failed to copy URL'));
+    navigator.clipboard
+      .writeText(url)
+      .then(() => message.success("URL copied to clipboard!"))
+      .catch(() => message.error("Failed to copy URL"));
   };
 
   // Open modal for adding new page
   const openAddModal = () => {
     form.resetFields();
     setEditingPage(null);
+    setShowAlert(false);
+    setValidationErrors([]);
     setIsModalOpen(true);
   };
 
@@ -857,10 +1031,11 @@ export default function Pages() {
       render: (text, record) => (
         <div>
           <Text strong>{text}</Text>
-          <div style={{ fontSize: 12, color: "#666" }}>
-            Slug: {record.slug}
-          </div>
-          <Tag color={record.isActive ? "green" : "red"} style={{ marginTop: 4 }}>
+          <div style={{ fontSize: 12, color: "#666" }}>Slug: {record.slug}</div>
+          <Tag
+            color={record.isActive ? "green" : "red"}
+            style={{ marginTop: 4 }}
+          >
             {record.isActive ? "Active" : "Inactive"}
           </Tag>
         </div>
@@ -870,21 +1045,17 @@ export default function Pages() {
       title: "Category",
       dataIndex: "category",
       key: "category",
-      render: (category) => (
-        <Tag color="blue">{category || "N/A"}</Tag>
-      ),
+      render: (category) => <Tag color="blue">{category || "N/A"}</Tag>,
     },
     {
       title: "SubCategory",
       dataIndex: "subcategory",
       key: "subcategory",
       render: (subcat) => {
-        const subcatObj = subCategories.find(s => s._id === subcat || s._id === subcat?._id);
-        return (
-          <Tag color="purple">
-            {subcatObj?.name || "Unknown"}
-          </Tag>
+        const subcatObj = subCategories.find(
+          (s) => s._id === subcat || s._id === subcat?._id,
         );
+        return <Tag color="purple">{subcatObj?.name || "Unknown"}</Tag>;
       },
     },
     {
@@ -912,8 +1083,8 @@ export default function Pages() {
             onClick={() => handleView(record.slug)}
             size="small"
           />
-          <Button 
-            icon={<EditOutlined />} 
+          <Button
+            icon={<EditOutlined />}
             onClick={() => handleEdit(record)}
             size="small"
             type="primary"
@@ -936,24 +1107,36 @@ export default function Pages() {
 
   return (
     <div style={{ padding: 24 }}>
-      <Breadcrumb style={{ marginBottom: 24 }} items={[{ href: "/", title: <HomeOutlined /> }, { title: "Pages" }]} />
-      
+      <Breadcrumb
+        style={{ marginBottom: 24 }}
+        items={[{ href: "/", title: <HomeOutlined /> }, { title: "Pages" }]}
+      />
+
       <Card>
-        <Row justify="space-between" align="middle" style={{ marginBottom: 24 }}>
+        <Row
+          justify="space-between"
+          align="middle"
+          style={{ marginBottom: 24 }}
+        >
           <Col>
             <Title level={2}>📄 Pages Management</Title>
           </Col>
           <Col>
-            <Button type="primary" icon={<PlusOutlined />} onClick={openAddModal} size="large">
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={openAddModal}
+              size="large"
+            >
               Add New Page
             </Button>
           </Col>
         </Row>
 
-        <Table 
-          columns={columns} 
-          dataSource={pages} 
-          rowKey="_id" 
+        <Table
+          columns={columns}
+          dataSource={pages}
+          rowKey="_id"
           loading={loading}
           pagination={{ pageSize: 10 }}
         />
@@ -966,6 +1149,8 @@ export default function Pages() {
             setIsModalOpen(false);
             form.resetFields();
             setEditingPage(null);
+            setShowAlert(false);
+            setValidationErrors([]);
           }}
           onOk={handleOk}
           okText={editingPage ? "Update" : "Create"}
@@ -973,6 +1158,32 @@ export default function Pages() {
           style={{ top: 20 }}
           destroyOnClose={true}
         >
+          {/* Validation Error Alert */}
+          {showAlert && validationErrors.length > 0 && (
+            <Alert
+              message={
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                    <WarningOutlined style={{ color: '#ff4d4f', fontSize: 16 }} />
+                    <strong>Please fix the following issues before saving:</strong>
+                  </div>
+                  <ul style={{ margin: 0, paddingLeft: 20 }}>
+                    {validationErrors.map((error, idx) => (
+                      <li key={idx} style={{ margin: '4px 0', color: '#ff4d4f' }}>
+                        {error}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              }
+              type="error"
+              showIcon
+              closable
+              onClose={() => setShowAlert(false)}
+              style={{ marginBottom: 16 }}
+            />
+          )}
+          
           <Form form={form} layout="vertical">
             <Tabs
               defaultActiveKey="1"
@@ -989,11 +1200,13 @@ export default function Pages() {
                             name="title"
                             rules={[{ required: true, message: "Please enter page title" }]}
                           >
-                            <Input 
-                              placeholder="Enter page title" 
+                            <Input
+                              placeholder="Enter page title"
                               onChange={(e) => {
                                 if (!editingPage) {
-                                  form.setFieldsValue({ slug: generateSlug(e.target.value) });
+                                  form.setFieldsValue({
+                                    slug: generateSlug(e.target.value),
+                                  });
                                 }
                               }}
                             />
@@ -1018,9 +1231,15 @@ export default function Pages() {
                             rules={[{ required: true, message: "Please select category" }]}
                           >
                             <Select placeholder="Select category">
-                              <Option value="digital-marketing">Digital Marketing</Option>
-                              <Option value="web-development">Web Development</Option>
-                              <Option value="app-development">App Development</Option>
+                              <Option value="digital-marketing">
+                                Digital Marketing
+                              </Option>
+                              <Option value="web-development">
+                                Web Development
+                              </Option>
+                              <Option value="app-development">
+                                App Development
+                              </Option>
                             </Select>
                           </Form.Item>
                         </Col>
@@ -1044,12 +1263,24 @@ export default function Pages() {
                       <Row gutter={16}>
                         <Col span={12}>
                           <Form.Item
+                            label="Keywords Title"
+                            name="keywordstitle"
+                            tooltip="Keywords for page categorization and search"
+                          >
+                            <Input placeholder="Enter keywords title" />
+                          </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                          <Form.Item
                             label="Status"
                             name="isActive"
                             valuePropName="checked"
                             initialValue={true}
                           >
-                            <Switch checkedChildren="Active" unCheckedChildren="Inactive" />
+                            <Switch
+                              checkedChildren="Active"
+                              unCheckedChildren="Inactive"
+                            />
                           </Form.Item>
                         </Col>
                       </Row>
@@ -1057,6 +1288,9 @@ export default function Pages() {
                       <Form.Item
                         label="Page Short Description"
                         name="subcatpagedescr"
+                        rules={[
+                          { max: 200, message: "⚠️ Short description cannot exceed 200 characters" }
+                        ]}
                       >
                         <Input.TextArea rows={3} placeholder="Enter short description" />
                       </Form.Item>
@@ -1068,28 +1302,55 @@ export default function Pages() {
                   label: "Hero Section",
                   children: (
                     <>
-                      <Form.Item name={["topSection", "backgroundImage"]} label="Hero Background Image">
-                        <ImageUploadField 
-                          value={form.getFieldValue(['topSection', 'backgroundImage'])}
-                          onChange={(url) => form.setFieldValue(['topSection', 'backgroundImage'], url)}
+                      <Form.Item
+                        name={["topSection", "backgroundImage"]}
+                        label="Hero Background Image"
+                      >
+                        <ImageUploadField
+                          value={form.getFieldValue([
+                            "topSection",
+                            "backgroundImage",
+                          ])}
+                          onChange={(url) =>
+                            form.setFieldValue(
+                              ["topSection", "backgroundImage"],
+                              url,
+                            )
+                          }
                           label="Background Image"
                         />
                       </Form.Item>
-                      
-                      <Form.Item name={["topSection", "heading"]} label="Hero Heading">
+
+                      <Form.Item
+                        name={["topSection", "heading"]}
+                        label="Hero Heading"
+                      >
                         <Input placeholder="Enter hero heading" />
                       </Form.Item>
 
-                      <Form.Item name={["topSection", "description"]} label="Hero Description">
+                      <Form.Item
+                        name={["topSection", "description"]}
+                        label="Hero Description"
+                      >
                         <TiptapEditor
-                          content={form.getFieldValue(["topSection", "description"])}
+                          content={form.getFieldValue([
+                            "topSection",
+                            "description",
+                          ])}
                           onChange={(html) => {
-                            form.setFieldValue(["topSection", "description"], html);
+                            form.setFieldValue(
+                              ["topSection", "description"],
+                              html,
+                            );
                           }}
                         />
                       </Form.Item>
 
-                      <CTAFields namePath={["topSection", "cta"]} label="Hero" ctas={ctas} />
+                      <CTAFields
+                        namePath={["topSection", "cta"]}
+                        label="Hero"
+                        ctas={ctas}
+                      />
                     </>
                   ),
                 },
@@ -1175,8 +1436,15 @@ export default function Pages() {
                   label: "SEO Settings",
                   children: (
                     <Card size="small" style={{ background: "#f5f5f5" }}>
+                      <Alert
+                        message="SEO Best Practices"
+                        description="Meta title should be 50-60 characters, meta description 150-160 characters for optimal search results"
+                        type="info"
+                        showIcon
+                        style={{ marginBottom: 16 }}
+                      />
                       <Form.Item name={["seo", "metaTitle"]} label="Meta Title">
-                        <Input maxLength={70} showCount />
+                        <Input maxLength={70} showCount placeholder="Enter meta title (recommended: 50-60 characters)" />
                       </Form.Item>
 
                       <Form.Item name={["seo", "metaDescription"]} label="Meta Description">
