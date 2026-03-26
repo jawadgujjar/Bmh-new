@@ -12,6 +12,17 @@ import Heroform from "@/components/landing/heroform";
 import DescriptionAndFormSection from "@/components/descriptionandformsection/descriptionform";
 import FaqSection from "@/components/faqspage/faqsection"; // ✅ Import FAQ component
 
+// HTML Content Component
+function HtmlContent({ content, className = "" }) {
+  if (!content) return null;
+  return (
+    <div
+      className={`${className} leading-snug`}
+      dangerouslySetInnerHTML={{ __html: content }}
+    />
+  );
+}
+
 // Simple HTML sanitizer
 const sanitizeHtml = (html) => {
   if (!html) return "";
@@ -105,7 +116,7 @@ async function getSubCategoryBySlug(slug) {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
     const res = await fetch(
       `${baseUrl}/api/subcategories?slug=${slug}`,
-      { cache: "no-store" },  
+      { cache: "no-store" },
     );
 
     if (!res.ok) return null;
@@ -172,7 +183,7 @@ export default async function UniversalPageRoute({ params }) {
     notFound();
   }
 
-  // Fetch subcategory for breadcrumb
+  // Fetch subcategory for keywords section and breadcrumb
   const subcategoryData = await getSubCategoryBySlug(subcategory);
 
   console.log("=== SUBCATEGORY DATA ===");
@@ -223,7 +234,7 @@ export default async function UniversalPageRoute({ params }) {
   // ✅ Prepare FAQ data
   const faqHeading = pageData.faqs?.heading || "Frequently Asked Questions";
   const faqDescription = pageData.faqs?.description || "Find answers to common questions about our services";
-  
+
   // Handle different API structures for FAQs
   let faqItems = [];
   if (pageData.faqs?.items && Array.isArray(pageData.faqs.items)) {
@@ -235,9 +246,28 @@ export default async function UniversalPageRoute({ params }) {
   }
 
   return (
-    <main>
+    <main className="flex flex-col w-full p-0 m-0 overflow-x-hidden">
       {/* Hero Section */}
       <SubHeroDigitalMarketing {...heroProps} renderHtml={true} />
+
+      {/* Hero Form Section */}
+      <Heroform />
+
+      {/* ✅ SubKeywordsdigital Section - Added from first file */}
+      {subcategoryData && (
+        <div className="py-10 bg-white">
+          <SubKeywordsdigital
+            heading={`Specialized ${subcategoryData.name} Services`}
+            description={
+              <HtmlContent
+                content={subcategoryData.keywordsSection?.description}
+              />
+            }
+            subcategoryId={subcategoryData._id}
+            category={subcategoryData.category}
+          />
+        </div>
+      )}
 
       {/* Dynamic Sections */}
       {hasDynamicSections && (
@@ -257,7 +287,7 @@ export default async function UniversalPageRoute({ params }) {
                     image1={section.image || "/default-image.jpg"}
                     image2=""
                     description2=""
-                    cta={section.cta || null} // ✅ ADDED CTA PROP
+                    cta={section.cta || null}
                     renderHtml={true}
                   />
                 );
@@ -272,7 +302,7 @@ export default async function UniversalPageRoute({ params }) {
                     image1={section.image || "/default-image.jpg"}
                     image2=""
                     description2=""
-                    cta={section.cta || null} // ✅ ADDED CTA PROP
+                    cta={section.cta || null}
                     renderHtml={true}
                   />
                 );
@@ -287,7 +317,7 @@ export default async function UniversalPageRoute({ params }) {
                     image1=""
                     image2=""
                     description2=""
-                    cta={section.cta || null} // ✅ ADDED CTA PROP
+                    cta={section.cta || null}
                     renderHtml={true}
                   />
                 );
@@ -298,7 +328,7 @@ export default async function UniversalPageRoute({ params }) {
                     key={`section-${index}`}
                     heading={section.heading || "Our Services"}
                     descriptions={section.descriptions || []}
-                    cta={section.cta || null} // ✅ ADDED CTA PROP
+                    cta={section.cta || null}
                   />
                 );
 
@@ -316,15 +346,16 @@ export default async function UniversalPageRoute({ params }) {
         </>
       )}
 
-      {/* CTA Sections */}
-      {/* <SubCalltoactiondigital1 {...cta1Props} renderHtml={true} /> */}
-      <SeoIndustries {...industriesProps} />
-      {/* <SubCalltoactiondigital2 {...cta2Props} renderHtml={true} /> */}
-      <Form1 />
-      <Carousel />
+      
+      {/* <SeoIndustries {...industriesProps} /> */}
+       
+      
+      {/* Form and Carousel Sections */}
+      {/* <Form1 />
+      <Carousel /> */}
 
       {/* ✅ FAQs Section - Shows either FAQs or "No FAQs Found" message */}
-      <FaqSection 
+      <FaqSection
         heading={faqHeading}
         description={faqDescription}
         faqs={faqItems}

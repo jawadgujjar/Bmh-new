@@ -33,10 +33,10 @@ export default function Home() {
       <Features/>
       <Seocontent1/>
       <SeoIndustries/>
-      <Calltoaction/>
+      {/* <Calltoaction/> */}
+      <WebCalltoaction/>
       <Webcontent1/>
       {/* <WebIndustries/> */}
-      <WebCalltoaction/>
       <WhyChooseUs/>
       <Carousel/>
       <Reward/>
