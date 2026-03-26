@@ -105,7 +105,6 @@ const ImageUploadField = ({ value, onChange, label, required = false }) => {
   );
 };
 
-// --- Sub-component for CTA Fields ---
 const CTAFields = ({ namePath, label, ctas }) => (
   <Card
     size="small"
@@ -141,7 +140,6 @@ const CTAFields = ({ namePath, label, ctas }) => (
   </Card>
 );
 
-// --- Section Item Component ---
 const SectionItem = ({ field, index, remove, move, form, ctas }) => {
   const layout = Form.useWatch(["sections", field.name, "layoutType"], form);
   const currentImageUrl = Form.useWatch(
@@ -239,7 +237,6 @@ const SectionItem = ({ field, index, remove, move, form, ctas }) => {
   );
 };
 
-// --- FAQ Item Component ---
 const FAQItem = ({ field, index, remove, move }) => (
   <Card
     size="small"
@@ -308,7 +305,6 @@ const FAQItem = ({ field, index, remove, move }) => (
   </Card>
 );
 
-// --- Main Component ---
 export default function SubCategory() {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
@@ -343,6 +339,7 @@ export default function SubCategory() {
     setEditingSubCat(record);
     const formattedValues = {
       ...record,
+      keywordstitle: record.keywordstitle || "",
       topSection: {
         ...record.topSection,
         cta: record.topSection?.cta?.ctaId
@@ -367,7 +364,7 @@ export default function SubCategory() {
         ...record.seo,
         metaKeywords: Array.isArray(record.seo?.metaKeywords)
           ? record.seo.metaKeywords.join(", ")
-          : record.seo?.metaKeywords,
+          : record.seo?.metaKeywords || "",
       },
     };
     form.setFieldsValue(formattedValues);
@@ -376,26 +373,36 @@ export default function SubCategory() {
 
   const handleOk = async () => {
     try {
-      // Validate all fields including hidden tabs
       await form.validateFields();
-
-      // Use true to ensure we get values from all tabs (even if they weren't visited)
       const values = form.getFieldsValue(true);
 
       const payload = {
         ...values,
+        // Manual fallbacks for safe saving
+        keywordstitle: values.keywordstitle || values.name || "",
         slug: values.slug || values.name?.toLowerCase().replace(/\s+/g, "-"),
         sections:
-          values.sections?.map((s, i) => ({ ...s, order: s.order ?? i })) || [],
-        faqs: values.faqs?.map((f, i) => ({ ...f, order: f.order ?? i })) || [],
+          values.sections?.map((s, i) => ({
+            ...s,
+            order: s.order !== undefined ? Number(s.order) : i,
+          })) || [],
+        faqs:
+          values.faqs?.map((f, i) => ({
+            ...f,
+            order: f.order !== undefined ? Number(f.order) : i,
+          })) || [],
         seo: {
           ...values.seo,
           metaKeywords:
             typeof values.seo?.metaKeywords === "string"
-              ? values.seo.metaKeywords.split(",").map((k) => k.trim())
+              ? values.seo.metaKeywords
+                  .split(",")
+                  .map((k) => k.trim())
+                  .filter((k) => k)
               : [],
         },
       };
+    console.log("🔍 keywordstitle value:", payload.keywordstitle);
 
       const url = editingSubCat
         ? `/api/subcategories/${editingSubCat._id}`
@@ -414,11 +421,11 @@ export default function SubCategory() {
         form.resetFields();
         fetchData();
       } else {
-        message.error("Failed to save to database");
+        const errorData = await res.json();
+        message.error(errorData.error || "Failed to save to database");
       }
     } catch (error) {
-      console.error("Validation failed:", error);
-      message.error("Validation failed. Please check all tabs.");
+      message.error("Please fix validation errors in all tabs.");
     } finally {
       setLoading(false);
     }
@@ -509,7 +516,7 @@ export default function SubCategory() {
           <Tabs
             activeKey={activeTab}
             onChange={setActiveTab}
-            destroyInactiveTabPane={false} // CRITICAL: Fixes FAQ data loss
+            destroyInactiveTabPane={false}
             items={[
               {
                 key: "1",
@@ -520,22 +527,40 @@ export default function SubCategory() {
                       <Form.Item
                         name="name"
                         label="Name"
-                        rules={[{ required: true }]}
+                        rules={[
+                          { required: true, message: "Name is required" },
+                        ]}
                       >
                         <Input
-                          onChange={(e) =>
-                            !editingSubCat &&
-                            form.setFieldValue(
-                              "slug",
-                              e.target.value.toLowerCase().replace(/\s+/g, "-"),
-                            )
-                          }
+                          placeholder="e.g. Corrugated Soap Boxes"
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            // Update slug and keywords only if creating new
+                            if (!editingSubCat) {
+                              form.setFieldValue(
+                                "slug",
+                                val.toLowerCase().replace(/\s+/g, "-"),
+                              );
+                              if (!form.isFieldTouched("keywordstitle")) {
+                                form.setFieldValue("keywordstitle", val);
+                              }
+                            }
+                          }}
                         />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
+                      <Form.Item
+                        name="keywordstitle"
+                        label="Keyword Title (SEO Focus)"
+                        dependencies={["name"]}
+                      >
+                        <Input placeholder="e.g. Best Seo Services" />
+                      </Form.Item>
+                    </Col>
+                    <Col span={8}>
                       <Form.Item name="slug" label="Slug">
-                        <Input />
+                        <Input placeholder="auto-generated-slug" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
@@ -544,7 +569,7 @@ export default function SubCategory() {
                         label="Parent"
                         rules={[{ required: true }]}
                       >
-                        <Select>
+                        <Select placeholder="Select Parent Category">
                           <Option value="digital-marketing">
                             Digital Marketing
                           </Option>
@@ -558,7 +583,7 @@ export default function SubCategory() {
                       </Form.Item>
                     </Col>
                     <Col span={24}>
-                      <Form.Item name="icon" label="Icon">
+                      <Form.Item label="Icon" name="icon">
                         <ImageUploadField
                           value={form.getFieldValue("icon")}
                           onChange={(url) => form.setFieldValue("icon", url)}
@@ -575,7 +600,7 @@ export default function SubCategory() {
                   <>
                     <Form.Item
                       name={["topSection", "backgroundImage"]}
-                      label="Hero BG"
+                      label="Hero Background Image"
                     >
                       <ImageUploadField
                         value={form.getFieldValue([
@@ -590,18 +615,21 @@ export default function SubCategory() {
                         }
                       />
                     </Form.Item>
-                    <Form.Item name={["topSection", "heading"]} label="Heading">
-                      <Input />
+                    <Form.Item
+                      name={["topSection", "heading"]}
+                      label="Main Heading"
+                    >
+                      <Input placeholder="Hero section title" />
                     </Form.Item>
                     <Form.Item
                       name={["topSection", "description"]}
-                      label="Desc"
+                      label="Hero Description"
                     >
                       <TiptapEditor
-                        content={form.getFieldValue([
-                          "topSection",
-                          "description",
-                        ])}
+                        content={
+                          form.getFieldValue(["topSection", "description"]) ||
+                          ""
+                        }
                         onChange={(v) =>
                           form.setFieldValue(["topSection", "description"], v)
                         }
@@ -641,7 +669,7 @@ export default function SubCategory() {
                             add({ layoutType: "description-only" })
                           }
                         >
-                          Add Section
+                          Add Content Section
                         </Button>
                       </>
                     )}
@@ -662,7 +690,6 @@ export default function SubCategory() {
                             index={i}
                             remove={remove}
                             move={move}
-                            form={form}
                           />
                         ))}
                         <Button
@@ -671,7 +698,7 @@ export default function SubCategory() {
                           icon={<PlusOutlined />}
                           onClick={() => add({ isActive: true })}
                         >
-                          Add FAQ
+                          Add New FAQ
                         </Button>
                       </>
                     )}
@@ -683,7 +710,10 @@ export default function SubCategory() {
                 label: "SEO",
                 children: (
                   <Card size="small" style={{ background: "#f0f2f5" }}>
-                    <Form.Item name={["seo", "metaTitle"]} label="Meta Title">
+                    <Form.Item
+                      name={["seo", "metaTitle"]}
+                      label="Meta Title (SEO)"
+                    >
                       <Input />
                     </Form.Item>
                     <Form.Item
@@ -696,7 +726,7 @@ export default function SubCategory() {
                       name={["seo", "metaKeywords"]}
                       label="Keywords (comma separated)"
                     >
-                      <Input />
+                      <Input placeholder="packaging, boxes, custom soap boxes" />
                     </Form.Item>
                   </Card>
                 ),

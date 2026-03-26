@@ -22,15 +22,6 @@ export async function GET(request) {
       .populate({ path: "sections.cta.ctaId", model: CTA })
       .lean();
 
-    // Debug: Check FAQs in response
-    console.log(
-      "FAQs in response:",
-      subcategories.map((s) => ({
-        name: s.name,
-        faqsCount: s.faqs?.length || 0,
-      })),
-    );
-
     return NextResponse.json(subcategories || [], { status: 200 });
   } catch (err) {
     console.error("GET Error:", err);
@@ -48,6 +39,10 @@ export async function POST(req) {
     if (!body.slug && body.name) body.slug = body.name;
 
     // --- DATA CLEANING (Normalization) ---
+
+    // ✅ FIX: Always set keywordstitle - don't use conditional
+    body.keywordstitle = body.keywordstitle?.trim() || body.name?.trim() || "";
+
     // Top Section cleaning
     if (body.topSection) {
       if (!body.topSection.cta?.ctaId) {
@@ -69,7 +64,7 @@ export async function POST(req) {
       });
     }
 
-    // ✅ FAQS CLEANING - ADD THIS
+    // FAQS CLEANING
     if (body.faqs && Array.isArray(body.faqs)) {
       body.faqs = body.faqs.map((faq, index) => ({
         question: faq.question,
@@ -77,8 +72,21 @@ export async function POST(req) {
         order: faq.order !== undefined ? faq.order : index,
         isActive: faq.isActive !== undefined ? faq.isActive : true,
       }));
-      console.log("FAQs being saved:", body.faqs); // Debug log
     }
+
+    // SEO Keywords handling (if coming as string)
+    if (body.seo && typeof body.seo.metaKeywords === "string") {
+      body.seo.metaKeywords = body.seo.metaKeywords
+        .split(",")
+        .map((k) => k.trim())
+        .filter((k) => k);
+    }
+
+    // Debug log
+    console.log("📝 Creating subcategory:", {
+      name: body.name,
+      keywordstitle: body.keywordstitle,
+    });
 
     const subcategory = new SubCategory(body);
     await subcategory.save();
@@ -88,9 +96,9 @@ export async function POST(req) {
       .populate({ path: "sections.cta.ctaId", model: CTA })
       .lean();
 
-    console.log("Saved subcategory with FAQs:", {
+    console.log("✅ Created subcategory:", {
       name: populated.name,
-      faqsCount: populated.faqs?.length,
+      keywordstitle: populated.keywordstitle,
     });
 
     return NextResponse.json(populated, { status: 201 });
