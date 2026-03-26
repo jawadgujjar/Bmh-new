@@ -19,6 +19,7 @@ import {
   Breadcrumb,
   Switch,
   Tabs,
+  Alert,
 } from "antd";
 import {
   PlusOutlined,
@@ -31,6 +32,7 @@ import {
   InfoCircleOutlined,
   ArrowUpOutlined,
   ArrowDownOutlined,
+  WarningOutlined,
 } from "@ant-design/icons";
 
 // Dynamically import TipTap to avoid SSR
@@ -212,7 +214,7 @@ const FAQItem = ({ field, index, remove, move }) => {
             {...field}
             name={[field.name, "question"]}
             label="Question"
-            rules={[{ required: true, message: "Please enter question" }]}
+            rules={[{ required: true, message: "Please enter FAQ question" }]}
           >
             <Input placeholder="Enter FAQ question" />
           </Form.Item>
@@ -222,7 +224,7 @@ const FAQItem = ({ field, index, remove, move }) => {
             {...field}
             name={[field.name, "answer"]}
             label="Answer"
-            rules={[{ required: true, message: "Please enter answer" }]}
+            rules={[{ required: true, message: "Please enter FAQ answer" }]}
           >
             <Input.TextArea rows={2} placeholder="Enter FAQ answer" />
           </Form.Item>
@@ -322,15 +324,8 @@ const DescriptionItem = ({ field, index, remove, move, form }) => {
 // --- Section Item Component ---
 const SectionItem = ({ field, index, remove, move, form, ctas }) => {
   const layout = Form.useWatch(["sections", field.name, "layoutType"], form);
-  const currentImageUrl = Form.useWatch(
-    ["sections", field.name, "image"],
-    form,
-  );
-  const descriptionValue = form.getFieldValue([
-    "sections",
-    field.name,
-    "description",
-  ]);
+  const currentImageUrl = Form.useWatch(["sections", field.name, "image"], form);
+  const descriptionValue = form.getFieldValue(["sections", field.name, "description"]);
 
   return (
     <Card
@@ -369,7 +364,7 @@ const SectionItem = ({ field, index, remove, move, form, ctas }) => {
             name={[field.name, "layoutType"]}
             label="Layout Type"
             initialValue="description-only"
-            rules={[{ required: true, message: "Please select layout type" }]}
+            rules={[{ required: true, message: "Please select layout type for section" }]}
           >
             <Select>
               <Option value="image-left">Image Left</Option>
@@ -397,7 +392,7 @@ const SectionItem = ({ field, index, remove, move, form, ctas }) => {
         label="Section Heading"
         rules={[
           { required: true, message: "Heading is required" },
-          { min: 3, message: "Heading must be at least 3 characters" },
+          { min: 3, message: "Heading must be at least 3 characters" }
         ]}
       >
         <Input placeholder="Section Title" />
@@ -410,7 +405,7 @@ const SectionItem = ({ field, index, remove, move, form, ctas }) => {
           label="Description"
           rules={[
             { required: true, message: "Description is required" },
-            { min: 10, message: "Description must be at least 10 characters" },
+            { min: 10, message: "Description must be at least 10 characters" }
           ]}
         >
           <TiptapEditor
@@ -426,9 +421,7 @@ const SectionItem = ({ field, index, remove, move, form, ctas }) => {
         <Form.Item
           {...field}
           name={[field.name, "image"]}
-          rules={[
-            { required: true, message: "Image is required for this layout" },
-          ]}
+          rules={[{ required: true, message: "Image is required for this layout" }]}
         >
           <ImageUploadField
             label="Section Image"
@@ -562,6 +555,8 @@ export default function Pages() {
   const [ctas, setCtas] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPage, setEditingPage] = useState(null);
+  const [validationErrors, setValidationErrors] = useState([]);
+  const [showAlert, setShowAlert] = useState(false);
 
   // Fetch Pages
   const fetchPages = async () => {
@@ -626,11 +621,113 @@ export default function Pages() {
       .replace(/-+$/, "");
   };
 
+  // Validate all sections for required fields
+  const validateSections = (sections) => {
+    const errors = [];
+    
+    if (!sections || sections.length === 0) {
+      errors.push("❌ At least one content section is required");
+      return errors;
+    }
+    
+    sections.forEach((section, idx) => {
+      const sectionNum = idx + 1;
+      
+      if (!section.heading || section.heading.trim() === '') {
+        errors.push(`❌ Section #${sectionNum}: Heading is required`);
+      } else if (section.heading.trim().length < 3) {
+        errors.push(`❌ Section #${sectionNum}: Heading must be at least 3 characters`);
+      }
+      
+      if (section.layoutType === "description-and-form") {
+        if (!section.descriptions || section.descriptions.length === 0) {
+          errors.push(`❌ Section #${sectionNum}: At least one description point is required when using "Description & Form" layout`);
+        } else {
+          section.descriptions.forEach((desc, descIdx) => {
+            if (!desc.text || desc.text.trim() === '') {
+              errors.push(`❌ Section #${sectionNum}, Description Point #${descIdx + 1}: Description text is required`);
+            }
+          });
+        }
+      } else {
+        if (!section.description || section.description.trim() === '') {
+          errors.push(`❌ Section #${sectionNum}: Description is required`);
+        } else if (section.description.trim().length < 10) {
+          errors.push(`❌ Section #${sectionNum}: Description must be at least 10 characters`);
+        }
+      }
+      
+      if ((section.layoutType === "image-left" || section.layoutType === "image-right") && (!section.image || section.image.trim() === '')) {
+        errors.push(`❌ Section #${sectionNum}: Image is required for "${section.layoutType}" layout`);
+      }
+    });
+    
+    return errors;
+  };
+  
+  // Validate FAQs
+  const validateFaqs = (faqs) => {
+    const errors = [];
+    
+    if (faqs && faqs.length > 0) {
+      faqs.forEach((faq, idx) => {
+        if (!faq.question || faq.question.trim() === '') {
+          errors.push(`❌ FAQ #${idx + 1}: Question is required`);
+        }
+        if (!faq.answer || faq.answer.trim() === '') {
+          errors.push(`❌ FAQ #${idx + 1}: Answer is required`);
+        }
+      });
+    }
+    
+    return errors;
+  };
+  
+  // Validate all form fields
+  const validateFormFields = (values) => {
+    const errors = [];
+    
+    // Basic required fields
+    if (!values.title || values.title.trim() === '') {
+      errors.push("❌ Page Title is required");
+    }
+    
+    if (!values.slug || values.slug.trim() === '') {
+      errors.push("❌ URL Slug is required");
+    }
+    
+    if (!values.category || values.category.trim() === '') {
+      errors.push("❌ Category is required");
+    }
+    
+    if (!values.subcategory || values.subcategory.trim() === '') {
+      errors.push("❌ Subcategory is required");
+    }
+    
+    // Hero section validation
+    if (values.topSection) {
+      if (values.topSection.heading && values.topSection.heading.trim() === '') {
+        errors.push("⚠️ Hero Heading is empty (optional but recommended)");
+      }
+    }
+    
+    // Validate sections
+    const sectionErrors = validateSections(values.sections);
+    errors.push(...sectionErrors);
+    
+    // Validate FAQs
+    const faqErrors = validateFaqs(values.faqs);
+    errors.push(...faqErrors);
+    
+    return errors;
+  };
+
   // Add / Edit Page
   const handleOk = async () => {
     try {
+      // First, validate the form fields
       const values = await form.validateFields();
-
+      
       // Process sections to ensure proper structure
       const processedSections =
         values.sections?.map((s, idx) => {
@@ -751,20 +848,39 @@ export default function Pages() {
 
       if (res.ok || data.success || data._id) {
         message.success(
-          editingPage
-            ? "Page updated successfully!"
-            : "Page created successfully!",
+          editingPage ? "Page updated successfully!" : "Page created successfully!"
         );
         form.resetFields();
         setEditingPage(null);
+        setShowAlert(false);
+        setValidationErrors([]);
         setIsModalOpen(false);
         fetchPages();
       } else {
         message.error(data.error || "Operation failed");
+        // Show server-side validation errors if any
+        if (data.errors && Array.isArray(data.errors)) {
+          setValidationErrors(data.errors);
+          setShowAlert(true);
+        }
       }
     } catch (err) {
       console.error("Error saving page:", err);
-      message.error("Error saving page");
+      
+      // Handle validation errors from Ant Design form
+      if (err.errorFields && err.errorFields.length > 0) {
+        const fieldErrors = err.errorFields.map(field => 
+          `❌ ${field.name.join(' > ')}: ${field.errors.join(', ')}`
+        );
+        setValidationErrors(fieldErrors);
+        setShowAlert(true);
+        message.error({
+          content: `Please fix ${fieldErrors.length} validation error(s)`,
+          duration: 3,
+        });
+      } else {
+        message.error("Error saving page");
+      }
     }
   };
 
@@ -777,7 +893,7 @@ export default function Pages() {
       const data = await res.json();
 
       if (res.ok || data.success) {
-        message.success("Page deleted successfully");
+        message.success("✅ Page deleted successfully");
         fetchPages();
       } else {
         message.error(data.error || "Failed to delete page");
@@ -791,7 +907,7 @@ export default function Pages() {
   // Open modal for editing
   const handleEdit = (record) => {
     setEditingPage(record);
-
+    
     // Reset form first
     form.resetFields();
 
@@ -901,6 +1017,8 @@ export default function Pages() {
   const openAddModal = () => {
     form.resetFields();
     setEditingPage(null);
+    setShowAlert(false);
+    setValidationErrors([]);
     setIsModalOpen(true);
   };
 
@@ -1031,6 +1149,8 @@ export default function Pages() {
             setIsModalOpen(false);
             form.resetFields();
             setEditingPage(null);
+            setShowAlert(false);
+            setValidationErrors([]);
           }}
           onOk={handleOk}
           okText={editingPage ? "Update" : "Create"}
@@ -1038,6 +1158,32 @@ export default function Pages() {
           style={{ top: 20 }}
           destroyOnClose={true}
         >
+          {/* Validation Error Alert */}
+          {showAlert && validationErrors.length > 0 && (
+            <Alert
+              message={
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                    <WarningOutlined style={{ color: '#ff4d4f', fontSize: 16 }} />
+                    <strong>Please fix the following issues before saving:</strong>
+                  </div>
+                  <ul style={{ margin: 0, paddingLeft: 20 }}>
+                    {validationErrors.map((error, idx) => (
+                      <li key={idx} style={{ margin: '4px 0', color: '#ff4d4f' }}>
+                        {error}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              }
+              type="error"
+              showIcon
+              closable
+              onClose={() => setShowAlert(false)}
+              style={{ marginBottom: 16 }}
+            />
+          )}
+          
           <Form form={form} layout="vertical">
             <Tabs
               defaultActiveKey="1"
@@ -1052,12 +1198,7 @@ export default function Pages() {
                           <Form.Item
                             label="Page Title"
                             name="title"
-                            rules={[
-                              {
-                                required: true,
-                                message: "Please enter page title",
-                              },
-                            ]}
+                            rules={[{ required: true, message: "Please enter page title" }]}
                           >
                             <Input
                               placeholder="Enter page title"
@@ -1075,12 +1216,7 @@ export default function Pages() {
                           <Form.Item
                             label="URL Slug"
                             name="slug"
-                            rules={[
-                              {
-                                required: true,
-                                message: "Please enter URL slug",
-                              },
-                            ]}
+                            rules={[{ required: true, message: "Please enter URL slug" }]}
                           >
                             <Input placeholder="your-slug" />
                           </Form.Item>
@@ -1092,12 +1228,7 @@ export default function Pages() {
                           <Form.Item
                             label="Category"
                             name="category"
-                            rules={[
-                              {
-                                required: true,
-                                message: "Please select category",
-                              },
-                            ]}
+                            rules={[{ required: true, message: "Please select category" }]}
                           >
                             <Select placeholder="Select category">
                               <Option value="digital-marketing">
@@ -1116,12 +1247,7 @@ export default function Pages() {
                           <Form.Item
                             label="SubCategory"
                             name="subcategory"
-                            rules={[
-                              {
-                                required: true,
-                                message: "Please select a subcategory",
-                              },
-                            ]}
+                            rules={[{ required: true, message: "Please select a subcategory" }]}
                           >
                             <Select placeholder="Select subcategory">
                               {subCategories.map((subcat) => (
@@ -1162,11 +1288,11 @@ export default function Pages() {
                       <Form.Item
                         label="Page Short Description"
                         name="subcatpagedescr"
+                        rules={[
+                          { max: 200, message: "⚠️ Short description cannot exceed 200 characters" }
+                        ]}
                       >
-                        <Input.TextArea
-                          rows={3}
-                          placeholder="Enter short description"
-                        />
+                        <Input.TextArea rows={3} placeholder="Enter short description" />
                       </Form.Item>
                     </>
                   ),
@@ -1251,13 +1377,13 @@ export default function Pages() {
                             block
                             icon={<PlusOutlined />}
                             onClick={() =>
-                              add({
-                                layoutType: "description-only",
+                              add({ 
+                                layoutType: "description-only", 
                                 image: "",
                                 description: "",
                                 descriptions: [],
-                                cta: { ctaId: "", buttonVariant: "primary" },
-                                order: fields.length,
+                                cta: { ctaId: '', buttonVariant: 'primary' },
+                                order: fields.length 
                               })
                             }
                             style={{ height: 60, marginTop: 10 }}
@@ -1290,10 +1416,10 @@ export default function Pages() {
                             block
                             icon={<PlusOutlined />}
                             onClick={() =>
-                              add({
-                                question: "",
-                                answer: "",
-                                order: fields.length,
+                              add({ 
+                                question: '', 
+                                answer: '', 
+                                order: fields.length 
                               })
                             }
                             style={{ height: 60, marginTop: 10 }}
@@ -1310,32 +1436,27 @@ export default function Pages() {
                   label: "SEO Settings",
                   children: (
                     <Card size="small" style={{ background: "#f5f5f5" }}>
+                      <Alert
+                        message="SEO Best Practices"
+                        description="Meta title should be 50-60 characters, meta description 150-160 characters for optimal search results"
+                        type="info"
+                        showIcon
+                        style={{ marginBottom: 16 }}
+                      />
                       <Form.Item name={["seo", "metaTitle"]} label="Meta Title">
-                        <Input maxLength={70} showCount />
+                        <Input maxLength={70} showCount placeholder="Enter meta title (recommended: 50-60 characters)" />
                       </Form.Item>
 
-                      <Form.Item
-                        name={["seo", "metaDescription"]}
-                        label="Meta Description"
-                      >
+                      <Form.Item name={["seo", "metaDescription"]} label="Meta Description">
                         <Input.TextArea rows={3} maxLength={160} showCount />
                       </Form.Item>
 
-                      <Form.Item
-                        name={["seo", "metaKeywords"]}
-                        label="Meta Keywords"
-                      >
+                      <Form.Item name={["seo", "metaKeywords"]} label="Meta Keywords">
                         <Input placeholder="keyword1, keyword2, keyword3" />
                       </Form.Item>
 
-                      <Form.Item
-                        name={["seo", "schemaMarkup"]}
-                        label="Schema Markup"
-                      >
-                        <Input.TextArea
-                          rows={5}
-                          placeholder='{"@context": "https://schema.org"}'
-                        />
+                      <Form.Item name={["seo", "schemaMarkup"]} label="Schema Markup">
+                        <Input.TextArea rows={5} placeholder='{"@context": "https://schema.org"}' />
                       </Form.Item>
                     </Card>
                   ),
@@ -1348,3 +1469,4 @@ export default function Pages() {
     </div>
   );
 }
+  
