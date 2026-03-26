@@ -1,188 +1,148 @@
-/* Professional testimonial carousel styling */
 .customerDiv {
   text-align: center;
-  padding: 3rem 1rem;
-  background: #f8f9fa;
-  position: relative;
+  padding: 4rem 1rem;
+  background: #fdfdfd;
 }
 
 .customers {
   font-size: 2.2rem;
   font-weight: 700;
-  color: #FF6B00;
   margin-bottom: 0.5rem;
   font-family: 'Inter', sans-serif;
 }
 
 .blackText {
-  color: black;
+  color: #000;
 }
 
 .customer {
   font-size: 1.1rem;
-  color: #6c757d;
-  margin-bottom: 2rem;
-  font-family: 'Inter', sans-serif;
+  color: #666;
+  margin-bottom: 3rem;
 }
 
 .carouselWrapper {
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 1.5rem;
-  box-sizing: border-box;
+  max-width: 1300px;
+  margin: 0 auto;
 }
 
 .carouselContainer {
   width: 100%;
-  max-width: 1200px;
-  padding: 1rem;
-  position: relative;
-  border-radius: 12px;
-  background: #ffffff;
 }
 
-/* Carousel item container - increased height */
-.carouselItemContent {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem;
-  height: 32rem; /* Further increased height */
-}
-
-/* Card styling */
+/* Card Styling - Exact Match */
 .carouselCard {
+  background: #f9f9f9; /* Subtle grey background like image */
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin: 0 10px;
+  text-align: left;
+  border: none !important;
+  box-shadow: none !important;
+  min-height: 280px;
   display: flex;
   flex-direction: column;
+}
+
+.cardHeader {
+  display: flex;
   align-items: center;
-  text-align: center;
-  width: 100%;
-  max-width: 360px;
-  padding: 2rem;
-  height: 100%; /* Take full height of container */
-  border: 1px solid #e0e0e0;
-  border-radius: 10px;
-  background: #ffffff;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  gap: 12px;
+  margin-bottom: 10px;
 }
 
-/* Avatar styling */
 .avatarReview {
-  width: 4.5rem;
-  height: 4.5rem;
-  border-radius: 50%;
-  margin-bottom: 1.2rem;
-  border: 2px solid #007bff;
-}
-
-/* Text styling */
-.name {
-  font-size: 1.3rem;
+  width: 44px !important;
+  height: 44px !important;
+  font-size: 1.2rem;
   font-weight: 600;
+  background-color: #00695c !important; /* Teal color */
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.name {
+  font-size: 1rem;
+  font-weight: 700;
   color: #1a1a1a;
-  margin: 0.5rem 0;
+  margin: 0;
   font-family: 'Inter', sans-serif;
 }
 
-.occupation {
-  font-size: 0.9rem;
-  color: #6c757d;
-  margin-bottom: 1rem;
-  font-family: 'Inter', sans-serif;
+/* Rating & Blue Tick */
+.ratingLine {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 15px;
 }
 
-.rating {
-  margin-bottom: 1rem;
+.ratingStars :global(.ant-rate-star) {
+  margin-inline-end: 2px !important;
+  font-size: 14px;
+}
+
+.blueTick {
+  color: #1877F2; /* Facebook/Verified Blue */
+  font-size: 14px;
+  display: flex;
+  align-items: center;
 }
 
 .review {
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: #333;
-  line-height: 1.6;
-  font-style: italic;
-  margin: 1rem 0;
-  font-family: 'Inter', sans-serif;
+  line-height: 1.5;
+  margin-bottom: 15px;
+  flex-grow: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.readMore {
+  color: #8c8c8c;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
 }
 
 .divider {
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #FF8C00, transparent);
-  margin: 3rem auto 0;
-  width: 60%;
-  max-width: 600px;
+  height: 1px;
+  background: #eee;
+  margin: 4rem auto 0;
+  width: 80%;
+}
+.readMore {
+  color: #8c8c8c;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s;
+  display: inline-block;
+  margin-top: auto; /* Push to bottom of card */
 }
 
-/* Responsive adjustments */
-@media (max-width: 1024px) {
-  .carouselContainer {
-    max-width: 900px;
-  }
-
-  .carouselCard {
-    max-width: 320px;
-  }
+.readMore:hover {
+  color: #00695c; /* Teal hover effect */
+  text-decoration: underline;
 }
 
-@media (max-width: 768px) {
-  .customers {
-    font-size: 2rem;
-  }
-
-  .customer {
-    font-size: 1rem;
-  }
-
-  .carouselItemContent {
-    height: 30rem;
-  }
-
-  .carouselCard {
-    max-width: 280px;
-    padding: 1.5rem;
-  }
-
-  .name {
-    font-size: 1.2rem;
-  }
-
-  .occupation {
-    font-size: 0.85rem;
-  }
-
-  .review {
-    font-size: 0.95rem;
-  }
+/* Modal Styling */
+.reviewModal :global(.ant-modal-content) {
+  border-radius: 16px;
+  padding: 20px;
 }
 
-@media (max-width: 480px) {
-  .carouselItemContent {
-    height: 32rem;
-  }
+.reviewModal :global(.ant-modal-header) {
+  border-bottom: none;
+}
 
-  .customers {
-    font-size: 1.8rem;
-  }
-
-  .customer {
-    font-size: 0.9rem;
-  }
-
-  .avatarReview {
-    width: 4rem;
-    height: 4rem;
-  }
-
-  .name {
-    font-size: 1.1rem;
-  }
-
-  .occupation {
-    font-size: 0.8rem;
-  }
-
-  .review {
-    font-size: 0.9rem;
-  }
+.reviewModal :global(.ant-modal-title) {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
 }

@@ -1,5 +1,6 @@
-import React from "react";
-import { Row, Col } from "antd";
+"use client";
+import React, { useState } from "react"; // useState add kiya
+import { Row, Col, Input, Button, message } from "antd"; // Input, Button, message add kiya
 import {
   FacebookOutlined,
   TwitterOutlined,
@@ -8,16 +9,43 @@ import {
   PhoneOutlined,
   MailOutlined,
   EnvironmentOutlined,
+  SendOutlined, // Icon for button
 } from "@ant-design/icons";
 import Link from "next/link";
 import styles from "../../styles/footer.module.css";
 
 function Footer() {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    if (!email) {
+      return message.error("Please enter a valid email!");
+    }
+
+    setLoading(true);
+    try {
+      // Yahan apna API endpoint dalein
+      // const response = await fetch('/api/subscribe', { method: 'POST', body: JSON.stringify({ email }) });
+
+      // Temporary Success Message
+      setTimeout(() => {
+        message.success("Subscribed successfully!");
+        setEmail("");
+        setLoading(false);
+      }, 1500);
+    } catch (error) {
+      message.error("Something went wrong. Please try again.");
+      setLoading(false);
+    }
+  };
+
   return (
     <div className={styles.footerContainer}>
       <div className={styles.footerContent}>
         <Row gutter={[32, 32]}>
-          {/* Column 1: Brand Info and Social Media */}
+          {/* Column 1: Brand Info */}
           <Col xs={24} sm={12} md={6} lg={6}>
             <div className={styles.footerSection}>
               <Link href="/">
@@ -28,7 +56,6 @@ function Footer() {
                   draggable={false}
                 />
               </Link>
-
               <p className={styles.sectionText}>
                 Follow us on social media to get more updates about our
                 services.
@@ -63,10 +90,8 @@ function Footer() {
                     Blog
                   </Link>
                 </li>
-
                 <li>Portfolio</li>
                 <li>Privacy Policy</li>
-
               </ul>
             </div>
           </Col>
@@ -77,53 +102,56 @@ function Footer() {
               <h3 className={styles.sectionTitle}>Our Services</h3>
               <ul className={styles.footerList}>
                 <li>Custom Web Development</li>
-                <li>SEO</li>
-                <li>SEM</li>
+                <li>SEO / SEM</li>
                 <li>UI and UX Design</li>
                 <li>App Development</li>
                 <li>Graphics & Branding</li>
-                <li>Quality Assurance</li>
                 <li>DevOps</li>
-
               </ul>
             </div>
           </Col>
 
-          {/* Column 4: Contact Us */}
+          {/* Column 4: Contact & Newsletter */}
           <Col xs={24} sm={12} md={6} lg={6}>
             <div className={styles.footerSection}>
               <h3 className={styles.sectionTitle}>Contact Us</h3>
-              <p className={styles.sectionText}>
-                Get in touch today, and we'll help you build your dream project
-                real soon.
-              </p>
-
               <div className={styles.contactInfo}>
-                <h4 className={styles.contactCountry}>USA</h4>
                 <div className={styles.contactDetail}>
                   <PhoneOutlined className={styles.contactIcon} />
                   <a href="tel:+18132140535">(813) 214-0535</a>
                 </div>
-
                 <div className={styles.contactDetail}>
                   <EnvironmentOutlined className={styles.contactIcon} />
-                  <span>7901 4TH  ST N STE 300 ST. PETERSURG  FL 33702</span>
+                  <span>7901 4TH ST N STE 300 ST. PETERSBURG FL 33702</span>
                 </div>
               </div>
 
-              {/* <div className={styles.contactInfo}>
-                <h4 className={styles.contactCountry}>UK</h4>
-                <div className={styles.contactDetail}>
-                  <PhoneOutlined className={styles.contactIcon} />
-                  <span>+447425471610</span>
-                </div>
-                <div className={styles.contactDetail}>
-                  <EnvironmentOutlined className={styles.contactIcon} />
-                  <span>
-                    27 Saint Andrews Drive Flat no. 3/4, Glasgow, G41 5JN
-                  </span>
-                </div>
-              </div> */}
+              {/* --- Newsletter Input Added Here --- */}
+              <div className={styles.newsletterSection}>
+                <h4 className={styles.newsletterTitle}>
+                  Subscribe to Newsletter
+                </h4>
+                <form
+                  onSubmit={handleSubscribe}
+                  className={styles.newsletterForm}
+                >
+                  <Input
+                    placeholder="Your Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className={styles.newsletterInput}
+                    type="email"
+                    required
+                  />
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    loading={loading}
+                    className={styles.newsletterButton}
+                    icon={<SendOutlined />}
+                  />
+                </form>
+              </div>
             </div>
           </Col>
         </Row>

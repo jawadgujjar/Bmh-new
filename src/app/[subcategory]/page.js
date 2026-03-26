@@ -85,7 +85,7 @@ export default async function SubcategoryPage({ params }) {
         />
       ))}
 
-      <SeoIndustries heading="Industries We Transform" industries={[]} />
+      {/* <SeoIndustries heading="Industries We Transform" industries={[]} /> */}
 
       <div className="py-0 my-0">
         <Form1 />
