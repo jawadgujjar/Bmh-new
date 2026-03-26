@@ -1,7 +1,5 @@
 import { notFound } from "next/navigation";
 import SubAboutdigital from "@/components/digital-marketing/sub-category-digital/subaboutdigital";
-import SubCalltoactiondigital1 from "@/components/digital-marketing/sub-category-digital/subcalltoactiondigital1";
-import SubCalltoactiondigital2 from "@/components/digital-marketing/sub-category-digital/subcalltoactiondigital2";
 import SubHeroDigitalMarketing from "@/components/digital-marketing/sub-category-digital/subdigitalhero";
 import SubKeywordsdigital from "@/components/digital-marketing/sub-category-digital/subkeywordsdigital";
 import SubWhydigital from "@/components/digital-marketing/sub-category-digital/subdynamicsection";
@@ -11,6 +9,7 @@ import SeoIndustries from "@/components/landing/seoindustries";
 import Heroform from "@/components/landing/heroform";
 import DescriptionAndFormSection from "@/components/descriptionandformsection/descriptionform";
 import FaqSection from "@/components/faqspage/faqsection"; // ✅ Import FAQ component
+import PageKeywordsdigital from "@/components/digital-marketing/pagekeyword-digital/pagekeywordsdigital";
 
 // HTML Content Component
 function HtmlContent({ content, className = "" }) {
@@ -256,16 +255,13 @@ export default async function UniversalPageRoute({ params }) {
       {/* ✅ SubKeywordsdigital Section - Added from first file */}
       {subcategoryData && (
         <div className="py-10 bg-white">
-          <SubKeywordsdigital
-            heading={`Specialized ${subcategoryData.name} Services`}
-            description={
-              <HtmlContent
-                content={subcategoryData.keywordsSection?.description}
-              />
-            }
-            subcategoryId={subcategoryData._id}
-            category={subcategoryData.category}
-          />
+          <PageKeywordsdigital
+        heading="Explore Our Other Services"
+        description="Discover more specialized services we offer"
+        subcategoryId={pageData.subcategory?._id || pageData.subcategory}
+        category="digital-marketing" // or your category slug
+        currentPageSlug={pageData.slug} // Pass current page slug to exclude it
+      />
         </div>
       )}
 

@@ -1,3 +1,5 @@
+import "@/models/subcategory"; // ✅ FIX
+import "@/models/cta"; 
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import Page from "@/models/page";
