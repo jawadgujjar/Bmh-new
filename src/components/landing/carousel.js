@@ -1,105 +1,121 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import AliceCarousel from 'react-alice-carousel';
-import { Card, Avatar } from 'antd';
-import { Rate } from 'antd';
+import { Avatar, Rate, Modal } from 'antd'; // Modal add kiya
+import { CheckCircleFilled } from '@ant-design/icons';
 import 'react-alice-carousel/lib/alice-carousel.css';
 import styles from '../../styles/carousel.module.css';
 
-// Carousel items - constant data
 const carouselItems = [
   {
-    img: "/images/download.jpg",
-    name: "John Wick",
-    occupation: "Broker – About Roatan Real Estate",
-    review: "“Thrive exceeded our expectations in every way. They are honest, reliable, and handle all needs quickly. They deliver on their promises without any fuss.”"
+    name: "olive",
+    review: "Deuxième session réussie pour moi et mon collègue, toujours aussi bien organisé pour Budapest, la clinique parfaite, le personnel au petits soins, on ne pense pas qu'il y aurait autant de confort. Je recommande vivement l'expérience pour tous ceux qui hésitent encore."
   },
   {
-    img: "/images/download.jpg",
-    name: "ACP",
-    occupation: "Practice Manager – PARC Urology",
-    review: "“Thrive is incredible. They helped us grow our business so much that our biggest challenge now is managing the overflow. We're exactly where we wanted to be, thanks to them.”"
+    name: "Francis Hughes",
+    review: "I cannot recommend the team at HairPalace enough... they really went above and beyond, and made me feel exceptionally comfortable. Big thanks to the doctors and the coordinators for making this a smooth journey."
   },
   {
-    img: "/images/download.jpg",
-    name: "NINI",
-    occupation: "CEO – Accurate Leak and Line",
-    review: "“Working with Thrive has been a pleasure. Their dedication, exceptional support, and attention to our needs make us excited for a long-term partnership.”"
+    name: "Mainsail WebDesign",
+    review: "We just signed up for the service and so far so good. I like that they don't stop improving and there seem to be a lot of options. It will take time to figure it all out, but the support has been top-notch."
   }
 ];
 
 const Carousel = () => {
-  const carouselRef = React.useRef(null);
   const [isClient, setIsClient] = useState(false);
+  const [selectedReview, setSelectedReview] = useState(null); // Modal data state
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  // Render carousel items
+  const showModal = (item) => {
+    setSelectedReview(item);
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
   const renderItems = () => (
     carouselItems.map((item, index) => (
       <div className={styles.carouselItemContent} key={index}>
-        <Card className={styles.carouselCard}>
-          <Avatar className={styles.avatarReview} src={item.img} />
-          <h5 className={styles.name}>{item.name}</h5>
-          <p className={styles.occupation}>{item.occupation}</p>
-          <Rate disabled defaultValue={5} className={styles.rating} />
+        <div className={styles.carouselCard}>
+          <div className={styles.cardHeader}>
+            <Avatar className={styles.avatarReview}>
+              {item.name.charAt(0).toUpperCase()}
+            </Avatar>
+            <h5 className={styles.name}>{item.name}</h5>
+          </div>
+
+          <div className={styles.ratingLine}>
+            <Rate disabled defaultValue={5} className={styles.ratingStars} style={{ color: '#ffb400' }} />
+            <span className={styles.blueTick}>
+              <CheckCircleFilled />
+            </span>
+          </div>
+
           <p className={styles.review}>{item.review}</p>
-        </Card>
+          
+          <span className={styles.readMore} onClick={() => showModal(item)}>
+            Read more
+          </span>
+        </div>
       </div>
     ))
   );
 
-  // اگر client side نہیں ہے تو loading state دکھائیں
-  if (!isClient) {
-    return (
-      <div className={styles.customerDiv}>
-        <h1 className={styles.customers}><span className={styles.blackText}>What Our </span> Clients Say</h1>
-        <p className={styles.customer}>Real stories from clients showcasing our exceptional service and results.</p>
-        <div className={styles.carouselWrapper}>
-          <div className={styles.carouselContainer}>
-            <div style={{ display: 'flex', gap: '20px', justifyContent: 'center' }}>
-              {[1, 2, 3].map((_, index) => (
-                <Card key={index} className={styles.carouselCard} style={{ opacity: 0.5 }}>
-                  <div style={{ height: '50px', width: '50px', borderRadius: '50%', backgroundColor: '#f0f0f0', marginBottom: '10px' }}></div>
-                  <div style={{ height: '20px', backgroundColor: '#f0f0f0', width: '100px', marginBottom: '10px' }}></div>
-                  <div style={{ height: '15px', backgroundColor: '#f0f0f0', width: '150px', marginBottom: '10px' }}></div>
-                  <div style={{ height: '15px', backgroundColor: '#f0f0f0', width: '100%', marginBottom: '5px' }}></div>
-                  <div style={{ height: '15px', backgroundColor: '#f0f0f0', width: '80%', marginBottom: '5px' }}></div>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className={styles.divider}></div>
-      </div>
-    );
-  }
+  if (!isClient) return null;
 
   return (
     <div className={styles.customerDiv}>
       <h1 className={styles.customers}><span className={styles.blackText}>What Our </span> Clients Say</h1>
-      <p className={styles.customer}>Real stories from clients showcasing our exceptional service and results.</p>
+      
       <div className={styles.carouselWrapper}>
         <div className={styles.carouselContainer}>
           <AliceCarousel
-            ref={carouselRef}
+            mouseTracking
             items={renderItems()}
-            responsive={{
-              0: { items: 1 },
-              768: { items: 2 },
-              1024: { items: 3 },
-            }}
-            controlsStrategy="alternate"
+            responsive={{ 0: { items: 1 }, 768: { items: 2 }, 1024: { items: 3 } }}
             autoPlay
-            autoPlayInterval={4000}
+            autoPlayInterval={3000}
             infinite
-            disableButtonsControls={true}
-            disableDotsControls={true}
+            disableButtonsControls
+            disableDotsControls
           />
         </div>
       </div>
+
+      {/* --- Review Modal --- */}
+      <Modal
+        title="Full Review"
+        open={isModalOpen}
+        onCancel={handleCancel}
+        footer={null}
+        centered
+        className={styles.reviewModal}
+      >
+        {selectedReview && (
+          <div style={{ textAlign: 'left', padding: '10px' }}>
+            <div className={styles.cardHeader}>
+              <Avatar className={styles.avatarReview}>
+                {selectedReview.name.charAt(0).toUpperCase()}
+              </Avatar>
+              <h5 className={styles.name}>{selectedReview.name}</h5>
+            </div>
+            <div className={styles.ratingLine}>
+                <Rate disabled defaultValue={5} className={styles.ratingStars} style={{ color: '#ffb400' }} />
+                <span className={styles.blueTick}><CheckCircleFilled /></span>
+            </div>
+            <p style={{ fontSize: '1rem', lineHeight: '1.6', color: '#333' }}>
+              {selectedReview.review}
+            </p>
+          </div>
+        )}
+      </Modal>
+
       <div className={styles.divider}></div>
     </div>
   );

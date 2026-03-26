@@ -117,7 +117,40 @@
  margin-right: 2rem;
  transition: all 0.3s ease;
 }
+.newsletterForm {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  width: 100%;
+}
 
+.newsletterInput {
+  flex: 1; /* yeh remaining space le lega */
+  min-width: 0; /* overflow fix */
+  /* background: rgba(255, 255, 255, 0.1); */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  height: 40px;
+}
+.newsletterTitle {
+  color: #fff; /* Apne theme ke mutabiq change karein */
+  font-size: 20.8px;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.newsletterButton {
+  height: 40px;
+  width: 50px !important; /* apni desired width */
+  flex-shrink: 0; /* yeh shrink nahi hoga */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #FF6B00; 
+  border: none;
+}
+.newsletterButton:hover {
+  background-color: #fca700 !important;
+}
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .footerSection {
