@@ -1,3 +1,4 @@
+/* --- GLOBAL NAVBAR STYLING --- */
 .mainNavbar {
   height: 85px;
   background: transparent !important;
@@ -19,10 +20,17 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 4% !important;
+  position: relative; /* Dropdown alignment ke liye zaroori hai */
 }
 
-.navLeft { flex: 0 0 auto; }
-.logo { width: 125px !important; height: auto; transition: 0.3s; }
+.navLeft {
+  flex: 0 0 auto;
+}
+.logo {
+  width: 125px !important;
+  height: auto;
+  transition: 0.3s;
+}
 
 .navCollapse {
   flex: 1;
@@ -31,16 +39,25 @@
   align-items: center;
 }
 
-.navCenter { flex: 1; display: flex; justify-content: center; }
-.centerLinks { display: flex; gap: 10px; }
+.navCenter {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+.centerLinks {
+  display: flex;
+  gap: 10px;
+}
 
 .navItemWrapper {
-  position: relative;
+  position: static; /* Mega Menu ke liye isko static rakhein taaki dropdown full width le sake */
   display: flex;
   align-items: center;
   height: 85px;
 }
-.scrolled .navItemWrapper { height: 70px; }
+.scrolled .navItemWrapper {
+  height: 70px;
+}
 
 .navLink {
   color: white !important;
@@ -53,15 +70,54 @@
   transition: 0.3s;
 }
 
-.navLink:hover { color: #ffa500 !important; }
+.navLink:hover {
+  color: #ffa500 !important;
+}
 
-/* Section 3: Right */
-.navRight { flex: 0 0 auto; }
-.actionSection { display: flex; align-items: center; gap: 20px; }
+/* --- RIGHT SECTION (Phone, WhatsApp, Quote) --- */
+.navRight {
+  flex: 0 0 auto;
+}
+.actionSection {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
 
-.phoneBox { display: flex; align-items: center; gap: 8px; text-decoration: none; }
-.phoneText span { display: block; color: #ffa500; font-weight: 700; font-size: 13px; line-height: 1; }
-.phoneText small { color: #fff; font-size: 10px; opacity: 0.6; }
+.phoneBox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+.phoneText span {
+  display: block;
+  color: #ffa500;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1;
+}
+.phoneText small {
+  color: #fff;
+  font-size: 10px;
+  opacity: 0.6;
+}
+
+.whatsappBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: rgba(37, 211, 102, 0.1);
+  transition: all 0.3s ease;
+}
+
+.whatsappBox:hover {
+  background-color: rgba(37, 211, 102, 0.2);
+  transform: scale(1.1);
+}
 
 .quoteBtn {
   background: #ffa500 !important;
@@ -74,47 +130,78 @@
   text-transform: uppercase;
 }
 
-/* Dropdown */
+/* --- MEGA DROPDOWN MENU (The Fix) --- */
 .customDropdownMenu {
   position: absolute;
   top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
+  width: 100%; /* Pura horizontal area cover karega */
   background: #0f0f0f;
-  border: 1px solid rgba(255, 165, 0, 0.2);
-  padding: 20px;
-  width: max-content;
-  min-width: 250px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  border-top: 1px solid rgba(255, 165, 0, 0.3);
+  border-bottom: 2px solid #ffa500;
+  padding: 40px 6%; /* Side spacing */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
   z-index: 1000;
-  border-radius: 0 0 8px 8px;
-  animation: fadeIn 0.2s ease-out;
+  animation: fadeIn 0.3s ease-out;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translate(-50%, 10px); }
-  to { opacity: 1; transform: translate(-50%, 0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.dropdownFlex { display: flex; gap: 30px; }
-.subCol { display: flex; flex-direction: column; white-space: nowrap; }
+.dropdownFlex {
+  display: grid;
+  /* Columns automatically adjust based on content */
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 30px;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.subCol {
+  display: flex;
+  flex-direction: column;
+}
+
 .subTitle {
   color: #ffa500 !important;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   text-decoration: none;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
   gap: 8px;
-  border-bottom: 1px solid rgba(255, 165, 0, 0.1);
-  padding-bottom: 5px;
+  border-bottom: 1px solid rgba(255, 165, 0, 0.2);
+  padding-bottom: 6px;
+  transition: 0.3s;
 }
-.pageLink { color: #aaa !important; font-size: 12px; text-decoration: none; padding: 5px 0; }
+
+.subTitle:hover {
+  color: white !important;
+}
+
+.pageLink {
+  color: #aaa !important;
+  font-size: 13px;
+  text-decoration: none;
+  padding: 6px 0;
+  transition: 0.2s;
+}
+
+.pageLink:hover {
+  color: #fff !important;
+  padding-left: 5px;
+}
 
 /* --- MOBILE RESPONSIVE --- */
-
-/* Custom Toggle Button Styling */
 .customToggle {
   display: none;
   flex-direction: column;
@@ -124,7 +211,6 @@
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 0;
   z-index: 1100;
 }
 
@@ -134,138 +220,83 @@
   background: #ffa500;
   border-radius: 10px;
   transition: all 0.3s linear;
-  position: relative;
-  transform-origin: 1px;
-}
-.whatsappBox {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: rgba(37, 211, 102, 0.1);
-  transition: all 0.3s ease;
-  margin: 0 5px;
 }
 
-.whatsappBox:hover {
-  background-color: rgba(37, 211, 102, 0.2);
-  transform: scale(1.1);
-}
-
-/* If you want to maintain the same layout as the phone box, you can use this alternative */
-.whatsappBoxAlt {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  color: inherit;
-  padding: 5px 10px;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
-
-.whatsappBoxAlt:hover {
-  background-color: rgba(37, 211, 102, 0.1);
-}
-
-/* Make sure your actionSection has proper flex alignment */
-.actionSection {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* Mobile responsive adjustments */
 @media (max-width: 991px) {
-  .actionSection {
-    flex-wrap: wrap;
-    justify-content: center;
+  .customToggle {
+    display: flex;
   }
-  
-  .whatsappBox {
-    margin: 0 10px;
+  .customToggle.open span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
   }
-}
-@media (max-width: 991px) {
-  .customToggle { display: flex; }
-
-  /* Animation to X */
-  .customToggle.open span:nth-child(1) { transform: rotate(45deg); }
-  .customToggle.open span:nth-child(2) { opacity: 0; transform: translateX(20px); }
-  .customToggle.open span:nth-child(3) { transform: rotate(-45deg); }
+  .customToggle.open span:nth-child(2) {
+    opacity: 0;
+  }
+  .customToggle.open span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+  }
 
   .navCollapse {
     position: fixed;
     top: 0;
     left: -100%;
-    width: 80%;
+    width: 85%;
     height: 100vh;
     background: #000;
     flex-direction: column;
-    padding: 100px 30px 40px;
+    padding: 100px 25px 40px;
     transition: 0.4s ease-in-out;
     display: flex !important;
     align-items: flex-start;
-    box-shadow: 10px 0 30px rgba(0,0,0,0.5);
-    z-index: 1050;
+    overflow-y: auto;
   }
 
+  /* Jab menu open ho (React state se control ho rha hai) */
+  :global(.navbar-collapse.show) {
+    left: 0 !important;
+  }
 
-  .navCenter, .centerLinks {
-    flex-direction: column;
+  .navCenter,
+  .centerLinks {
     width: 100%;
-    gap: 0;
+    flex-direction: column;
   }
-
   .navItemWrapper {
     height: auto !important;
-    flex-direction: column;
-    align-items: flex-start;
     width: 100%;
     border-bottom: 1px solid #222;
   }
-
   .navLinkWrapper {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    width: 100%;
     padding: 15px 0;
+    width: 100%;
   }
-
-  .navLink { padding: 0; width: 100%; font-size: 16px; }
-
-  .mobileArrow {
-    transition: 0.3s;
-    color: #ffa500;
+  .navLink {
+    padding: 0;
+    font-size: 16px;
   }
-
-  .arrowRotate { transform: rotate(90deg); }
 
   .customDropdownMenu {
     position: static;
-    transform: none;
     width: 100%;
-    background: #111;
     padding: 15px;
+    background: #111;
     border: none;
-    border-left: 2px solid #ffa500;
-    margin-bottom: 10px;
-    animation: none;
-    display: block; /* Shown because of parent state */
+    border-left: 3px solid #ffa500;
   }
 
-  .dropdownFlex { flex-direction: column; gap: 20px; }
-
+  .dropdownFlex {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
   .navRight {
     width: 100%;
     margin-top: 30px;
   }
-
   .actionSection {
     flex-direction: column;
     align-items: flex-start;
-    gap: 20px;
   }
 }

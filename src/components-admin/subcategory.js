@@ -108,13 +108,13 @@ const ImageUploadField = ({ value, onChange, label, required = false }) => {
 const CTAFields = ({ namePath, label, ctas }) => (
   <Card
     size="small"
-    title={`${label} CTA`}
+    title={`${label} CTA (Global)`}
     style={{ marginBottom: 16, background: "#f9f9f9" }}
   >
     <Row gutter={16}>
       <Col span={12}>
         <Form.Item label="Select CTA" name={[...namePath, "ctaId"]}>
-          <Select placeholder="Link to CTA" allowClear>
+          <Select placeholder="Link to Global CTA" allowClear>
             {ctas?.map((c) => (
               <Option key={c._id} value={c._id}>
                 {c.name}
@@ -144,6 +144,10 @@ const SectionItem = ({ field, index, remove, move, form, ctas }) => {
   const layout = Form.useWatch(["sections", field.name, "layoutType"], form);
   const currentImageUrl = Form.useWatch(
     ["sections", field.name, "image"],
+    form,
+  );
+  const showInlineButton = Form.useWatch(
+    ["sections", field.name, "showButton"],
     form,
   );
 
@@ -222,6 +226,66 @@ const SectionItem = ({ field, index, remove, move, form, ctas }) => {
           }
         />
       </Form.Item>
+
+      {/* 🔥 New Inline Button Controls */}
+      <Card
+        size="small"
+        title="Inline Button Settings"
+        style={{ marginBottom: 16, background: "#f0f7ff" }}
+      >
+        <Row gutter={16} align="middle">
+          <Col span={6}>
+            <Form.Item
+              {...field}
+              label="Enable Button"
+              name={[field.name, "showButton"]}
+              valuePropName="checked"
+              initialValue={false}
+            >
+              <Switch checkedChildren="ON" unCheckedChildren="OFF" />
+            </Form.Item>
+          </Col>
+          {showInlineButton && (
+            <>
+              <Col span={9}>
+                <Form.Item
+                  {...field}
+                  label="Button Text"
+                  name={[field.name, "buttonText"]}
+                  initialValue="Learn More"
+                >
+                  <Input placeholder="Button text" />
+                </Form.Item>
+              </Col>
+              <Col span={9}>
+                <Form.Item
+                  {...field}
+                  label="Button Link"
+                  name={[field.name, "buttonLink"]}
+                >
+                  <Input placeholder="/services/seo" />
+                </Form.Item>
+              </Col>
+              <Col span={24}>
+                <Form.Item
+                  {...field}
+                  label="Button Variant"
+                  name={[field.name, "buttonVariant"]}
+                  initialValue="primary"
+                >
+                  <Select>
+                    <Option value="primary">Primary (Blue)</Option>
+                    <Option value="secondary">Secondary (Dark)</Option>
+                    <Option value="outline">Outline</Option>
+                    <Option value="ghost">Ghost (Simple)</Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+            </>
+          )}
+        </Row>
+      </Card>
+
       {(layout === "image-left" || layout === "image-right") && (
         <ImageUploadField
           label="Image"
@@ -232,7 +296,7 @@ const SectionItem = ({ field, index, remove, move, form, ctas }) => {
           required
         />
       )}
-      <CTAFields namePath={[field.name, "cta"]} label="Section" ctas={ctas} />
+      <CTAFields namePath={[field.name, "cta"]} label="Global" ctas={ctas} />
     </Card>
   );
 };
@@ -339,7 +403,6 @@ export default function SubCategory() {
     setEditingSubCat(record);
     const formattedValues = {
       ...record,
-      keywordstitle: record.keywordstitle || "",
       topSection: {
         ...record.topSection,
         cta: record.topSection?.cta?.ctaId
@@ -378,13 +441,16 @@ export default function SubCategory() {
 
       const payload = {
         ...values,
-        // Manual fallbacks for safe saving
         keywordstitle: values.keywordstitle || values.name || "",
         slug: values.slug || values.name?.toLowerCase().replace(/\s+/g, "-"),
         sections:
           values.sections?.map((s, i) => ({
             ...s,
             order: s.order !== undefined ? Number(s.order) : i,
+            showButton: s.showButton ?? false,
+            buttonText: s.buttonText?.trim() || "Learn More",
+            buttonLink: s.buttonLink?.trim() || "",
+            buttonVariant: s.buttonVariant || "primary",
           })) || [],
         faqs:
           values.faqs?.map((f, i) => ({
@@ -402,12 +468,10 @@ export default function SubCategory() {
               : [],
         },
       };
-    console.log("🔍 keywordstitle value:", payload.keywordstitle);
 
       const url = editingSubCat
         ? `/api/subcategories/${editingSubCat._id}`
         : "/api/subcategories";
-
       setLoading(true);
       const res = await fetch(url, {
         method: editingSubCat ? "PUT" : "POST",
@@ -422,10 +486,10 @@ export default function SubCategory() {
         fetchData();
       } else {
         const errorData = await res.json();
-        message.error(errorData.error || "Failed to save to database");
+        message.error(errorData.error || "Failed to save");
       }
     } catch (error) {
-      message.error("Please fix validation errors in all tabs.");
+      message.error("Please fix validation errors.");
     } finally {
       setLoading(false);
     }
@@ -516,7 +580,6 @@ export default function SubCategory() {
           <Tabs
             activeKey={activeTab}
             onChange={setActiveTab}
-            destroyInactiveTabPane={false}
             items={[
               {
                 key: "1",
@@ -527,40 +590,30 @@ export default function SubCategory() {
                       <Form.Item
                         name="name"
                         label="Name"
-                        rules={[
-                          { required: true, message: "Name is required" },
-                        ]}
+                        rules={[{ required: true }]}
                       >
                         <Input
-                          placeholder="e.g. Corrugated Soap Boxes"
                           onChange={(e) => {
                             const val = e.target.value;
-                            // Update slug and keywords only if creating new
                             if (!editingSubCat) {
                               form.setFieldValue(
                                 "slug",
                                 val.toLowerCase().replace(/\s+/g, "-"),
                               );
-                              if (!form.isFieldTouched("keywordstitle")) {
-                                form.setFieldValue("keywordstitle", val);
-                              }
+                              form.setFieldValue("keywordstitle", val);
                             }
                           }}
                         />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item
-                        name="keywordstitle"
-                        label="Keyword Title (SEO Focus)"
-                        dependencies={["name"]}
-                      >
-                        <Input placeholder="e.g. Best Seo Services" />
+                      <Form.Item name="keywordstitle" label="Keyword Title">
+                        <Input />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item name="slug" label="Slug">
-                        <Input placeholder="auto-generated-slug" />
+                        <Input />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
@@ -569,7 +622,7 @@ export default function SubCategory() {
                         label="Parent"
                         rules={[{ required: true }]}
                       >
-                        <Select placeholder="Select Parent Category">
+                        <Select>
                           <Option value="digital-marketing">
                             Digital Marketing
                           </Option>
@@ -583,12 +636,11 @@ export default function SubCategory() {
                       </Form.Item>
                     </Col>
                     <Col span={24}>
-                      <Form.Item label="Icon" name="icon">
-                        <ImageUploadField
-                          value={form.getFieldValue("icon")}
-                          onChange={(url) => form.setFieldValue("icon", url)}
-                        />
-                      </Form.Item>
+                      <ImageUploadField
+                        label="Icon"
+                        value={form.getFieldValue("icon")}
+                        onChange={(url) => form.setFieldValue("icon", url)}
+                      />
                     </Col>
                   </Row>
                 ),
@@ -600,7 +652,7 @@ export default function SubCategory() {
                   <>
                     <Form.Item
                       name={["topSection", "backgroundImage"]}
-                      label="Hero Background Image"
+                      label="Hero BG"
                     >
                       <ImageUploadField
                         value={form.getFieldValue([
@@ -617,13 +669,13 @@ export default function SubCategory() {
                     </Form.Item>
                     <Form.Item
                       name={["topSection", "heading"]}
-                      label="Main Heading"
+                      label="Hero Heading"
                     >
-                      <Input placeholder="Hero section title" />
+                      <Input />
                     </Form.Item>
                     <Form.Item
                       name={["topSection", "description"]}
-                      label="Hero Description"
+                      label="Hero Desc"
                     >
                       <TiptapEditor
                         content={
@@ -666,7 +718,10 @@ export default function SubCategory() {
                           block
                           icon={<PlusOutlined />}
                           onClick={() =>
-                            add({ layoutType: "description-only" })
+                            add({
+                              layoutType: "description-only",
+                              showButton: false,
+                            })
                           }
                         >
                           Add Content Section
@@ -710,10 +765,7 @@ export default function SubCategory() {
                 label: "SEO",
                 children: (
                   <Card size="small" style={{ background: "#f0f2f5" }}>
-                    <Form.Item
-                      name={["seo", "metaTitle"]}
-                      label="Meta Title (SEO)"
-                    >
+                    <Form.Item name={["seo", "metaTitle"]} label="Meta Title">
                       <Input />
                     </Form.Item>
                     <Form.Item
@@ -722,11 +774,8 @@ export default function SubCategory() {
                     >
                       <Input.TextArea rows={3} />
                     </Form.Item>
-                    <Form.Item
-                      name={["seo", "metaKeywords"]}
-                      label="Keywords (comma separated)"
-                    >
-                      <Input placeholder="packaging, boxes, custom soap boxes" />
+                    <Form.Item name={["seo", "metaKeywords"]} label="Keywords">
+                      <Input placeholder="comma, separated" />
                     </Form.Item>
                   </Card>
                 ),

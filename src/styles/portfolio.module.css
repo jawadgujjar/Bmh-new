@@ -1,94 +1,122 @@
 .portfolioWrapper {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 24px;
-    justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  padding: 30px 10px;
 }
 
-/* Card */
+/* ✅ CARD SIZE REDUCED: Ab size balance hai */
 .portfolioCard {
-    position: relative;
-    margin-top: 4rem;
-    width: 300px;
-    height: 400px;
-    perspective: 1000px;
-    cursor: pointer;
+  position: relative;
+  margin-top: 1.5rem;
+  width: 280px; /* Pehle 310-320 tha, ab perfect hai */
+  height: 380px; /* Height bhi maintain kar di */
+  perspective: 1000px;
+  cursor: pointer;
 }
 
-/* Inner */
+/* Inner Wrapper */
 .portfolioCardInner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transform-style: preserve-3d;
-    transition: transform 0.4s ease;
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
-/* Image Frame */
+/* Image Frame - Overflow Fix */
 .portfolioCardImageWrapper {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    transform: rotate(-6deg) skew(-4deg);
-    transition: transform 0.4s ease;
-    border-radius: 16px;
-    box-shadow: 0 12px 28px rgba(0,0,0,0.2);
-    background: black;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Is se image bahir nahi aayegi */
+  transform: rotate(-5deg) skew(-3deg);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  isolation: isolate; /* Layering fix */
+  position: relative;
 }
 
-/* ✅ CLEAN LANDING IMAGE */
+/* Image Handling */
 .websitePreviewImage {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 0.5s ease;
+  display: block;
 }
 
-/* Hover tilt fix */
+/* Hover Effects */
 .portfolioCard:hover .portfolioCardImageWrapper {
-    transform: rotate(0deg) skew(0deg);
+  transform: rotate(0deg) skew(0deg) translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 .portfolioCard:hover .websitePreviewImage {
-    transform: scale(1.05);
+  transform: scale(1.08);
 }
 
 /* Content Overlay */
 .portfolioCardContent {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 18px;
-    text-align: center;
-    color: white;
-    background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0));
-    border-radius: 0 0 16px 16px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 15px;
+  text-align: center;
+  color: white;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.8) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  z-index: 5;
 }
 
 .portfolioCardContent h3 {
-    font-size: 17px;
-    font-weight: 600;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 5px;
+  color: #fff;
 }
 
 .portfolioCardContent p {
-    font-size: 13px;
-    opacity: 0.85;
+  font-size: 12px;
+  opacity: 0.85;
+  line-height: 1.4;
+  margin-bottom: 12px;
 }
 
+/* ✅ PROPER BUTTON: Orange to Blue Hover */
 .viewProjectBtn {
-    margin-top: 8px;
-    font-weight: 600;
+  display: inline-block;
+  background: #ff8c00; /* Orange */
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px; /* Professional rectangular-round look */
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  border: none;
 }
 
-/* Mobile */
-@media (max-width: 768px) {
-    .portfolioCard {
-        width: 280px;
-        height: 360px;
-    }
+.portfolioCard:hover .viewProjectBtn {
+  background: #3b82f6; /* Blue */
+  transform: scale(1.05);
+}
 
-    .portfolioCardImageWrapper {
-        transform: rotate(0deg) skew(0deg);
-    }
+/* Mobile Fix */
+@media (max-width: 768px) {
+  .portfolioCard {
+    width: 260px;
+    height: 350px;
+  }
+  .portfolioCardImageWrapper {
+    transform: rotate(0deg) skew(0deg);
+  }
 }
