@@ -1,9 +1,6 @@
 import { notFound } from "next/navigation";
 import SubHeroDigitalMarketing from "@/components/digital-marketing/sub-category-digital/subdigitalhero";
 import SubKeywordsdigital from "@/components/digital-marketing/sub-category-digital/subkeywordsdigital";
-import Carousel from "@/components/landing/carousel";
-import Form1 from "@/components/landing/getaquote";
-import SeoIndustries from "@/components/landing/seoindustries";
 import Heroform from "@/components/landing/heroform";
 import SubDynamicSection from "@/components/digital-marketing/sub-category-digital/subdynamicsection";
 import SubFaqs from "../../components/digital-marketing/sub-category-digital/subfaqs";
@@ -81,17 +78,14 @@ export default async function SubcategoryPage({ params }) {
           description={section.description}
           image={section.image}
           cta={section.cta}
+          // 🔥 Yeh naye props lazmi pass karne hain:
+          showButton={section.showButton}
+          buttonText={section.buttonText}
+          buttonLink={section.buttonLink}
+          buttonVariant={section.buttonVariant}
           index={index}
         />
       ))}
-
-      {/* <SeoIndustries heading="Industries We Transform" industries={[]} /> */}
-
-      {/* <div className="py-0 my-0">
-        <Form1 />
-      </div>
-
-      <Carousel /> */}
 
       <div className="py-10">
         <SubFaqs

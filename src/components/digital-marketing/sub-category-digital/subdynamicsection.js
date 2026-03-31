@@ -5,8 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightOutlined } from "@ant-design/icons";
 
+// Global CTA Component (For the big banner CTA)
 function GlobalCTA({ ctaData }) {
   if (!ctaData) return null;
+  const data = ctaData.ctaId || ctaData;
+
   return (
     <div className={styles.fullWidthCtaWrapper}>
       <div className={styles.ctaContainer}>
@@ -15,16 +18,16 @@ function GlobalCTA({ ctaData }) {
           <div className={styles.titleWrapper}>
             <div className={styles.circle}></div>
             <h4 className={styles.ctaTitle}>
-              {ctaData.title || "Get a Quote"}
+              {data.title || data.name || "Get a Quote"}
             </h4>
             <div className={styles.circle}></div>
           </div>
           <p className={styles.ctaDescriptionText}>
-            {ctaData.description || "Get Consultation with Us"}
+            {data.description || "Get Consultation with Us"}
           </p>
-          <Link href={ctaData.buttonLink || "/getaquote"} passHref>
+          <Link href={data.buttonLink || "/getaquote"} passHref>
             <button className={styles.quoteButton}>
-              {ctaData.buttonText || "Get a Quote"}
+              {data.buttonText || "Get a Quote"}
               <ArrowRightOutlined className={styles.arrowIcon} />
             </button>
           </Link>
@@ -41,8 +44,11 @@ export default function SubDynamicSection({
   image = "",
   cta = null,
   index = 0,
+  showButton = false,
+  buttonText = "Get a Quote",
+  buttonLink = "/getaquote",
 }) {
-  const ctaData = cta?.ctaId || cta || null;
+  const isInlineButtonVisible = showButton === true || showButton === "true";
 
   return (
     <div className="w-full">
@@ -57,6 +63,17 @@ export default function SubDynamicSection({
                 className={styles.mainDescription}
                 dangerouslySetInnerHTML={{ __html: description }}
               />
+              {/* Inline Button (Small) */}
+              {isInlineButtonVisible && (
+                <div style={{ marginTop: "30px", textAlign: "center" }}>
+                  <Link href={buttonLink}>
+                    <button className={styles.quoteButton}>
+                      {buttonText}{" "}
+                      <ArrowRightOutlined className={styles.arrowIcon} />
+                    </button>
+                  </Link>
+                </div>
+              )}
             </div>
           ) : (
             <div
@@ -80,12 +97,25 @@ export default function SubDynamicSection({
                   className={styles.sideDescription}
                   dangerouslySetInnerHTML={{ __html: description }}
                 />
+                {/* Inline Button (Small) */}
+                {isInlineButtonVisible && (
+                  <div style={{ marginTop: "20px" }}>
+                    <Link href={buttonLink}>
+                      <button className={styles.quoteButton}>
+                        {buttonText}{" "}
+                        <ArrowRightOutlined className={styles.arrowIcon} />
+                      </button>
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
           )}
         </div>
       </section>
-      {ctaData && <GlobalCTA ctaData={ctaData} />}
+
+      {/* Global CTA (Big Banner) */}
+      {cta && <GlobalCTA ctaData={cta} />}
     </div>
   );
 }

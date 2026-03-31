@@ -6,6 +6,9 @@ import CTA from "@/models/cta";
 // Helper to check if string is valid MongoDB ID
 const isValidObjectId = (id) => /^[0-9a-fA-F]{24}$/.test(id);
 
+/* ==========================================================
+   1. GET: Fetch SubCategory by ID or Slug
+   ========================================================== */
 export async function GET(request, { params }) {
   try {
     await dbConnect();
@@ -20,19 +23,10 @@ export async function GET(request, { params }) {
 
     const query = isValidObjectId(id) ? { _id: id } : { slug: id };
 
-    console.log("🔍 Query:", query);
-
     const subcategory = await SubCategory.findOne(query)
       .populate("topSection.cta.ctaId")
       .populate("sections.cta.ctaId")
       .lean();
-
-    console.log(
-      "📦 Raw subcategory from DB:",
-      JSON.stringify(subcategory, null, 2),
-    );
-    console.log("🔑 keywordstitle value:", subcategory?.keywordstitle);
-    console.log("🔑 All keys:", Object.keys(subcategory || {}));
 
     if (!subcategory) {
       return NextResponse.json(
@@ -43,55 +37,67 @@ export async function GET(request, { params }) {
 
     return NextResponse.json(subcategory, { status: 200 });
   } catch (err) {
-    console.error("GET Error:", err);
+    console.error("❌ GET Error:", err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
 
+/* ==========================================================
+   2. PUT: Update SubCategory (The Main Logic)
+   ========================================================== */
 export async function PUT(request, { params }) {
   try {
     await dbConnect();
     const { id } = await params;
     const body = await request.json();
 
-    console.log("📥 PUT Received body:", JSON.stringify(body, null, 2));
-    console.log("📥 keywordstitle in PUT:", body.keywordstitle);
-
     const query = isValidObjectId(id) ? { _id: id } : { slug: id };
 
-    // --- 1. CLEANING & PREPARING DATA ---
+    // --- DATA CLEANING START ---
     const updateData = { ...body };
 
-    // ✅ FIX: Always set keywordstitle (remove conditional)
+    // Normalize Title
     updateData.keywordstitle = (
       updateData.keywordstitle ||
       updateData.name ||
       ""
     ).trim();
 
-    console.log("📝 After processing keywordstitle:", updateData.keywordstitle);
-
-    // Hero Section CTA fix
-    if (
-      updateData.topSection &&
-      (!updateData.topSection.cta || !updateData.topSection.cta.ctaId)
-    ) {
-      updateData.topSection.cta = undefined;
+    // Hero Section CTA logic
+    if (updateData.topSection) {
+      if (!updateData.topSection.cta || !updateData.topSection.cta.ctaId) {
+        updateData.topSection.cta = null;
+      }
     }
 
-    // Dynamic Sections CTA fix
+    // 🔥 SECTIONS CLEANING (With New Inline Button Logic)
     if (updateData.sections && Array.isArray(updateData.sections)) {
-      updateData.sections = updateData.sections.map((s, index) => ({
-        ...s,
-        order: s.order !== undefined ? Number(s.order) : index,
-        cta: s.cta && s.cta.ctaId ? s.cta : undefined,
-      }));
+      updateData.sections = updateData.sections.map((s, index) => {
+        const cleanSection = {
+          ...s,
+          // Inline Button Fields (Admin control)
+          showButton: s.showButton ?? false,
+          buttonText: s.buttonText?.trim() || "Learn More",
+          buttonLink: s.buttonLink?.trim() || "",
+          buttonVariant: s.buttonVariant || "primary",
+          // Order handling
+          order: s.order !== undefined ? Number(s.order) : index,
+        };
+
+        // Agar global CTA select nahi kiya toh usey undefined kar do
+        if (cleanSection.cta && !cleanSection.cta.ctaId) {
+          cleanSection.cta = undefined;
+        }
+
+        return cleanSection;
+      });
     }
 
     // FAQ Section cleaning
     if (updateData.faqs && Array.isArray(updateData.faqs)) {
       updateData.faqs = updateData.faqs
         .map((faq, index) => ({
+          ...faq,
           question: faq.question?.trim(),
           answer: faq.answer?.trim(),
           order: faq.order !== undefined ? Number(faq.order) : index,
@@ -100,25 +106,21 @@ export async function PUT(request, { params }) {
         .filter((f) => f.question && f.answer);
     }
 
-    // SEO Keywords handling (string to array)
+    // SEO Keywords (String to Array)
     if (updateData.seo && typeof updateData.seo.metaKeywords === "string") {
       updateData.seo.metaKeywords = updateData.seo.metaKeywords
         .split(",")
         .map((k) => k.trim())
         .filter((k) => k);
     }
+    // --- DATA CLEANING END ---
 
-    console.log("📦 Final updateData:", JSON.stringify(updateData, null, 2));
-
-    // --- 2. DATABASE UPDATE ---
-    // ✅ Clean version - directly use updateData without duplicate
     const updated = await SubCategory.findOneAndUpdate(
       query,
       { $set: updateData },
       {
         new: true,
         runValidators: true,
-        upsert: false,
       },
     )
       .populate("topSection.cta.ctaId")
@@ -132,17 +134,17 @@ export async function PUT(request, { params }) {
       );
     }
 
-    console.log(`✅ Subcategory ${updated.name} updated successfully.`);
-    console.log("📦 Updated document:", JSON.stringify(updated, null, 2));
-    console.log("🔑 keywordstitle in updated:", updated.keywordstitle);
-
+    console.log(`✅ Subcategory ${updated.name} updated with buttons.`);
     return NextResponse.json(updated);
   } catch (err) {
-    console.error("PUT Error:", err);
+    console.error("❌ PUT Error:", err);
     return NextResponse.json({ error: err.message }, { status: 400 });
   }
 }
 
+/* ==========================================================
+   3. DELETE: Remove SubCategory
+   ========================================================== */
 export async function DELETE(request, { params }) {
   try {
     await dbConnect();
@@ -152,15 +154,12 @@ export async function DELETE(request, { params }) {
     const deleted = await SubCategory.findOneAndDelete(query);
 
     if (!deleted) {
-      return NextResponse.json(
-        { error: "Record pehle hi delete ho chuka hai" },
-        { status: 404 },
-      );
+      return NextResponse.json({ error: "Record nahi mila" }, { status: 404 });
     }
 
-    return NextResponse.json({ message: "Gayab! Khalaas!" });
+    return NextResponse.json({ message: "Success! SubCategory deleted." });
   } catch (err) {
-    console.error("DELETE Error:", err);
+    console.error("❌ DELETE Error:", err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

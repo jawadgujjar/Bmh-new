@@ -38,28 +38,38 @@ export async function POST(req) {
     // Slug fallback
     if (!body.slug && body.name) body.slug = body.name;
 
-    // --- DATA CLEANING (Normalization) ---
-
-    // ✅ FIX: Always set keywordstitle - don't use conditional
+    // ✅ FIX: Keywordstitle normalization
     body.keywordstitle = body.keywordstitle?.trim() || body.name?.trim() || "";
 
-    // Top Section cleaning
+    // --- DATA CLEANING (Updated for New Section Button) ---
+
+    // Top Section cleaning (Existing Logic)
     if (body.topSection) {
       if (!body.topSection.cta?.ctaId) {
         delete body.topSection.cta;
       }
     }
 
-    // Sections cleaning
+    // 🔥 Sections cleaning (Added new fields support)
     if (body.sections && Array.isArray(body.sections)) {
       body.sections = body.sections.map((section, index) => {
         const cleanSection = {
           ...section,
+          // Ensure order exists
           order: section.order !== undefined ? section.order : index,
+          // Inline button fields normalization
+          showButton: section.showButton ?? false,
+          buttonText: section.buttonText?.trim() || "Learn More",
+          buttonLink: section.buttonLink?.trim() || "",
+          buttonVariant: section.buttonVariant || "primary",
         };
-        if (!cleanSection.cta?.ctaId) {
+
+        // Agar section mein global CTA id nahi hai to usey remove kar do
+        // Taake inline button aur global CTA overlap na karein
+        if (cleanSection.cta && !cleanSection.cta.ctaId) {
           delete cleanSection.cta;
         }
+
         return cleanSection;
       });
     }
@@ -67,26 +77,19 @@ export async function POST(req) {
     // FAQS CLEANING
     if (body.faqs && Array.isArray(body.faqs)) {
       body.faqs = body.faqs.map((faq, index) => ({
-        question: faq.question,
-        answer: faq.answer,
+        ...faq,
         order: faq.order !== undefined ? faq.order : index,
         isActive: faq.isActive !== undefined ? faq.isActive : true,
       }));
     }
 
-    // SEO Keywords handling (if coming as string)
+    // SEO Keywords handling
     if (body.seo && typeof body.seo.metaKeywords === "string") {
       body.seo.metaKeywords = body.seo.metaKeywords
         .split(",")
         .map((k) => k.trim())
         .filter((k) => k);
     }
-
-    // Debug log
-    console.log("📝 Creating subcategory:", {
-      name: body.name,
-      keywordstitle: body.keywordstitle,
-    });
 
     const subcategory = new SubCategory(body);
     await subcategory.save();
@@ -95,11 +98,6 @@ export async function POST(req) {
       .populate({ path: "topSection.cta.ctaId", model: CTA })
       .populate({ path: "sections.cta.ctaId", model: CTA })
       .lean();
-
-    console.log("✅ Created subcategory:", {
-      name: populated.name,
-      keywordstitle: populated.keywordstitle,
-    });
 
     return NextResponse.json(populated, { status: 201 });
   } catch (err) {
