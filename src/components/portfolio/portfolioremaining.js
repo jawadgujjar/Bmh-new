@@ -7,7 +7,10 @@ import styles from "../../styles/portfolioremianing.module.css";
 
 // slug helper
 const slugify = (text) =>
-  text.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]+/g, "");
+  text
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]+/g, "");
 
 const PortfolioRemain = ({ initialCategory = "All" }) => {
   const [activeCategory, setActiveCategory] = useState(initialCategory);
@@ -37,10 +40,8 @@ const PortfolioRemain = ({ initialCategory = "All" }) => {
               ...website,
               keyword: keywordItem.keyword,
               categorySlug: slugify(keywordItem.keyword), // ✅ pre-slugify for safe routing
-              projectSlug: slugify(
-                website?.portfolioPage?.header?.title || ""
-              ), // ✅ slug for project
-            }))
+              projectSlug: slugify(website?.portfolioPage?.header?.title || ""), // ✅ slug for project
+            })),
           );
 
           setPortfolioData(flattenedWebsites);
