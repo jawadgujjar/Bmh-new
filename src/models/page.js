@@ -37,12 +37,16 @@ const faqSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
   },
   { _id: false },
 );
 
 /* ================================
-   Description Item Schema (for description-and-form layout)
+   Description Item Schema
 ================================ */
 const descriptionItemSchema = new mongoose.Schema(
   {
@@ -64,7 +68,7 @@ const descriptionItemSchema = new mongoose.Schema(
 );
 
 /* ================================
-   Section Schema
+   Section Schema - FIXED & ROBUST
 ================================ */
 const sectionSchema = new mongoose.Schema(
   {
@@ -75,33 +79,44 @@ const sectionSchema = new mongoose.Schema(
         "image-left",
         "image-right",
         "description-only",
-        "description-and-form", // ✅ NEW LAYOUT
+        "description-and-form",
       ],
       default: "description-only",
     },
 
     heading: { type: String, default: "" },
-
-    // For backward compatibility - single description
     description: { type: String, default: "" },
+    image: { type: String, default: "" },
 
-    image: {
+    // 🔥 Inline Button Fields (Fixed for persistence)
+    showButton: {
+      type: Boolean,
+      default: false,
+    },
+    buttonText: {
       type: String,
-      default: "",
+      default: "Get a Quote",
+      trim: true,
+    },
+    buttonLink: {
+      type: String,
+      default: "/getaquote",
+      trim: true,
+    },
+    buttonVariant: {
+      type: String,
+      enum: ["primary", "secondary", "outline", "link", "ghost"],
+      default: "primary",
     },
 
-    // ✅ For description-and-form layout - multiple descriptions with icons
     descriptions: {
       type: [descriptionItemSchema],
       default: [],
     },
 
-    // ✅ For description-and-form layout - single icon (backward compatibility)
-    icon: {
-      type: String,
-      default: "",
-    },
+    icon: { type: String, default: "" },
 
+    // Global CTA Ref
     cta: {
       type: ctaRefSchema,
       required: false,
@@ -110,7 +125,10 @@ const sectionSchema = new mongoose.Schema(
 
     order: { type: Number, default: 0 },
   },
-  { _id: false },
+  {
+    _id: false,
+    minimize: false, // Ensures empty fields and defaults are saved
+  },
 );
 
 /* ================================
@@ -127,12 +145,15 @@ const topSectionSchema = new mongoose.Schema(
       default: null,
     },
   },
-  { _id: false },
+  {
+    _id: false,
+    minimize: false,
+  },
 );
 
 /* ================================
    SEO Schema
-================================ */
+=============================== */
 const seoSchema = new mongoose.Schema(
   {
     metaTitle: { type: String, default: "" },
@@ -173,6 +194,7 @@ const pageSchema = new mongoose.Schema(
       ref: "SubCategory",
       required: true,
     },
+
     keywordstitle: {
       type: String,
       default: "",
@@ -180,13 +202,11 @@ const pageSchema = new mongoose.Schema(
     },
     subcatpagedescr: { type: String, default: "" },
 
-    /* 🔥 Hero Section */
     topSection: {
       type: topSectionSchema,
       default: () => ({}),
     },
 
-    /* 🔥 Dynamic Sections */
     sections: {
       type: [sectionSchema],
       default: [],
@@ -195,7 +215,7 @@ const pageSchema = new mongoose.Schema(
           if (!sectionsArr || sectionsArr.length === 0) return true;
 
           return sectionsArr.every((section) => {
-            // image layouts validation
+            // Validation for image layouts
             if (
               section.layoutType === "image-left" ||
               section.layoutType === "image-right"
@@ -206,9 +226,8 @@ const pageSchema = new mongoose.Schema(
               );
             }
 
-            // description-and-form validation
+            // Validation for description-and-form
             if (section.layoutType === "description-and-form") {
-              // Check if either single description or multiple descriptions exist
               const hasSingleDescription =
                 section.description && section.description.trim().length > 0;
               const hasMultipleDescriptions =
@@ -229,13 +248,11 @@ const pageSchema = new mongoose.Schema(
       },
     },
 
-    /* ✅ FAQs */
     faqs: {
       type: [faqSchema],
       default: [],
     },
 
-    /* 🔥 SEO */
     seo: {
       type: seoSchema,
       default: () => ({}),
@@ -255,6 +272,7 @@ const pageSchema = new mongoose.Schema(
     timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
+    minimize: false, // Key for root level too
   },
 );
 
@@ -270,7 +288,7 @@ pageSchema.index({
 });
 
 /* ================================
-   Auto Slug
+   Auto Slug Logic
 ================================ */
 pageSchema.pre("save", function (next) {
   if (!this.slug || this.slug.trim() === "") {
@@ -303,4 +321,5 @@ pageSchema.virtual("faqCount").get(function () {
   return this.faqs?.length || 0;
 });
 
+// Avoid OverwriteModelError
 export default mongoose.models.Page || mongoose.model("Page", pageSchema);

@@ -1,5 +1,5 @@
-import "@/models/subcategory"; // ✅ FIX
-import "@/models/cta";    
+import "@/models/subcategory";
+import "@/models/cta";
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 import dbConnect from "@/lib/mongodb";
@@ -40,14 +40,12 @@ export async function GET(request) {
         );
       }
 
-      // Sort sections & faqs by order
+      // Sorting sections & faqs by order
       if (page.sections) {
-        page.sections = page.sections.sort(
-          (a, b) => (a.order || 0) - (b.order || 0),
-        );
+        page.sections.sort((a, b) => (a.order || 0) - (b.order || 0));
       }
       if (page.faqs) {
-        page.faqs = page.faqs.sort((a, b) => (a.order || 0) - (b.order || 0));
+        page.faqs.sort((a, b) => (a.order || 0) - (b.order || 0));
       }
 
       return NextResponse.json({
@@ -58,12 +56,7 @@ export async function GET(request) {
 
     // 🔥 CASE 2: FILTER PAGES BY CATEGORY OR SUBCATEGORY
     let query = {};
-
-    if (isActive !== null) {
-      query.isActive = isActive === "true";
-    } else {
-      query.isActive = true;
-    }
+    query.isActive = isActive !== null ? isActive === "true" : true;
 
     if (subcategory) {
       try {
@@ -82,13 +75,9 @@ export async function GET(request) {
         "web-development",
         "app-development",
       ];
-      if (!validCategories.includes(category)) {
-        return NextResponse.json(
-          { success: false, message: "Invalid category" },
-          { status: 400 },
-        );
+      if (validCategories.includes(category)) {
+        query.category = category;
       }
-      query.category = category;
     }
 
     let pagesQuery = Page.find(query)
@@ -103,12 +92,10 @@ export async function GET(request) {
 
     pages.forEach((page) => {
       if (page.sections) {
-        page.sections = page.sections.sort(
-          (a, b) => (a.order || 0) - (b.order || 0),
-        );
+        page.sections.sort((a, b) => (a.order || 0) - (b.order || 0));
       }
       if (page.faqs) {
-        page.faqs = page.faqs.sort((a, b) => (a.order || 0) - (b.order || 0));
+        page.faqs.sort((a, b) => (a.order || 0) - (b.order || 0));
       }
     });
 
@@ -127,61 +114,33 @@ export async function GET(request) {
 }
 
 /* ==================================================
-   POST: Create New Page
+   POST: Create New Page - FIXED
 ================================================== */
 export async function POST(req) {
   try {
     await dbConnect();
     const body = await req.json();
 
-    // 🔥 Validate required fields
-    if (!body.title) {
+    // Validation
+    if (!body.title || !body.category || !body.subcategory) {
       return NextResponse.json(
-        { success: false, message: "Title is required" },
+        {
+          success: false,
+          message: "Title, Category, and Subcategory are required",
+        },
         { status: 400 },
       );
     }
 
-    // ✅ Keyword Title Cleaning & Fallback
-    if (body.keywordstitle) {
-      body.keywordstitle = body.keywordstitle.trim();
-    } else {
-      body.keywordstitle = body.title; // Default to title if empty
-    }
-
-    // Validate category
-    const validCategories = [
-      "digital-marketing",
-      "web-development",
-      "app-development",
-    ];
-
-    if (!body.category || !validCategories.includes(body.category)) {
-      return NextResponse.json(
-        { success: false, message: "Invalid or missing category" },
-        { status: 400 },
-      );
-    }
-
-    if (!body.subcategory) {
-      return NextResponse.json(
-        { success: false, message: "Subcategory is required" },
-        { status: 400 },
-      );
-    }
-
-    // 🔥 Generate slug
-    if (!body.slug && body.title) {
+    // Slug generation
+    if (!body.slug) {
       body.slug = body.title
         .toLowerCase()
         .replace(/\s+/g, "-")
-        .replace(/[^\w\-]+/g, "")
-        .replace(/\-\-+/g, "-")
-        .replace(/^-+/, "")
-        .replace(/-+$/, "");
+        .replace(/[^\w\-]+/g, "");
     }
 
-    // 🔥 Check duplicate slug
+    // Check duplicate slug
     const existingPage = await Page.findOne({ slug: body.slug });
     if (existingPage) {
       return NextResponse.json(
@@ -190,24 +149,26 @@ export async function POST(req) {
       );
     }
 
-    // Default values
-    if (body.isActive === undefined) body.isActive = true;
-    if (!body.createdBy) body.createdBy = "admin";
+    // 🔥 FIXED: Sanitize Sections with Strong Button Defaults
+    if (body.sections && Array.isArray(body.sections)) {
+      body.sections = body.sections.map((sec, index) => ({
+        ...sec,
+        order: sec.order !== undefined ? sec.order : index,
 
-    // Arrays initialization
-    body.sections = body.sections || [];
-    body.faqs = body.faqs || [];
+        // Strong Boolean conversion + defaults
+        showButton: sec.showButton === true || sec.showButton === "true",
+        buttonText: (sec.buttonText || "").trim() || "Get a Quote",
+        buttonLink: (sec.buttonLink || "").trim() || "/getaquote",
+      }));
+    }
 
-    // Auto assign order
-    body.sections = body.sections.map((sec, index) => ({
-      ...sec,
-      order: sec.order !== undefined ? sec.order : index,
-    }));
-
-    body.faqs = body.faqs.map((faq, index) => ({
-      ...faq,
-      order: faq.order !== undefined ? faq.order : index,
-    }));
+    // Sanitize FAQs
+    if (body.faqs && Array.isArray(body.faqs)) {
+      body.faqs = body.faqs.map((faq, index) => ({
+        ...faq,
+        order: faq.order !== undefined ? faq.order : index,
+      }));
+    }
 
     // SEO fallback
     if (!body.seo) {
@@ -234,12 +195,6 @@ export async function POST(req) {
     );
   } catch (error) {
     console.error("Error in POST /api/page:", error);
-    if (error.code === 11000) {
-      return NextResponse.json(
-        { success: false, message: "Duplicate key error" },
-        { status: 400 },
-      );
-    }
     return NextResponse.json(
       { success: false, message: error.message },
       { status: 400 },

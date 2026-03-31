@@ -83,15 +83,41 @@ function Footer() {
             <div className={styles.footerSection}>
               <h3 className={styles.sectionTitle}>Information</h3>
               <ul className={styles.footerList}>
-                <li>About Us</li>
-                <li>FAQ</li>
+                <li>
+                  <Link href="/aboutus" className={styles.footerLink}>
+                    About Us
+                  </Link>
+                </li>
+
+                <li>
+                  <Link href="/faq" className={styles.footerLink}>
+                    FAQ
+                  </Link>
+                </li>
+
                 <li>
                   <Link href="/blogs" className={styles.footerLink}>
                     Blog
                   </Link>
                 </li>
-                <li>Portfolio</li>
-                <li>Privacy Policy</li>
+
+                <li>
+                  <Link href="/portfolio" className={styles.footerLink}>
+                    Portfolio
+                  </Link>
+                </li>
+
+                <li>
+                  <Link href="/privacy-policy" className={styles.footerLink}>
+                    Privacy Policy
+                  </Link>
+                </li>
+
+                <li>
+                  <Link href="/contactus" className={styles.footerLink}>
+                    Contact Us
+                  </Link>
+                </li>
               </ul>
             </div>
           </Col>

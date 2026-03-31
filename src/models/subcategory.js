@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 /* ================================
-   CTA Reference Schema
+   CTA Reference Schema (Global CTA)
 ================================ */
 const ctaRefSchema = new mongoose.Schema(
   {
@@ -19,7 +19,7 @@ const ctaRefSchema = new mongoose.Schema(
 );
 
 /* ================================
-   Section Schema
+   Section Schema (Updated with Inline Button)
 ================================ */
 const sectionSchema = new mongoose.Schema(
   {
@@ -34,9 +34,30 @@ const sectionSchema = new mongoose.Schema(
     image: {
       type: String,
       default: "",
-      // Individual field validation ko array level par handle karenge for better reliability
     },
-    // cta ko required: false rakha hai taake empty hone par error na de
+
+    // 🔥 Inline Button Fields (For Admin Panel)
+    showButton: {
+      type: Boolean,
+      default: false,
+    },
+    buttonText: {
+      type: String,
+      default: "Learn More",
+      trim: true,
+    },
+    buttonLink: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    buttonVariant: {
+      type: String,
+      enum: ["primary", "secondary", "outline", "link", "ghost"],
+      default: "primary",
+    },
+
+    // Global CTA Ref (Optional - already in your code)
     cta: {
       type: ctaRefSchema,
       required: false,
@@ -149,16 +170,14 @@ const subCategorySchema = new mongoose.Schema(
       default: [],
       validate: {
         validator: function (sectionsArr) {
-          // Agar array khali hai toh valid hai
           if (!sectionsArr || sectionsArr.length === 0) return true;
 
           return sectionsArr.every((section) => {
-            // Sirf image layouts check karo
+            // Check for image layouts
             if (
               section.layoutType === "image-left" ||
               section.layoutType === "image-right"
             ) {
-              // Check if image exists and is not just whitespace
               return (
                 typeof section.image === "string" &&
                 section.image.trim().length > 0
@@ -177,12 +196,10 @@ const subCategorySchema = new mongoose.Schema(
       default: [],
       validate: {
         validator: function (faqsArr) {
-          // Agar array khali hai toh valid hai
           if (!faqsArr || faqsArr.length === 0) return true;
 
-          // Check for duplicate questions (case insensitive)
           const questions = faqsArr
-            .filter((faq) => faq.question) // Filter out empty questions
+            .filter((faq) => faq.question)
             .map((faq) => faq.question.toLowerCase().trim());
 
           const uniqueQuestions = new Set(questions);
@@ -215,7 +232,6 @@ const subCategorySchema = new mongoose.Schema(
 subCategorySchema.index({ slug: 1 });
 subCategorySchema.index({ category: 1, isActive: 1 });
 subCategorySchema.index({ name: "text", "sections.heading": "text" });
-// FAQ search ke liye index
 subCategorySchema.index({ "faqs.question": "text", "faqs.answer": "text" });
 
 // Auto-generate slug

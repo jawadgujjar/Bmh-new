@@ -1,0 +1,107 @@
+.aboutWrapper { background: #fff; overflow-x: hidden; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+.containerSmall { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+
+/* Spacing - Tightened as requested */
+.sectionGap { padding: 40px 0; }
+.sectionGapGrey { padding: 40px 0; background: #fcfcfc; }
+
+/* Bold Headings - Extra Bold */
+.boldHeading { font-weight: 850 !important; color: #1a1a1a !important; margin-bottom: 10px !important; }
+.boldTitleSmall { font-weight: 800 !important; margin: 0 !important; color: #1a1a1a; }
+.orangeText { color: #FF9D00 !important; }
+.whiteText { color: #fff !important; }
+
+.badge { color: #FF9D00; font-weight: 700; display: block; margin-bottom: 5px; }
+.smallDesc { font-size: 16px; color: #555; margin-bottom: 20px !important; }
+.orangeBtn { background: #FF9D00 !important; border: none !important; font-weight: 700 !important; border-radius: 6px !important; display: flex; align-items: center; gap: 8px; justify-content: center; height: 48px !important; }
+
+/* Stats Grid */
+.statsGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 30px; }
+.statCard { padding: 15px; border: 1px solid #eee; border-radius: 10px; background: #fff; }
+.statLabel { font-size: 12px; color: #777; }
+
+/* Images */
+.fullImg { width: 100%; border-radius: 15px; }
+.fullImgRounded { width: 100%; border-radius: 15px; height: 350px; object-fit: cover; }
+
+/* Mission Card - Proper Borders & Shadows */
+.missionCard { background: #fff; border: 1px solid #eee; border-radius: 20px; padding: 25px; height: 100%; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+.cardHeader { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+.quoteCircle { width: 40px; height: 40px; background: #FF9D00; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-family: serif; }
+.cardPara { color: #555; line-height: 1.5; font-size: 15px; }
+
+/* Values - Hover Logic */
+.centerHeader { text-align: center; margin-bottom: 30px; }
+.valuesList { display: flex; flex-direction: column; gap: 10px; }
+.valueItem { display: flex; gap: 15px; padding: 15px; border: 1px solid #eee; border-radius: 12px; transition: 0.3s; cursor: pointer; align-items: center; }
+.activeValue { background: #FF9D00; border-color: #FF9D00; color: #fff !important; }
+.icon { font-size: 24px; }
+
+/* --- GLOBAL PRESENCE (GRID FIXED) --- */
+.locationGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 5 Columns guarantee equal width */
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.locCard {
+  width: 100%;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.locCard:hover {
+  transform: translateY(-5px);
+}
+
+.locImg {
+  width: 100%;
+  height: 280px; /* Uniform height for all images */
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.locNameWrapper {
+  padding: 0 5px;
+  word-wrap: break-word; /* Long names won't push width */
+}
+
+.locName {
+  font-size: 14px;
+  color: #333;
+  font-weight: 600;
+}
+
+/* Leadership */
+.leaderCard { text-align: center; }
+.leaderImg { width: 100%; border-radius: 15px; border: 1px solid #f0f0f0; filter: grayscale(100%); transition: 0.3s; }
+.leaderCard:hover .leaderImg { filter: grayscale(0%); }
+
+/* Form */
+.contactBox { background: #fff; padding: 30px; border-radius: 20px; border: 1px solid #eee; box-shadow: 0 10px 25px rgba(0,0,0,0.03); }
+
+/* RESPONSIVE QUERIES */
+@media (max-width: 1024px) {
+  .locationGrid {
+    grid-template-columns: repeat(3, 1fr); /* Tablet: 3 per row */
+  }
+}
+
+@media (max-width: 991px) {
+  .heroLeft { text-align: center; }
+  .orangeBtn { margin: 0 auto; }
+}
+
+@media (max-width: 600px) {
+  .locationGrid {
+    grid-template-columns: repeat(2, 1fr); /* Mobile: 2 per row */
+    gap: 10px;
+  }
+  .locImg {
+    height: 200px; /* Small screens par height thori kam */
+  }
+}

@@ -29,54 +29,29 @@ import {
   UploadOutlined,
   HomeOutlined,
   CopyOutlined,
-  InfoCircleOutlined,
+  WarningOutlined,
   ArrowUpOutlined,
   ArrowDownOutlined,
-  WarningOutlined,
 } from "@ant-design/icons";
 
-// Dynamically import TipTap to avoid SSR
 import dynamic from "next/dynamic";
 
 const TiptapEditor = dynamic(
   () => import("@/components-admin/TipTapEditor").then((mod) => mod.default),
-  {
-    ssr: false,
-    loading: () => (
-      <div
-        style={{
-          border: "1px solid #d9d9d9",
-          borderRadius: "8px",
-          minHeight: "150px",
-          padding: "20px",
-          background: "#fafafa",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        Loading editor...
-      </div>
-    ),
-  },
+  { ssr: false },
 );
 
 const { Title, Text } = Typography;
 const { Option } = Select;
 
-// --- Image Upload Component ---
+// ImageUploadField Component
 const ImageUploadField = ({ value, onChange, label, required = false }) => {
   const [fileList, setFileList] = useState([]);
 
   useEffect(() => {
     if (value && typeof value === "string" && value.trim() !== "") {
       setFileList([
-        {
-          uid: "-1",
-          name: "image.png",
-          status: "done",
-          url: value,
-        },
+        { uid: "-1", name: "image.png", status: "done", url: value },
       ]);
     } else {
       setFileList([]);
@@ -86,14 +61,12 @@ const ImageUploadField = ({ value, onChange, label, required = false }) => {
   const handleUpload = async (file) => {
     const formData = new FormData();
     formData.append("image", file);
-
     try {
       const res = await fetch("/api/upload", {
         method: "POST",
         body: formData,
       });
       const data = await res.json();
-
       if (data.success) {
         onChange(data.url);
         message.success("Image uploaded successfully");
@@ -101,19 +74,12 @@ const ImageUploadField = ({ value, onChange, label, required = false }) => {
         message.error(data.error || "Failed to upload image");
       }
     } catch (error) {
-      console.error("Upload error:", error);
       message.error("Error uploading image");
     }
   };
 
   return (
-    <Form.Item
-      label={label}
-      required={required}
-      rules={
-        required ? [{ required: true, message: `Please upload ${label}` }] : []
-      }
-    >
+    <Form.Item label={label} required={required}>
       <Upload
         listType="picture"
         fileList={fileList}
@@ -134,7 +100,7 @@ const ImageUploadField = ({ value, onChange, label, required = false }) => {
   );
 };
 
-// --- CTA Reference Fields Component ---
+// CTA Reference Fields Component
 const CTAFields = ({ namePath, label, ctas }) => (
   <Card
     size="small"
@@ -175,7 +141,7 @@ const CTAFields = ({ namePath, label, ctas }) => (
   </Card>
 );
 
-// --- FAQ Item Component ---
+// FAQ Item Component
 const FAQItem = ({ field, index, remove, move }) => {
   return (
     <Card
@@ -242,9 +208,8 @@ const FAQItem = ({ field, index, remove, move }) => {
   );
 };
 
-// --- Description Item Component (with TipTap Editor) ---
+// Description Item Component (with TipTap Editor)
 const DescriptionItem = ({ field, index, remove, move, form }) => {
-  // Get the current value
   const textValue = form.getFieldValue([field.name, "text"]);
 
   return (
@@ -321,11 +286,22 @@ const DescriptionItem = ({ field, index, remove, move, form }) => {
   );
 };
 
-// --- Section Item Component ---
+// Section Item Component (Updated with Button Fields)
 const SectionItem = ({ field, index, remove, move, form, ctas }) => {
   const layout = Form.useWatch(["sections", field.name, "layoutType"], form);
-  const currentImageUrl = Form.useWatch(["sections", field.name, "image"], form);
-  const descriptionValue = form.getFieldValue(["sections", field.name, "description"]);
+  const currentImageUrl = Form.useWatch(
+    ["sections", field.name, "image"],
+    form,
+  );
+  const descriptionValue = form.getFieldValue([
+    "sections",
+    field.name,
+    "description",
+  ]);
+  const showButton = Form.useWatch(
+    ["sections", field.name, "showButton"],
+    form,
+  );
 
   return (
     <Card
@@ -364,7 +340,12 @@ const SectionItem = ({ field, index, remove, move, form, ctas }) => {
             name={[field.name, "layoutType"]}
             label="Layout Type"
             initialValue="description-only"
-            rules={[{ required: true, message: "Please select layout type for section" }]}
+            rules={[
+              {
+                required: true,
+                message: "Please select layout type for section",
+              },
+            ]}
           >
             <Select>
               <Option value="image-left">Image Left</Option>
@@ -392,7 +373,7 @@ const SectionItem = ({ field, index, remove, move, form, ctas }) => {
         label="Section Heading"
         rules={[
           { required: true, message: "Heading is required" },
-          { min: 3, message: "Heading must be at least 3 characters" }
+          { min: 3, message: "Heading must be at least 3 characters" },
         ]}
       >
         <Input placeholder="Section Title" />
@@ -405,7 +386,7 @@ const SectionItem = ({ field, index, remove, move, form, ctas }) => {
           label="Description"
           rules={[
             { required: true, message: "Description is required" },
-            { min: 10, message: "Description must be at least 10 characters" }
+            { min: 10, message: "Description must be at least 10 characters" },
           ]}
         >
           <TiptapEditor
@@ -421,7 +402,9 @@ const SectionItem = ({ field, index, remove, move, form, ctas }) => {
         <Form.Item
           {...field}
           name={[field.name, "image"]}
-          rules={[{ required: true, message: "Image is required for this layout" }]}
+          rules={[
+            { required: true, message: "Image is required for this layout" },
+          ]}
         >
           <ImageUploadField
             label="Section Image"
@@ -542,6 +525,87 @@ const SectionItem = ({ field, index, remove, move, form, ctas }) => {
         </div>
       )}
 
+      {/* Button Section - New Feature */}
+      <Card
+        size="small"
+        title="Section Button (Optional)"
+        style={{
+          marginTop: 16,
+          marginBottom: 16,
+          background: "#f0f7ff",
+          border: "1px dashed #1890ff",
+        }}
+      >
+        <Row gutter={16}>
+          <Col span={8}>
+            <Form.Item
+              {...field}
+              name={[field.name, "showButton"]}
+              label="Show Button"
+              valuePropName="checked"
+              initialValue={false}
+            >
+              <Switch checkedChildren="Show" unCheckedChildren="Hide" />
+            </Form.Item>
+          </Col>
+          {showButton && (
+            <>
+              <Col span={8}>
+                <Form.Item
+                  {...field}
+                  name={[field.name, "buttonText"]}
+                  label="Button Text"
+                  initialValue="Get a Quote"
+                  rules={[
+                    {
+                      required: showButton,
+                      message: "Please enter button text",
+                    },
+                  ]}
+                >
+                  <Input placeholder="Button text" />
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item
+                  {...field}
+                  name={[field.name, "buttonLink"]}
+                  label="Button Link"
+                  initialValue="/getaquote"
+                  rules={[
+                    {
+                      required: showButton,
+                      message: "Please enter button link",
+                    },
+                  ]}
+                >
+                  <Input placeholder="/link-url" />
+                </Form.Item>
+              </Col>
+            </>
+          )}
+        </Row>
+        {showButton && (
+          <div
+            style={{
+              marginTop: 8,
+              padding: 8,
+              background: "#e6f7ff",
+              borderRadius: 4,
+            }}
+          >
+            <Text type="secondary" style={{ fontSize: 12 }}>
+              💡 Preview:{" "}
+              <Button type="primary" size="small">
+                {form.getFieldValue(["sections", field.name, "buttonText"]) ||
+                  "Get a Quote"}
+              </Button>{" "}
+              will appear at the end of this section
+            </Text>
+          </div>
+        )}
+      </Card>
+
       <CTAFields namePath={[field.name, "cta"]} label="Section" ctas={ctas} />
     </Card>
   );
@@ -624,141 +688,139 @@ export default function Pages() {
   // Validate all sections for required fields
   const validateSections = (sections) => {
     const errors = [];
-    
+
     if (!sections || sections.length === 0) {
       errors.push("❌ At least one content section is required");
       return errors;
     }
-    
+
     sections.forEach((section, idx) => {
       const sectionNum = idx + 1;
-      
-      if (!section.heading || section.heading.trim() === '') {
+
+      if (!section.heading || section.heading.trim() === "") {
         errors.push(`❌ Section #${sectionNum}: Heading is required`);
       } else if (section.heading.trim().length < 3) {
-        errors.push(`❌ Section #${sectionNum}: Heading must be at least 3 characters`);
+        errors.push(
+          `❌ Section #${sectionNum}: Heading must be at least 3 characters`,
+        );
       }
-      
+
       if (section.layoutType === "description-and-form") {
         if (!section.descriptions || section.descriptions.length === 0) {
-          errors.push(`❌ Section #${sectionNum}: At least one description point is required when using "Description & Form" layout`);
+          errors.push(
+            `❌ Section #${sectionNum}: At least one description point is required when using "Description & Form" layout`,
+          );
         } else {
           section.descriptions.forEach((desc, descIdx) => {
-            if (!desc.text || desc.text.trim() === '') {
-              errors.push(`❌ Section #${sectionNum}, Description Point #${descIdx + 1}: Description text is required`);
+            if (!desc.text || desc.text.trim() === "") {
+              errors.push(
+                `❌ Section #${sectionNum}, Description Point #${descIdx + 1}: Description text is required`,
+              );
             }
           });
         }
       } else {
-        if (!section.description || section.description.trim() === '') {
+        if (!section.description || section.description.trim() === "") {
           errors.push(`❌ Section #${sectionNum}: Description is required`);
         } else if (section.description.trim().length < 10) {
-          errors.push(`❌ Section #${sectionNum}: Description must be at least 10 characters`);
+          errors.push(
+            `❌ Section #${sectionNum}: Description must be at least 10 characters`,
+          );
         }
       }
-      
-      if ((section.layoutType === "image-left" || section.layoutType === "image-right") && (!section.image || section.image.trim() === '')) {
-        errors.push(`❌ Section #${sectionNum}: Image is required for "${section.layoutType}" layout`);
+
+      if (
+        (section.layoutType === "image-left" ||
+          section.layoutType === "image-right") &&
+        (!section.image || section.image.trim() === "")
+      ) {
+        errors.push(
+          `❌ Section #${sectionNum}: Image is required for "${section.layoutType}" layout`,
+        );
+      }
+
+      // Validate button fields if showButton is true
+      if (section.showButton) {
+        if (!section.buttonText || section.buttonText.trim() === "") {
+          errors.push(
+            `❌ Section #${sectionNum}: Button text is required when button is enabled`,
+          );
+        }
+        if (!section.buttonLink || section.buttonLink.trim() === "") {
+          errors.push(
+            `❌ Section #${sectionNum}: Button link is required when button is enabled`,
+          );
+        }
       }
     });
-    
+
     return errors;
   };
-  
+
   // Validate FAQs
   const validateFaqs = (faqs) => {
     const errors = [];
-    
+
     if (faqs && faqs.length > 0) {
       faqs.forEach((faq, idx) => {
-        if (!faq.question || faq.question.trim() === '') {
+        if (!faq.question || faq.question.trim() === "") {
           errors.push(`❌ FAQ #${idx + 1}: Question is required`);
         }
-        if (!faq.answer || faq.answer.trim() === '') {
+        if (!faq.answer || faq.answer.trim() === "") {
           errors.push(`❌ FAQ #${idx + 1}: Answer is required`);
         }
       });
     }
-    
-    return errors;
-  };
-  
-  // Validate all form fields
-  const validateFormFields = (values) => {
-    const errors = [];
-    
-    // Basic required fields
-    if (!values.title || values.title.trim() === '') {
-      errors.push("❌ Page Title is required");
-    }
-    
-    if (!values.slug || values.slug.trim() === '') {
-      errors.push("❌ URL Slug is required");
-    }
-    
-    if (!values.category || values.category.trim() === '') {
-      errors.push("❌ Category is required");
-    }
-    
-    if (!values.subcategory || values.subcategory.trim() === '') {
-      errors.push("❌ Subcategory is required");
-    }
-    
-    // Hero section validation
-    if (values.topSection) {
-      if (values.topSection.heading && values.topSection.heading.trim() === '') {
-        errors.push("⚠️ Hero Heading is empty (optional but recommended)");
-      }
-    }
-    
-    // Validate sections
-    const sectionErrors = validateSections(values.sections);
-    errors.push(...sectionErrors);
-    
-    // Validate FAQs
-    const faqErrors = validateFaqs(values.faqs);
-    errors.push(...faqErrors);
-    
+
     return errors;
   };
 
-  // Add / Edit Page
+  // ✅ FIXED: Add / Edit Page with proper button fields handling
   const handleOk = async () => {
     try {
       // First, validate the form fields
       const values = await form.validateFields();
-      
+
       // Process sections to ensure proper structure
       const processedSections =
         values.sections?.map((s, idx) => {
+          // 1. Basic properties jo har layout mein hongi
           const sectionData = {
             layoutType: s.layoutType || "description-only",
             heading: s.heading || "",
             image: s.image || "",
+            // ✅ Button fields correctly picked from form values
+            showButton: s.showButton === true,
+            buttonText: s.buttonText || "Get a Quote",
+            buttonLink: s.buttonLink || "/getaquote",
+            order: s.order ?? idx,
             cta: s.cta?.ctaId
               ? {
                   ctaId: s.cta.ctaId,
                   buttonVariant: s.cta.buttonVariant || "primary",
                 }
               : null,
-            order: s.order ?? idx,
           };
 
+          // 2. Logic for Descriptions vs Description
           if (s.layoutType === "description-and-form") {
+            // Multi-point description
             if (s.descriptions && s.descriptions.length > 0) {
               sectionData.descriptions = s.descriptions.map((d, dIdx) => ({
-                text: d.text,
+                text: d.text || "",
                 icon: d.icon || "",
                 order: d.order ?? dIdx,
               }));
-              sectionData.description = "";
+              sectionData.description = ""; // Clear single description
             } else {
+              // Fallback to single description if no multi-point descriptions
               sectionData.description = s.description || "";
               sectionData.descriptions = [];
             }
           } else {
+            // Single rich-text description (Default for other layouts)
             sectionData.description = s.description || "";
-            sectionData.descriptions = [];
+            sectionData.descriptions = []; // Clear multi-points
           }
 
           return sectionData;
@@ -803,7 +865,7 @@ export default function Pages() {
         slug: values.slug || generateSlug(values.title),
         category: values.category,
         subcategory: values.subcategory,
-        keywordstitle: values.keywordstitle || "", // Added keywordstitle field
+        keywordstitle: values.keywordstitle || "",
         subcatpagedescr: values.subcatpagedescr || "",
         isActive: values.isActive !== undefined ? values.isActive : true,
 
@@ -848,7 +910,9 @@ export default function Pages() {
 
       if (res.ok || data.success || data._id) {
         message.success(
-          editingPage ? "Page updated successfully!" : "Page created successfully!"
+          editingPage
+            ? "Page updated successfully!"
+            : "Page created successfully!",
         );
         form.resetFields();
         setEditingPage(null);
@@ -866,11 +930,11 @@ export default function Pages() {
       }
     } catch (err) {
       console.error("Error saving page:", err);
-      
+
       // Handle validation errors from Ant Design form
       if (err.errorFields && err.errorFields.length > 0) {
-        const fieldErrors = err.errorFields.map(field => 
-          `❌ ${field.name.join(' > ')}: ${field.errors.join(', ')}`
+        const fieldErrors = err.errorFields.map(
+          (field) => `❌ ${field.name.join(" > ")}: ${field.errors.join(", ")}`,
         );
         setValidationErrors(fieldErrors);
         setShowAlert(true);
@@ -907,7 +971,7 @@ export default function Pages() {
   // Open modal for editing
   const handleEdit = (record) => {
     setEditingPage(record);
-    
+
     // Reset form first
     form.resetFields();
 
@@ -930,6 +994,9 @@ export default function Pages() {
         layoutType: s.layoutType || "description-only",
         heading: s.heading || "",
         image: s.image || "",
+        showButton: s.showButton === true,
+        buttonText: s.buttonText || "Get a Quote",
+        buttonLink: s.buttonLink || "/getaquote",
         cta: {
           ctaId: s.cta?.ctaId?._id || s.cta?.ctaId || "",
           buttonVariant: s.cta?.buttonVariant || "primary",
@@ -963,7 +1030,7 @@ export default function Pages() {
       slug: record.slug || "",
       category: record.category || "",
       subcategory: record.subcategory?._id || record.subcategory || "",
-      keywordstitle: record.keywordstitle || "", // Added keywordstitle field
+      keywordstitle: record.keywordstitle || "",
       subcatpagedescr: record.subcatpagedescr || "",
       isActive: record.isActive !== undefined ? record.isActive : true,
 
@@ -1163,13 +1230,27 @@ export default function Pages() {
             <Alert
               message={
                 <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-                    <WarningOutlined style={{ color: '#ff4d4f', fontSize: 16 }} />
-                    <strong>Please fix the following issues before saving:</strong>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 8,
+                      marginBottom: 8,
+                    }}
+                  >
+                    <WarningOutlined
+                      style={{ color: "#ff4d4f", fontSize: 16 }}
+                    />
+                    <strong>
+                      Please fix the following issues before saving:
+                    </strong>
                   </div>
                   <ul style={{ margin: 0, paddingLeft: 20 }}>
                     {validationErrors.map((error, idx) => (
-                      <li key={idx} style={{ margin: '4px 0', color: '#ff4d4f' }}>
+                      <li
+                        key={idx}
+                        style={{ margin: "4px 0", color: "#ff4d4f" }}
+                      >
                         {error}
                       </li>
                     ))}
@@ -1183,7 +1264,7 @@ export default function Pages() {
               style={{ marginBottom: 16 }}
             />
           )}
-          
+
           <Form form={form} layout="vertical">
             <Tabs
               defaultActiveKey="1"
@@ -1198,7 +1279,12 @@ export default function Pages() {
                           <Form.Item
                             label="Page Title"
                             name="title"
-                            rules={[{ required: true, message: "Please enter page title" }]}
+                            rules={[
+                              {
+                                required: true,
+                                message: "Please enter page title",
+                              },
+                            ]}
                           >
                             <Input
                               placeholder="Enter page title"
@@ -1216,7 +1302,12 @@ export default function Pages() {
                           <Form.Item
                             label="URL Slug"
                             name="slug"
-                            rules={[{ required: true, message: "Please enter URL slug" }]}
+                            rules={[
+                              {
+                                required: true,
+                                message: "Please enter URL slug",
+                              },
+                            ]}
                           >
                             <Input placeholder="your-slug" />
                           </Form.Item>
@@ -1228,7 +1319,12 @@ export default function Pages() {
                           <Form.Item
                             label="Category"
                             name="category"
-                            rules={[{ required: true, message: "Please select category" }]}
+                            rules={[
+                              {
+                                required: true,
+                                message: "Please select category",
+                              },
+                            ]}
                           >
                             <Select placeholder="Select category">
                               <Option value="digital-marketing">
@@ -1247,7 +1343,12 @@ export default function Pages() {
                           <Form.Item
                             label="SubCategory"
                             name="subcategory"
-                            rules={[{ required: true, message: "Please select a subcategory" }]}
+                            rules={[
+                              {
+                                required: true,
+                                message: "Please select a subcategory",
+                              },
+                            ]}
                           >
                             <Select placeholder="Select subcategory">
                               {subCategories.map((subcat) => (
@@ -1289,10 +1390,17 @@ export default function Pages() {
                         label="Page Short Description"
                         name="subcatpagedescr"
                         rules={[
-                          { max: 200, message: "⚠️ Short description cannot exceed 200 characters" }
+                          {
+                            max: 200,
+                            message:
+                              "⚠️ Short description cannot exceed 200 characters",
+                          },
                         ]}
                       >
-                        <Input.TextArea rows={3} placeholder="Enter short description" />
+                        <Input.TextArea
+                          rows={3}
+                          placeholder="Enter short description"
+                        />
                       </Form.Item>
                     </>
                   ),
@@ -1377,13 +1485,16 @@ export default function Pages() {
                             block
                             icon={<PlusOutlined />}
                             onClick={() =>
-                              add({ 
-                                layoutType: "description-only", 
+                              add({
+                                layoutType: "description-only",
                                 image: "",
                                 description: "",
                                 descriptions: [],
-                                cta: { ctaId: '', buttonVariant: 'primary' },
-                                order: fields.length 
+                                showButton: false,
+                                buttonText: "Get a Quote",
+                                buttonLink: "/getaquote",
+                                cta: { ctaId: "", buttonVariant: "primary" },
+                                order: fields.length,
                               })
                             }
                             style={{ height: 60, marginTop: 10 }}
@@ -1416,10 +1527,10 @@ export default function Pages() {
                             block
                             icon={<PlusOutlined />}
                             onClick={() =>
-                              add({ 
-                                question: '', 
-                                answer: '', 
-                                order: fields.length 
+                              add({
+                                question: "",
+                                answer: "",
+                                order: fields.length,
                               })
                             }
                             style={{ height: 60, marginTop: 10 }}
@@ -1444,19 +1555,35 @@ export default function Pages() {
                         style={{ marginBottom: 16 }}
                       />
                       <Form.Item name={["seo", "metaTitle"]} label="Meta Title">
-                        <Input maxLength={70} showCount placeholder="Enter meta title (recommended: 50-60 characters)" />
+                        <Input
+                          maxLength={70}
+                          showCount
+                          placeholder="Enter meta title (recommended: 50-60 characters)"
+                        />
                       </Form.Item>
 
-                      <Form.Item name={["seo", "metaDescription"]} label="Meta Description">
+                      <Form.Item
+                        name={["seo", "metaDescription"]}
+                        label="Meta Description"
+                      >
                         <Input.TextArea rows={3} maxLength={160} showCount />
                       </Form.Item>
 
-                      <Form.Item name={["seo", "metaKeywords"]} label="Meta Keywords">
+                      <Form.Item
+                        name={["seo", "metaKeywords"]}
+                        label="Meta Keywords"
+                      >
                         <Input placeholder="keyword1, keyword2, keyword3" />
                       </Form.Item>
 
-                      <Form.Item name={["seo", "schemaMarkup"]} label="Schema Markup">
-                        <Input.TextArea rows={5} placeholder='{"@context": "https://schema.org"}' />
+                      <Form.Item
+                        name={["seo", "schemaMarkup"]}
+                        label="Schema Markup"
+                      >
+                        <Input.TextArea
+                          rows={5}
+                          placeholder='{"@context": "https://schema.org"}'
+                        />
                       </Form.Item>
                     </Card>
                   ),
@@ -1469,4 +1596,3 @@ export default function Pages() {
     </div>
   );
 }
-  

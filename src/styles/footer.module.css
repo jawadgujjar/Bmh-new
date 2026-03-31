@@ -43,6 +43,17 @@
   margin-top: 1.5rem;
   color: #ccc; /* Lighter gray for better readability on black */
 }
+.footerLink {
+  color: #ccc;
+  text-decoration: none;
+  font-size: 0.95rem;
+  display: inline-block;
+  transition: color 0.3s;
+}
+
+.footerLink:hover {
+  color: #fd7e14;
+}
 
 .footerList {
   list-style: none;

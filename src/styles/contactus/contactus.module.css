@@ -1,0 +1,130 @@
+.contactWrapper {
+  padding: 80px 0;
+  background-color: #fff;
+  font-family: 'Arial', sans-serif;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.headerBox {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.mainTitle {
+  font-size: 45px !important;
+  font-weight: 400 !important; /* Image k mutabiq clean look */
+  color: #000;
+  letter-spacing: 1px;
+}
+
+/* Form Styles */
+.contactForm {
+  width: 100%;
+}
+
+.customInput {
+  border: 1px solid #d9d9d9 !important;
+  border-radius: 0px !important; /* Sharp corners like in image */
+  padding: 12px 15px !important;
+  font-size: 15px !important;
+  box-shadow: none !important;
+}
+
+.customInput:focus {
+  border-color: #40a9ff !important;
+}
+
+.btnWrapper {
+  display: flex;
+  justify-content: center; /* Center button like image */
+  margin-top: 10px;
+}
+
+.sendBtn {
+  background-color: #000 !important;
+  border-color: #000 !important;
+  border-radius: 0px !important;
+  padding: 0 45px !important;
+  height: 40px !important;
+  font-weight: bold !important;
+  text-transform: uppercase;
+  color: #fff !important;
+}
+
+/* Contact Info Styles (Right Side) */
+.infoContent {
+  padding-left: 20px;
+}
+
+.infoItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 35px;
+}
+
+.iconBox {
+  font-size: 32px;
+  color: #596a7d; /* Greyish Blue tone from image */
+  margin-right: 25px;
+  display: flex;
+  align-items: center;
+}
+
+.infoText {
+  font-size: 24px;
+  color: #596a7d;
+  font-weight: 400;
+}
+
+/* extra................ */
+/* Clickable Link Wrapper */
+.infoLink {
+    text-decoration: none !important;
+    display: block;
+    transition: 0.3s;
+}
+
+/* Hover effect taake user ko pata chale clickable hai */
+.infoLink:hover .infoText {
+    color: #FD7E14 !important; /* Ya jo b apka primary color hai */
+}
+
+.infoLink:hover .iconBox {
+    transform: scale(1.1);
+}
+
+.infoItem {
+    display: flex;
+    align-items: center;
+    margin-bottom: 35px;
+    cursor: pointer;
+}
+
+/* Ensure text color stays original */
+.infoText {
+    font-size: 20px;
+    color: #596a7d;
+    font-weight: 400;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .mainTitle {
+    font-size: 32px !important;
+  }
+  .infoContent {
+    padding-left: 0;
+    margin-top: 40px;
+  }
+  .infoText {
+    font-size: 18px;
+  }
+  .iconBox {
+    font-size: 24px;
+  }
+}
