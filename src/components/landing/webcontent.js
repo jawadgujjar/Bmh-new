@@ -11,8 +11,8 @@ function Webcontent1() {
                 <Col xs={22} sm={22} md={10} lg={10} xl={10}>
                     <div className={styles.imageContainerweb}>
                         <Image
-                            src="/images/fullstack.jpg"
-                            alt="about-digital"
+                            src="/images/home-page/Small Business Branding Agency.webp"
+                            alt="Small Business Branding Agency"
                             fill
                             className={styles.imageweb}
                             quality={90}
