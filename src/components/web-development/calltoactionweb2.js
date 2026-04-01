@@ -1,7 +1,7 @@
 import React from "react";
 import { FaPhone, FaArrowRight } from "react-icons/fa";
 import Image from "next/image";
-import webImage from "../../../public/images/brand marketing.jpg";
+import webImage from "../../../public/images/web-development/Website Redesign Services That Improve User Experience.webp";
 import styless from "../../styles/webdevelopment.module.css";
 import styles from "../../styles/web-development/calltoactionweb2.module.css";
 
@@ -44,7 +44,7 @@ function Calltoactionweb2() {
           </div>
         </div>
       </section>
-      <div style={{ textAlign: "center",padding:"3%" }}>
+      <div style={{ textAlign: "center", padding: "3%" }}>
         <h2>
           <span className={styless.span}>Responsive Website Development </span>{" "}
           for Modern Users
