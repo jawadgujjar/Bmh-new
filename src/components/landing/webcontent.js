@@ -39,7 +39,7 @@ function Webcontent1() {
           </p>
         </Col>
       </Row>
-      <Row justify="center" align="middle" gutter={[40, 0]}>
+      <Row justify="center" align="middle" gutter={[40, 0]} style={{marginTop:"5rem"}}>
         {/* IMAGE COLUMN */}
 
         {/* CONTENT COLUMN */}
@@ -72,101 +72,7 @@ function Webcontent1() {
           </div>
         </Col>
       </Row>
-      <Row justify="center" align="middle" gutter={[40, 0]}>
-        {/* IMAGE COLUMN */}
-        <Col xs={22} sm={22} md={10} lg={10} xl={10}>
-          <div className={styles.imageContainerweb}>
-            <Image
-              src="/images/home-page/Small Business Branding Agency.webp"
-              alt="Small Business Branding Agency"
-              fill
-              className={styles.imageweb}
-              quality={90}
-              priority
-            />
-          </div>
-        </Col>
-
-        {/* CONTENT COLUMN */}
-        <Col xs={22} sm={22} md={12} lg={10} xl={10}>
-          <p className={styles.provenTextDigitalweb}>
-            A Small Business Branding Agency That Truly Understands You
-          </p>
-
-          <p className={styles.allTextDigitalweb}>
-            Small businesses need branding that is simple, affordable, and
-            effective. As a small business branding agency, Brand Marketing Hub
-            focuses on practical solutions that help you grow step by step. We
-            do not overcomplicate the process or use confusing language. We help
-            small businesses create a strong foundation that supports future
-            growth. Our branding strategies are designed to work today and still
-            make sense tomorrow as your business expands.
-          </p>
-        </Col>
-      </Row>
-      <Row justify="center" align="middle" gutter={[40, 0]}>
-        {/* IMAGE COLUMN */}
-
-        {/* CONTENT COLUMN */}
-        <Col xs={22} sm={22} md={12} lg={10} xl={10}>
-          <p className={styles.provenTextDigitalweb}>
-            Personal Branding Consultant Services for Real People{" "}
-          </p>
-
-          <p className={styles.allTextDigitalweb}>
-            Your personal brand represents who you are and what you stand for.
-            Our personal branding consultant services are designed for
-            professionals, entrepreneurs, and leaders who want to build trust
-            online in a simple and authentic way. As a personal brand
-            consultant, we help you share your story clearly and professionally.
-            We focus on real communication that feels human and relatable,
-            helping you connect with the right audience and opportunities.
-          </p>
-        </Col>
-        <Col xs={22} sm={22} md={10} lg={10} xl={10}>
-          <div className={styles.imageContainerweb}>
-            <Image
-              src="/images/home-page/Small Business Branding Agency.webp"
-              alt="Small Business Branding Agency"
-              fill
-              className={styles.imageweb}
-              quality={90}
-              priority
-            />
-          </div>
-        </Col>
-      </Row>
-      <Row justify="center" align="middle" gutter={[40, 0]}>
-        {/* IMAGE COLUMN */}
-        <Col xs={22} sm={22} md={10} lg={10} xl={10}>
-          <div className={styles.imageContainerweb}>
-            <Image
-              src="/images/home-page/Small Business Branding Agency.webp"
-              alt="Small Business Branding Agency"
-              fill
-              className={styles.imageweb}
-              quality={90}
-              priority
-            />
-          </div>
-        </Col>
-
-        {/* CONTENT COLUMN */}
-        <Col xs={22} sm={22} md={12} lg={10} xl={10}>
-          <p className={styles.provenTextDigitalweb}>
-            A Friendly Branding Partner for Businesses Across the USA{" "}
-          </p>
-
-          <p className={styles.allTextDigitalweb}>
-            Brand Marketing Hub works with businesses across the USA that want
-            honest and effective branding support. We believe good branding
-            should feel helpful, calm, and clear. Our focus is always on
-            long-term trust, not short-term trends. We work closely with you and
-            treat your brand with care. Every decision we make is guided by what
-            will truly help your audience understand and trust your business.
-          </p>
-        </Col>
-      </Row>
+   
     </div>
   );
 }
