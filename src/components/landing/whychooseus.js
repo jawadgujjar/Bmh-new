@@ -69,7 +69,7 @@ const WhyChooseUs = () => {
     <div className={styles.contentWrapper}>
       {activeContent === null ? (
         <img 
-          src="../images/whychoose.webp" 
+          src="../images/home-page/why choose us.webp" 
           alt="Why Choose Us"
           className={styles.defaultImage}
         />

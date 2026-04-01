@@ -20,12 +20,13 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 4% !important;
-  position: relative; /* Dropdown alignment ke liye zaroori hai */
+  position: relative;
 }
 
 .navLeft {
   flex: 0 0 auto;
 }
+
 .logo {
   width: 125px !important;
   height: auto;
@@ -44,17 +45,19 @@
   display: flex;
   justify-content: center;
 }
+
 .centerLinks {
   display: flex;
   gap: 10px;
 }
 
 .navItemWrapper {
-  position: static; /* Mega Menu ke liye isko static rakhein taaki dropdown full width le sake */
+  position: static;
   display: flex;
   align-items: center;
   height: 85px;
 }
+
 .scrolled .navItemWrapper {
   height: 70px;
 }
@@ -74,10 +77,11 @@
   color: #ffa500 !important;
 }
 
-/* --- RIGHT SECTION (Phone, WhatsApp, Quote) --- */
+/* --- RIGHT SECTION --- */
 .navRight {
   flex: 0 0 auto;
 }
+
 .actionSection {
   display: flex;
   align-items: center;
@@ -90,6 +94,7 @@
   gap: 8px;
   text-decoration: none;
 }
+
 .phoneText span {
   display: block;
   color: #ffa500;
@@ -97,6 +102,7 @@
   font-size: 13px;
   line-height: 1;
 }
+
 .phoneText small {
   color: #fff;
   font-size: 10px;
@@ -130,16 +136,16 @@
   text-transform: uppercase;
 }
 
-/* --- MEGA DROPDOWN MENU (The Fix) --- */
+/* --- MEGA DROPDOWN MENU --- */
 .customDropdownMenu {
   position: absolute;
   top: 100%;
   left: 0;
-  width: 100%; /* Pura horizontal area cover karega */
+  width: 100%;
   background: #0f0f0f;
   border-top: 1px solid rgba(255, 165, 0, 0.3);
   border-bottom: 2px solid #ffa500;
-  padding: 40px 6%; /* Side spacing */
+  padding: 40px 6%;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
   z-index: 1000;
   animation: fadeIn 0.3s ease-out;
@@ -158,7 +164,6 @@
 
 .dropdownFlex {
   display: grid;
-  /* Columns automatically adjust based on content */
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 30px;
   max-width: 1300px;
@@ -201,7 +206,7 @@
   padding-left: 5px;
 }
 
-/* --- MOBILE RESPONSIVE --- */
+/* --- MOBILE --- */
 .customToggle {
   display: none;
   flex-direction: column;
@@ -226,12 +231,15 @@
   .customToggle {
     display: flex;
   }
+
   .customToggle.open span:nth-child(1) {
     transform: rotate(45deg) translate(5px, 5px);
   }
+
   .customToggle.open span:nth-child(2) {
     opacity: 0;
   }
+
   .customToggle.open span:nth-child(3) {
     transform: rotate(-45deg) translate(7px, -7px);
   }
@@ -251,8 +259,8 @@
     overflow-y: auto;
   }
 
-  /* Jab menu open ho (React state se control ho rha hai) */
-  :global(.navbar-collapse.show) {
+  /* ✅ FIXED GLOBAL SELECTOR */
+  :global(.navbar-collapse).show {
     left: 0 !important;
   }
 
@@ -261,17 +269,20 @@
     width: 100%;
     flex-direction: column;
   }
+
   .navItemWrapper {
     height: auto !important;
     width: 100%;
     border-bottom: 1px solid #222;
   }
+
   .navLinkWrapper {
     display: flex;
     justify-content: space-between;
     padding: 15px 0;
     width: 100%;
   }
+
   .navLink {
     padding: 0;
     font-size: 16px;
@@ -291,10 +302,12 @@
     flex-direction: column;
     gap: 20px;
   }
+
   .navRight {
     width: 100%;
     margin-top: 30px;
   }
+
   .actionSection {
     flex-direction: column;
     align-items: flex-start;

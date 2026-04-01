@@ -3,12 +3,11 @@
 import React, { useState } from "react";
 import styles from "../../styles/digital-marketing/calltoactiondigital1.module.css";
 import Image from "next/image";
-import Link from "next/link";
-import webImage2 from "../../../public/images/digital-agencies.webp";
+import webImage2 from "../../../public/images/web-development/Website Management Services for Long-Term Stability.webp";
 import styless from "../../styles/webdevelopment.module.css";
 
 function Calltoactionweb1() {
-  const [step, setStep] = useState(0); // 0 = initial, 1 = form, 2 = success
+  const [step, setStep] = useState(0);
   const [formData, setFormData] = useState({
     fullName: "",
     emailAddress: "",
