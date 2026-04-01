@@ -69,15 +69,10 @@ export default function Digitalservices1({ category }) {
                       </h3>
                     </div>
 
-                    <p
-                      className={
-                        isBlack
-                          ? styles.cardDescriptionBlack
-                          : styles.cardDescriptionWhite
-                      }
-                    >
-                      {service.topSection?.description}
-                    </p>
+                   <div
+  className={isBlack ? styles.cardDescriptionBlack : styles.cardDescriptionWhite}
+  dangerouslySetInnerHTML={{ __html: service.topSection?.description }}
+/>
                   </Card>
                 </Col>
               );

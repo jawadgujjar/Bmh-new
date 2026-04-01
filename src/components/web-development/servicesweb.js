@@ -62,15 +62,18 @@ export default function Webservices1({ category }) {
                       </h3>
                     </div>
 
-                    <p
+                    <div
                       className={
                         isBlack
                           ? styles.cardDescriptionBlack
                           : styles.cardDescriptionWhite
                       }
-                    >
-                      {service.topSection?.description}
-                    </p>
+                      dangerouslySetInnerHTML={{
+                        __html: service.topSection?.description,
+                      }}
+                    />
+                    {/* {service.topSection?.description}
+                    </div> */}
                   </Card>
                 </Col>
               );

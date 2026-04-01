@@ -7,40 +7,40 @@ import styles from '../../styles/services.module.css';
 const Services = () => {
     const services = [
         {
-            title: "Full Stack Development",
+            title: "Social Media Marketing",
             image: "../images/fullstack.jpg", // Replace with your actual image path
             description: "We provide end-to-end web development solutions covering front-end, back-end, and database management for seamless digital experiences.",
-            link: "/fullstack"
+            link: "/smm-services"
         },
         {
             title: "Search Engine Optimization",
             image: "../images/seo.jpg", // Replace with your actual image path
             description: "Boost your online visibility with our comprehensive SEO strategies that drive organic traffic and improve search rankings.",
-            link: "/seo"
+            link: "/seo-services"
         },
         {
-            title: "Google Ads",
+            title: "Google Ads Management Services",
             image: "../images/google ads.jpg", // Replace with your actual image path
             description: "Maximize your advertising ROI with our expert Google Ads management and optimization services.",
-            link: "/google-ads"
+            link: "/google-ads-management-services"
         },
         {
-            title: "Brand Marketing",
+            title: "Search Engine Marketing",
             image: "../images/brand marketing.jpg", // Replace with your actual image path
             description: "Build a strong brand identity with our strategic marketing solutions that resonate with your target audience.",
-            link: "/brand-marketing"
+            link: "/search-engine-marketing"
         },
         {
             title: "E-Commerce Specialization",
             image: "../images/ecommerce.avif", // Replace with your actual image path
             description: "Transform your online store with our specialized e-commerce solutions designed to increase conversions and sales.",
-            link: "/ecommerce"
+            link: "/ecommerce-website-development"
         },
         {
             title: "Website Development",
             image: "../images/web.jpg", // Replace with your actual image path
             description: "Get custom, responsive websites that deliver exceptional user experiences and drive business growth.",
-            link: "/web-development"
+            link: "/webdevelopment"
         }
     ];
 

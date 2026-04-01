@@ -1,14 +1,22 @@
 .container {
   padding: 2rem;
   margin: 2rem auto;
-  background-color: #E6F0FA;
+  background: #000000;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(255, 107, 0, 1) 40%,rgba(255, 107, 0, 1) 60%, rgba(0, 0, 0, 1) 100%);
   border-radius: 8px;
   position: relative;
+  
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .row {
   display: flex;
   flex-wrap: wrap;
+  
 }
 
 .column {
@@ -16,9 +24,11 @@
   padding: 1.5rem;
 }
 
+/* HEADING */
 .title {
   font-size: 2rem;
-  color: #FF6B00;
+  color: white;
+  /* WHITE TEXT */
   margin-bottom: 1.5rem;
   font-weight: 600;
   line-height: 1.2;
@@ -26,63 +36,47 @@
   letter-spacing: 1px;
 }
 
-.text {
+/* TEXT WHITE */
+.textWhite {
   font-size: 1rem;
-  color: #555;
+  color: white;
   line-height: 1.6;
   margin-bottom: 1.5rem;
 }
 
-.quoteButton {
-  width: 100%;
+/* BLACK BUTTON */
+.blackButton {
+  width: 70%;
   font-weight: 600;
   margin-top: 1rem;
-  background-color: #FF6B00;
-  border-color: #FF6B00;
+  background-color: black;
   color: white;
   height: 50px;
   font-size: 1.1rem;
   border-radius: 4px;
+  border: none;
   transition: all 0.3s;
   text-transform: uppercase;
   letter-spacing: 1px;
+
+  display: block;
+  margin-left: auto;
+  margin-right: auto; /* 👈 extra safety center */
 }
 
-.quoteButton:hover {
-  background-color: #E05D00;
-  border-color: #E05D00;
+.blackButton:hover {
+  background-color: #222;
+  color: rgba(255, 107, 0, 1) !important;  
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(255, 107, 0, 0.3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-.meetingButton {
-   margin-top: 0; 
-  width: 100%;
-  font-weight: 600;
-  background-color: white;
-  border-color: #FF6B00;
-  color: #FF6B00;
-  height: 50px;
-  font-size: 1.1rem;
-  border-radius: 4px;
-  transition: all 0.3s;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.meetingButton:hover {
-  background-color: #FFF4ED;
-  border-color: #E05D00;
-  color: #E05D00;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(255, 107, 0, 0.2);
-}
-
+/* FEATURE ITEMS */
 .featureItem {
   display: flex;
   align-items: flex-start;
   padding: 1rem 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -92,74 +86,69 @@
 }
 
 .featureItem:hover {
-  background-color: #f9f9f9;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .featureItem.active {
-  background-color: #f0f7ff;
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
-.featureIcon {
+/* ICON WHITE */
+.featureIconWhite {
   font-size: 1.8rem;
-  color: #FF6B00;
+  color: white;
   margin-right: 1.5rem;
   padding-top: 0.2rem;
   min-width: 40px;
 }
 
-.featureTitle {
+/* FEATURE TEXT */
+.featureTitleWhite {
   font-size: 1.1rem;
-  color: #333;
+  color: white;
   margin-bottom: 0.5rem;
   font-weight: 600;
 }
 
-.featureText {
+.featureTextWhite {
   font-size: 0.95rem;
-  color: #666;
+  color: white;
   line-height: 1.5;
   margin: 0;
 }
 
+/* IMAGE */
+.defaultImage {
+  width: 95%;
+  height: 90%;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-top: -50px;
+}
+
+/* CONTENT AREA */
+.contentWrapper {
+  min-height: 450px;
+  display: flex;
+  flex-direction: column;
+}
+
+.contentArea {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+}
+
+/* DIVIDER */
 .divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, #FF8C00, transparent);
+  background: linear-gradient(90deg, transparent, white, transparent);
   width: 80%;
   max-width: 800px;
   margin: 2rem auto 0;
 }
 
-.contentWrapper {
- min-height: 450px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; /* Remove this line */
-}
-
-.defaultImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 8px;
-}
-
-.contentArea {
- display: flex;
-  flex-direction: column;
-  height: auto; /* Change from flex:1 to height:auto */
-}
-
-.contentArea .text {
- 
-  margin-bottom: 1.5rem;
-}
-
-.contentArea .meetingButton {
-  margin-top: 0;
-  align-self: flex-start;
-}
-
-/* Responsive adjustments */
+/* RESPONSIVE */
 @media (max-width: 1200px) {
   .contentWrapper {
     min-height: 400px;
@@ -170,12 +159,12 @@
   .title {
     font-size: 1.8rem;
   }
-  
-  .featureIcon {
+
+  .featureIconWhite {
     font-size: 1.6rem;
     margin-right: 1.2rem;
   }
-  
+
   .contentWrapper {
     min-height: 380px;
   }
@@ -185,15 +174,15 @@
   .container {
     padding: 1.5rem;
   }
-  
+
   .title {
     font-size: 1.6rem;
   }
-  
+
   .column {
     padding: 1rem;
   }
-  
+
   .contentWrapper {
     min-height: 350px;
   }
@@ -203,16 +192,16 @@
   .container {
     padding: 1rem;
   }
-  
+
   .title {
     font-size: 1.5rem;
   }
-  
+
   .contentWrapper {
     min-height: 300px;
   }
-  
-  .featureIcon {
+
+  .featureIconWhite {
     font-size: 1.4rem;
   }
 }

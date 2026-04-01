@@ -16,6 +16,7 @@ import CTAManagement from "@/components-admin/calltoactions";
 
 // ✅ NEW IMPORT
 import NewsletterAdmin from "@/components-admin/newsletter";
+import ContactAdmin from "@/components-admin/contactus";
 
 export default function AdminLayout() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -77,6 +78,8 @@ export default function AdminLayout() {
       // ✅ NEW (IMPORTANT)
       case "newsletter":
         return <NewsletterAdmin />;
+      case "contactus":
+        return <ContactAdmin />;
 
       default:
         return <Dashboard />;
@@ -85,7 +88,7 @@ export default function AdminLayout() {
 
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
-      
+
       {/* Sidebar */}
       <AdminSidebar
         active={activeComponent}
