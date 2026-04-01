@@ -1,40 +1,47 @@
-import React from 'react';
-import styles from '../../styles/landing/seocontent.module.css';
-import { Row, Col } from 'antd';
-import Image from 'next/image';
+import React from "react";
+import styles from "../../styles/landing/seocontent.module.css";
+import { Row, Col } from "antd";
+import Image from "next/image";
 
 function Seocontent1() {
-    return (
-        <div className={styles.aboutdigitalMainseo}>
-            <Row justify="center" align="middle" gutter={[40, 0]}>
-                {/* IMAGE COLUMN */}
-                <Col xs={22} sm={22} md={10} lg={10} xl={10}>
-                    <div className={styles.imageContainerseo}>
-                        <Image
-                            src="/images/seo-content.webp"
-                            alt="about-digital"
-                            fill
-                            className={styles.imageseo}
-                            quality={90}
-                            priority
-                        />
-                    </div>
-                </Col>
+  return (
+    <div className={styles.aboutdigitalMainseo}>
+      <Row justify="center" align="middle" gutter={[40, 0]}>
+        {/* IMAGE COLUMN */}
+        <Col xs={22} sm={22} md={10} lg={10} xl={10}>
+          <div className={styles.imageContainerseo}>
+            <Image
+              src="/images/seo-content.webp"
+              alt="about-digital"
+              fill
+              className={styles.imageseo}
+              quality={90}
+              priority
+            />
+          </div>
+        </Col>
 
-                {/* CONTENT COLUMN */}
-                <Col xs={22} sm={22} md={12} lg={10} xl={10}>
-                    <p className={styles.provenTextDigitalseo}>
-                        A Small Business Branding Agency That Truly Understands You
-                    </p>
+        {/* CONTENT COLUMN */}
+        <Col xs={22} sm={22} md={12} lg={10} xl={10}>
+          <p className={styles.provenTextDigitalseo}>
+            Helping Brands Communicate Clearly and Confidently
+          </p>
 
-                    <p className={styles.allTextDigitalseo}>
-                        Small businesses need branding that is simple, affordable, and effective. As a small business branding agency, Brand Marketing Hub focuses on practical solutions that help you grow step by step. We do not overcomplicate the process or use confusing language.
-                        We help small businesses create a strong foundation that supports future growth. Our branding strategies are designed to work today and still make sense tomorrow as your business expands.
-                    </p>
-                </Col>
-            </Row>
-        </div>
-    );
+          <p className={styles.allTextDigitalseo}>
+            Many businesses struggle to explain who they are and why they
+            matter. We help remove that confusion. Our digital branding
+            solutions are built to make your message clear and easy for your
+            audience to understand. When people quickly understand your brand,
+            they are more likely to trust it. We take time to understand your
+            business, your audience, and your goals. This allows us to create
+            branding that feels natural and useful, not complicated or
+            overwhelming. Everything we do is focused on helping your brand
+            communicate better online.
+          </p>
+        </Col>
+      </Row>
+    </div>
+  );
 }
 
 export default Seocontent1;

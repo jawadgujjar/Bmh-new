@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import webImage from "../../../public/images/web-development/Professional Website Development Company in USA.webp";
-import webImage2 from "../../../public/images/web-development/Why Brand Marketing Hub Is the Right Choice !.webp";
+import webImage2 from "../../../public/images/web-development/Why Brand Marketing Hub.webp";
 import Link from "next/link";
 import styles from "../../styles/webdevelopment.module.css";
 import { FaFire } from "react-icons/fa";
