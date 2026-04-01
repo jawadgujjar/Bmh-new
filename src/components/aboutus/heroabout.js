@@ -19,10 +19,9 @@ function Heroabout1() {
             </div>
 
             <div className={styles.mainHerodigital}>
-                <p className={styles.heroFirstText}>ABOUT US</p>
+                <p className={styles.heroFirstText}>About Brand Marketing Hub</p>
                 <p className={styles.growText}>
-                    Get a personalized quote tailored to your business needs. Share your requirements and let our team provide you with the best solutions to achieve your goals efficiently.
-                </p>
+                    Brand Marketing Hub helps businesses grow their online presence through simple, clear, and effective digital strategies.</p>
                 {/* <div className={styles.formDigital}>
                     <Link href="/getaquote" passHref>
                         <Button className={styles.proposalButton}>Get My Free Proposal</Button>
