@@ -11,7 +11,7 @@ function Webcontent1() {
         <Col xs={22} sm={22} md={10} lg={10} xl={10}>
           <div className={styles.imageContainerweb}>
             <Image
-              src="/images/home-page/Small Business Branding Agency.webp"
+              src="/images/home-page/We Don’t Just Design Brands — We Build Direction.webp"
               alt="Small Business Branding Agency"
               fill
               className={styles.imageweb}
@@ -75,7 +75,7 @@ function Webcontent1() {
         <Col xs={22} sm={22} md={10} lg={10} xl={10}>
           <div className={styles.imageContainerweb}>
             <Image
-              src="/images/home-page/Small Business Branding Agency.webp"
+              src="/images/home-page/Your Brand Should Be Clear. Memorable. Easy to Trust.webp"
               alt="Small Business Branding Agency"
               fill
               className={styles.imageweb}
