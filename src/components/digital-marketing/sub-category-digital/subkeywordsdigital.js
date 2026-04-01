@@ -79,7 +79,9 @@ function SubKeywordsdigital({
             onClick={() => setActivePageIndex(index)}
           >
             <span className={styles.keywordText}>{page.title}</span>
-            {activePageIndex === index && <div className={styles.activeIndicator}></div>}
+            {activePageIndex === index && (
+              <div className={styles.activeIndicator}></div>
+            )}
           </button>
         ))}
       </div>
@@ -97,10 +99,14 @@ function SubKeywordsdigital({
             <h3 className={styles.contentTitle}>{activePage.title}</h3>
             <div className={styles.contentIcon}>◉</div>
           </div>
-
-          <p className={styles.contentText}>
-            {activePage.subcatpagedescr || activePage.topSection?.description}
-          </p>
+          <div
+            className={styles.contentText}
+            dangerouslySetInnerHTML={{
+              __html:
+                activePage.subcatpagedescr ||
+                activePage.topSection?.description,
+            }}
+          />
 
           {/* Correct CTA Navigation */}
           <div className={styles.contentFooter}>
