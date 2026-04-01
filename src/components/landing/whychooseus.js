@@ -47,15 +47,22 @@ const WhyChooseUs = () => {
     <div className={styles.container}>
       <div className={styles.inner}>
         <Row gutter={[24, 24]} className={styles.row}>
-
           {/* Column 1 */}
           <Col xs={24} md={8}>
             <div className={styles.column}>
               <h2 className={styles.title}>
-                Brand Positioning That Makes Your Business Easy to Choose
+                Let’s Build a Brand People Remember
               </h2>
               <p className={styles.textWhite}>
-                People choose brands they understand. As a brand positioning agency, we help you clearly define what makes your business different and why it matters. This helps your audience quickly see the value you offer without needing extra explanation. Strong brand positioning helps your business feel confident and focused. It allows you to attract the right customers instead of trying to appeal to everyone. We make sure your positioning feels natural and honest, not forced or sales-driven.
+                A strong brand is not built overnight. It is built with clarity,
+                consistency, and the right direction. At Brand Marketing Hub, we
+                work as your long-term branding consultant — guiding you through
+                every step of your brand’s growth. From strategy to execution,
+                everything we do is focused on helping you succeed in a
+                competitive digital space. If your goal is to create a brand
+                that feels professional, trustworthy, and easy to understand,
+                then you’re in the right place. Let’s build something that
+                doesn’t just look good — but actually works.
               </p>
 
               {/* <Button
@@ -80,7 +87,7 @@ const WhyChooseUs = () => {
                 />
                 <Link href="/getaquote" passHref>
                   <Button size="large" className={styles.blackButton}>
-                    Get Free Quote
+                    Get Your Free Strategy
                   </Button>
                 </Link>
                 {/* ) : (
@@ -107,8 +114,9 @@ const WhyChooseUs = () => {
               {featureItems.map((item, index) => (
                 <div
                   key={index}
-                  className={`${styles.featureItem} ${activeContent === index ? styles.active : ""
-                    }`}
+                  className={`${styles.featureItem} ${
+                    activeContent === index ? styles.active : ""
+                  }`}
                   onClick={() => setActiveContent(index)}
                 >
                   <div className={styles.featureIconWhite}>{item.icon}</div>
@@ -120,7 +128,6 @@ const WhyChooseUs = () => {
               ))}
             </div>
           </Col>
-
         </Row>
       </div>
     </div>

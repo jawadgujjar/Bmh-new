@@ -19,12 +19,14 @@ const AboutContent = () => {
     { label: "Projects Delivered", value: "500+" },
   ];
 
-  const values = [
-    { title: "Ship & Iterate", desc: "We move swiftly, refining our approach with every step.", icon: "🚀" },
-    { title: "Trusted Pair of Hands", desc: "Dependable and steadfast, we are always there.", icon: "🤝" },
-    { title: "Overdeliver on the Promise", desc: "Exceeding expectations is our standard.", icon: "🎯" },
-    { title: "Clear is Kind", desc: "Transparent, honest communication keeps everyone aligned.", icon: "✨" },
-  ];
+ const values = [
+  { title: "Continuous Improvement", desc: "We constantly improve our work to deliver better results every time.", icon: "🚀" },
+  { title: "Client-Focused Mindset", desc: "We always focus on your goals and business needs first.", icon: "🤝" },
+  { title: "Results That Matter", desc: "We focus on real growth, traffic, and measurable performance results.", icon: "🎯" },
+  { title: "Transparency & Clarity", desc: "We keep everything clear, simple, and easy to understand.", icon: "✨" },
+  { title: "Reliability & Commitment", desc: "We stay committed and deliver work on time, every time.", icon: "📅" },
+  { title: "Smart Innovation", desc: "We use modern tools and ideas to stay ahead in the market.", icon: "💡" },
+];
 
   const locations = [
     { name: "Pakistan", img: "/images/pakistan.webp" },
@@ -55,7 +57,10 @@ const AboutContent = () => {
                   <span className={styles.orangeText}>Inspiring Innovation</span>
                 </Title>
                 <Paragraph className={styles.smallDesc}>
-                  We specialize in transforming businesses with enterprise-grade software solutions tailored to their needs.We specialize in transforming businesses with enterprise-grade software solutions tailored to their needs.We specialize in transforming businesses with enterprise-grade software solutions tailored to their needs.
+                  We help businesses improve their online presence and reach the right audience. Our team uses simple, effective strategies that are based on research and real data.
+                  We don’t believe in guesswork. Every step we take is planned to help your business grow in a clear and steady way.
+                  If you are starting a new business or already running one, we make sure your brand stands out and performs better online.
+
                 </Paragraph>
                 <Link href="/getaquote">
                   <Button type="primary" size="large" className={styles.orangeBtn}>
@@ -89,7 +94,7 @@ const AboutContent = () => {
                   <Title level={2} className={styles.boldHeading}>Our <span className={styles.orangeText}>Mission</span></Title>
                   <div className={styles.quoteCircle}>“</div>
                 </div>
-                <Paragraph className={styles.cardPara}>To empower businesses with cutting-edge technology solutions, unlocking growth potential.</Paragraph>
+                <Paragraph className={styles.cardPara}>Our mission is to help businesses grow with simple, effective, and affordable digital marketing solutions.</Paragraph>
               </div>
             </Col>
             <Col xs={24} md={12}>
@@ -98,7 +103,7 @@ const AboutContent = () => {
                   <Title level={2} className={styles.boldHeading}>Our <span className={styles.orangeText}>Vision</span></Title>
                   <div className={styles.quoteCircle}>“</div>
                 </div>
-                <Paragraph className={styles.cardPara}>To become a global leader in digital transformation by delivering future-ready technology solutions.</Paragraph>
+                <Paragraph className={styles.cardPara}>Our vision is to become a trusted global partner, helping businesses grow with smart and modern strategies.</Paragraph>
               </div>
             </Col>
           </Row>
@@ -110,11 +115,11 @@ const AboutContent = () => {
         <div className={styles.container}>
           <div className={styles.centerHeader}>
             <Text className={styles.badge}>OUR VALUES</Text>
-            <Title level={2} className={styles.boldHeading}>We Believe in Providing Values.</Title>
+            <Title level={2} className={styles.boldHeading}>Principles We Stand For</Title>
           </div>
           <Row gutter={[40, 30]} align="middle">
             <Col xs={24} md={10}>
-              <img src="/images/team.png" alt="Team" className={styles.fullImgRounded} />
+              <img src="/images/Principles We Stand For.webp" alt="Team" className={styles.fullImgRounded} />
             </Col>
             <Col xs={24} md={14}>
               <div className={styles.valuesList}>

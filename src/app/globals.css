@@ -2,6 +2,8 @@
   --background: #ffffff;
   --foreground: #171717;
 }
+
+/* Navbar mobile fix */
 @media (max-width: 991px) {
   .navbar-collapse.show {
     left: 0 !important;
@@ -21,10 +23,10 @@ body {
   padding: 0;
   max-width: 100vw;
   overflow-x: visible;
-  
- }
- .site-wrapper {
-  overflow-x: clip; /* NOT hidden */
+}
+
+.site-wrapper {
+  overflow-x: clip;
 }
 
 body {
@@ -50,50 +52,52 @@ a {
   border-top-color: white !important;
 }
 
+/* --- FORM STYLING --- */
 .formWrapper,
 .getaquote-module__G5UDDW__formWrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: auto;
-    padding: 0;
-    background: transparent !important;
-    font-family: 'Poppins', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: auto;
+  padding: 0;
+  background: transparent !important;
+  font-family: "Poppins", sans-serif;
 }
-/* Form container adjustments */
+
 .formContainer {
-    background-color: #E6F0FA !important;
-    box-shadow: none !important;
-    padding: 20px !important;
-    border-radius: 10px !important;
+  background-color: #e6f0fa !important;
+  box-shadow: none !important;
+  padding: 20px !important;
+  border-radius: 10px !important;
 }
 
 .formWrapper {
-    min-height: auto !important;
-    padding: 0 !important;
-    background: transparent !important;
+  min-height: auto !important;
+  padding: 0 !important;
+  background: transparent !important;
 }
-/* Orange Theme Colors firstpageblog.module.css*/
+
+/* --- ORANGE THEME --- */
 :root {
-  --orange-primary: #FD7E14;
-  --orange-light: #FFA94D;
-  --orange-dark: #E8590C;
-  --orange-gradient: linear-gradient(90deg, #FD7E14 0%, #FFA94D 100%);
+  --orange-primary: #fd7e14;
+  --orange-light: #ffa94d;
+  --orange-dark: #e8590c;
+  --orange-gradient: linear-gradient(90deg, #fd7e14 0%, #ffa94d 100%);
 }
-  
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
   }
 }
- 
-/* Breadcrumbs Overlay Styling */
+
+/* --- BREADCRUMBS --- */
 .breadcrumb-container-main {
-  position: absolute; 
-  top: 95px;         
+  position: absolute;
+  top: 95px;
   left: 0;
   width: 100%;
-  z-index: 10;       
+  z-index: 10;
   background: transparent;
 }
 
@@ -103,12 +107,13 @@ a {
   list-style: none;
   padding: 0;
   margin: 0;
-  font-size: 16px; 
-  font-weight: 600; 
+  font-size: 16px;
+  font-weight: 600;
   letter-spacing: 0.3px;
 }
+
 .b-link {
-  color: rgba(255, 255, 255, 0.8); 
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
   transition: 0.3s;
   display: flex;
@@ -116,7 +121,7 @@ a {
 }
 
 .b-link:hover {
-  color: #ffa500; /* Aapka theme orange */
+  color: #ffa500;
 }
 
 .separator {
@@ -124,20 +129,27 @@ a {
 }
 
 .b-current {
-  color: #ffa500; /* Active page orange mein */
+  color: #ffa500;
   font-weight: 700;
   text-transform: capitalize;
 }
 
-/* Scrolled Navbar adjustment */
+/* Navbar scroll adjustment */
 .scrolled ~ .breadcrumb-container-main {
-  top: 80px; /* Jab navbar chota ho jaye */
+  top: 80px;
 }
 
-/* Mobile responsive */
+/* --- MOBILE RESPONSIVE --- */
 @media (max-width: 991px) {
   .breadcrumb-container-main {
     top: 75px;
     padding-left: 15px;
+  }
+}
+
+/* ✅ FINAL FIX: Hide breadcrumbs on mobile */
+@media (max-width: 768px) {
+  .breadcrumb-container-main {
+    display: none !important;
   }
 }

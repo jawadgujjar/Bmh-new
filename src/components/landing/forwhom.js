@@ -12,23 +12,26 @@ const Forwhom = () => {
   const cardData = [
     {
       title: "Startup Business",
-      content: "Tailored solutions for new businesses looking to establish their online presence.",
-      icon: StartupIcon
+      content:
+        "Tailored solutions for new businesses looking to establish their online presence.",
+      icon: StartupIcon,
     },
     {
       title: "Small & Medium Scale Business",
-      content: "Cost-effective digital solutions designed for growing businesses.",
-      icon: SmbIcon
+      content:
+        "Cost-effective digital solutions designed for growing businesses.",
+      icon: SmbIcon,
     },
     {
       title: "Enterprise",
       content: "Comprehensive digital strategies for large organizations.",
-      icon: EnterpriseIcon
+      icon: EnterpriseIcon,
     },
     {
       title: "Digital Agencies",
-      content: "Partnership opportunities for agencies looking to expand their offerings.",
-      icon: AgencyIcon
+      content:
+        "Partnership opportunities for agencies looking to expand their offerings.",
+      icon: AgencyIcon,
     },
   ];
 
@@ -37,13 +40,23 @@ const Forwhom = () => {
       <Row gutter={[48, 32]} align="middle">
         <Col xs={24} md={12}>
           <div className={styles.contentSection}>
-            <h3 className={styles.subTitle}>Simple and Smart Digital Branding Solutions for the USA</h3>
+            <h3 className={styles.subTitle}>
+              Your Brand Should Be Clear. Memorable. Easy to Trust.
+            </h3>
             <p className={styles.description}>
-              Brand Marketing Hub helps businesses grow by building strong and meaningful brands online. We provide digital branding solutions that are easy to understand, effective, and designed for real people. Our goal is simple. We help you create a brand that feels clear, trustworthy, and memorable to your audience across the USA.
-              In today’s online world, people connect with brands that feel honest and consistent. A good brand is not only about logos or colors. It is about how people feel when they see your business online. At Brand Marketing Hub, we focus on creating brand experiences that make people feel confident choosing you.
+              Brand Marketing Hub helps businesses across the USA turn spread
+              ideas into clear, confident, and consistent brands. We design
+              digital branding systems that do more than just look good — they
+              communicate value, build trust, and guide your audience to take
+              action. In today’s digital world, people don’t have time to figure
+              out complicated messages. They connect with brands that feel
+              simple, professional, and easy to understand. That’s exactly what
+              we create. From the very first interaction, we focus on making
+              your brand feel reliable, structured, and meaningful. Because when
+              your brand is easy to understand, it becomes easier to choose.
             </p>
             <Button type="primary" size="large" className={styles.quoteButton}>
-              Get A Free Quote Now
+             Start Building Your Brand
             </Button>
           </div>
         </Col>
@@ -53,12 +66,8 @@ const Forwhom = () => {
             <Row gutter={[16, 16]}>
               {cardData.map((card, index) => (
                 <Col xs={24} sm={12} key={index}>
-                  <Card
-                    className={styles.card}
-                    cover={null}
-                  >
+                  <Card className={styles.card} cover={null}>
                     <div className={styles.cardContentWrapper}>
-
                       <div className={styles.cardIconContainer}>
                         <img
                           alt={card.title}
