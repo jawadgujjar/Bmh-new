@@ -36,7 +36,9 @@
   gap: 20px;
   margin-bottom: 1.5rem;
 }
-
+.para{
+    margin-top: 2.3rem;
+}
 .circle {
   width: 12px;
   height: 12px;

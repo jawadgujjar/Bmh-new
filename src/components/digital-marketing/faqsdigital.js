@@ -71,6 +71,7 @@ function FAQdigital() {
             lg={10} // Slightly narrower on large screens
             xl={10} // Slightly narrower on extra large screens
           >
+            <div className={styles.para} style={{ marginTop: "2rem" }}>
             <p className={styless.provenTextDigital}>
               Supporting Startups and Small Businesses Across the USA
             </p>
@@ -86,6 +87,7 @@ function FAQdigital() {
               strategies are built to grow with you, adapting to changes in
               market demand and business goals.
             </p>
+            </div>
             {/* <p className={styles.allTextDigital}>Partner with Thrive today to get a holistic, full-service approach to all your digital marketing needs.
                     </p> */}
           </Col>
@@ -105,6 +107,7 @@ function FAQdigital() {
             lg={10} // Slightly narrower on large screens
             xl={10} // Slightly narrower on extra large screens
           >
+            <div className={styles.para} style={{ marginTop: "2rem" }}>
             <p className={styless.provenTextDigital}>
               Grow with Brand Marketing Hub
             </p>
@@ -119,6 +122,7 @@ function FAQdigital() {
               agency USA startups and small businesses trust for clarity,
               performance, and sustainable growth.
             </p>
+            </div>
             {/* <p className={styles.allTextDigital}>Partner with Thrive today to get a holistic, full-service approach to all your digital marketing needs.
                     </p> */}
           </Col>

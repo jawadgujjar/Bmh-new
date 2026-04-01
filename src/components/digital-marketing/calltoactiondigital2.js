@@ -78,6 +78,7 @@ function Calltoactiondigital2() {
             lg={10} // Slightly narrower on large screens
             xl={10} // Slightly narrower on extra large screens
           >
+            <div className={styles.para}>
             <p className={styless.provenTextDigital}>
               Why Brand Marketing Hub Is the Right Partner
             </p>
@@ -98,6 +99,7 @@ function Calltoactiondigital2() {
               communication, realistic expectations, and performance tracking in
               everything we do.
             </p>
+            </div>
             {/* <p className={styles.allTextDigital}>Partner with Thrive today to get a holistic, full-service approach to all your digital marketing needs.
                     </p> */}
           </Col>
@@ -117,6 +119,7 @@ function Calltoactiondigital2() {
             lg={10} // Slightly narrower on large screens
             xl={10} // Slightly narrower on extra large screens
           >
+            <div className={styles.para}>
             <p className={styless.provenTextDigital}>
               Performance-Driven Marketing Built for the US Market
             </p>
@@ -132,6 +135,7 @@ function Calltoactiondigital2() {
               next. In a competitive US market, this clarity is essential for
               sustainable growth.
             </p>
+            </div>
             {/* <p className={styles.allTextDigital}>Partner with Thrive today to get a holistic, full-service approach to all your digital marketing needs.
                     </p> */}
           </Col>

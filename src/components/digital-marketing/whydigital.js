@@ -33,6 +33,7 @@ function Whydigital() {
           lg={10} // Slightly narrower on large screens
           xl={10} // Slightly narrower on extra large screens
         >
+          <div className={styles.para}>
           <p className={styles.provenTextDigital}>
             A Top Digital Marketing Agency USA Startups Can Rely On
           </p>
@@ -52,6 +53,7 @@ function Whydigital() {
             thinking define how we work. Every campaign is designed to support
             business growth, not just short-term visibility.
           </p>
+          </div>
           {/* <p className={styles.allTextDigital}>Partner with Thrive today to get a holistic, full-service approach to all your digital marketing needs.
                     </p> */}
         </Col>
