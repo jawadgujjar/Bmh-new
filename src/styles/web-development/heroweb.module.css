@@ -47,6 +47,7 @@
 
 .growText {
     color: rgb(253, 126, 20);
+    /* color: aliceblue; */
     font-size: 1.3rem;
     margin-bottom: 2rem;
 }

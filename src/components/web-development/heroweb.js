@@ -9,7 +9,7 @@ function Heroweb1() {
     <div className={styles.backheroDigital}>
       <div className={styles.backgroundImage}>
         <Image
-          src="/images/hero.jpg"
+          src="/images/banner.webp"
           alt="Digital Marketing Background"
           layout="fill"
           objectFit="cover"
