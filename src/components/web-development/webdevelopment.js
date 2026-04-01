@@ -2,8 +2,6 @@
 
 import React from "react";
 import Image from "next/image";
-import webImage from "../../../public/images/web-development/Professional Website Development Company in USA.webp";
-import webImage2 from "../../../public/images/web-development/Why Brand Marketing Hub Is the Right Choice !.webp";
 import Link from "next/link";
 import styles from "../../styles/webdevelopment.module.css";
 import { FaFire } from "react-icons/fa";
@@ -38,7 +36,7 @@ const Webdevelopment1 = () => {
         </div>
         <div className={styles.imageContent}>
           <Image
-            src={webImage}
+            src="images/web-development/Professional Website Development Company in USA.webp"
             alt="Web development services"
             width={600}
             height={500}
@@ -136,7 +134,7 @@ const Webdevelopment1 = () => {
       <div className={styles.point}>
         <div className={styles.imageContent1}>
           <Image
-            src={webImage2}
+            src="/images/web-development/Why Brand Marketing Hub.webp"
             alt="Digital agency services"
             width={600}
             height={500}
