@@ -4,11 +4,12 @@ import Contact from "@/models/contactus";
 import mongoose from "mongoose";
 
 /* ================= GET SINGLE ================= */
-export async function GET(req, { params }) {
+export async function GET(req, context) {
   try {
     await connectDB();
 
-    const { id } = params;
+    const { params } = context;
+    const { id } = await params; // ✅ FIX
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
@@ -37,11 +38,12 @@ export async function GET(req, { params }) {
 }
 
 /* ================= DELETE ================= */
-export async function DELETE(req, { params }) {
+export async function DELETE(req, context) {
   try {
     await connectDB();
 
-    const { id } = params;
+    const { params } = context;
+    const { id } = await params; // ✅ FIX
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
@@ -73,11 +75,13 @@ export async function DELETE(req, { params }) {
 }
 
 /* ================= UPDATE ================= */
-export async function PUT(req, { params }) {
+export async function PUT(req, context) {
   try {
     await connectDB();
 
-    const { id } = params;
+    const { params } = context;
+    const { id } = await params; // ✅ FIX
+
     const body = await req.json();
 
     if (!mongoose.Types.ObjectId.isValid(id)) {

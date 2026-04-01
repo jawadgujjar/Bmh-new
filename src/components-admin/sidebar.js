@@ -31,7 +31,8 @@ export default function AdminSidebar({ active, setActive }) {
     { id: "ctas", label: "Call-To-Actions" },
 
     // ✅ NEW ADD
-    { id: "newsletter", label: "Newsletter" }
+    { id: "newsletter", label: "Newsletter" },
+    { id: "contactus", label: "Contact Us" }
   ];
 
   return (
