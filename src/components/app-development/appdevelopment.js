@@ -17,13 +17,15 @@ const Appdevelopment1 = () => {
 
             <div className={styles.container}>
                 <div className={styles.textContent}>
-                    <h2><span className={styles.span}>Mobile App</span> Development</h2>
+                    <h2><span className={styles.span}>Technology Designed </span> to Grow with Your Business</h2>
                     <h3>
-                        We specialize in building high-performance mobile applications tailored for both Android and iOS platforms. From concept to deployment, our team delivers scalable, secure, and engaging apps that elevate user experience and drive real business value. Whether you need a native app, cross-platform solution, or progressive web app — we’ve got you covered.
+                        Modern businesses grow faster when their technology works the same way they do. Relying on generic software often creates gaps between daily operations and long-term goals. Teams adjust their workflows, productivity slows down, and opportunities are missed. Custom-built applications remove these limitations by shaping technology around real business needs instead of forcing businesses to adapt to rigid systems. This is where Brand Marketing Hub brings a focused and experience-driven approach to custom application development.
+                        Every application developed through this approach is built with purpose. It is designed to support real users, real decisions, and real growth. Instead of following trends, the focus remains on creating stable, scalable, and meaningful digital solutions that continue to deliver value over time.
+
                     </h3>
                 </div>
                 <div className={styles.imageContent}>
-                    <Image 
+                    <Image
                         src={appImage1}
                         alt="Mobile app development services"
                         width={600}
@@ -65,8 +67,16 @@ const Appdevelopment1 = () => {
             </div>
 
             <div className={styles.point}>
+                <div style={{ textAlign: "center", padding: "3%" }}>
+                    <h2>
+                        <span className={styles.span}>Custom Application Development</span>  as a Business Advantage
+                    </h2>
+                    <p>
+                        Custom application development is not simply a technical decision. It is a strategic one. Businesses that rely on tailored applications gain better control over their processes, data, and user experience. Unlike ready-made tools that try to serve everyone, custom applications are shaped around specific workflows, performance expectations, and operational goals. At Brand Marketing Hub, the development process begins with understanding how a business functions on a daily basis. This understanding influences every technical and design decision. The result is an application that feels intuitive to users, reduces unnecessary steps, and supports smarter decision-making. Over time, this creates measurable efficiency and stronger digital stability.
+                    </p>
+                </div>
                 <div className={styles.imageContent1}>
-                    <Image 
+                    <Image
                         src={appImage2}
                         alt="Mobile development workflow"
                         width={600}
@@ -76,21 +86,32 @@ const Appdevelopment1 = () => {
                     />
                 </div>
                 <div className={styles.pointsList}>
-                    <p className={styles.pointsTextx}>How We Build Mobile Apps</p>
+                    <p className={styles.pointsTextx}>
+                        Our Services We Provide
+                    </p>
+
                     <ul className={styles.featuresList}>
-                        <li className={styles.featureItem}>
-                            <span className={styles.featureTitle}>UI/UX Design:</span> We craft visually stunning designs that are user-friendly and optimized for mobile screens.
+                        <li>
+                            <strong>Mobile App Development:</strong> Mobile app development focuses on building easy-to-use applications for smartphones and tablets that deliver smooth performance and a reliable user experience.
                         </li>
-                        <li className={styles.featureItem}>
-                            <span className={styles.featureTitle}>Native & Cross-Platform:</span> Choose between platform-specific performance (Swift/Kotlin) or cross-platform efficiency (Flutter/React Native).
+
+                        <li>
+                            <strong>Web App Development:</strong> Web app development involves creating browser-based applications that allow users to access features and data securely from any location.
                         </li>
-                        <li className={styles.featureItem}>
-                            <span className={styles.featureTitle}>API Integration:</span> We connect your app with powerful APIs, databases, and third-party tools for a seamless experience.
+
+                        <li>
+                            <strong>Desktop App Development:</strong> Desktop app development is the process of building stable applications designed to run directly on desktop systems with consistent performance.
                         </li>
-                        <li className={styles.featureItem}>
-                            <span className={styles.featureTitle}>Push Notifications & Analytics:</span> Engage users and track app performance with integrated push messaging and analytics tools.
+
+                        <li>
+                            <strong>Hybrid / Cross-Platform App Development:</strong> Hybrid and cross-platform app development enables applications to work across multiple operating systems while maintaining a unified user experience.
+                        </li>
+
+                        <li>
+                            <strong>Enterprise & Custom Business Applications:</strong> Enterprise and custom business applications are designed to support specific business workflows, improve efficiency, and scale as organizational needs grow.
                         </li>
                     </ul>
+
                     <div className={styles.ctaButtons}>
                         <Link href="/contact" className={styles.ctaButton}>Get Started</Link>
                     </div>

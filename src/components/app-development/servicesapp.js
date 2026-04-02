@@ -27,9 +27,9 @@ export default function Appservices1({ category }) {
 
   return (
     <div className={styles.container}>
-      <p className={styles.text1}>Our Web Development Services </p>
+      <p className={styles.text1}>Built for the Standards and Expectations of the USA Market</p>
       <p className={styles.text2}>
-        Build Brand Recognition as an Industry Leader and Increase Profitability
+        The USA market demands more than basic functionality. Users expect speed, reliability, security, and consistency across devices. Applications that fail to meet these expectations often struggle to retain users or build trust. Recognizing this reality is essential when developing applications intended for long-term use. Brand Marketing Hub develops applications using modern and proven app development platforms that support performance and scalability. Careful testing and optimization ensure that applications perform smoothly under real-world conditions. This approach allows businesses to meet user expectations today while remaining prepared for future growth.
       </p>
 
       <div className={styles.cardsContainer}>
@@ -45,9 +45,8 @@ export default function Appservices1({ category }) {
                   <Card
                     hoverable
                     bordered={false}
-                    className={`${styles.card} ${
-                      isBlack ? styles.cardBlack : styles.cardWhite
-                    }`}
+                    className={`${styles.card} ${isBlack ? styles.cardBlack : styles.cardWhite
+                      }`}
                     onClick={() => router.push(`/${service.slug}`)}
                   >
                     <div className={styles.cardHeader}>
