@@ -19,21 +19,23 @@ const AboutContent = () => {
     { label: "Projects Delivered", value: "500+" },
   ];
 
- const values = [
-  { title: "Continuous Improvement", desc: "We constantly improve our work to deliver better results every time.", icon: "🚀" },
-  { title: "Client-Focused Mindset", desc: "We always focus on your goals and business needs first.", icon: "🤝" },
-  { title: "Results That Matter", desc: "We focus on real growth, traffic, and measurable performance results.", icon: "🎯" },
-  { title: "Transparency & Clarity", desc: "We keep everything clear, simple, and easy to understand.", icon: "✨" },
-  { title: "Reliability & Commitment", desc: "We stay committed and deliver work on time, every time.", icon: "📅" },
-  { title: "Smart Innovation", desc: "We use modern tools and ideas to stay ahead in the market.", icon: "💡" },
-];
+  const values = [
+    { title: "Continuous Improvement", desc: "We constantly improve our work to deliver better results every time.", icon: "🚀" },
+    { title: "Client-Focused Mindset", desc: "We always focus on your goals and business needs first.", icon: "🤝" },
+    { title: "Results That Matter", desc: "We focus on real growth, traffic, and measurable performance results.", icon: "🎯" },
+    { title: "Transparency & Clarity", desc: "We keep everything clear, simple, and easy to understand.", icon: "✨" },
+    { title: "Reliability & Commitment", desc: "We stay committed and deliver work on time, every time.", icon: "📅" },
+    { title: "Smart Innovation", desc: "We use modern tools and ideas to stay ahead in the market.", icon: "💡" },
+  ];
 
   const locations = [
+    { name: "USA", img: "/images/aboutus/USA.webp" },
+    { name: "United Kingdom", img: "/images/aboutus/UK.webp" },
+    { name: "Canada", img: "/images/aboutus/Canada.webp" },
     { name: "Pakistan", img: "/images/pakistan.webp" },
-    { name: "USA", img: "/images/pakistan.webp" },
-    { name: "UAE", img: "/images/pakistan.webp" },
-    { name: "Saudi Arabia", img: "/images/pakistan.webp" },
-    { name: "United Kingdom", img: "/images/pakistan.webp" },
+    { name: "UAE", img: "/images/aboutus/Dubai.webp" },
+
+
   ];
 
   const leaders = [

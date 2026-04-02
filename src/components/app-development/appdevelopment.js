@@ -2,8 +2,8 @@
 
 import React from 'react';
 import Image from 'next/image';
-import appImage1 from '../../../public/images/brand marketing.jpg';
-import appImage2 from '../../../public/images/digital-agencies.webp';
+import appImage1 from 'public/images/App development/Build Software that Works the Way Your Business Operates.webp';
+import appImage2 from 'public/images/App development/Scalable and Reliable Application Development.webp';
 import Link from 'next/link';
 import styles from '../../styles/app-development/appdevelopment.module.css';
 import { FaFire } from 'react-icons/fa';
@@ -52,7 +52,7 @@ const Appdevelopment1 = () => {
                     </div>
                     <p className={styles.infoText}>Cross-Platform Compatibility</p>
                     <p className={styles.infoText1}>
-                       Our applications work consistently on mobile and desktop, delivering smooth performance and a unified experience across platforms without issues, delays, or functionality gaps.
+                        Our applications work consistently on mobile and desktop, delivering smooth performance and a unified experience across platforms without issues, delays, or functionality gaps.
                     </p>
                 </div>
                 <div className={styles.infoColumn}>
@@ -67,7 +67,7 @@ const Appdevelopment1 = () => {
             </div>
 
             <div className={styles.point}>
-                <div style={{ textAlign: "center", padding: "3%" }}>
+                <div style={{ textAlign: "center", padding: "0%" }}>
                     <h2>
                         <span className={styles.span}>Built Around</span>  your Business, Not Templates
                     </h2>
@@ -78,12 +78,13 @@ const Appdevelopment1 = () => {
 
                     </p>
                 </div>
+
                 <div className={styles.imageContent1}>
                     <Image
                         src={appImage2}
                         alt="Mobile development workflow"
-                        width={600}
-                        height={500}
+                        width={500}
+                        height={450}
                         className={styles.image}
                         quality={100}
                     />
@@ -101,6 +102,7 @@ const Appdevelopment1 = () => {
                         <Link href="/contact" className={styles.ctaButton}>Get Started</Link>
                     </div>
                 </div>
+
             </div>
         </section>
     );

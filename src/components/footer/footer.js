@@ -89,11 +89,11 @@ function Footer() {
                   </Link>
                 </li>
 
-                <li>
+                {/* <li>
                   <Link href="/faq" className={styles.footerLink}>
                     FAQ
                   </Link>
-                </li>
+                </li> */}
 
                 <li>
                   <Link href="/blogs" className={styles.footerLink}>

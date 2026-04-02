@@ -19,7 +19,7 @@ function Herogetaquote1() {
             </div>
 
             <div className={styles.mainHerodigital}>
-                <p className={styles.heroFirstText}>GET A QUOTE</p>
+                <h1 className={styles.heroFirstText}>GET A QUOTE</h1>
                 <p className={styles.growText}>
                     Get a personalized quote tailored to your business needs. Share your requirements and let our team provide you with the best solutions to achieve your goals efficiently.
                 </p>

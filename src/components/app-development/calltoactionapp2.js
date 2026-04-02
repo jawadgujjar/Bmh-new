@@ -2,7 +2,7 @@ import React from 'react';
 import { FaPhone, FaArrowRight } from 'react-icons/fa';
 import Image from 'next/image';
 import Link from 'next/link';
-import appImage2 from '../../../public/images/digital-agencies.webp';
+import appImage2 from 'public/images/App development/A Process That Delivers Results.webp';
 import styles from '../../styles/app-development/calltoactionapp2.module.css';
 import styles1 from '../../styles/app-development/appdevelopment.module.css';
 
@@ -62,8 +62,8 @@ function Calltoactionapp2() {
           <Image
             src={appImage2}
             alt="Mobile development workflow"
-            width={600}
-            height={500}
+            width={500}
+            height={450}
             className={styles1.image}
             quality={100}
           />
