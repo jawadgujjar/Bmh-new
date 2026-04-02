@@ -27,9 +27,12 @@ export default function Appservices1({ category }) {
 
   return (
     <div className={styles.container}>
-      <p className={styles.text1}>Built for the Standards and Expectations of the USA Market</p>
+      <p className={styles.text1}>Cross Platform Solutions for Modern Users</p>
       <p className={styles.text2}>
-        The USA market demands more than basic functionality. Users expect speed, reliability, security, and consistency across devices. Applications that fail to meet these expectations often struggle to retain users or build trust. Recognizing this reality is essential when developing applications intended for long-term use. Brand Marketing Hub develops applications using modern and proven app development platforms that support performance and scalability. Careful testing and optimization ensure that applications perform smoothly under real-world conditions. This approach allows businesses to meet user expectations today while remaining prepared for future growth.
+        Today’s users expect a consistent experience across devices. Whether they are using a mobile phone, tablet, or desktop, the application should work smoothly without limitations. Our cross platform app development services are designed to meet this expectation.
+Instead of building separate systems, we create a unified application that performs reliably across platforms. This approach reduces complexity and ensures your users have the same experience everywhere.
+For businesses, this means faster deployment, easier updates, and better control over the entire system.
+
       </p>
 
       <div className={styles.cardsContainer}>
