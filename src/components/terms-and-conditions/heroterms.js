@@ -19,7 +19,7 @@ function HeroTerms() {
       </div>
 
       <div className={styles.mainHerodigital}>
-        <p className={styles.heroFirstText}>Terms And Conditions</p>
+        <h1 className={styles.heroFirstText}>Terms And Conditions</h1>
       </div>
     </div>
   );

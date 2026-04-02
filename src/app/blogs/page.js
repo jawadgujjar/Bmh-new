@@ -29,9 +29,6 @@ export default async function BlogsPage() {
       <header className="blogs-header">
         <div className="header-overlay">
           <h1 className="header-title">Blogs</h1>
-          <nav className="breadcrumb">
-            <span>Home › Blogs</span>
-          </nav>
         </div>
       </header>
 

@@ -17,9 +17,8 @@ function HeroDigitalMarketing() {
                     priority
                 />
             </div>
-
             <div className={styles.mainHerodigital}>
-                <p className={styles.heroFirstText}>Digital Marketing Services</p>
+                <h1 className={styles.heroFirstText}>Digital Marketing Services</h1>
                 <p className={styles.growText}>Expand your client base with targeted, data-driven strategies that boost visibility, build lasting trust, and deliver measurable results for your business.</p>
                 <div className={styles.formDigital}>
                     <Link href="/getaquote" passHref>

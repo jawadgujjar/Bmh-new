@@ -19,9 +19,9 @@ function Heroweb1() {
       </div>
 
       <div className={styles.mainHerodigital}>
-        <p className={styles.heroFirstText}>
+        <h1 className={styles.heroFirstText}>
           Trusted Web Development Company in the USA
-        </p>
+        </h1>
         <p className={styles.growText}>
           As a growing web development company usa, Brand Marketing Hub is
           committed to building trust through quality work and clear

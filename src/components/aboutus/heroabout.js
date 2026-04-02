@@ -19,7 +19,7 @@ function Heroabout1() {
             </div>
 
             <div className={styles.mainHerodigital}>
-                <p className={styles.heroFirstText}>About Brand Marketing Hub</p>
+                <h1 className={styles.heroFirstText}>About Brand Marketing Hub</h1>
                 <p className={styles.growText}>
                     Brand Marketing Hub helps businesses grow their online presence through simple, clear, and effective digital strategies.</p>
                 {/* <div className={styles.formDigital}>

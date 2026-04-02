@@ -19,7 +19,7 @@ function Herofirstportfolio1() {
             </div>
 
             <div className={styles.mainHerodigital}>
-                <p className={styles.heroFirstText}>Portfolio</p>
+                <h1 className={styles.heroFirstText}>Portfolio</h1>
                 <p className={styles.growText}>Expand your client base with targeted, data-driven strategies that boost visibility, build lasting trust, and deliver measurable results for your business.</p>
                 <div className={styles.formDigital}>
                     <Link href="/getaquote" passHref>
