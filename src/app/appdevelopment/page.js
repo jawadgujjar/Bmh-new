@@ -9,22 +9,24 @@ import Digitalservices1 from "@/components/digital-marketing/servicesdigital";
 import Carousel from "@/components/landing/carousel";
 import Form1 from "@/components/landing/getaquote";
 import Heroform from "@/components/landing/heroform";
- 
- 
+
+
 
 export default function AppdevelopmentPage() {
   return (
     <main>
-        <Heroapp1/>
+      <Heroapp1 />
+      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
         {/* <Heroform/> */}
-        <Appdevelopment1/>
-        <Keywordsapp/>
-        <Calltoactionapp1/>
+        <Appdevelopment1 />
+        <Keywordsapp />
+        <Calltoactionapp1 />
         <Appservices1 category="app-development" />
-        <Calltoactionapp2/>
-        <Form1/>
-        <Carousel/>
-        <Faqapp1/>
+        <Calltoactionapp2 />
+        <Form1 />
+        <Carousel />
+        <Faqapp1 />
+      </div>
     </main>
   );
 };

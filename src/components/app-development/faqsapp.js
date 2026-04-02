@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { FaPlus, FaMinus } from 'react-icons/fa';
-import appImage2 from '../../../public/images/digital-agencies.webp';
+import appImage2 from 'public/images/App development/Long-Term Value for Your Business.webp';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from '../../styles/app-development/faqsapp.module.css';
@@ -61,7 +61,7 @@ const Faqapp1 = () => {
   return (
     <div>
       <div className={styles2.point}>
-        <div style={{ textAlign: "center", padding: "3%" }}>
+        <div style={{ textAlign: "center", padding: "0%" }}>
           <h2>
             <span className={styles.span}>Trusted by Businesses</span>  Looking for Real Solutions
           </h2>
@@ -75,8 +75,8 @@ const Faqapp1 = () => {
           <Image
             src={appImage2}
             alt="Mobile development workflow"
-            width={600}
-            height={500}
+            width={500}
+            height={450}
             className={styles2.image}
             quality={100}
           />

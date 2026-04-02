@@ -51,30 +51,27 @@ const Webdevelopment1 = () => {
           <div className={styles.iconWrapper}>
             <FaFire className={styles.infoIcon} />
           </div>
-          <p className={styles.infoText}>Credibility & Trust</p>
+          <p className={styles.infoText}>Real Business Growth</p>
           <p className={styles.infoText1}>
-            A professional website establishes your business as a legitimate
-            player, fostering trust and confidence with potential customers.
+            We focus on what actually works, helping your business get more visibility, better leads, and steady growth without wasting time on things that don’t matter.
           </p>
         </div>
         <div className={styles.infoColumn}>
           <div className={styles.iconWrapper}>
             <FaFire className={styles.infoIcon} />
           </div>
-          <p className={styles.infoText}>24/7 Availability</p>
+          <p className={styles.infoText}>Always Here for You</p>
           <p className={styles.infoText1}>
-            Your website works tirelessly, showcasing your products or services
-            around the clock, reaching new customers globally
+            You won’t be left waiting or guessing. We stay in touch, respond quickly, and make sure you always know what’s happening with your marketing.
           </p>
         </div>
         <div className={styles.infoColumn}>
           <div className={styles.iconWrapper}>
             <FaFire className={styles.infoIcon} />
           </div>
-          <p className={styles.infoText}>Lead Generation & Sales</p>
+          <p className={styles.infoText}>Built Around You</p>
           <p className={styles.infoText1}>
-            Convert website visitors into leads and sales through strategic
-            calls to action, contact forms, and e-commerce functionality.
+            We don’t follow fixed templates. Everything we do is based on your business, your audience, and what will genuinely work for you.y.
           </p>
         </div>
       </div>
