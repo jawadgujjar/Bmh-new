@@ -112,7 +112,14 @@ function Footer() {
                     Privacy Policy
                   </Link>
                 </li>
-
+                <li>
+                  <Link
+                    href="/terms-and-conditions"
+                    className={styles.footerLink}
+                  >
+                    Terms and Conditions
+                  </Link>
+                </li>
                 <li>
                   <Link href="/contactus" className={styles.footerLink}>
                     Contact Us

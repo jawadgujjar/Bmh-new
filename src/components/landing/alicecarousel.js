@@ -3,12 +3,14 @@ import styles from '../../styles/alicecarousel.module.css';
 import { useSpring, animated } from '@react-spring/web';
 
 // Import your logos here
-import logo1 from '../../../public/images/google.png';
-import logo2 from '../../../public/images/gucci.png';
-import logo3 from '../../../public/images/insta.png';
-import logo4 from '../../../public/images/nike.png';
-import logo5 from '../../../public/images/pintrest.png';
-import logo6 from '../../../public/images/twitter.png';
+import logo1 from '../../../public/images/home-page/alice1.png';
+import logo2 from '../../../public/images/home-page/Cosmatic soluctions.webp';
+import logo3 from '../../../public/images/home-page/Febia.webp';
+import logo4 from '../../../public/images/home-page/Green Plant.webp';
+import logo5 from '../../../public/images/home-page/Hemp wellness.webp';
+import logo6 from '../../../public/images/home-page/HV Hemp.webp';
+import logo7 from '../../../public/images/home-page/Makers Row.webp';
+import logo8 from '../../../public/images/home-page/Uniform Makers.webp';
 
 const Alice = () => {
   const props = useSpring({
@@ -30,8 +32,8 @@ const Alice = () => {
           <img src={logo4.src} alt="Brand Logo 4" className={styles.logo} />
           <img src={logo5.src} alt="Brand Logo 5" className={styles.logo} />
           <img src={logo6.src} alt="Brand Logo 6" className={styles.logo} />
-          <img src={logo1.src} alt="Brand Logo 1" className={styles.logo} />
-          <img src={logo2.src} alt="Brand Logo 2" className={styles.logo} />
+          <img src={logo7.src} alt="Brand Logo 1" className={styles.logo} />
+          <img src={logo8.src} alt="Brand Logo 2" className={styles.logo} />
           <img src={logo3.src} alt="Brand Logo 3" className={styles.logo} />
           <img src={logo4.src} alt="Brand Logo 4" className={styles.logo} />
           <img src={logo5.src} alt="Brand Logo 5" className={styles.logo} />

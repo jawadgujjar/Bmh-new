@@ -2,7 +2,11 @@
 
 import React, { useState } from 'react';
 import { FaPlus, FaMinus } from 'react-icons/fa';
+import appImage2 from '../../../public/images/digital-agencies.webp';
+import Image from 'next/image';
+import Link from 'next/link';
 import styles from '../../styles/app-development/faqsapp.module.css';
+import styles2 from '../../styles/app-development/appdevelopment.module.css';
 
 const Faqapp1 = () => {
   const [openIndex, setOpenIndex] = useState(null);
@@ -40,6 +44,50 @@ const Faqapp1 = () => {
   };
 
   return (
+    <div>
+      <div className={styles2.point}>
+        <div style={{ textAlign: "center", padding: "3%" }}>
+          <h2>
+            <span className={styles.span}>Web Development Consulting </span> Based
+            on Experience
+          </h2>
+          <p>
+            Choosing the right technical direction can be challenging without
+            expert guidance. That is why we offer web development consulting to
+            help businesses make informed decisions. As experienced website
+            development consultants, we provide clear advice based on real project
+            experience, not generic suggestions. Our web development consulting
+            services cover planning, platform selection, performance improvements,
+            and future scalability. Whether you need a second opinion or long-term
+            technical guidance, our consulting approach is transparent, practical,
+            and focused on your goals. Working with a professional website
+            development consultant helps reduce risks and ensures your website
+            effectively supports your business strategy.
+          </p>
+        </div>
+        <div className={styles2.imageContent1}>
+          <Image
+            src={appImage2}
+            alt="Mobile development workflow"
+            width={600}
+            height={500}
+            className={styles2.image}
+            quality={100}
+          />
+        </div>
+        <div className={styles2.pointsList}>
+          <p className={styles2.pointsTextx}>
+            Custom Application Development as a Business Advantage
+          </p>
+
+          <p className={styles2.featuresList}>
+            Custom application development is not simply a technical decision. It is a strategic one. Businesses that rely on tailored applications gain better control over their processes, data, and user experience. Unlike ready-made tools that try to serve everyone, custom applications are shaped around specific workflows, performance expectations, and operational goals. At Brand Marketing Hub, the development process begins with understanding how a business functions on a daily basis. This understanding influences every technical and design decision. The result is an application that feels intuitive to users, reduces unnecessary steps, and supports smarter decision-making. Over time, this creates measurable efficiency and stronger digital stability.
+          </p>
+
+        </div>
+      </div>
+
+
     <section id="faq" className={styles.faqSection}>
       <div className={styles.faqContainer}>
         <div className={styles.faqColumns}>
@@ -75,6 +123,7 @@ const Faqapp1 = () => {
         </div>
       </div>
     </section>
+    </div>
   );
 };
 
