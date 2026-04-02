@@ -19,8 +19,8 @@ function Heroapp1() {
             </div>
 
             <div className={styles.mainHerodigital}>
-                <p className={styles.heroFirstText}>Custom Application Development That Aligns With How Modern Businesses Operate</p>
-                <p className={styles.growText}>Creating custom applications that help businesses run smoothly, grow faster, and make work easier for teams.</p>
+                <p className={styles.heroFirstText}>Custom Application Development Services in USA That Fit Your Business</p>
+                <p className={styles.growText}>App development services focused on building simple, reliable, and scalable applications that support your business operations and improve user experience without unnecessary complexity.</p>
                 <div className={styles.formDigital}>
                     <Link href="/getaquote" passHref>
                         <Button className={styles.proposalButton}>Get My Free Proposal</Button>

@@ -13,29 +13,44 @@ const Faqapp1 = () => {
 
   const faqs = [
     {
-      question: "What platforms do you develop mobile apps for?",
+      question: "What is custom application development?",
       answer:
-        "We develop apps for iOS (iPhone, iPad), Android smartphones/tablets, and also offer cross-platform solutions using frameworks like React Native and Flutter."
+        " Custom application development means creating software designed specifically to meet a business’s unique needs and workflows, rather than using generic off-the-shelf tools."
     },
     {
-      question: "How long does it take to build a mobile app?",
+      question: "Why do businesses in the USA invest in custom apps?",
       answer:
-        "The timeline depends on the complexity and features of the app. A basic app may take 4–8 weeks, while more complex apps with custom backend, integrations, and advanced UI can take 3–6 months or more."
+        " Businesses invest in custom applications because tailored solutions help improve operational efficiency and better match how teams and customers interact with technology."
     },
     {
-      question: "What technologies do you use for mobile app development?",
+      question: "How large is the application development market in the USA?",
       answer:
-        "We use Swift and Objective-C for iOS, Kotlin and Java for Android, and cross-platform tools like Flutter and React Native to build apps efficiently for both platforms."
+        " The USA application market is substantial, with strong growth driven by consumer demand and enterprise adoption across sectors like finance, healthcare, and entertainment."
     },
     {
-      question: "Do you help with publishing the app on the App Store and Play Store?",
+      question: "What types of applications are most in demand?",
       answer:
-        "Yes, we offer full deployment support including app store submission, preparing assets (icons, descriptions, screenshots), and ensuring your app meets Apple's and Google’s guidelines."
+        " In the USA, demand spans enterprise systems, mobile apps for iOS and Android, web-based solutions, and cross-platform applications that work across devices."
     },
     {
-      question: "Will my app be secure and scalable?",
+      question: "Does custom development improve user engagement?",
       answer:
-        "Absolutely. We follow best practices in mobile security, including encrypted data transmission, secure API usage, and regular code audits. We also ensure your backend is scalable for growing users."
+        " Yes. Studies show that custom apps tailored to business and user needs often deliver higher efficiency and better user satisfaction compared to generic solutions."
+    },
+     {
+      question: "Is the custom software market growing?",
+      answer:
+        "Yes. The custom software development market is expanding rapidly, with North America holding a major share and continued growth expected through the next decade."
+    },
+     {
+      question: "What role does scalability play in custom app development?",
+      answer:
+        " Scalability is critical because applications must support business growth and handle increasing users and data without performance issues."
+    },
+    {
+      question: "How does cross-platform development benefit businesses?",
+      answer:
+        " Cross-platform development allows an app to run on multiple devices with a consistent user experience, reducing development time and cost compared to building separate native apps. "
     }
   ];
 
@@ -48,21 +63,12 @@ const Faqapp1 = () => {
       <div className={styles2.point}>
         <div style={{ textAlign: "center", padding: "3%" }}>
           <h2>
-            <span className={styles.span}>Web Development Consulting </span> Based
-            on Experience
+            <span className={styles.span}>Trusted by Businesses</span>  Looking for Real Solutions
           </h2>
           <p>
-            Choosing the right technical direction can be challenging without
-            expert guidance. That is why we offer web development consulting to
-            help businesses make informed decisions. As experienced website
-            development consultants, we provide clear advice based on real project
-            experience, not generic suggestions. Our web development consulting
-            services cover planning, platform selection, performance improvements,
-            and future scalability. Whether you need a second opinion or long-term
-            technical guidance, our consulting approach is transparent, practical,
-            and focused on your goals. Working with a professional website
-            development consultant helps reduce risks and ensures your website
-            effectively supports your business strategy.
+            As a top application development company, Brand Marketing Hub focuses on delivering solutions that work in real environments. Businesses trust us because we avoid unnecessary complexity and focus on what actually matters.
+            Our approach is transparent and practical. We communicate clearly, deliver what we promise, and build systems that businesses can rely on daily. This has helped us work with companies that need dependable applications without the risk of frequent issues or costly changes.
+
           </p>
         </div>
         <div className={styles2.imageContent1}>
@@ -77,52 +83,55 @@ const Faqapp1 = () => {
         </div>
         <div className={styles2.pointsList}>
           <p className={styles2.pointsTextx}>
-            Custom Application Development as a Business Advantage
+            Long-Term Value for Your Business
           </p>
 
           <p className={styles2.featuresList}>
-            Custom application development is not simply a technical decision. It is a strategic one. Businesses that rely on tailored applications gain better control over their processes, data, and user experience. Unlike ready-made tools that try to serve everyone, custom applications are shaped around specific workflows, performance expectations, and operational goals. At Brand Marketing Hub, the development process begins with understanding how a business functions on a daily basis. This understanding influences every technical and design decision. The result is an application that feels intuitive to users, reduces unnecessary steps, and supports smarter decision-making. Over time, this creates measurable efficiency and stronger digital stability.
+            Investing in custom application development is not just about solving immediate challenges. It is about creating a system that becomes a core part of your business operations.
+            A well-built application improves efficiency, reduces manual work, and helps teams stay organized. It also provides better control over data and processes, allowing you to make informed decisions.
+            Over time, this leads to better performance, smoother operations, and stronger business growth.
+
           </p>
 
         </div>
       </div>
 
 
-    <section id="faq" className={styles.faqSection}>
-      <div className={styles.faqContainer}>
-        <div className={styles.faqColumns}>
-          <div className={styles.faqHeadingCol}>
-            <h2 className={styles.faqTitle}>FAQs</h2>
-            <p className={styles.frequently}>
-              <span className={styles.span}>Frequently</span> Asked Questions
-            </p>
-            <p className={styles.faqSubtitle}>Everything You Need to Know About Mobile App Development</p>
-          </div>
+      <section id="faq" className={styles.faqSection}>
+        <div className={styles.faqContainer}>
+          <div className={styles.faqColumns}>
+            <div className={styles.faqHeadingCol}>
+              <h2 className={styles.faqTitle}>FAQs</h2>
+              <p className={styles.frequently}>
+                <span className={styles.span}>Frequently</span> Asked Questions
+              </p>
+              <p className={styles.faqSubtitle}>Everything You Need to Know About Mobile App Development</p>
+            </div>
 
-          <div className={styles.faqQuestionsCol}>
-            {faqs.map((faq, index) => (
-              <div
-                key={index}
-                className={`${styles.faqItem} ${openIndex === index ? styles.active : ''}`}
-                onClick={() => toggleAnswer(index)}
-              >
-                <div className={styles.faqQuestion}>
-                  {faq.question}
-                  <span className={styles.faqToggleIcon}>
-                    {openIndex === index ? <FaMinus /> : <FaPlus />}
-                  </span>
-                </div>
-                {openIndex === index && (
-                  <div className={styles.faqAnswer}>
-                    {faq.answer}
+            <div className={styles.faqQuestionsCol}>
+              {faqs.map((faq, index) => (
+                <div
+                  key={index}
+                  className={`${styles.faqItem} ${openIndex === index ? styles.active : ''}`}
+                  onClick={() => toggleAnswer(index)}
+                >
+                  <div className={styles.faqQuestion}>
+                    {faq.question}
+                    <span className={styles.faqToggleIcon}>
+                      {openIndex === index ? <FaMinus /> : <FaPlus />}
+                    </span>
                   </div>
-                )}
-              </div>
-            ))}
+                  {openIndex === index && (
+                    <div className={styles.faqAnswer}>
+                      {faq.answer}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
     </div>
   );
 };
