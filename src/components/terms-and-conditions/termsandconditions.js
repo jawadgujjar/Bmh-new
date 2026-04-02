@@ -16,15 +16,12 @@ const TermsAndConditions = () => {
               <div className={styles.section}>
                 <Title level={3}>1. Acceptance of Terms</Title>
                 <Paragraph className={styles.para}>
-                  By accessing this website or engaging with Brand Marketing
-                  Hub, you agree to be legally bound by these Terms and
-                  Conditions. If you do not agree with any part of these Terms,
-                  you must not use our website or services.
-                </Paragraph>
-                <Paragraph className={styles.para}>
-                  These Terms apply globally to all users, regardless of their
-                  country of residence, ensuring consistent standards across all
-                  regions.
+                  By accessing this website or engaging with our services, you
+                  agree to be legally bound by these Terms and Conditions. If
+                  you do not agree with any part of these Terms, you are not
+                  authorized to use the website or services. These Terms apply
+                  to clients worldwide, ensuring consistency across all regions,
+                  including the USA, UK, Canada, Dubai, and Pakistan.
                 </Paragraph>
               </div>
 
@@ -33,25 +30,13 @@ const TermsAndConditions = () => {
               {/* SECTION 2 */}
               <div className={styles.section}>
                 <Title level={3}>2. General Use</Title>
-                <ul className={styles.list}>
-                  <li>
-                    You must use our website and services only for lawful
-                    purposes.
-                  </li>
-                  <li>
-                    You must not provide false, misleading, or incomplete
-                    information.
-                  </li>
-                  <li>
-                    You must not attempt to harm, disrupt, or misuse our
-                    operations.
-                  </li>
-                </ul>
                 <Paragraph className={styles.para}>
-                  These conditions are in place to protect both our business and
-                  all users. Any misuse, fraudulent activity, or violation of
-                  applicable laws may result in immediate restriction or
-                  termination of access without prior notice.
+                  Services are to be used only for lawful purposes. Providing
+                  false, misleading, or incomplete information is strictly
+                  prohibited. Attempts to disrupt, harm, or misuse operations
+                  may result in immediate restriction or termination of access.
+                  These measures protect both the company and all clients
+                  globally.
                 </Paragraph>
               </div>
 
@@ -60,21 +45,13 @@ const TermsAndConditions = () => {
               {/* SECTION 3 */}
               <div className={styles.section}>
                 <Title level={3}>3. Service Engagement</Title>
-                <ul className={styles.list}>
-                  <li>
-                    All work is carried out based on mutual agreement (written
-                    or verbal).
-                  </li>
-                  <li>
-                    We reserve the right to accept, reject, pause, or cancel any
-                    project.
-                  </li>
-                </ul>
                 <Paragraph className={styles.para}>
-                  This means that every engagement is subject to our discretion.
-                  We maintain the right to manage workloads, refuse projects
-                  that do not align with our policies, or discontinue services
-                  if necessary to protect our operations.
+                  All work is based on mutual agreement, either written or
+                  verbal. The company reserves the right to accept, reject,
+                  pause, or cancel any project at its discretion. This ensures
+                  efficient management of workloads and maintenance of quality
+                  standards. Clients will be notified promptly if any service
+                  adjustments are required.
                 </Paragraph>
               </div>
 
@@ -82,58 +59,39 @@ const TermsAndConditions = () => {
 
               {/* SECTION 4 */}
               <div className={styles.section}>
-                <Title level={3}>4. Payments & No Refund Policy</Title>
+                <Title level={3}>4. Payments and Refund Policy</Title>
+                <Paragraph className={styles.para}>
+                  Payments must be made in advance unless otherwise agreed.{" "}
+                  <strong>
+                    All payments are final and strictly non-refundable.
+                  </strong>{" "}
+                  Work outside the agreed-upon scope will be billed separately.
+                  By making a payment, clients waive the right to initiate
+                  chargebacks or disputes through banks or payment providers.
+                  Any attempt to reverse a payment may result in legal action.
+                </Paragraph>
                 <ul className={styles.list}>
+                  <li>Payments are final and non-refundable.</li>
                   <li>
-                    All payments must be made in advance unless agreed
-                    otherwise.
-                  </li>
-                  <li>
-                    <strong>
-                      All payments are strictly non-refundable under any
-                      circumstances.
-                    </strong>
-                  </li>
-                  <li>
-                    Any work outside the agreed scope will be billed separately.
+                    Any additional services beyond the agreement will incur
+                    separate charges.
                   </li>
                 </ul>
-                <Paragraph className={styles.para}>
-                  All payments made to Brand Marketing Hub are final. Once a
-                  payment has been processed, it cannot be reversed, including
-                  in cases where services are partially used or outcomes differ
-                  from expectations.
-                </Paragraph>
-                <Paragraph className={styles.para}>
-                  By making a payment, you explicitly agree to waive your right
-                  to initiate chargebacks or disputes through any bank or
-                  payment provider. Any attempt to reverse or dispute a payment
-                  will be treated as a violation of these Terms and may result
-                  in legal action.
-                </Paragraph>
               </div>
 
               <Divider className={styles.divider} />
 
               {/* SECTION 5 */}
               <div className={styles.section}>
-                <Title level={3}>5. No Guarantees & External Factors</Title>
-                <ul className={styles.list}>
-                  <li>
-                    We do not guarantee specific results, performance, or
-                    outcomes.
-                  </li>
-                  <li>We do not guarantee timelines or completion dates.</li>
-                  <li>
-                    We do not guarantee business growth, revenue, or success.
-                  </li>
-                </ul>
+                <Title level={3}>5. No Guarantees and External Factors</Title>
                 <Paragraph className={styles.para}>
-                  All services are provided on a best-effort basis. However,
-                  outcomes may vary due to factors beyond our control. You
-                  acknowledge that we do not control third-party systems,
-                  platforms, or algorithms. Any fluctuations or losses are not
-                  the responsibility of Brand Marketing Hub.
+                  All services are provided on a best-effort basis. Specific
+                  results, timelines, revenue growth, or business success cannot
+                  be guaranteed. Outcomes may vary due to factors beyond
+                  control, such as third-party platforms, algorithm changes, or
+                  market conditions. Clients acknowledge that external factors
+                  may impact results and are not the responsibility of the
+                  service provider.
                 </Paragraph>
               </div>
 
@@ -141,13 +99,21 @@ const TermsAndConditions = () => {
 
               {/* SECTION 6 */}
               <div className={styles.section}>
-                <Title level={3}>6. Project Timelines & Communication</Title>
+                <Title level={3}>6. Project Timelines and Communication</Title>
                 <Paragraph className={styles.para}>
-                  Timely communication from the client is required. Delays in
-                  feedback or approvals will automatically extend timelines. We
-                  are not responsible for any missed deadlines that occur due to
-                  the client’s lack of responsiveness or incomplete input.
+                  Timely communication from clients is critical for project
+                  completion. Delays in providing feedback, approvals, or
+                  materials will extend project timelines. The company is not
+                  responsible for missed deadlines resulting from client delays.
                 </Paragraph>
+                <ul
+                  className={styles.list}
+                  style={{ listStyleType: "decimal" }}
+                >
+                  <li>Providing accurate and complete materials.</li>
+                  <li>Responding promptly to requests for feedback.</li>
+                  <li>Approving deliverables in a timely manner.</li>
+                </ul>
               </div>
 
               <Divider className={styles.divider} />
@@ -155,14 +121,15 @@ const TermsAndConditions = () => {
               {/* SECTION 7 */}
               <div className={styles.section}>
                 <Title level={3}>
-                  7. Client Responsibility & Content Liability
+                  7. Client Responsibility and Content Liability
                 </Title>
                 <Paragraph className={styles.para}>
-                  Clients are responsible for all provided materials and
-                  information. Final approval of all content rests solely with
-                  the client. Once approved, Brand Marketing Hub holds no
-                  responsibility for any copyright, trademark, or legal issues
-                  that may arise.
+                  Clients are responsible for all content, materials, and
+                  information provided. All content must comply with local laws
+                  and regulations. Once content is approved, the service
+                  provider holds no liability for copyright, trademark, or other
+                  legal issues. Legal responsibility for provided content
+                  remains solely with the client.
                 </Paragraph>
               </div>
 
@@ -170,12 +137,13 @@ const TermsAndConditions = () => {
 
               {/* SECTION 8 */}
               <div className={styles.section}>
-                <Title level={3}>8. Third-Party Dependency</Title>
+                <Title level={3}>8. Third-Party Dependencies</Title>
                 <Paragraph className={styles.para}>
-                  Our work may involve third-party platforms or tools (Google,
-                  Meta, etc.). We do not control their policies or systems and
-                  are not responsible for account suspensions, policy changes,
-                  or system errors caused by these providers.
+                  Some services rely on third-party tools or platforms. The
+                  provider does not control their policies or systems and is not
+                  liable for any disruptions, errors, downtime, or policy
+                  changes caused by these platforms. Any interruptions from
+                  external sources are outside of responsibility.
                 </Paragraph>
               </div>
 
@@ -185,11 +153,10 @@ const TermsAndConditions = () => {
               <div className={styles.section}>
                 <Title level={3}>9. Limitation of Liability</Title>
                 <Paragraph className={styles.para}>
-                  Under no circumstances shall Brand Marketing Hub be held
-                  liable for any loss of revenue, profits, business
-                  opportunities, or data. If any liability arises, it will be
-                  strictly limited to the total amount paid by the client for
-                  the specific service in question.
+                  Under no circumstances will the provider be liable for direct,
+                  indirect, financial, or business losses resulting from the use
+                  of services. Any liability, if determined, is strictly limited
+                  to the total amount paid for the specific service in question.
                 </Paragraph>
               </div>
 
@@ -199,10 +166,11 @@ const TermsAndConditions = () => {
               <div className={styles.section}>
                 <Title level={3}>10. Intellectual Property</Title>
                 <Paragraph className={styles.para}>
-                  All work remains our property until full payment is received.
-                  Unauthorized use or duplication is prohibited. We reserve the
-                  right to display completed work in our portfolio unless
-                  otherwise agreed in writing.
+                  All work remains the property of the provider until full
+                  payment is received. Unauthorized use or duplication is
+                  prohibited. Upon full payment, ownership may be transferred.
+                  Completed work may be displayed in portfolios or promotional
+                  materials unless otherwise agreed.
                 </Paragraph>
               </div>
 
@@ -212,10 +180,10 @@ const TermsAndConditions = () => {
               <div className={styles.section}>
                 <Title level={3}>11. Termination</Title>
                 <Paragraph className={styles.para}>
-                  We reserve full rights to terminate or suspend services
-                  without prior notice if any Terms are violated or if
-                  misconduct occurs. No refunds will be issued in case of
-                  termination.
+                  Services may be terminated or suspended at any time for
+                  violations of these Terms, payment issues, or misconduct.
+                  Termination does not entitle clients to refunds for payments
+                  already made.
                 </Paragraph>
               </div>
 
@@ -225,9 +193,9 @@ const TermsAndConditions = () => {
               <div className={styles.section}>
                 <Title level={3}>12. Indemnification</Title>
                 <Paragraph className={styles.para}>
-                  You agree to fully indemnify and hold Brand Marketing Hub
+                  Clients agree to indemnify and hold the service provider
                   harmless from any claims, damages, or legal actions arising
-                  from your use of our services, violations of laws, or
+                  from the use of services, including violations of laws or
                   third-party rights.
                 </Paragraph>
               </div>
@@ -236,12 +204,13 @@ const TermsAndConditions = () => {
 
               {/* SECTION 13 */}
               <div className={styles.section}>
-                <Title level={3}>13. Governing Law & Jurisdiction</Title>
+                <Title level={3}>13. Governing Law and Jurisdiction</Title>
                 <Paragraph className={styles.para}>
-                  These Terms shall be governed by the laws of{" "}
-                  <strong>Pakistan</strong>. Any disputes arising shall be
-                  exclusively handled in the courts of{" "}
-                  <strong>Lahore, Pakistan</strong>.
+                  These Terms are governed by the laws of the{" "}
+                  <strong>United States of America</strong>. Disputes shall be
+                  resolved in the courts of <strong>New York, USA</strong>,
+                  unless otherwise agreed. Clients using services from other
+                  countries consent to this jurisdiction for legal matters.
                 </Paragraph>
               </div>
 
@@ -249,12 +218,13 @@ const TermsAndConditions = () => {
 
               {/* SECTION 14 & 15 */}
               <div className={styles.section}>
-                <Title level={3}>14. Changes & Global Operations</Title>
+                <Title level={3}>14. Changes and Global Operations</Title>
                 <Paragraph className={styles.para}>
-                  We may update these Terms at any time. Continued use of our
-                  services after updates means you accept the revised Terms.
-                  These Terms apply universally to all clients worldwide,
-                  ensuring consistency across all engagements.
+                  Terms may be updated at any time. Continued use of services
+                  after changes constitutes acceptance of the revised Terms.
+                  Services are provided internationally, including the USA, UK,
+                  Canada, Dubai, and Pakistan, applying consistently across all
+                  regions.
                 </Paragraph>
               </div>
             </div>
