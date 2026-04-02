@@ -40,9 +40,9 @@ const Forwhom = () => {
       <Row gutter={[48, 32]} align="middle">
         <Col xs={24} md={12}>
           <div className={styles.contentSection}>
-            <h3 className={styles.subTitle}>
+            <h1 className={styles.subTitle}>
               Your Brand Should Be Clear. Memorable. Easy to Trust.
-            </h3>
+            </h1>
             <p className={styles.description}>
               Brand Marketing Hub helps businesses across the USA turn spread
               ideas into clear, confident, and consistent brands. We design

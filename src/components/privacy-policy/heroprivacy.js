@@ -19,7 +19,7 @@ function HeroPrivacy() {
       </div>
 
       <div className={styles.mainHerodigital}>
-        <p className={styles.heroFirstText}>Privacy Policy</p>
+        <h1 className={styles.heroFirstText}>Privacy Policy</h1>
       </div>
     </div>
   );
