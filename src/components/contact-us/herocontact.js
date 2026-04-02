@@ -7,7 +7,7 @@ import Image from 'next/image';
 function Herocontact1() {
     return (
         <div className={styles.backheroDigital}>
-            <div className={styles.backgroundImage}>
+            <div className={styles.backgroundImage}>    
                 <Image
                     src="/images/hero.jpg"
                     alt="Digital Marketing Background"
