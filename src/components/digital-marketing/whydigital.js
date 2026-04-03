@@ -20,7 +20,7 @@ function Whydigital() {
               src="/images/digital-marketing/Digital Marketing Agency USA Startups Can Rely On.webp"
               alt="about-digital"
               width={500}
-              height={400}
+              height={450}
               layout="responsive"
               quality={100}
             />

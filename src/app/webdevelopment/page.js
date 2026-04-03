@@ -10,6 +10,7 @@ import Keywordsweb from "@/components/web-development/keywordsweb";
 import Webservices1 from "@/components/web-development/servicesweb";
 import Webdevelopment1 from "@/components/web-development/webdevelopment";
 import SEO from "@/components/seo/seo"; // ✅ IMPORT ADD
+import Alice from "@/components/landing/alicecarousel";
 
 // ✅ Web Development SEO Data
 const webDevelopmentSEO = {
@@ -47,15 +48,19 @@ export default function WebdevelopmentPage() {
       <SEO seo={webDevelopmentSEO} />
 
       <Heroweb1 />
+       <Alice/>
       {/* <Heroform/> */}
-      <Webdevelopment1 />
-      <Keywordsweb />
-      <Calltoactionweb1 />
-      <Webservices1 category="web-development" />
-      <Calltoactionweb2 />
-      <Form1 />
-      <Carousel />
-      <Faqwebdevelopment1 />
+      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+       
+        <Webdevelopment1 />
+        <Keywordsweb />
+        <Calltoactionweb1 />
+        <Webservices1 category="web-development" />
+        <Calltoactionweb2 />
+        <Form1 />
+        <Carousel />
+        <Faqwebdevelopment1 />
+      </div>
     </main>
   );
 }

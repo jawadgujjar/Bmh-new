@@ -36,8 +36,8 @@ function Calltoactionweb2() {
             <Image
               src={webImage}
               alt="Web development services"
-              width={600}
-              height={400}
+              width={500}
+              height={450}
               className={styless.image}
               quality={100}
             />

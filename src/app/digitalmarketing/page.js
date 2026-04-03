@@ -6,6 +6,7 @@ import FAQdigital from "@/components/digital-marketing/faqsdigital";
 import Keywordsdigital from "@/components/digital-marketing/keywordsdigital";
 import Digitalservices1 from "@/components/digital-marketing/servicesdigital";
 import Whydigital from "@/components/digital-marketing/whydigital";
+import Alice from "@/components/landing/alicecarousel";
 import Carousel from "@/components/landing/carousel";
 import Form1 from "@/components/landing/getaquote";
 import Heroform from "@/components/landing/heroform";
@@ -43,7 +44,9 @@ export default function DigitalmarketingPage() {
       <SEO seo={digitalMarketingSEO} />
       
       <HeroDigitalMarketing/>
+       
       <Heroform/>
+      <Alice/>
       <Aboutdigital/>
       <Whydigital/>
       <Keywordsdigital/>
@@ -53,6 +56,7 @@ export default function DigitalmarketingPage() {
       <Form1/>
       <Carousel/>
       <FAQdigital/>
+       
     </main>
   );
 };

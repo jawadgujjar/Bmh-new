@@ -6,6 +6,7 @@ import Heroapp1 from "@/components/app-development/heroapp";
 import Keywordsapp from "@/components/app-development/keywordsapp";
 import Appservices1 from "@/components/app-development/servicesapp";
 import Digitalservices1 from "@/components/digital-marketing/servicesdigital";
+import Alice from "@/components/landing/alicecarousel";
 import Carousel from "@/components/landing/carousel";
 import Form1 from "@/components/landing/getaquote";
 import Heroform from "@/components/landing/heroform";
@@ -47,6 +48,7 @@ export default function AppdevelopmentPage() {
       <SEO seo={appDevelopmentSEO} />
 
       <Heroapp1 />
+       <Alice/>
       <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
         {/* <Heroform/> */}
         <Appdevelopment1 />

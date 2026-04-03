@@ -277,8 +277,8 @@ function Calltoactionweb1() {
             <Image
               src={webImage2}
               alt="Digital agency services"
-              width={600}
-              height={500}
+              width={500}
+              height={450}
               className={styless.image}
               quality={100}
             />

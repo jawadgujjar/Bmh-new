@@ -38,8 +38,8 @@ const Webdevelopment1 = () => {
           <Image
             src="images/web-development/Professional Website Development Company in USA.webp"
             alt="Web development services"
-            width={600}
-            height={500}
+            width={500}
+            height={450}
             className={styles.image}
             quality={100}
           />
@@ -102,8 +102,8 @@ const Webdevelopment1 = () => {
           <Image
             src="/images/web-development/Custom Website Development Built Around Real Business Needs.webp"
             alt="Web development services"
-            width={600}
-            height={400}
+            width={500}
+            height={450}
             className={styles.image}
             quality={100}
           />
@@ -133,8 +133,8 @@ const Webdevelopment1 = () => {
           <Image
             src="/images/web-development/Why Brand Marketing Hub.webp"
             alt="Digital agency services"
-            width={600}
-            height={500}
+            width={500}
+            height={450}
             className={styles.image}
             quality={100}
           />
