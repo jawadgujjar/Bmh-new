@@ -209,12 +209,12 @@ const PrivacyPolicy = () => {
                 <div className={styles.contactInfo}>
                   <div block className={styles.para}>
                     <strong>Email:</strong>{" "}
-                    <a href="mailto:support@bmh.com">support@bmh.com</a>
+                    <a href="mailto:hello@brandmarketinghub.com">hello@brandmarketinghub.com</a>
                   </div>
                   <div block className={styles.para}>
                     <strong>Website:</strong>{" "}
-                    <a href="https://bmh.com" target="_blank" rel="noreferrer">
-                      www.bmh.com
+                    <a href="https://brandmarketinghub.com" target="_blank" rel="noreferrer">
+                      www.brandmarketinghub.com
                     </a>
                   </div>
                 </div>

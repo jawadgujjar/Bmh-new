@@ -134,7 +134,7 @@ export default function SubFaqs({
         <p style={{ margin: 0, color: "#666" }}>
           Can't find the answer you're looking for? Please{" "}
           <a
-            href="/contact"
+            href="/contactus"
             style={{
               color: "#FD7E14",
               textDecoration: "none",

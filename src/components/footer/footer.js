@@ -164,7 +164,7 @@ function Footer() {
                 </div>
                 <div className={styles.contactDetail}>
                   <EnvironmentOutlined className={styles.contactIcon} />
-                  <span>7901 4TH ST N STE 300 ST. PETERSBURG FL 33702</span>
+                  <span>7901 4TH ST N STE 300 <br/>ST. PETERSBURG FL 33702</span>
                 </div>
                 <div className={styles.contactDetail}>
                   <MailOutlined className={styles.contactIcon} />

@@ -1,5 +1,6 @@
 import FAQ from '@/components/landing/faqs';
 import Form1 from '@/components/landing/getaquote';
+import Getaquotefaq from '@/components/landing/getaquotefaq';
 import Herogetaquote1 from '@/components/landing/herogetaquote/herogetaquote';
 import { Row, Col } from 'antd';
 
@@ -15,7 +16,7 @@ export default function getaquotePage() {
         </Col>
         <Col xs={24} md={12}>
           <div style={{ background: 'white', padding: '24px', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-            <FAQ />
+            <Getaquotefaq />
           </div>
         </Col>
       </Row>

@@ -91,7 +91,7 @@ function ProposalForm() {
                                 </button>
 
                                 <p className={styles.callText}>
-                                    In a Hurry? Give us a call at <a href="tel:+1234567890" className={styles.callLink}>+123-456-7890</a>
+                                    In a Hurry? Give us a call at {" "} <a href="tel:+1234567890" className={styles.callLink}>+123-456-7890</a>
                                 </p>
                             </form>
                         </div>
