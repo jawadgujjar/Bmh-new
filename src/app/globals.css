@@ -138,7 +138,9 @@ a {
 .scrolled ~ .breadcrumb-container-main {
   top: 80px;
 }
-
+.getaquote_formWrapper__tqq7v {
+  background: transparent !important;
+}
 /* --- MOBILE RESPONSIVE --- */
 @media (max-width: 991px) {
   .breadcrumb-container-main {
