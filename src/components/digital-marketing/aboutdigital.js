@@ -50,7 +50,7 @@ function Aboutdigital() {
               src="/images/digital-marketing/Digital Marketing Agency for Startups.webp"
               alt="about-digital"
               width={500}
-              height={400}
+              height={450}
               layout="responsive"
               quality={100}
             />

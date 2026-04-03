@@ -32,13 +32,7 @@ function Calltoactionweb2() {
               That Improve User Experience
             </h2>
             <h3>
-              An outdated or poorly structured website can hold your business
-              back. Our website redesign services in USA are designed to improve
-              usability, modernise the design, and align your site with current
-              user expectations. Instead of changing everything blindly, we
-              carefully analyse what is working and what needs improvement. We
-              redesign websites with a strong focus on user behaviour,
-              performance, and clarity.
+              An outdated or poorly structured website can hold your business back. Our website redesign services in USA are designed to improve usability, modernise the design, and align your site with current user expectations. Instead of changing everything blindly, we carefully analyse what is working and what needs improvement. We redesign websites with a strong focus on user behaviour, performance, and clarity. We refine layouts, improve page structure, and enhance overall flow so visitors feel confident navigating your site. This approach helps reduce bounce rates and increases meaningful user interaction. A redesigned website should feel familiar yet improved. That balance is what allows businesses to refresh their online presence without losing trust or brand identity.
             </h3>
           </div>
 
@@ -46,8 +40,8 @@ function Calltoactionweb2() {
             <Image
               src={webImage}
               alt="Web development services"
-              width={600}
-              height={400}
+              width={500}
+              height={450}
               className={styless.image}
               quality={100}
             />
@@ -61,11 +55,7 @@ function Calltoactionweb2() {
           for Modern Users
         </h2>
         <p>
-          Today, users access websites from multiple devices, and consistency
-          matters. As a responsive website development company, we ensure your
-          website performs smoothly on mobile phones, tablets, and desktops.
-          Brand Marketing Hub is recognised as a responsive web design company
-          that prioritizes accessibility and loading speed.
+          Today, users access websites from multiple devices, and consistency matters. As a responsive website development company, we ensure your website performs smoothly on mobile phones, tablets, and desktops. Our designs adapt naturally to different screen sizes while maintaining usability and visual balance. Brand Marketing Hub is also recognised as a responsive web design company that prioritizes accessibility, loading speed, and clean layouts. These elements not only improve user satisfaction but also align with search engine expectations for quality websites in the USA market. Responsive design is not just a feature — it is a requirement for businesses that want to stay competitive and relevant online.
         </p>
       </div>
 

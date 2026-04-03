@@ -38,7 +38,7 @@ const Services = () => {
         },
         {
             title: "Website Development",
-            image: "../images/home-page/Web dev.webp", // Replace with your actual image path
+            image: "../images/home-page/Web_Development.webp", // Replace with your actual image path
             description: "Get custom, responsive websites that deliver exceptional user experiences and drive business growth.",
             link: "/web-development"
         }
