@@ -72,21 +72,21 @@ function FAQdigital() {
             xl={10} // Slightly narrower on extra large screens
           >
             <div className={styles.para} style={{ marginTop: "2rem" }}>
-            <p className={styless.provenTextDigital}>
-              Supporting Startups and Small Businesses Across the USA
-            </p>
-            {/* <p className={styles.allTextDigital}>Convey <span className={styles.specialText}>a unified brand message </span>and <span className={styles.specialText}>drive consistent leads</span> across locations with franchise digital marketing.</p> */}
-            <p className={styless.allTextDigital}>
-              Brand Marketing Hub proudly works with startups and small
-              businesses across the USA. Whether you are launching a new venture
-              or scaling an existing business, our digital marketing solutions
-              are designed to support your growth journey. We understand the
-              pressure to move fast while building something that lasts. As a
-              digital marketing agency for small business success, we focus on
-              creating systems that deliver consistent results over time. Our
-              strategies are built to grow with you, adapting to changes in
-              market demand and business goals.
-            </p>
+              <p className={styless.provenTextDigital}>
+                Supporting Startups and Small Businesses Across the USA
+              </p>
+              {/* <p className={styles.allTextDigital}>Convey <span className={styles.specialText}>a unified brand message </span>and <span className={styles.specialText}>drive consistent leads</span> across locations with franchise digital marketing.</p> */}
+              <p className={styless.allTextDigital}>
+                Brand Marketing Hub proudly works with startups and small
+                businesses across the USA. Whether you are launching a new
+                venture or scaling an existing business, our digital marketing
+                solutions are designed to support your growth journey. We
+                understand the pressure to move fast while building something
+                that lasts. As a digital marketing agency for small business
+                success, we focus on creating systems that deliver consistent
+                results over time. Our strategies are built to grow with you,
+                adapting to changes in market demand and business goals.
+              </p>
             </div>
             {/* <p className={styles.allTextDigital}>Partner with Thrive today to get a holistic, full-service approach to all your digital marketing needs.
                     </p> */}
@@ -108,20 +108,20 @@ function FAQdigital() {
             xl={10} // Slightly narrower on extra large screens
           >
             <div className={styles.para} style={{ marginTop: "2rem" }}>
-            <p className={styless.provenTextDigital}>
-              Grow with Brand Marketing Hub
-            </p>
-            {/* <p className={styles.allTextDigital}>Convey <span className={styles.specialText}>a unified brand message </span>and <span className={styles.specialText}>drive consistent leads</span> across locations with franchise digital marketing.</p> */}
-            <p className={styless.allTextDigital}>
-              If you are looking for a digital marketing agency for startups
-              that understands the US market and delivers measurable outcomes,
-              Brand Marketing Hub is ready to help. From strategic guidance to
-              hands-on execution, we provide the expertise and support needed to
-              grow confidently in a competitive digital landscape. Work with
-              Brand Marketing Hub and partner with a top digital marketing
-              agency USA startups and small businesses trust for clarity,
-              performance, and sustainable growth.
-            </p>
+              <p className={styless.provenTextDigital}>
+                Grow with Brand Marketing Hub
+              </p>
+              {/* <p className={styles.allTextDigital}>Convey <span className={styles.specialText}>a unified brand message </span>and <span className={styles.specialText}>drive consistent leads</span> across locations with franchise digital marketing.</p> */}
+              <p className={styless.allTextDigital}>
+                If you are looking for a digital marketing agency for startups
+                that understands the US market and delivers measurable outcomes,
+                Brand Marketing Hub is ready to help. From strategic guidance to
+                hands-on execution, we provide the expertise and support needed
+                to grow confidently in a competitive digital landscape. Work
+                with Brand Marketing Hub and partner with a top digital
+                marketing agency USA startups and small businesses trust for
+                clarity, performance, and sustainable growth.
+              </p>
             </div>
             {/* <p className={styles.allTextDigital}>Partner with Thrive today to get a holistic, full-service approach to all your digital marketing needs.
                     </p> */}
@@ -190,7 +190,9 @@ function FAQdigital() {
           <h2>Still have questions?</h2>
           <p>
             Contact us directly at{" "}
-            <a href="mailto:hello@brandmarketinghub.com">hello@brandmarketinghub.com</a>
+            <a href="mailto:hello@brandmarketinghub.com">
+              hello@brandmarketinghub.com
+            </a>{" "}
             or call <a href="tel:+18132140535">(813) 214-0535</a>
           </p>
         </div>

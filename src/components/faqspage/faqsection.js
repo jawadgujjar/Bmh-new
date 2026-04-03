@@ -1,6 +1,6 @@
 // components/faqspage/faqsection.js
-'use client';
-import { useState } from 'react';
+"use client";
+import { useState } from "react";
 
 export default function FaqSection({ heading, description, faqs }) {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -10,9 +10,9 @@ export default function FaqSection({ heading, description, faqs }) {
   };
 
   // Heading ko split karke "Frequently" ko orange karna hai
-  const headingWords = heading.split(' ');
+  const headingWords = heading.split(" ");
   const firstWord = headingWords[0];
-  const restHeading = headingWords.slice(1).join(' ');
+  const restHeading = headingWords.slice(1).join(" ");
 
   return (
     <>
@@ -21,7 +21,9 @@ export default function FaqSection({ heading, description, faqs }) {
           max-width: 800px;
           margin: 0 auto;
           padding: 40px 20px;
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+          font-family:
+            -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+            Ubuntu, Cantarell, sans-serif;
           color: #333;
           background-color: #ffffff;
         }
@@ -56,11 +58,11 @@ export default function FaqSection({ heading, description, faqs }) {
         }
 
         .frequently {
-          color: #FD7E14;
+          color: #fd7e14;
         }
 
         .faqItem.active {
-          border-color: #FD7E14;
+          border-color: #fd7e14;
           box-shadow: 0 4px 6px rgba(253, 126, 20, 0.1);
         }
 
@@ -88,7 +90,7 @@ export default function FaqSection({ heading, description, faqs }) {
         .faqIcon {
           font-size: 1.5rem;
           font-weight: 300;
-          color: #FD7E14;
+          color: #fd7e14;
         }
 
         .faqAnswer {
@@ -130,7 +132,7 @@ export default function FaqSection({ heading, description, faqs }) {
         }
 
         .faqContact a {
-          color: #FD7E14;
+          color: #fd7e14;
           text-decoration: none;
           font-weight: 500;
         }
@@ -146,7 +148,7 @@ export default function FaqSection({ heading, description, faqs }) {
           background-color: #f8f8f8;
           border-radius: 8px;
           margin: 20px 0;
-          border: 2px dashed #FD7E14;
+          border: 2px dashed #fd7e14;
         }
 
         .noFaqsMessage p {
@@ -158,7 +160,7 @@ export default function FaqSection({ heading, description, faqs }) {
         .noFaqsMessage .icon {
           font-size: 3rem;
           margin-bottom: 15px;
-          color: #FD7E14;
+          color: #fd7e14;
         }
 
         @media (max-width: 768px) {
@@ -188,8 +190,7 @@ export default function FaqSection({ heading, description, faqs }) {
       <div className="faqContainer">
         <div className="faqHeader">
           <h1>
-            <span className="frequently">{firstWord}</span>{' '}
-            {restHeading}
+            <span className="frequently">{firstWord}</span> {restHeading}
           </h1>
           <p>{description}</p>
         </div>
@@ -198,17 +199,14 @@ export default function FaqSection({ heading, description, faqs }) {
           <>
             <div className="faqList">
               {faqs.map((faq, index) => (
-                <div 
-                  key={index} 
-                  className={`faqItem ${activeIndex === index ? 'active' : ''}`}
+                <div
+                  key={index}
+                  className={`faqItem ${activeIndex === index ? "active" : ""}`}
                 >
-                  <div 
-                    className="faqQuestion"
-                    onClick={() => toggleFAQ(index)}
-                  >
+                  <div className="faqQuestion" onClick={() => toggleFAQ(index)}>
                     <h3>{faq.question}</h3>
                     <span className="faqIcon">
-                      {activeIndex === index ? '−' : '+'}
+                      {activeIndex === index ? "−" : "+"}
                     </span>
                   </div>
                   {activeIndex === index && (
@@ -224,7 +222,7 @@ export default function FaqSection({ heading, description, faqs }) {
           <div className="noFaqsMessage">
             <div className="icon">❓</div>
             <p>No FAQs Found</p>
-            <p style={{ fontSize: '1rem', color: '#999' }}>
+            <p style={{ fontSize: "1rem", color: "#999" }}>
               Check back later for frequently asked questions about this service
             </p>
           </div>
@@ -233,7 +231,10 @@ export default function FaqSection({ heading, description, faqs }) {
         <div className="faqContact">
           <h2>Still have questions?</h2>
           <p>
-            Contact us directly at <a href="mailto:hello@brandmarketinghub.com">hello@brandmarketinghub.com</a> 
+            Contact us directly at{" "}
+            <a href="mailto:hello@brandmarketinghub.com">
+              hello@brandmarketinghub.com
+            </a>{" "}
             or call <a href="tel:+18132140535">(813) 214-0535</a>
           </p>
         </div>
