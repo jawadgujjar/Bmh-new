@@ -172,6 +172,15 @@ function Footer() {
                   <EnvironmentOutlined className={styles.contactIcon} />
                   <span>7901 4TH ST N STE 300 ST. PETERSBURG FL 33702</span>
                 </div>
+                <div className={styles.contactDetail}>
+                  <MailOutlined className={styles.contactIcon} />
+                  <a
+                    href="mailto:hello@brandmarketinghub.com"
+                    className={styles.mailLink}
+                  >
+                    hello@brandmarketinghub.com
+                  </a>
+                </div>
               </div>
 
               {/* --- Newsletter Input Added Here --- */}
