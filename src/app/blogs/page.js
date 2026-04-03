@@ -1,6 +1,5 @@
 import React from "react";
 import FirstPageBlog from "@/components/blogs/firstpageblog";
-import SEO from "@/components/seo/seo";
 import dbConnect from "@/lib/mongodb";
 import Blog from "@/models/blogs";
 import "../blogs/blogs.css";
