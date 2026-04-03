@@ -8,7 +8,6 @@ import Appservices1 from "@/components/app-development/servicesapp";
 import Digitalservices1 from "@/components/digital-marketing/servicesdigital";
 import Carousel from "@/components/landing/carousel";
 import Form1 from "@/components/landing/getaquote";
-import Heroform from "@/components/landing/heroform";
  
  
 
