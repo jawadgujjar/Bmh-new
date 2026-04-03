@@ -1,11 +1,27 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import { FaPhone, FaArrowRight } from "react-icons/fa";
 import Image from "next/image";
 import webImage from "../../../public/images/web-development/Website Redesign Services That Improve User Experience.webp";
 import styless from "../../styles/webdevelopment.module.css";
 import styles from "../../styles/web-development/calltoactionweb2.module.css";
+import WebCalltoaction from "../landing/webdevelopment/webcalltoaction";
 
 function Calltoactionweb2() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Lock body scroll when modal is active to prevent double scrolling
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isModalOpen]);
+
   return (
     <div>
       <section className={styless.section}>
@@ -22,13 +38,7 @@ function Calltoactionweb2() {
               user expectations. Instead of changing everything blindly, we
               carefully analyse what is working and what needs improvement. We
               redesign websites with a strong focus on user behaviour,
-              performance, and clarity. We refine layouts, improve page
-              structure, and enhance overall flow so visitors feel confident
-              navigating your site. This approach helps reduce bounce rates and
-              increases meaningful user interaction. A redesigned website should
-              feel familiar yet improved. That balance is what allows businesses
-              to refresh their online presence without losing trust or brand
-              identity.
+              performance, and clarity.
             </h3>
           </div>
 
@@ -44,6 +54,7 @@ function Calltoactionweb2() {
           </div>
         </div>
       </section>
+
       <div style={{ textAlign: "center", padding: "3%" }}>
         <h2>
           <span className={styless.span}>Responsive Website Development </span>{" "}
@@ -52,17 +63,12 @@ function Calltoactionweb2() {
         <p>
           Today, users access websites from multiple devices, and consistency
           matters. As a responsive website development company, we ensure your
-          website performs smoothly on mobile phones, tablets, and desktops. Our
-          designs adapt naturally to different screen sizes while maintaining
-          usability and visual balance. Brand Marketing Hub is also recognised
-          as a responsive web design company that prioritizes accessibility,
-          loading speed, and clean layouts. These elements not only improve user
-          satisfaction but also align with search engine expectations for
-          quality websites in the USA market. Responsive design is not just a
-          feature — it is a requirement for businesses that want to stay
-          competitive and relevant online.
+          website performs smoothly on mobile phones, tablets, and desktops.
+          Brand Marketing Hub is recognised as a responsive web design company
+          that prioritizes accessibility and loading speed.
         </p>
       </div>
+
       <div className={styles.ctaContainer}>
         <div className={styles.ctaContent}>
           <div className={styles.titleWrapper}>
@@ -86,12 +92,41 @@ function Calltoactionweb2() {
                 <div className={styles.buttonHoverEffect}></div>
               </div>
             </a>
-            <a href="#contact" className={styles.secondaryButton}>
+
+            {/* Modal Trigger Button */}
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className={styles.secondaryButton}
+            >
               <span>Schedule Consultation</span>
               <FaArrowRight className={styles.arrowIcon} />
-            </a>
+            </button>
           </div>
         </div>
+
+        {/* --- MODAL IMPLEMENTATION --- */}
+        {isModalOpen && (
+          <div
+            className={styles.modalOverlay}
+            onClick={() => setIsModalOpen(false)}
+          >
+            <div
+              className={styles.modalContent}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                className={styles.closeBtn}
+                onClick={() => setIsModalOpen(false)}
+              >
+                ×
+              </button>
+              <div className={styles.modalScrollBox}>
+                <WebCalltoaction />
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className={styles.decorativeElement}>
           <div className={styles.decorativeCircle}></div>
           <div className={styles.decorativeCircle}></div>

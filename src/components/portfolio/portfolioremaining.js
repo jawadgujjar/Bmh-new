@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation"; // ✅ client-side navigation
 import Carousel from "../landing/carousel";
 import Portfolio from "./portfolio";
 import styles from "../../styles/portfolioremianing.module.css";
+import Link from "next/link";
 
 // slug helper
 const slugify = (text) =>
@@ -89,7 +90,9 @@ const PortfolioRemain = ({ initialCategory = "All" }) => {
       <div className={styles.containerportfolio}>
         <div className={styles.textBox}>
           <p>How Does Your Site Compare?</p>
-          <button className={styles.actionButton}>Free Quote</button>
+          <Link href="/getaquote" className={styles.actionButton}>
+            Free Quote
+          </Link>{" "}
         </div>
       </div>
 

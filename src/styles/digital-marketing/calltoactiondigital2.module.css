@@ -186,7 +186,60 @@
   background: linear-gradient(90deg, transparent, #fd7e14, transparent);
   animation: lineAnimation 3s infinite;
 }
+/* Poori screen ko cover karne wala background */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Taake lamba modal top se shuru ho */
+  z-index: 10000;
+  backdrop-filter: blur(8px);
+  overflow-y: auto; /* Bahar wala scroll allow karega */
+  padding: 40px 10px; /* Mobile par sides se gap */
+}
 
+/* Modal ka asal box */
+.modalContent {
+  background: #1a1a1a; /* Dark theme jaisa screenshot mein hai */
+  padding: 30px;
+  border-radius: 20px;
+  position: relative;
+  max-width: 600px;
+  width: 100%;
+  margin: auto; /* Vertical alignment fix karne ke liye */
+  border: 1px solid #333;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.closeBtn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: #ff7f11;
+  border: none;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 101;
+  transition: 0.3s;
+}
+
+.closeBtn:hover {
+  transform: rotate(90deg);
+  background: #e66d00;
+}
 @keyframes lineAnimation {
   0% {
     transform: translateX(-100%);
