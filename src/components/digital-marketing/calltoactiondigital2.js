@@ -114,11 +114,7 @@ function Calltoactiondigital2() {
                 Why Brand Marketing Hub Is the Right Partner
               </p>
               <p className={styless.allTextDigital}>
-                Brand Marketing Hub stands out as a digital marketing agency for
-                startups because we understand early-stage challenges. We know
-                that resources are limited, competition is high, and every
-                decision matters. Our role is to simplify digital marketing
-                while delivering results that support long-term success.
+                Brand Marketing Hub stands out as a digital marketing agency for startups because we understand early-stage challenges. We know that resources are limited, competition is high, and every decision matters. Our role is to simplify digital marketing while delivering results that support long-term success. We bring experience working with startups and small businesses across different industries in the USA. This allows us to identify opportunities quickly and avoid strategies that waste time or budget. As a top digital marketing company in USA for growing businesses, we focus on execution that is practical, measurable, and aligned with real business needs. Trust is built through consistency and results. That is why we emphasize clear communication, realistic expectations, and performance tracking in everything we do.
               </p>
             </div>
           </Col>
@@ -133,10 +129,7 @@ function Calltoactiondigital2() {
                 Performance-Driven Marketing Built for the US Market
               </p>
               <p className={styless.allTextDigital}>
-                Brand Marketing Hub operates with a performance-first mindset.
-                As a performance based marketing agency, we measure success
-                through meaningful metrics such as qualified leads, conversions,
-                and growth trends.
+                Brand Marketing Hub operates with a performance-first mindset. As a performance based marketing agency, we measure success through meaningful metrics such as qualified leads, conversions, and growth trends. Every strategy is reviewed and optimized based on data and user behavior. This approach allows startups and small businesses to scale confidently. Instead of guessing what works, you gain insight into what drives results and where to invest next. In a competitive US market, this clarity is essential for sustainable growth.
               </p>
             </div>
           </Col>

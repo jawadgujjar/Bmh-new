@@ -2,8 +2,8 @@
 
 import React from "react";
 import Image from "next/image";
-import appImage1 from "../../../public/images/brand marketing.jpg";
-import appImage2 from "../../../public/images/digital-agencies.webp";
+import appImage1 from "../../../public/images/App development/Build Software that Works the Way Your Business Operates.webp";
+import appImage2 from "../../../public/images/App development/Scalable and Reliable Application Development.webp";
 import Link from "next/link";
 import styles from "../../styles/app-development/appdevelopment.module.css";
 import { FaFire } from "react-icons/fa";
@@ -105,8 +105,8 @@ const Appdevelopment1 = () => {
           <Image
             src={appImage2}
             alt="Mobile development workflow"
-            width={600}
-            height={500}
+            width={500}
+            height={450}
             className={styles.image}
             quality={100}
           />
