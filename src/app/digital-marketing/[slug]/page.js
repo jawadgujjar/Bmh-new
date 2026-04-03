@@ -48,7 +48,7 @@ const generateSchemaMarkup = (subcategory) => {
       "name": "YourCompany"
     },
     "serviceType": subcategory.name,
-    "url": `https://yourdomain.com/digitalmarketing/${subcategory.slug || slug}`,
+    "url": `https://yourdomain.com/digital-marketing/${subcategory.slug || slug}`,
     "areaServed": {
       "@type": "Country",
       "name": "Global"

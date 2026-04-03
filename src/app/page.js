@@ -19,7 +19,6 @@ import SeoIndustries from "@/components/landing/seoindustries";
 import Features from "@/components/landing/services";
 import Webcontent1 from "@/components/landing/webcontent";
 import WebCalltoaction from "@/components/landing/webdevelopment/webcalltoaction";
-import WebIndustries from "@/components/landing/webdevelopment/webindustries";
 import WhyChooseUs from "@/components/landing/whychooseus";
 
 export default function Home() {
