@@ -134,12 +134,36 @@ function Footer() {
             <div className={styles.footerSection}>
               <h3 className={styles.sectionTitle}>Our Services</h3>
               <ul className={styles.footerList}>
-                <li>Custom Web Development</li>
-                <li>SEO / SEM</li>
-                <li>UI and UX Design</li>
-                <li>App Development</li>
-                <li>Graphics & Branding</li>
-                <li>DevOps</li>
+                <li>
+                  <Link href="/seo-services/local-seo-services" className={styles.footerLink}>
+                    Local SEO Services
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/search-engine-marketing/google-ads-management-services" className={styles.footerLink}>
+                    Google Ads Management Services
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/ecommerce-website-development" className={styles.footerLink}>
+                    Ecommerce Website Development
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/website-redesign-services" className={styles.footerLink}>
+                    Website Redesign Services
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/smm-services/facebook-marketing-agency" className={styles.footerLink}>
+                    Facebook Marketing Services
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/seo-services/content-writing-services" className={styles.footerLink}>
+                    Content Writing Services
+                  </Link>
+                </li>
               </ul>
             </div>
           </Col>
