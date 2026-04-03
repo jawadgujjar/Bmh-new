@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { CiMobile3 } from "react-icons/ci";
-import { FaChevronRight, FaWhatsapp } from "react-icons/fa";
+import { FaWhatsapp } from "react-icons/fa";
 import styles from "../../styles/navbar.module.css";
 
 function NavbarBmh() {
@@ -12,9 +12,8 @@ function NavbarBmh() {
   const [expanded, setExpanded] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [subcategories, setSubcategories] = useState({});
-  const [pagesBySub, setPagesBySub] = useState({});
+  const [allPages, setAllPages] = useState({});
   const timeoutRef = useRef(null);
-  const navbarRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -22,61 +21,47 @@ function NavbarBmh() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Data fetching logic
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        navbarRef.current &&
-        !navbarRef.current.contains(event.target) &&
-        expanded
-      ) {
-        setExpanded(false);
-        setActiveDropdown(null);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [expanded]);
+    const fetchFullMenu = async () => {
+      const categories = [
+        "digital-marketing",
+        "web-development",
+        "app-development",
+      ];
+      const catData = {};
+      const pageData = {};
 
-  useEffect(() => {
-    const fetchCats = async () => {
-      const keys = ["digital-marketing", "web-development", "app-development"];
-      const dataObj = {};
-      for (const key of keys) {
+      for (const catKey of categories) {
         try {
-          const res = await fetch(`/api/subcategories?category=${key}`);
-          const data = await res.json();
-          dataObj[key] = Array.isArray(data) ? data : data.data || [];
+          const res = await fetch(`/api/subcategories?category=${catKey}`);
+          const json = await res.json();
+          const subs = Array.isArray(json) ? json : json.data || [];
+
+          if (subs.length > 0) {
+            catData[catKey] = subs;
+            for (const sub of subs) {
+              const pRes = await fetch(`/api/page?subcategory=${sub._id}`);
+              const pJson = await pRes.json();
+              pageData[sub._id] = pJson?.data || [];
+            }
+          }
         } catch (e) {
-          console.error(e);
+          console.error(`Error loading ${catKey}:`, e);
         }
       }
-      setSubcategories(dataObj);
+      setSubcategories(catData);
+      setAllPages(pageData);
     };
-    fetchCats();
+    fetchFullMenu();
   }, []);
 
-const prefetchPages = useCallback(
-  async (subId) => {
-    if (!subId || pagesBySub[subId]) return;
-    try {
-      const res = await fetch(`/api/page?subcategory=${subId}`);
-      const json = await res.json();
-      const pages = json?.data || []; // ✅ Correctly extract array
-      setPagesBySub((prev) => ({
-        ...prev,
-        [subId]: pages,
-      }));
-    } catch (e) {
-      console.error(e);
-    }
-  },
-  [pagesBySub]
-);
-
-  const handleOpen = (id) => {
+  const handleOpen = (id, key) => {
     if (window.innerWidth < 992) return;
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    setActiveDropdown(id);
+    if (subcategories[key]?.length > 0) {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      setActiveDropdown(id);
+    }
   };
 
   const handleClose = () => {
@@ -89,15 +74,7 @@ const prefetchPages = useCallback(
     setActiveDropdown(null);
   };
 
-  // Fixed: Toggle Logic for Mobile
-  const toggleSubMenu = (id, e) => {
-    if (window.innerWidth >= 992) return;
-    e.preventDefault();
-    e.stopPropagation();
-    setActiveDropdown(activeDropdown === id ? null : id);
-  };
-
-  const categoryConfig = [
+  const menuItems = [
     {
       title: "Digital Marketing",
       id: "dm",
@@ -120,24 +97,19 @@ const prefetchPages = useCallback(
 
   return (
     <Navbar
-      ref={navbarRef}
       expand="lg"
       fixed="top"
       expanded={expanded}
       className={`${styles.mainNavbar} ${scrolled ? styles.scrolled : ""}`}
     >
       <Container fluid className={styles.navContainer}>
-        <div className={styles.navLeft}>
-          <Navbar.Brand as={Link} href="/" onClick={closeMenu}>
-            <img src="/bmhlogo.svg" className={styles.logo} alt="Logo" />
-          </Navbar.Brand>
-        </div>
+        <Navbar.Brand as={Link} href="/" onClick={closeMenu}>
+          <img src="/bmhlogo.svg" className={styles.logo} alt="Logo" />
+        </Navbar.Brand>
 
-        {/* Custom Toggle Button with Animation */}
         <button
           className={`${styles.customToggle} ${expanded ? styles.open : ""}`}
           onClick={() => setExpanded(!expanded)}
-          aria-label="Toggle navigation"
         >
           <span></span>
           <span></span>
@@ -147,71 +119,64 @@ const prefetchPages = useCallback(
         <Navbar.Collapse id="nav-menu" className={styles.navCollapse}>
           <div className={styles.navCenter}>
             <Nav className={styles.centerLinks}>
-              {categoryConfig.map((cat) => (
+              {menuItems.map((item) => (
                 <div
-                  key={cat.id}
+                  key={item.id}
                   className={styles.navItemWrapper}
-                  onMouseEnter={() => handleOpen(cat.id)}
+                  onMouseEnter={() => handleOpen(item.id, item.key)}
                   onMouseLeave={handleClose}
                 >
-                  <div
-                    className={styles.navLinkWrapper}
-                    onClick={(e) => toggleSubMenu(cat.id, e)}
+                  <Link
+                    href={item.path}
+                    className={styles.navLink}
+                    onClick={closeMenu}
                   >
-                    <Link
-                      href={cat.path}
-                      className={styles.navLink}
-                      onClick={(e) => {
-                        if (window.innerWidth < 992) {
-                          // On mobile, first click opens dropdown
-                          e.preventDefault();
-                        } else {
-                          closeMenu();
-                        }
-                      }}
-                    >
-                      {cat.title}
-                    </Link>
-                    <FaChevronRight
-                      className={`${styles.mobileArrow} ${activeDropdown === cat.id ? styles.arrowRotate : ""}`}
-                      size={12}
-                    />
-                  </div>
+                    {item.title}
+                  </Link>
 
-                  {activeDropdown === cat.id && (
-                    <div className={styles.customDropdownMenu}>
-                      <div className={styles.dropdownFlex}>
-                        {subcategories[cat.key]?.map((sub) => (
-                          <div
-                            key={sub._id}
-                            className={styles.subCol}
-                            onMouseEnter={() => prefetchPages(sub._id)}
-                          >
+                  {activeDropdown === item.id &&
+                    subcategories[item.key]?.length > 0 && (
+                      <div className={styles.customDropdownMenu}>
+                        {subcategories[item.key].map((sub) => (
+                          <div key={sub._id} className={styles.subCol}>
                             <Link
                               href={`/${sub.slug}`}
                               className={styles.subTitle}
                               onClick={closeMenu}
                             >
-                              {sub.name} <FaChevronRight size={10} />
+                              {sub.icon && (
+                                <img
+                                  src={sub.icon}
+                                  className={styles.categoryIcon}
+                                  alt=""
+                                />
+                              )}
+                              <span>{sub.name}</span>
                             </Link>
-                            {pagesBySub[sub._id]?.map((p) => (
-                              <Link
-                                key={p._id}
-                                href={`/${sub.slug}/${p.slug}`}
-                                className={styles.pageLink}
-                                onClick={closeMenu}
-                              >
-                                {p.title}
-                              </Link>
-                            ))}
+
+                            {/* Pages as a List */}
+                            <ul className={styles.pagesList}>
+                              {allPages[sub._id]?.map((page) => (
+                                <li
+                                  key={page._id}
+                                  className={styles.pageListItem}
+                                >
+                                  <Link
+                                    href={`/${sub.slug}/${page.slug}`}
+                                    className={styles.pageLink}
+                                    onClick={closeMenu}
+                                  >
+                                    {page.title}
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
                           </div>
                         ))}
                       </div>
-                    </div>
-                  )}
+                    )}
                 </div>
               ))}
-
               <div className={styles.navItemWrapper}>
                 <Link
                   href="/portfolio"
@@ -226,31 +191,21 @@ const prefetchPages = useCallback(
 
           <div className={styles.navRight}>
             <div className={styles.actionSection}>
-              <a
-                href="tel:+18132140535"
-                className={styles.phoneBox}
-                onClick={closeMenu}
-              >
+              <a href="tel:+18132140535" className={styles.phoneBox}>
                 <CiMobile3 size={24} color="#ffa500" />
                 <div className={styles.phoneText}>
                   <span>(813) 214-0535</span>
                   <small>Speak with Expert</small>
                 </div>
               </a>
-              
-              {/* WhatsApp Icon */}
               <a
                 href="https://wa.me/18132140535"
                 target="_blank"
-                rel="noopener noreferrer"
                 className={styles.whatsappBox}
-                onClick={closeMenu}
-                aria-label="Chat on WhatsApp"
               >
                 <FaWhatsapp size={24} color="#25D366" />
               </a>
-
-              <Link href="/getaquote" onClick={closeMenu}>
+              <Link href="/getaquote">
                 <Button className={styles.quoteBtn}>Get a Quote</Button>
               </Link>
             </div>
