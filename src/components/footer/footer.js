@@ -62,16 +62,31 @@ function Footer() {
               </p>
               <h4 className={styles.sectionSubtitle}>Follow Us!</h4>
               <div className={styles.socialIcons}>
-                <a href="#" className={styles.socialIcon}>
+                <a
+                  href="https://www.facebook.com/brandmarketinghubofficial/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.socialIcon}
+                >
                   <FacebookOutlined />
                 </a>
                 <a href="#" className={styles.socialIcon}>
                   <TwitterOutlined />
                 </a>
-                <a href="#" className={styles.socialIcon}>
+                <a
+                  href="https://www.instagram.com/brandmarketinghub_official/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.socialIcon}
+                >
                   <InstagramOutlined />
                 </a>
-                <a href="#" className={styles.socialIcon}>
+                <a
+                  href="https://www.linkedin.com/company/brand-marketing-hub"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.socialIcon}
+                >
                   <LinkedinOutlined />
                 </a>
               </div>
@@ -180,6 +195,15 @@ function Footer() {
                 <div className={styles.contactDetail}>
                   <EnvironmentOutlined className={styles.contactIcon} />
                   <span>7901 4TH ST N STE 300 ST. PETERSBURG FL 33702</span>
+                </div>
+                <div className={styles.contactDetail}>
+                  <MailOutlined className={styles.contactIcon} />
+                  <a
+                    href="mailto:hello@brandmarketinghub.com"
+                    className={styles.mailLink}
+                  >
+                    hello@brandmarketinghub.com
+                  </a>
                 </div>
               </div>
 
