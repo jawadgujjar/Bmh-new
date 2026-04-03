@@ -78,19 +78,19 @@ function NavbarBmh() {
     {
       title: "Digital Marketing",
       id: "dm",
-      path: "/digitalmarketing",
+      path: "/digital-marketing",
       key: "digital-marketing",
     },
     {
       title: "Web Development",
       id: "wd",
-      path: "/webdevelopment",
+      path: "/web-development",
       key: "web-development",
     },
     {
       title: "App Development",
       id: "ad",
-      path: "/appdevelopment",
+      path: "/app-development",
       key: "app-development",
     },
   ];
