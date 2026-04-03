@@ -1,12 +1,28 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import { FaPhone, FaArrowRight } from "react-icons/fa";
 import styles from "../../styles/digital-marketing/calltoactiondigital2.module.css";
-import styless from "../../styles/digital-marketing/whydigital.module.css"; // Using CSS Modules
+import styless from "../../styles/digital-marketing/whydigital.module.css";
 import Link from "next/link";
-import { Row, Col, Button } from "antd";
-import Image from "next/image"; // Using Next.js Image component
+import { Row, Col } from "antd";
+import Image from "next/image";
+import WebCalltoaction from "../landing/webdevelopment/webcalltoaction";
 
 function Calltoactiondigital2() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isModalOpen]);
+
   return (
     <div>
       <div className={styles.ctaContainer}>
@@ -36,30 +52,51 @@ function Calltoactiondigital2() {
               </div>
             </a>
 
-            <a href="#contact" className={styles.secondaryButton}>
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className={styles.secondaryButton}
+            >
               <span>Schedule Consultation</span>
               <FaArrowRight className={styles.arrowIcon} />
-            </a>
+            </button>
           </div>
         </div>
+
+        {/* Modal logic with improved Overlay and Content wrapping */}
+        {isModalOpen && (
+          <div
+            className={styles.modalOverlay}
+            onClick={() => setIsModalOpen(false)}
+          >
+            <div
+              className={styles.modalContent}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                className={styles.closeBtn}
+                onClick={() => setIsModalOpen(false)}
+              >
+                ×
+              </button>
+              <div className={styles.modalScrollBox}>
+                <WebCalltoaction />
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className={styles.decorativeElement}>
           <div className={styles.decorativeCircle}></div>
           <div className={styles.decorativeCircle}></div>
           <div className={styles.decorativeCircle}></div>
         </div>
-
         <div className={styles.animatedLine}></div>
       </div>
+
+      {/* --- Rest of the Content Sections --- */}
       <div className={styless.aboutdigitalMain}>
-        <Row justify="center" gutter={[24, 24]}>
-          <Col
-            xs={22} // Full width on extra small screens
-            sm={22} // Full width on small screens
-            md={10} // Half width on medium screens
-            lg={10} // Slightly narrower on large screens
-            xl={10} // Slightly narrower on extra large screens
-          >
+        <Row justify="center" gutter={[24, 24]} align="middle">
+          <Col xs={22} sm={22} md={10} lg={10} xl={10}>
             <div className={styless.imageContainer}>
               <Image
                 src="/images/digital-marketing/Why Brand Marketing Hub Is the Right Partner.webp"
@@ -71,81 +108,39 @@ function Calltoactiondigital2() {
               />
             </div>
           </Col>
-          <Col
-            xs={18} // Full width on extra small screens
-            sm={18} // Full width on small screens
-            md={12} // Half width on medium screens
-            lg={10} // Slightly narrower on large screens
-            xl={10} // Slightly narrower on extra large screens
-          >
+          <Col xs={18} sm={18} md={12} lg={10} xl={10}>
             <div className={styles.para}>
-            <p className={styless.provenTextDigital}>
-              Why Brand Marketing Hub Is the Right Partner
-            </p>
-            {/* <p className={styles.allTextDigital}>Convey <span className={styles.specialText}>a unified brand message </span>and <span className={styles.specialText}>drive consistent leads</span> across locations with franchise digital marketing.</p> */}
-            <p className={styless.allTextDigital}>
-              Brand Marketing Hub stands out as a digital marketing agency for
-              startups because we understand early-stage challenges. We know
-              that resources are limited, competition is high, and every
-              decision matters. Our role is to simplify digital marketing while
-              delivering results that support long-term success. We bring
-              experience working with startups and small businesses across
-              different industries in the USA. This allows us to identify
-              opportunities quickly and avoid strategies that waste time or
-              budget. As a top digital marketing company in USA for growing
-              businesses, we focus on execution that is practical, measurable,
-              and aligned with real business needs. Trust is built through
-              consistency and results. That is why we emphasize clear
-              communication, realistic expectations, and performance tracking in
-              everything we do.
-            </p>
+              <p className={styless.provenTextDigital}>
+                Why Brand Marketing Hub Is the Right Partner
+              </p>
+              <p className={styless.allTextDigital}>
+                Brand Marketing Hub stands out as a digital marketing agency for
+                startups because we understand early-stage challenges. We know
+                that resources are limited, competition is high, and every
+                decision matters. Our role is to simplify digital marketing
+                while delivering results that support long-term success.
+              </p>
             </div>
-            {/* <p className={styles.allTextDigital}>Partner with Thrive today to get a holistic, full-service approach to all your digital marketing needs.
-                    </p> */}
           </Col>
         </Row>
-        {/* <div className={styless.callactionButton}>
-                <Link href="/getaquote" passHref>
-                    <Button className={styless.proposalButton}>UNLOCK YOUR FRANCHISE'S POTENTIAL</Button>
-                </Link>
-            </div> */}
       </div>
+
       <div className={styless.aboutdigitalMain}>
-        <Row justify="center" gutter={[24, 24]}>
-          <Col
-            xs={18} // Full width on extra small screens
-            sm={18} // Full width on small screens
-            md={12} // Half width on medium screens
-            lg={10} // Slightly narrower on large screens
-            xl={10} // Slightly narrower on extra large screens
-          >
+        <Row justify="center" gutter={[24, 24]} align="middle">
+          <Col xs={18} sm={18} md={12} lg={10} xl={10}>
             <div className={styles.para}>
-            <p className={styless.provenTextDigital}>
-              Performance-Driven Marketing Built for the US Market
-            </p>
-            {/* <p className={styles.allTextDigital}>Convey <span className={styles.specialText}>a unified brand message </span>and <span className={styles.specialText}>drive consistent leads</span> across locations with franchise digital marketing.</p> */}
-            <p className={styless.allTextDigital}>
-              Brand Marketing Hub operates with a performance-first mindset. As
-              a performance based marketing agency, we measure success through
-              meaningful metrics such as qualified leads, conversions, and
-              growth trends. Every strategy is reviewed and optimized based on
-              data and user behavior. This approach allows startups and small
-              businesses to scale confidently. Instead of guessing what works,
-              you gain insight into what drives results and where to invest
-              next. In a competitive US market, this clarity is essential for
-              sustainable growth.
-            </p>
+              <p className={styless.provenTextDigital}>
+                Performance-Driven Marketing Built for the US Market
+              </p>
+              <p className={styless.allTextDigital}>
+                Brand Marketing Hub operates with a performance-first mindset.
+                As a performance based marketing agency, we measure success
+                through meaningful metrics such as qualified leads, conversions,
+                and growth trends.
+              </p>
             </div>
-            {/* <p className={styles.allTextDigital}>Partner with Thrive today to get a holistic, full-service approach to all your digital marketing needs.
-                    </p> */}
           </Col>
-          <Col
-            xs={22} // Full width on extra small screens
-            sm={22} // Full width on small screens
-            md={10} // Half width on medium screens
-            lg={10} // Slightly narrower on large screens
-            xl={10} // Slightly narrower on extra large screens
-          >
+          <Col xs={22} sm={22} md={10} lg={10} xl={10}>
             <div className={styless.imageContainer}>
               <Image
                 src="/images/digital-marketing/Performance-Driven Marketing Built for the US Market.webp"
@@ -158,11 +153,6 @@ function Calltoactiondigital2() {
             </div>
           </Col>
         </Row>
-        {/* <div className={styless.callactionButton}>
-                <Link href="/getaquote" passHref>
-                    <Button className={styless.proposalButton}>UNLOCK YOUR FRANCHISE'S POTENTIAL</Button>
-                </Link>
-            </div> */}
       </div>
     </div>
   );

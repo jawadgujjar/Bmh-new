@@ -7,6 +7,7 @@ import StartupIcon from "../../../public/images/startup-business.webp";
 import SmbIcon from "../../../public/images/small-business.webp";
 import EnterpriseIcon from "../../../public/images/enterprise.webp";
 import AgencyIcon from "../../../public/images/digital-agencies.webp";
+import Link from "next/link";
 
 const Forwhom = () => {
   const cardData = [
@@ -55,9 +56,15 @@ const Forwhom = () => {
               your brand feel reliable, structured, and meaningful. Because when
               your brand is easy to understand, it becomes easier to choose.
             </p>
-            <Button type="primary" size="large" className={styles.quoteButton}>
-             Start Building Your Brand
-            </Button>
+            <Link href="/contactus" passHref>
+              <Button
+                type="primary"
+                size="large"
+                className={styles.quoteButton}
+              >
+                Start Building Your Brand
+              </Button>
+            </Link>
           </div>
         </Col>
 
