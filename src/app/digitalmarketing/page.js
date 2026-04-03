@@ -15,9 +15,9 @@ import SEO from "@/components/seo/seo";
 
 // Main Digital Marketing page ke liye SEO data
 const digitalMarketingSEO = {
-  metaTitle: "Digital Marketing Services - Grow Your Business Online | YourCompany",
-  metaDescription: "Professional digital marketing services including SEO, PPC, social media marketing, and content marketing. Boost your online presence and drive more sales.",
-  metaKeywords: ["digital marketing", "SEO services", "social media marketing", "PPC advertising", "online marketing"],
+  metaTitle: "Top digital marketing agency for startups in USA",
+  metaDescription: "Grow your startup with a top digital marketing agency in the USA. We create simple, smart strategies to get more customers and grow your business. Start today!",
+  metaKeywords: ["Digital marketing agency for startups", "Top digital marketing agency USA", "digital marketing agency for small business", "digital marketing consultancy", "affordable digital marketing agency"],
   // ✅ schemaMarkup add karein (optional)
   schemaMarkup: {
     "@context": "https://schema.org",

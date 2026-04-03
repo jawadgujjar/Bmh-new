@@ -5,9 +5,9 @@ import SEO from "@/components/seo/seo";
 
  
 const portfolioSEO = {
-  metaTitle: "Our Portfolio - Client Work & Case Studies | YourCompany",
-  metaDescription: "Explore our portfolio of successful projects and client work. See real examples of our expertise.",
-  metaKeywords: ["portfolio", "case studies", "client work", "project showcase"]
+  metaTitle: "BMH Portfolio – Projects We’ve Worked On Across the USA",
+  metaDescription: "Explore BMH’s portfolio showcasing our digital marketing and branding projects in the USA. See how we help businesses grow with creative solutions.",
+  // metaKeywords: ["portfolio", "case studies", "client work", "project showcase"]
 };
 
 export default function PortfolioPage() {
