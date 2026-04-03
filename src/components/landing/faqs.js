@@ -54,7 +54,7 @@ function FAQ() {
       question: "Why should I choose Brand Marketing Hub?",
       answer:
         "We focus on clarity, consistency, and meaningful communication. Instead of making branding complicated, we simplify the process and focus on what actually helps your business grow. Our goal is to create a brand that people understand, trust, and remember.",
-    },
+    }
   ];
 
   return (
@@ -94,9 +94,7 @@ function FAQ() {
         <h2>Still have questions?</h2>
         <p>
           Contact us directly at{" "}
-          <a href="mailto:hello@brandmarketinghub.com">
-            hello@brandmarketinghub.com
-          </a>{" "}
+          <a href="mailto:hello@brandmarketinghub.com">hello@brandmarketinghub.com</a>{" "}
           or call <a href="tel:+18132140535">(813) 214-0535</a>
         </p>
       </div>
