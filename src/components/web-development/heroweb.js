@@ -23,14 +23,7 @@ function Heroweb1() {
           Trusted Web Development Company in the USA
         </h1>
         <p className={styles.growText}>
-          As a growing web development company usa, Brand Marketing Hub is
-          committed to building trust through quality work and clear
-          communication. We focus on long-term partnerships rather than one-time
-          projects. Our experience across different industries allows us to
-          adapt strategies while maintaining consistent standards. We approach
-          every project with responsibility, attention to detail, and respect
-          for user expectations. That mindset helps us deliver solutions that
-          feel reliable, professional, and aligned with EEAT principles.
+          As a growing web development company usa, Brand Marketing Hub is committed to building trust through quality work and clear communication. We focus on long-term partnerships rather than one-time projects. Our experience across different industries allows us to adapt strategies while maintaining consistent standards. We approach every project with responsibility, attention to detail, and respect for user expectations. That mindset helps us deliver solutions that feel reliable, professional, and aligned with EEAT principles.
         </p>
         <div className={styles.formDigital}>
           <Link href="/getaquote" passHref>

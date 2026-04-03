@@ -3,7 +3,7 @@ import { Row, Col, Card, Button } from "antd";
 import styles from "../../styles/forwhom.module.css";
 
 // Import your icons (replace with actual icon paths)
-import StartupIcon from "../../../public/images/startup-business.webp";
+import StartupIcon from "../../../public/images/home-page/startup.png";
 import SmbIcon from "../../../public/images/small-business.webp";
 import EnterpriseIcon from "../../../public/images/enterprise.webp";
 import AgencyIcon from "../../../public/images/digital-agencies.webp";

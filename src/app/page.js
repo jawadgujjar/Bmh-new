@@ -1,36 +1,33 @@
 // app/page.js
-
 "use client";
 
-import Alice from "@/components/landing/alicecarousel";
-import Calltoaction from "@/components/landing/calltoaction";
-import Carousel from "@/components/landing/carousel";
-import FAQ from "@/components/landing/faqs";
-import Forwhom from "@/components/landing/forwhom";
-import Form1 from "@/components/landing/getaquote";
-import Heroform from "@/components/landing/heroform";
-import HeroMain from "@/components/landing/heromain";
-import ProposalForm from "@/components/landing/proposalform";
-import Reviews from "@/components/landing/reviews";  
-import Reward from "@/components/landing/reward";
-import Seocontent1 from "@/components/landing/seocontent";
-import SeoIndustries from "@/components/landing/seoindustries";
-
-import Features from "@/components/landing/services";
-import Webcontent1 from "@/components/landing/webcontent";
-import WebCalltoaction from "@/components/landing/webdevelopment/webcalltoaction";
-import WebIndustries from "@/components/landing/webdevelopment/webindustries";
-import WhyChooseUs from "@/components/landing/whychooseus";
+// import Calltoaction from "@/components/landing/calltoaction";
+ 
+ 
+ import Alice from "src/components/landing/alicecarousel";
+import Carousel from "src/components/landing/carousel";
+import FAQ from "src/components/landing/faqs";
+import Forwhom from "src/components/landing/forwhom";
+import Form1 from "src/components/landing/getaquote";
+import Heroform from "src/components/landing/heroform";
+import HeroMain from "src/components/landing/heromain";
+import Reward from "src/components/landing/reward";
+import Seocontent1 from "src/components/landing/seocontent";
+import SeoIndustries from "src/components/landing/seoindustries";
+import Services from "src/components/landing/services";
+import Webcontent1 from "src/components/landing/webcontent";
+import WebCalltoaction from "src/components/landing/webdevelopment/webcalltoaction";
+import WhyChooseUs from "src/components/landing/whychooseus";
 
 export default function Home() {
   return (
     <>
       <HeroMain />
       {/* <Reviews />   */}
-      <Heroform/>
+      <Heroform />
       <Alice/>
-      <Forwhom/>
-      <Features/>
+      <Forwhom />
+      <Services/>
       <Seocontent1/>
       <SeoIndustries/>
       {/* <Calltoaction/> */}
@@ -38,11 +35,11 @@ export default function Home() {
       <Webcontent1/>
       {/* <WebIndustries/> */}
       <WhyChooseUs/>
-      <Carousel/>
+      <Carousel />
       <Reward/>
       {/* <ProposalForm/> */}
-      <Form1/>
-      <FAQ/>
+      <Form1 />
+      <FAQ />
 
     </>
   );

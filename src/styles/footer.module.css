@@ -162,6 +162,10 @@
 .newsletterButton:hover {
   background-color: #fca700 !important;
 }
+.contactDetail .mailLink:hover {
+  color: orange;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .footerSection {

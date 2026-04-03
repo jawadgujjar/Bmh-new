@@ -2,9 +2,9 @@
 
 import { SessionProvider } from "next-auth/react";
 import { usePathname } from "next/navigation";
-import NavbarBmh from "@/components/navbar/navbar";
-import Footer from "@/components/footer/footer";
-import Breadcrumbs from "@/components/breadcrumbs"; // Import added
+ import Breadcrumbs from "src/components/breadcrumbs";
+import Footer from "src/components/footer/footer";
+import NavbarBmh from "src/components/navbar/navbar";
 
 export default function ClientLayoutWrapper({ children }) {
   const pathname = usePathname();

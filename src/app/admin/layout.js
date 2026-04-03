@@ -10,8 +10,7 @@ import Portfolio from "@/components-admin/portfolio";
 import GetaQuote from "@/components-admin/getaquote";
 import CallToActionQuote from "@/components-admin/calltoactionquote";
 import Pages from "@/components-admin/pages";
-import BlogAdmin from "@/components-admin/blogs";
-import SelectedCategoryPagesAdmin from "@/components-admin/selectedpages";
+ import SelectedCategoryPagesAdmin from "@/components-admin/selectedpages";
 import CTAManagement from "@/components-admin/calltoactions";
 
 // ✅ NEW IMPORT

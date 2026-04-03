@@ -19,10 +19,10 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: {
-    default: "Brand Marketing Hub",
+    default: "Luxury Digital Branding & Marketing Solutions in USA | BMH",
     template: "%s | BMH App Name",
   },
-  description: "BMH main application",
+  description: "Transform your business with premium digital branding and marketing solutions in the USA. Stand out, attract clients, and grow with BMH. Get started now.",
 };
 
 export default function RootLayout({ children }) {

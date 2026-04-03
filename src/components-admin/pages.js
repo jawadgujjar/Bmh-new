@@ -37,7 +37,7 @@ import {
 import dynamic from "next/dynamic";
 
 const TiptapEditor = dynamic(
-  () => import("@/components-admin/TipTapEditor").then((mod) => mod.default),
+  () => import("src/components-admin/TipTapEditor.js").then((mod) => mod.default),
   { ssr: false },
 );
 
