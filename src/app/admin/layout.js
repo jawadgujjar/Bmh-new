@@ -16,6 +16,7 @@ import CTAManagement from "@/components-admin/calltoactions";
 // ✅ NEW IMPORT
 import NewsletterAdmin from "@/components-admin/newsletter";
 import ContactAdmin from "@/components-admin/contactus";
+import BlogAdmin from "@/components-admin/blogs";
 
 export default function AdminLayout() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
