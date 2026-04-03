@@ -23,6 +23,10 @@ export const metadata = {
     template: "%s | BMH App Name",
   },
   description: "Transform your business with premium digital branding and marketing solutions in the USA. Stand out, attract clients, and grow with BMH. Get started now.",
+robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function RootLayout({ children }) {
