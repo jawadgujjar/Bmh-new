@@ -125,10 +125,10 @@ const ContactUs = () => {
                 </div>
               </a>
 
-              <a href="mailto:support@bmh.com" className={styles.infoLink}>
+              <a href="mailto:hello@brandmarketinghub.com" className={styles.infoLink}>
                 <div className={styles.infoItem}>
                   <div className={styles.iconBox}><MailOutlined /></div>
-                  <Text className={styles.infoText}>support@bmh.com</Text>
+                  <Text className={styles.infoText}>hello@brandmarketinghub.com</Text>
                 </div>
               </a>
 
@@ -136,7 +136,7 @@ const ContactUs = () => {
                 <div className={styles.infoItem}>
                   <div className={styles.iconBox}><EnvironmentOutlined /></div>
                   <Text className={styles.infoText}>
-                    7901 4TH ST N STE 300 ST. PETERSBURG FL 33702
+                    7901 4TH ST N STE 300 <br/>ST. PETERSBURG FL 33702
                   </Text>
                 </div>
               </a>

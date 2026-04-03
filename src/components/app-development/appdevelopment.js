@@ -37,8 +37,8 @@ const Appdevelopment1 = () => {
           <Image
             src={appImage1}
             alt="Mobile app development services"
-            width={600}
-            height={400}
+            width={500}
+            height={450}
             className={styles.image}
             quality={100}
           />
