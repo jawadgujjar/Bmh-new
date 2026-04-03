@@ -7,7 +7,7 @@ function SubKeywordsdigital({
   heading = "Our Specialized Services",
   description = "",
   subcategoryId = "",
-  category = "", // pass the parent subcategory slug here
+  category = "",
   fallbackKeywords = [],
 }) {
   const router = useRouter();
