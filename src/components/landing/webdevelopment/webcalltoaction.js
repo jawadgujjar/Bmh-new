@@ -69,7 +69,6 @@ function WebCalltoaction() {
 
       setMessage(`
         ✅ Meeting scheduled successfully!
-        • Check your email for meeting details
         • Meeting added to your Google Calendar
         • Admin has been notified
       `);
@@ -105,7 +104,7 @@ function WebCalltoaction() {
     }
   };
 
-  // اگر client side نہیں ہے تو loading state دکھائیں
+  
   if (!isClient) {
     return (
       <div className={styles.container}>

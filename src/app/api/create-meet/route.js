@@ -65,7 +65,7 @@ export async function POST(req) {
         timeZone: timeZone,
       },
       attendees: [
-        { email: session.user.email },
+        { email: session.user.email,responseStatus: 'accepted' },
         { email: "jawadgujjar573@gmail.com" } // Add your admin email
       ],
       conferenceData: {
