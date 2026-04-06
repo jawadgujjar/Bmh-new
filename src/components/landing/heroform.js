@@ -18,16 +18,13 @@ function Heroform() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       setLoading(true);
       setMessage("");
 
       const res = await fetch("/api/heroform", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           fullName: formData.name,
           emailAddress: formData.email,
@@ -39,17 +36,8 @@ function Heroform() {
 
       if (data.success) {
         setMessage("Form submitted successfully!");
-
-        setFormData({
-          name: "",
-          email: "",
-          website: "",
-        });
-
-        // message 3 seconds baad hide
-        setTimeout(() => {
-          setMessage("");
-        }, 3000);
+        setFormData({ name: "", email: "", website: "" });
+        setTimeout(() => setMessage(""), 3000);
       } else {
         setMessage("Something went wrong!");
       }
@@ -110,13 +98,12 @@ function Heroform() {
             disabled={loading}
           >
             {loading ? "Submitting..." : "Get Free Consultation"}
-            <span className={styles.arrowIcon}>→</span>
+            {!loading && <span className={styles.arrowIcon}>→</span>}
           </button>
-
         </div>
 
         {message && (
-          <p style={{ marginTop: "10px", color: "white", fontWeight: "500" }}>
+          <p className={styles.statusMessage}>
             {message}
           </p>
         )}

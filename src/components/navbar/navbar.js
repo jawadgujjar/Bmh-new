@@ -1,218 +1,340 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Navbar, Nav, Container, Button } from "react-bootstrap";
-import { CiMobile3 } from "react-icons/ci";
-import { FaWhatsapp } from "react-icons/fa";
+import { Button } from "react-bootstrap";
+import {
+  CiMobile3,
+  CiMenuFries,
+  CiGlobe,
+  CiCamera,
+  CiBullhorn,
+} from "react-icons/ci";
+import { FaWhatsapp, FaArrowRight, FaCode } from "react-icons/fa";
+import {
+  IoCloseOutline,
+  IoChevronDown,
+  IoChevronForward,
+} from "react-icons/io5";
 import styles from "../../styles/navbar.module.css";
 
 function NavbarBmh() {
   const [scrolled, setScrolled] = useState(false);
-  const [expanded, setExpanded] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState(null);
-  const [subcategories, setSubcategories] = useState({});
-  const [allPages, setAllPages] = useState({});
-  const timeoutRef = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeMega, setActiveMega] = useState(null);
+  const [menuData, setMenuData] = useState({ subcategories: {}, allPages: {} });
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const handleResize = () => setIsMobile(window.innerWidth <= 1024);
+
+    handleResize();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
-  // Data fetching logic
   useEffect(() => {
-    const fetchFullMenu = async () => {
+    const fetchMenu = async () => {
       const categories = [
         "digital-marketing",
         "web-development",
         "app-development",
       ];
-      const catData = {};
-      const pageData = {};
+      try {
+        const subResults = await Promise.all(
+          categories.map((cat) =>
+            fetch(`/api/subcategories?category=${cat}`).then((res) =>
+              res.json(),
+            ),
+          ),
+        );
+        const tempSubcats = {};
+        const pagePromises = [];
 
-      for (const catKey of categories) {
-        try {
-          const res = await fetch(`/api/subcategories?category=${catKey}`);
-          const json = await res.json();
+        subResults.forEach((json, index) => {
           const subs = Array.isArray(json) ? json : json.data || [];
-
-          if (subs.length > 0) {
-            catData[catKey] = subs;
-            for (const sub of subs) {
-              const pRes = await fetch(`/api/page?subcategory=${sub._id}`);
-              const pJson = await pRes.json();
-              pageData[sub._id] = pJson?.data || [];
-            }
-          }
-        } catch (e) {
-          console.error(`Error loading ${catKey}:`, e);
-        }
+          tempSubcats[categories[index]] = subs;
+          subs.forEach((sub) => {
+            pagePromises.push(
+              fetch(`/api/page?subcategory=${sub._id}`)
+                .then((res) => res.json())
+                .then((pJson) => ({ id: sub._id, data: pJson?.data || [] })),
+            );
+          });
+        });
+        const allPageResults = await Promise.all(pagePromises);
+        const tempPages = allPageResults.reduce((acc, curr) => {
+          acc[curr.id] = curr.data;
+          return acc;
+        }, {});
+        setMenuData({ subcategories: tempSubcats, allPages: tempPages });
+      } catch (e) {
+        console.error(e);
       }
-      setSubcategories(catData);
-      setAllPages(pageData);
     };
-    fetchFullMenu();
+    fetchMenu();
   }, []);
-
-  const handleOpen = (id, key) => {
-    if (window.innerWidth < 992) return;
-    if (subcategories[key]?.length > 0) {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-      setActiveDropdown(id);
-    }
-  };
-
-  const handleClose = () => {
-    if (window.innerWidth < 992) return;
-    timeoutRef.current = setTimeout(() => setActiveDropdown(null), 150);
-  };
-
-  const closeMenu = () => {
-    setExpanded(false);
-    setActiveDropdown(null);
-  };
 
   const menuItems = [
     {
       title: "Digital Marketing",
-      id: "dm",
       path: "/digital-marketing",
       key: "digital-marketing",
+      icon: <CiBullhorn size={18} />,
+      description: "Grow your brand online",
     },
     {
       title: "Web Development",
-      id: "wd",
       path: "/web-development",
       key: "web-development",
+      icon: <FaCode size={18} />,
+      description: "Modern web solutions",
     },
     {
       title: "App Development",
-      id: "ad",
       path: "/app-development",
       key: "app-development",
+      icon: <CiMobile3 size={18} />,
+      description: "Native & cross-platform apps",
     },
   ];
 
+  const handleMegaEnter = (key) => {
+    if (!isMobile) setActiveMega(key);
+  };
+
+  const handleMegaLeave = () => {
+    if (!isMobile) setActiveMega(null);
+  };
+
   return (
-    <Navbar
-      expand="lg"
-      fixed="top"
-      expanded={expanded}
-      className={`${styles.mainNavbar} ${scrolled ? styles.scrolled : ""}`}
-    >
-      <Container fluid className={styles.navContainer}>
-        <Navbar.Brand as={Link} href="/" onClick={closeMenu}>
-          <img src="/bmhlogo.svg" className={styles.logo} alt="Logo" />
-        </Navbar.Brand>
+    <>
+      <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ""}`}>
+        <div className={styles.container}>
+          {/* LOGO */}
+          <Link href="/" className={styles.logoLink}>
+            <img
+              src="/bmhlogo.svg"
+              className={styles.logo}
+              alt="Brand Marketing Hub"
+            />
+          </Link>
 
-        <button
-          className={`${styles.customToggle} ${expanded ? styles.open : ""}`}
-          onClick={() => setExpanded(!expanded)}
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-
-        <Navbar.Collapse id="nav-menu" className={styles.navCollapse}>
-          <div className={styles.navCenter}>
-            <Nav className={styles.centerLinks}>
-              {menuItems.map((item) => (
-                <div
-                  key={item.id}
-                  className={styles.navItemWrapper}
-                  onMouseEnter={() => handleOpen(item.id, item.key)}
-                  onMouseLeave={handleClose}
-                >
-                  <Link
-                    href={item.path}
-                    className={styles.navLink}
-                    onClick={closeMenu}
-                  >
-                    {item.title}
-                  </Link>
-
-                  {activeDropdown === item.id &&
-                    subcategories[item.key]?.length > 0 && (
-                      <div className={styles.customDropdownMenu}>
-                        {subcategories[item.key].map((sub) => (
-                          <div key={sub._id} className={styles.subCol}>
-                            <Link
-                              href={`/${sub.slug}`}
-                              className={styles.subTitle}
-                              onClick={closeMenu}
-                            >
-                              {sub.icon && (
-                                <img
-                                  src={sub.icon}
-                                  className={styles.categoryIcon}
-                                  alt=""
-                                />
-                              )}
-                              <span>{sub.name}</span>
-                            </Link>
-
-                            {/* Pages as a List */}
-                            <ul className={styles.pagesList}>
-                              {allPages[sub._id]?.map((page) => (
-                                <li
-                                  key={page._id}
-                                  className={styles.pageListItem}
-                                >
-                                  <Link
-                                    href={`/${sub.slug}/${page.slug}`}
-                                    className={styles.pageLink}
-                                    onClick={closeMenu}
-                                  >
-                                    {page.title}
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                </div>
-              ))}
-              <div className={styles.navItemWrapper}>
-                <Link
-                  href="/portfolio"
-                  className={styles.navLink}
-                  onClick={closeMenu}
-                >
-                  Portfolio
-                </Link>
-              </div>
-            </Nav>
-          </div>
-
-          <div className={styles.navRight}>
-            <div className={styles.actionSection}>
-              <a href="tel:+18132140535" className={styles.phoneBox}>
-                <CiMobile3 size={24} color="#ffa500" />
-                <div className={styles.phoneText}>
-                  <span>(813) 214-0535</span>
-                  <small>Speak with Expert</small>
-                </div>
-              </a>
-              <a
-                href="https://wa.me/18132140535"
-                target="_blank"
-                className={styles.whatsappBox}
+          {/* DESKTOP LINKS */}
+          <div className={styles.navLinks}>
+            {menuItems.map((item) => (
+              <div
+                key={item.key}
+                className={`${styles.navItem} ${activeMega === item.key ? styles.active : ""}`}
+                onMouseEnter={() => handleMegaEnter(item.key)}
+                onMouseLeave={handleMegaLeave}
               >
-                <FaWhatsapp size={24} color="#25D366" />
-              </a>
-              <Link href="/getaquote">
-                <Button className={styles.quoteBtn}>Get a Quote</Button>
-              </Link>
-            </div>
+                <Link href={item.path} className={styles.mainLink}>
+                  {item.icon}
+                  <span>{item.title}</span>
+                  <IoChevronDown size={12} className={styles.chevron} />
+                </Link>
+
+                {/* MEGA MENU - with clickable subcategories */}
+                <div className={styles.megaMenu}>
+                  <div className={styles.megaContainer}>
+                    <div className={styles.megaHeader}>
+                      <h4>{item.title}</h4>
+                      <p>{item.description}</p>
+                    </div>
+                    <div className={styles.megaInner}>
+                      {menuData.subcategories[item.key]?.map((sub) => (
+                        <div key={sub._id} className={styles.megaCol}>
+                          {/* Subcategory name clickable - goes to subcategory page */}
+                          <Link
+                            href={`/${sub.slug}`}
+                            className={styles.megaColHeader}
+                          >
+                            {sub.icon && (
+                              <img
+                                src={sub.icon}
+                                alt={sub.name}
+                                width={20}
+                                height={20}
+                                className={styles.subIcon}
+                              />
+                            )}
+                            <h6>{sub.name}</h6>
+                          </Link>
+                          <div className={styles.megaLinks}>
+                            {menuData.allPages[sub._id]
+                              ?.slice(0, 5)
+                              .map((page) => (
+                                <Link
+                                  key={page._id}
+                                  href={`/${sub.slug}/${page.slug}`}
+                                >
+                                  <span>{page.title}</span>
+                                  <FaArrowRight size={8} />
+                                </Link>
+                              ))}
+                            {menuData.allPages[sub._id]?.length > 5 && (
+                              <Link
+                                href={`/${sub.slug}`}
+                                className={styles.viewAll}
+                              >
+                                View All <IoChevronForward size={10} />
+                              </Link>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+            <Link href="/portfolio" className={styles.mainLink}>
+              <CiCamera size={18} />
+              <span>Portfolio</span>
+            </Link>
           </div>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+
+          {/* RIGHT ACTIONS */}
+          <div className={styles.actions}>
+            <a href="tel:+18132140535" className={styles.phoneLink}>
+              <CiMobile3 size={20} />
+              <div className={styles.phoneInfo}>
+                <span>(813) 214-0535</span>
+                <small>24/7 Support</small>
+              </div>
+            </a>
+            <Link href="/getaquote">
+              <Button className={styles.ctaBtn}>
+                Quote <FaArrowRight size={10} />
+              </Button>
+            </Link>
+            <a
+              href="https://wa.me/18132140535"
+              className={styles.whatsappBtn}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaWhatsapp size={18} />
+            </a>
+
+            {/* MOBILE TOGGLE */}
+            <button
+              className={styles.mobileToggle}
+              onClick={() => setIsOpen(true)}
+            >
+              <CiMenuFries size={24} />
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* MOBILE DRAWER - with clickable subcategories */}
+      <div
+        className={`${styles.mobileDrawer} ${isOpen ? styles.drawerOpen : ""}`}
+      >
+        <div className={styles.drawerHeader}>
+          <img src="/bmhlogo.svg" alt="Logo" width="100" />
+          <IoCloseOutline
+            size={28}
+            onClick={() => setIsOpen(false)}
+            className={styles.closeBtn}
+          />
+        </div>
+        <div className={styles.drawerBody}>
+          {menuItems.map((item) => (
+            <div key={item.key} className={styles.drawerItem}>
+              <Link
+                href={item.path}
+                onClick={() => setIsOpen(false)}
+                className={styles.drawerMainLink}
+              >
+                {item.icon}
+                <span>{item.title}</span>
+                <IoChevronForward size={14} />
+              </Link>
+              {menuData.subcategories[item.key]?.length > 0 && (
+                <div className={styles.drawerSubmenu}>
+                  {menuData.subcategories[item.key]?.map((sub) => (
+                    <div key={sub._id} className={styles.drawerSubItem}>
+                      {/* Subcategory name clickable - goes to subcategory page */}
+                      <Link
+                        href={`/${item.key}/${sub.slug}`}
+                        onClick={() => setIsOpen(false)}
+                        className={styles.drawerSubHeader}
+                      >
+                        {sub.icon && (
+                          <img
+                            src={sub.icon}
+                            alt={sub.name}
+                            width={16}
+                            height={16}
+                            className={styles.drawerSubIcon}
+                          />
+                        )}
+                        <span>{sub.name}</span>
+                      </Link>
+                      {menuData.allPages[sub._id]?.slice(0, 3).map((page) => (
+                        <Link
+                          key={page._id}
+                          href={`/${sub.slug}/${page.slug}`}
+                          onClick={() => setIsOpen(false)}
+                          className={styles.drawerPageLink}
+                        >
+                          {page.title}
+                        </Link>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+          <Link
+            href="/portfolio"
+            onClick={() => setIsOpen(false)}
+            className={styles.drawerMainLink}
+          >
+            <CiCamera size={18} />
+            <span>Portfolio</span>
+            <IoChevronForward size={14} />
+          </Link>
+          <hr className={styles.drawerDivider} />
+          <Link href="/getaquote" onClick={() => setIsOpen(false)}>
+            <Button className={styles.drawerCtaBtn}>
+              Get a Quote <FaArrowRight size={12} />
+            </Button>
+          </Link>
+          <div className={styles.drawerContact}>
+            <a href="tel:+18132140535">
+              <CiMobile3 size={16} />
+              Call Now
+            </a>
+            <a
+              href="https://wa.me/18132140535"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaWhatsapp size={16} />
+              WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* OVERLAY */}
+      {isOpen && (
+        <div
+          className={styles.drawerOverlay}
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+    </>
   );
 }
 

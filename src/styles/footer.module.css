@@ -144,7 +144,7 @@
   height: 40px;
 }
 .newsletterTitle {
-  color: #fff; /* Apne theme ke mutabiq change karein */
+  color: #fff;  
   font-size: 20.8px;
   margin-bottom: 12px;
   font-weight: 600;
@@ -183,6 +183,9 @@
     max-width: 150px;
     margin-right: 0;
   }
+.newsletterInput {
+  width: 50%;
+}
 }
 
 @media (max-width: 480px) {
