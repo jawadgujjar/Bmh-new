@@ -7,15 +7,16 @@
     justify-content: center;
     align-items: center;
     padding: 40px;
-    background: #0f172a; /* Dark background as requested */
+    background: #0f172a; 
 }
 
 /* Form Container */
 .formContainer {
     width: 100%;
-    max-width: 800px;
+    /* Max width ko 800px se barha kar 1000px kiya taake bari screens par space cover ho */
+    max-width: 1200px; 
     padding: 40px;
-    background: linear-gradient(135deg, #0f172a, #1e293b); /* Original gradient background */
+    background: linear-gradient(135deg, #0f172a, #1e293b); 
     border-radius: 20px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
     font-family: 'Poppins', sans-serif;
@@ -27,7 +28,7 @@
     text-align: center;
     font-weight: 700;
     margin-bottom: 1.5rem;
-    color: #ff7f11; /* Orange heading as requested */
+    color: #ff7f11; 
     text-transform: uppercase;
     font-size: 2rem;
     letter-spacing: 0.5px;
@@ -45,8 +46,8 @@
 .customTextarea,
 .customInputNumber {
     border-radius: 8px;
-    color: #000000; /* Black text for entered values */
-    background-color: #ffffff; /* White background for inputs */
+    color: #000000; 
+    background-color: #ffffff; 
     border: 1px solid #334155;
     width: 100%;
     font-family: 'Poppins', sans-serif;
@@ -66,7 +67,7 @@
 .customInput::placeholder,
 .customTextarea::placeholder,
 .customInputNumber::placeholder {
-    color: #94a3b8; /* Original placeholder color */
+    color: #94a3b8; 
     font-family: 'Poppins', sans-serif;
 }
 
@@ -77,16 +78,15 @@
     border-color: #ff7f11;
     outline: none;
     box-shadow: 0 0 6px rgba(255, 127, 17, 0.6);
-    background-color: #ffffff; /* Maintain white background on focus */
-    color: #000000; /* Maintain black text on focus */
+    background-color: #ffffff; 
+    color: #000000; 
 }
 
 /* Submit Button */
-/* Submit Button - Normal State */
 .submitButton.submitButton {
-    background: #ff7f11 !important; /* Orange background */
+    background: #ff7f11 !important; 
     border-color: #ff7f11 !important;
-    color: #ffffff !important;      /* White text */
+    color: #ffffff !important;      
     font-weight: 600;
     border-radius: 8px;
     height: 45px;
@@ -97,20 +97,16 @@
     transition: all 0.3s ease;
 }
 
-/* Submit Button - Hover State */
-/* :global selector zaroori hai kyunki Ant Design dynamically classes add karta hai */
 .submitButton.submitButton:hover,
 .submitButton.submitButton:focus {
-    background: #ffffff !important;  /* White background on hover */
+    background: #ffffff !important;  
     border-color: #ffffff !important;
-    color: #000000 !important;       /* Black text on hover */
+    color: #000000 !important;       
     transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(255, 255, 255, 0.2);
 }
 
-/* Loading state ke liye orange hi rakhte hain taaki blue na dikhe */
-.submitButton.submitButton:disabled,
-.submitButton.submitButton[disabled] {
+.submitButton.submitButton:disabled {
     background: #94a3b8 !important;
     color: #ffffff !important;
     border-color: #94a3b8 !important;
@@ -150,8 +146,26 @@
     margin-bottom: 0 !important;
 }
 
-/* Responsive */
+/* ================================
+   RESPONSIVE (1024px specific fix)
+   ================================ */
+@media (min-width: 992px) and (max-width: 1200px) {
+    .formContainer {
+        max-width: 900px; /* Laptop par width ko adjust kiya */
+        padding: 30px;
+    }
+    
+    .formItemRow {
+        gap: 25px; /* Fields ke darmiyan gap thoda barhaya */
+    }
+}
+
+/* Responsive for Tablets/Mobiles */
 @media (max-width: 768px) {
+    .formWrapper {
+        padding: 20px;
+    }
+
     .formContainer {
         padding: 20px;
     }
