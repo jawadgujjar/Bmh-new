@@ -37,6 +37,7 @@
     max-width: auto;
     margin: 0 auto;
     padding: 0 1rem;
+    margin-top: 4rem;
 }
 
 .heroFirstText {
@@ -86,11 +87,12 @@
 /* Media Queries */
 @media (max-width: 768px) {
     .backheroDigital {
-        height: 60vh;
+        height: auto;
+        padding-bottom: 1rem;
     }
     
     .mainHerodigital {
-        margin-top: 2rem;
+        padding-top: 2rem;
     }
 
     .heroFirstText {
@@ -98,7 +100,7 @@
     }
 
     .growText {
-        font-size: 1.1rem;
+        font-size: 0.8rem;
     }
     
     .formDigital {
@@ -113,7 +115,7 @@
     }
 
     .growText {
-        font-size: 1rem;
+        font-size: 0.8rem;
         margin-bottom: 1.5rem;
     }
     
