@@ -1,9 +1,8 @@
 .container {
-  padding: 20px 0;
+  padding: 60px 0; /* Padding thodi badha dein taake sections mein gap rahe */
   background: linear-gradient(135deg, #4b1a03 0%, #ff6a00 50%, #ff8c00 100%);
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
+  min-height: auto; /* 100vh ko auto kar dein */
+  display: block;   /* flex hata kar block kar dein taake natural flow rahe */
   overflow: hidden;
 }
 
@@ -117,12 +116,15 @@
    ================================ */
 
 @media (max-width: 991px) {
+  .container {
+    padding: 40px 0; /* Mobile/Tablet par padding kam kar dein */
+  }
   .row {
     text-align: center;
   }
 
   .title {
-    margin-top: 1rem;
+    margin-top: 0;
     font-size: 2.2rem;
   }
 
@@ -145,14 +147,23 @@
   }
 
   .imageColumn {
-    margin: 40px 0;
+    margin: 20px 0;
+  }
+  .funnelImage {
+    max-width: 300px; /* Tablet/Mobile par image thodi choti karein */
+    margin-bottom: 15px;
   }
  
 }
 
 @media (max-width: 480px) {
+  .container {
+    padding: 30px 0;
+  }
+  
   .title {
     font-size: 1.8rem;
+    margin-bottom: 15px;
   }
   
   .strategyBtn {
