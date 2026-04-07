@@ -94,10 +94,8 @@ function Calltoactionapp2() {
         </div>
 
         <div className={styles1.pointsList}>
-          <p className={styles1.pointsTextx} style={{ textAlign: "left" }}>
-            A Process That Delivers Results
-          </p>
-          <p className={styles1.featuresList} style={{ textAlign: "left" }}>
+          <p className={styles1.pointsTextx}>A Process That Delivers Results</p>
+          <p className={styles1.featuresList}>
             Successful applications are built through a clear and structured
             process. At Brand Marketing Hub, every stage of development is
             handled with attention to detail. We begin by understanding your

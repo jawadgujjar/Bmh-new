@@ -213,7 +213,7 @@
 
 @media (max-width: 768px) {
   .pointsList{
-    text-align: left !important;
+    text-align: center !important;
   }
   .section {
   margin-top: 0rem
