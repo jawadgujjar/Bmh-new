@@ -94,9 +94,21 @@ function Calltoactionapp2() {
         </div>
 
         <div className={styles1.pointsList}>
-          <p className={styles1.pointsTextx}>A Process That Delivers Results</p>
-          <p className={styles1.featuresList}>
-            Successful applications are built through a clear and structured process. At Brand Marketing Hub, every stage of development is handled with attention to detail. We begin by understanding your goals and identifying the exact problem that needs to be solved. This is followed by planning the structure of the application to ensure it is stable and easy to scale. Development is carried out with clean and maintainable code, and every feature is tested before launch to ensure it performs as expected. After deployment, we continue to support and improve the system based on real usage. This ensures your application remains relevant and effective as your business evolves.
+          <p className={styles1.pointsTextx} style={{ textAlign: "left" }}>
+            A Process That Delivers Results
+          </p>
+          <p className={styles1.featuresList} style={{ textAlign: "left" }}>
+            Successful applications are built through a clear and structured
+            process. At Brand Marketing Hub, every stage of development is
+            handled with attention to detail. We begin by understanding your
+            goals and identifying the exact problem that needs to be solved.
+            This is followed by planning the structure of the application to
+            ensure it is stable and easy to scale. Development is carried out
+            with clean and maintainable code, and every feature is tested before
+            launch to ensure it performs as expected. After deployment, we
+            continue to support and improve the system based on real usage. This
+            ensures your application remains relevant and effective as your
+            business evolves.
           </p>
 
           <div className={styles1.ctaButtons}>

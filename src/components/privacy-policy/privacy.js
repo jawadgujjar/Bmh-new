@@ -3,7 +3,7 @@ import React from "react";
 import { Row, Col, Typography, Divider } from "antd";
 import styles from "../../styles/privacy.module.css";
 
-const { Title, Paragraph, Text } = Typography;
+const { Title, Paragraph } = Typography;
 
 const PrivacyPolicy = () => {
   return (
@@ -206,14 +206,16 @@ const PrivacyPolicy = () => {
               {/* SECTION 12 */}
               <div className={styles.section}>
                 <Title level={3}>12. Contact Us</Title>
-                <div className={styles.contactInfo}>
-                  <div block className={styles.para}>
-                    <strong>Email:</strong>{" "}
-                    <a href="mailto:hello@brandmarketinghub.com">hello@brandmarketinghub.com</a>
+                <div className={styles.contactGrid}>
+                  <div className={styles.contactCardItem}>
+                    <span className={styles.contactLabel}>Email Us</span>
+                    <a href="mailto:hello@brandmarketinghub.com" className={styles.contactLink}>
+                      hello@brandmarketinghub.com
+                    </a>
                   </div>
-                  <div block className={styles.para}>
-                    <strong>Website:</strong>{" "}
-                    <a href="https://brandmarketinghub.com" target="_blank" rel="noreferrer">
+                  <div className={styles.contactCardItem}>
+                    <span className={styles.contactLabel}>Visit Us</span>
+                    <a href="https://brandmarketinghub.com" target="_blank" rel="noreferrer" className={styles.contactLink}>
                       www.brandmarketinghub.com
                     </a>
                   </div>

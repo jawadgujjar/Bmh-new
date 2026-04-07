@@ -212,6 +212,9 @@
 }
 
 @media (max-width: 768px) {
+  .pointsList{
+    text-align: left !important;
+  }
   .section {
   margin-top: 0rem
 }
