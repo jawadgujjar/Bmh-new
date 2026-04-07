@@ -167,6 +167,8 @@
 }
 
 /* Responsive adjustments */
+/* --- In your footer.module.css --- */
+
 @media (max-width: 768px) {
   .footerSection {
     margin-bottom: 1.5rem;
@@ -179,13 +181,23 @@
   .sectionTitle {
     font-size: 1.2rem;
   }
+  
   .footerLogo {
     max-width: 150px;
     margin-right: 0;
   }
-.newsletterInput {
-  width: 50%;
-}
+
+  /* ISAY UPDATE KAREIN */
+  .newsletterInput {
+    width: 100% !important; /* 50% ko hata kar 100% kar dein */
+    flex: 1; 
+  }
+
+  /* Responsive Fix for Mail text overflow */
+  .mailLink {
+    word-break: break-all; /* Agar email address lamba ho toh cutne ki bajaye niche move ho jaye */
+    font-size: 0.85rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -211,5 +223,30 @@
     .footerLogo {
     max-width: 120px;
     margin: 0 auto 1.5rem; 
+  }
+  /* Newsletter section ko full width dene ke liye */
+  .newsletterSection {
+    width: 100%;
+    padding: 0 5px; /* Thodi si breathing space */
+  }
+
+  /* Form ko container ke mutabiq adjust karein */
+  .newsletterForm {
+    display: flex;
+    width: 100% !important;
+    gap: 8px; /* Input aur button ke darmiyan gap */
+  }
+
+  /* Input ko poori width cover karne dein */
+  .newsletterInput {
+    flex: 1 !important;
+    width: auto !important; /* Fixed width hata dein */
+    font-size: 14px; /* Mobile par text size chhota taake placeholder na kate */
+  }
+
+  /* Button size mobile ke liye perfect karein */
+  .newsletterButton {
+    width: 45px !important;
+    flex-shrink: 0;
   }
 }
