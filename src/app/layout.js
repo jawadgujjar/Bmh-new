@@ -27,6 +27,9 @@ robots: {
     index: false,
     follow: false,
   },
+  icons: {
+    icon: '/BMG_Favicon.png',
+  },
 };
 
 export default function RootLayout({ children }) {
