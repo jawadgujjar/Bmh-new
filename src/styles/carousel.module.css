@@ -148,3 +148,8 @@
   font-family: 'Inter', sans-serif;
   font-weight: 700;
 }
+@media (max-width: 768px) {
+  .customers {
+    font-size: 1.3rem;
+  }
+}

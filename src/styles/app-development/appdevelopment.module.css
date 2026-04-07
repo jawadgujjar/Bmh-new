@@ -1,11 +1,9 @@
 /* General styling */
 .section {
-  margin-top: 8rem;
+  margin-top: 2rem;
   padding: 0 2rem;
 }
-.container{
-  margin-top: -4rem;
-}
+
 .headerWrapper {
   text-align: center;
   margin-bottom: 3rem;
@@ -54,7 +52,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 4rem;
-    margin-bottom: 4rem;
+    margin-bottom: 0rem;
   }
 
   .textContent {
@@ -167,6 +165,9 @@
 .imageContent1 {
   flex: 1;
   min-width: 300px;
+  display: flex;          /* Add this */
+    justify-content: center; /* Add this */
+    align-items: center;
 }
 
 /* CTA buttons styling */
@@ -211,6 +212,9 @@
 }
 
 @media (max-width: 768px) {
+  .section {
+  margin-top: 0rem
+}
   .container {
     flex-direction: column;
   }

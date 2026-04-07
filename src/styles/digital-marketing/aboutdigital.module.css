@@ -1,5 +1,5 @@
 .aboutdigitalMain {
-    margin-top: 4rem;
+    margin-top: 1rem;
     margin-bottom: 3rem;
 }
 
@@ -16,9 +16,9 @@
     font-size: 1.1rem;
     
 }
-.para{
+/* .para{
     margin-top: 2.3rem;
-}
+} */
 
 .imageContainer {
     position: relative;
