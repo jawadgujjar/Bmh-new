@@ -264,7 +264,7 @@ function NavbarBmh() {
                     <div key={sub._id} className={styles.drawerSubItem}>
                       {/* Subcategory name clickable - goes to subcategory page */}
                       <Link
-                        href={`/${item.key}/${sub.slug}`}
+                        href={`/${sub.slug}`}
                         onClick={() => setIsOpen(false)}
                         className={styles.drawerSubHeader}
                       >
