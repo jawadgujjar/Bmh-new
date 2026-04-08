@@ -1,168 +1,159 @@
-/* digitalhero.module.css */
 .backheroDigital {
-    position: relative;
-    height: 70vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    overflow: hidden;
+  position: relative;
+  height: 80vh; /* Mobile par visibility behtar karne ke liye thora barha diya */
+  min-height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
 }
 
 .backgroundImage {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
 }
 
 .backgroundImage::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%; /* Changed to cover full height */
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 1;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(
+    0,
+    0,
+    0,
+    0.65
+  ); /* Overlay thora dark kiya taake text clear nazar aaye */
+  z-index: 1;
 }
 
 .mainHerodigital {
-    z-index: 5;
-    color: white;
-    position: relative;
-    width: 90%;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 0 1rem;
+  z-index: 5;
+  color: white;
+  position: relative;
+  width: 95%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  padding-top: 7rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .heroFirstText {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    margin-top: 5rem;
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 1.2rem;
+  line-height: 1.2;
 }
-.herodes{
-        font-size: 1rem;
-    }
 
 .growText {
-    color: rgb(253, 126, 20);
-    font-size: 1.3rem;
-    margin-bottom: 2rem;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: #ffffff;
+  margin-bottom: 30px;
+  max-width: 750px;
+}
+
+.herodes {
+  font-size: 1.1rem;
+  opacity: 0.9;
 }
 
 .formDigital {
-    display: flex;
-    justify-content: center;
-    margin-top: 2rem;
-    background-color: rgba(255, 255, 255, 0.2);
-    padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 100%; /* Full width of parent */
-    max-width: 600px; /* Maximum width */
-    margin-left: auto;
-    margin-right: auto;
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(5px); /* Modern glassmorphism look */
+  padding: 1.5rem;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
 }
 
 .proposalButton {
-    color: white;
-    background-color: rgb(253, 126, 20);
-    border: none;
-    font-size: large;
-    font-weight: bold;
-    height: 3rem;
-    width: 100%; /* Button takes full width of form */
-    max-width: 300px; /* But has a maximum width */
+  color: white;
+  background-color: rgb(253, 126, 20);
+  border: none;
+  font-size: 1.1rem;
+  font-weight: bold;
+  height: 3.5rem;
+  width: 100%;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .proposalButton:hover {
-    color: rgb(253, 126, 20) !important;
-    background-color: white !important;
-    border: 2px solid rgb(253, 126, 20) !important;
-}
-.growText {
-  font-size: 1.2rem;
-  line-height: 1.8;
-  color: white;
-  margin-bottom: 30px;
-  max-width: 800px;
+  background-color: white !important;
+  color: rgb(253, 126, 20) !important;
+  transform: translateY(-2px);
 }
 
-.growText img {
-  max-width: 100%;
-  height: auto;
-  margin: 10px 0;
-  border-radius: 8px;
-}
+/* --- Fully Responsive Media Queries --- */
 
-.growText strong,
-.growText b {
-  font-weight: bold;
-}
-
-.growText em,
-.growText i {
-  font-style: italic;
-}
-
-.growText u {
-  text-decoration: underline;
-}
-/* Media Queries */
 @media (max-width: 768px) {
-    .backheroDigital {
-        height: 60vh;
+    .mainHerodigital{
+    padding-top: 2rem;
     }
-    
-    .mainHerodigital {
-        margin-top: 2rem;
-    }
+  .backheroDigital {
+    height: auto;
+    padding: 80px 0; /* Content ke mutabiq height adjust hogi */
+    min-height: 60vh;
+  }
 
-    .heroFirstText {
-        font-size: 1.3rem;
-        margin-top: 3rem;
-    }
-      .herodes{
-        font-size: 0.8rem;
-    }
-    
-    
-    .growText {
-        font-size: 1.1rem;
-    }
-    
-    .formDigital {
-        padding: 1rem;
-        margin-top: 1.5rem;
-    }
+  .heroFirstText {
+    font-size: 1.3rem; /* Mobile par heading ka size readable rakha */
+    margin-top: 0;
+  }
+
+  .growText {
+    font-size: 1rem;
+    margin-bottom: 20px;
+  }
+
+  .formDigital {
+    padding: 1rem;
+    background-color: transparent; /* Mobile par box hata diya taake clutter kam ho */
+    box-shadow: none;
+  }
+
+  .proposalButton {
+    max-width: 100%;
+    height: 3.2rem;
+  }
 }
 
-@media (max-width: 576px) {
-    .heroFirstText { 
-        font-size: 0.8rem;
-        margin-top: 3rem;
-    }
-    .herodes{
-        font-size: 0.6rem;
-    }
+@media (max-width: 480px) {
+  .backheroDigital {
+    padding: 60px 15px;
+  }
 
-    .growText {
-        font-size: 1rem;
-        margin-bottom: 1.5rem;
-    }
-    
-    .formDigital {
-        width: 100%;
-        padding: 1rem;
-    }
-    
-    .proposalButton {
-        font-size: medium;
-        height: 2.8rem;
-    }
+  .heroFirstText {
+    font-size: 1.2rem; /* Choty phones ke liye optimized */
+    margin-bottom: 1rem;
+  }
+
+  .herodes {
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  .growText {
+    font-size: 0.95rem;
+  }
+
+  .proposalButton {
+    font-size: 1rem;
+    height: 3rem;
+  }
 }
