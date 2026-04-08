@@ -26,12 +26,9 @@ function SubKeywordsdigital({
       try {
         setLoading(true);
         const res = await fetch(`/api/page?subcategory=${subcategoryId}`);
-
         if (!res.ok) throw new Error("Failed to fetch services");
-
         const result = await res.json();
 
-        // Fix: Handle the response structure correctly
         let pagesData = [];
         if (result.success && Array.isArray(result.data)) {
           pagesData = result.data;
@@ -70,56 +67,77 @@ function SubKeywordsdigital({
         )}
       </div>
 
-      {/* Pages Buttons Row */}
+      {/* Keywords Area */}
       <div className={styles.keywordsRow}>
         {pages.map((page, index) => (
-          <button
-            key={page._id}
-            className={`${styles.keywordButton} ${activePageIndex === index ? styles.activeKeyword : ""}`}
-            onClick={() => setActivePageIndex(index)}
-          >
-            <span className={styles.keywordText}>{page.title}</span>
+          <React.Fragment key={page._id}>
+            <button
+              className={`${styles.keywordButton} ${
+                activePageIndex === index ? styles.activeKeyword : ""
+              }`}
+              onClick={() => setActivePageIndex(index)}
+            >
+              <span className={styles.keywordText}>{page.title}</span>
+              {activePageIndex === index && (
+                <div className={styles.activeIndicator}></div>
+              )}
+            </button>
+
+            {/* MOBILE ONLY CONTENT: Appears directly under the clicked button */}
             {activePageIndex === index && (
-              <div className={styles.activeIndicator}></div>
+              <div className={styles.mobileContentSection}>
+                <div
+                  className={styles.contentText}
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      page.subcatpagedescr || page.topSection?.description,
+                  }}
+                />
+                <button
+                  className={styles.ctaButton}
+                  onClick={() => router.push(`/${category}/${page.slug}`)}
+                >
+                  Learn More About {page.title}
+                  <span className={styles.arrow}>→</span>
+                </button>
+              </div>
             )}
-          </button>
+          </React.Fragment>
         ))}
       </div>
 
-      <div className={styles.dividerContainer}>
-        <div className={styles.dividerLine}></div>
-        <div className={styles.dividerIcon}>✦</div>
-        <div className={styles.dividerLine}></div>
-      </div>
-
-      {/* Content Section */}
-      {activePage && (
-        <div className={styles.contentSection}>
-          <div className={styles.contentHeader}>
-            <h3 className={styles.contentTitle}>{activePage.title}</h3>
-            <div className={styles.contentIcon}>◉</div>
-          </div>
-          <div
-            className={styles.contentText}
-            dangerouslySetInnerHTML={{
-              __html:
-                activePage.subcatpagedescr ||
-                activePage.topSection?.description,
-            }}
-          />
-
-          {/* Correct CTA Navigation */}
-          <div className={styles.contentFooter}>
-            <button
-              className={styles.ctaButton}
-              onClick={() => router.push(`/${category}/${activePage.slug}`)}
-            >
-              Learn More About {activePage.title}
-              <span className={styles.arrow}>→</span>
-            </button>
-          </div>
+      {/* DESKTOP ONLY SECTION: Hidden on mobile via CSS */}
+      <div className={styles.desktopOnlyContent}>
+        <div className={styles.dividerContainer}>
+          <div className={styles.dividerLine}></div>
+          <div className={styles.dividerLine}></div>
         </div>
-      )}
+
+        {activePage && (
+          <div className={styles.contentSection}>
+            <div className={styles.contentHeader}>
+              <h3 className={styles.contentTitle}>{activePage.title}</h3>
+            </div>
+            <div
+              className={styles.contentText}
+              dangerouslySetInnerHTML={{
+                __html:
+                  activePage.subcatpagedescr ||
+                  activePage.topSection?.description,
+              }}
+            />
+            <div className={styles.contentFooter}>
+              <button
+                className={styles.ctaButton}
+                onClick={() => router.push(`/${category}/${activePage.slug}`)}
+              >
+                Learn More About {activePage.title}
+                <span className={styles.arrow}>→</span>
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
 
       {error && <p className={styles.errorText}>{error}</p>}
     </div>

@@ -31,6 +31,7 @@ async function getPageBySlug(slug) {
     const response = await res.json();
     return response?.success ? response.data : response;
   } catch (error) {
+    console.error("Error fetching page:", error);
     return null;
   }
 }
@@ -41,49 +42,57 @@ async function getSubCategoryBySlug(slug) {
     const res = await fetch(`${baseUrl}/api/subcategories?slug=${slug}`, {
       cache: "no-store",
     });
-    const data = await res.json();
-    return data;
+    const response = await res.json();
+    // Handle both {success: true, data: {}} and direct {}
+    return response?.success ? response.data : response;
   } catch (error) {
+    console.error("Error fetching subcategory:", error);
     return null;
   }
 }
 
 export default async function UniversalPageRoute({ params }) {
+  // Params ko await karna Next.js 15+ mein zaroori hai
   const { subcategory, page } = await params;
 
-  const pageData = await getPageBySlug(page);
+  // Donon data calls parallel chalti hain
+  const [pageData, subcategoryRaw] = await Promise.all([
+    getPageBySlug(page),
+    getSubCategoryBySlug(subcategory),
+  ]);
+
   if (!pageData) notFound();
 
-  const subcategoryData = await getSubCategoryBySlug(subcategory);
+  // Subcategory data structure fix
+  const subcategoryData = subcategoryRaw?.data || subcategoryRaw;
+
   const hasDynamicSections = pageData.sections && pageData.sections.length > 0;
 
   return (
     <main className="flex flex-col w-full p-0 m-0 overflow-x-hidden">
-      {/* Hero Section */}
+      {/* 1. Hero Section */}
       <SubHeroDigitalMarketing
         backgroundImage={
-          pageData.topSection?.backgroundImage || "/default-bg.jpg"
+          pageData.topSection?.backgroundImage || "/images/hero.jpg"
         }
         heading={stripHtmlTags(pageData.topSection?.heading || pageData.title)}
         description={sanitizeHtml(pageData.topSection?.description || "")}
         renderHtml={true}
       />
 
+      {/* 2. Hero Form */}
       <Heroform />
 
-      {/* Keywords Section */}
-      {subcategoryData && (
-        <div className="py-10 bg-white">
-          <PageKeywordsdigital
-            heading={pageData?.keywordstitle || "Related Services"}
-            subcategoryId={subcategoryData?._id}
-            category="digital-marketing"
-            currentPageSlug={pageData?.slug}
-          />
-        </div>
+      {/* 3. Keywords Section (Sibling Pages) */}
+      {pageData.subcategory && (
+        <PageKeywordsdigital
+          subcategoryId={pageData.subcategory}
+          currentPageSlug={pageData.slug}
+          heading={pageData.keywordstitle}
+        />
       )}
 
-      {/* Dynamic Sections Loop */}
+      {/* 4. Dynamic Sections Loop */}
       {hasDynamicSections && (
         <>
           {pageData.sections.map((section, index) => {
@@ -129,7 +138,7 @@ export default async function UniversalPageRoute({ params }) {
         </>
       )}
 
-      {/* FAQ Section */}
+      {/* 5. FAQ Section */}
       <FaqSection
         heading={pageData.faqs?.heading || "Frequently Asked Questions"}
         faqs={
