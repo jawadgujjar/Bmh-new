@@ -80,10 +80,7 @@
   margin-bottom: 20px;
   animation: fadeIn 0.4s ease;
 }
-.contentFooter{
-  display: flex;
-  justify-content: end;
-}
+
 .ctaButton {
   display: flex;
   align-items: center;
@@ -96,7 +93,10 @@
   cursor: pointer;
   transition: transform 0.2s;
 }
-
+.contentFooter {
+  display: flex;
+  justify-content: end;
+}
 /* RESPONSIVE - MOBILE VIEW */
 @media (max-width: 768px) {
   .desktopOnlyContent {
