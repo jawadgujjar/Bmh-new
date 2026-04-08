@@ -14,7 +14,7 @@
 .formContainer {
     width: 100%;
     /* Max width ko 800px se barha kar 1000px kiya taake bari screens par space cover ho */
-    max-width: 1200px; 
+    max-width: 800px; 
     padding: 40px;
     background: linear-gradient(135deg, #0f172a, #1e293b); 
     border-radius: 20px;
