@@ -1,9 +1,11 @@
 'use client';
 import React, { useState } from 'react';
-import { Form, Input, Button, message, Row, Col } from 'antd';
+import { Form, Input, Button, message, Row, Col, Select } from 'antd';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import styles from '../../../styles/admin/auth/login.module.css';
+
+const { Option } = Select;
 
 function Login() {
   const [form] = Form.useForm();
@@ -25,11 +27,12 @@ function Login() {
         throw new Error(data.message || 'Login failed. Please try again.');
       }
 
-      if (data.user.role !== 'admin') {
-        throw new Error('Only Admins are allowed to login here');
+      // ✅ Role Validation: Check if selected role matches DB role
+      if (data.user.role !== values.role) {
+        throw new Error(`Unauthorized! You are not registered as ${values.role}`);
       }
 
-      // Store user data (token cookie already set by API)
+      // Store user data
       localStorage.setItem('username', data.user.name);
       localStorage.setItem('role', data.user.role);
       localStorage.setItem('userData', JSON.stringify(data.user));
@@ -47,24 +50,20 @@ function Login() {
   return (
     <div className={styles.loginContainer}>
       <Row className={styles.loginBox}>
-        {/* Left Section - Welcome Message */}
         <Col xs={0} md={12} className={styles.welcomeSection}>
-          <h1 className={styles.welcomeTitle}>Welcome to Brand Marketing Hub Admin Portal</h1>
-          <p className={styles.welcomeText}>
-            Please login to access the admin dashboard and manage your content.
-          </p>
+          <h1 className={styles.welcomeTitle}>Welcome to Brand Marketing Hub</h1>
+          <p className={styles.welcomeText}>Manage your content and marketing strategy effectively.</p>
         </Col>
 
-        {/* Right Section - Login Form */}
         <Col xs={24} md={12} className={styles.formSection}>
           <Form form={form} layout="vertical" onFinish={handleLogin}>
-            <h2 className={styles.formTitle}>Admin Login</h2>
+            <h2 className={styles.formTitle}>Portal Login</h2>
 
             <Form.Item
               name="email"
               rules={[
                 { required: true, message: 'Please enter your email!' },
-                { type: 'email', message: 'Please enter a valid email!' },
+                { type: 'email', message: 'Enter a valid email!' },
               ]}
             >
               <Input placeholder="Email" size="large" className={styles.formInput} />
@@ -72,27 +71,24 @@ function Login() {
 
             <Form.Item
               name="password"
-              rules={[
-                { required: true, message: 'Please enter your password!' },
-                { min: 6, message: 'Password must be at least 6 characters!' },
-              ]}
+              rules={[{ required: true, message: 'Please enter your password!' }]}
             >
-              <Input.Password
-                placeholder="Password"
-                size="large"
-                className={styles.formInput}
-              />
+              <Input.Password placeholder="Password" size="large" className={styles.formInput} />
+            </Form.Item>
+
+            {/* ✅ NEW ROLE SELECTION */}
+            <Form.Item
+              name="role"
+              rules={[{ required: true, message: 'Please select your role!' }]}
+            >
+              <Select placeholder="Select Your Role" size="large" className={styles.formInput}>
+                <Option value="admin">Admin</Option>
+                <Option value="digital-marketing">Digital Marketing</Option>
+              </Select>
             </Form.Item>
 
             <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                loading={loading}
-                block
-                size="large"
-                className={styles.loginButton}
-              >
+              <Button type="primary" htmlType="submit" loading={loading} block size="large" className={styles.loginButton}>
                 {loading ? 'Logging in...' : 'Login'}
               </Button>
             </Form.Item>
