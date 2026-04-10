@@ -4,7 +4,12 @@ const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true }, // Hashed with bcrypt
   name: { type: String, required: true },
-  role: { type: String, enum: ['admin', 'marketing', 'seo'], required: true },
+  role: { 
+    type: String, 
+    // ✅ "digital-marketing" ko yahan add kar diya hai
+    enum: ['admin', 'marketing', 'seo', 'digital-marketing'], 
+    required: true 
+  },
 }, { timestamps: true });
 
 export default mongoose.models.User || mongoose.model('User', UserSchema);

@@ -27,17 +27,17 @@ function Signup() {
                 throw new Error(data.message || 'Signup failed. Please try again.');
             }
 
-            // Store token (assuming /api/register sets a cookie, no localStorage for token)
+            // Store user data (Registration ke baad hum role save kar rahe hain)
             localStorage.setItem('username', data.user?.name || 'User');
-            localStorage.setItem('role', data.user?.role || 'admin');
+            localStorage.setItem('role', data.user?.role || values.role);
             localStorage.setItem('userData', JSON.stringify(data.user || {}));
 
             message.success('Account successfully created! Redirecting to login...');
-            setTimeout(() => router.push('/auth/login'), 1000);
+            setTimeout(() => router.push('/auth/login'), 1500);
 
         } catch (error) {
-            console.error('Signup Failed:', error.response?.data || error.message);
-            message.error('Signup failed! Please try again.');
+            console.error('Signup Failed:', error.message);
+            message.error(error.message || 'Signup failed! Please try again.');
         } finally {
             setLoading(false);
         }
@@ -48,9 +48,9 @@ function Signup() {
             <Row className={styles.signupBox}>
                 {/* Left Section - Welcome Message */}
                 <Col xs={0} md={12} className={styles.welcomeSection}>
-                    <h1 className={styles.welcomeTitle}>Welcome to Brand Marketing Hub Admin Portal</h1>
+                    <h1 className={styles.welcomeTitle}>Join Brand Marketing Hub</h1>
                     <p className={styles.welcomeText}>
-                        Sign up your account to access the portal.
+                        Create an account to manage your business services and content efficiently.
                     </p>
                 </Col>
 
@@ -68,7 +68,7 @@ function Signup() {
                             rules={[{ required: true, message: 'Please enter your name!' }]}
                         >
                             <Input
-                                placeholder="Name"
+                                placeholder="Full Name"
                                 size="large"
                                 className={styles.formInput}
                             />
@@ -76,10 +76,13 @@ function Signup() {
 
                         <Form.Item
                             name="email"
-                            rules={[{ required: true, message: 'Please enter your email!' }]}
+                            rules={[
+                                { required: true, message: 'Please enter your email!' },
+                                { type: 'email', message: 'Enter a valid email address!' }
+                            ]}
                         >
                             <Input
-                                placeholder="Email"
+                                placeholder="Email Address"
                                 size="large"
                                 className={styles.formInput}
                             />
@@ -87,7 +90,10 @@ function Signup() {
 
                         <Form.Item
                             name="password"
-                            rules={[{ required: true, message: 'Please enter your password!' }]}
+                            rules={[
+                                { required: true, message: 'Please enter your password!' },
+                                { min: 6, message: 'Password must be at least 6 characters!' }
+                            ]}
                         >
                             <Input.Password
                                 placeholder="Password"
@@ -96,18 +102,18 @@ function Signup() {
                             />
                         </Form.Item>
 
+                        {/* ✅ ROLE SELECTION DROPDOWN */}
                         <Form.Item
                             name="role"
-                            rules={[{ required: true, message: 'Please select your role!' }]}
+                            rules={[{ required: true, message: 'Please select a role!' }]}
                         >
                             <Select
                                 size="large"
                                 placeholder="Select Role"
-                                className={styles.roleSelector}
+                                className={styles.formInput}
                             >
                                 <Option value="admin">Admin</Option>
-                                <Option value="marketing">Digital Marketer</Option>
-                                <Option value="seo">SEO Expert</Option>
+                                <Option value="digital-marketing">Digital Marketing</Option>
                             </Select>
                         </Form.Item>
 
@@ -120,13 +126,13 @@ function Signup() {
                                 size="large"
                                 className={styles.signupButton}
                             >
-                                Signup
+                                {loading ? 'Creating Account...' : 'Sign Up'}
                             </Button>
                         </Form.Item>
 
                         <Form.Item className={styles.loginLink}>
                             <span>Already have an account? </span>
-                            <Link href="/auth/login">Login</Link>
+                            <Link href="/auth/login">Login here</Link>
                         </Form.Item>
                     </Form>
                 </Col>
@@ -135,4 +141,4 @@ function Signup() {
     );
 }
 
-export default Signup;
+export default Signup;  
