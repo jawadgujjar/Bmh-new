@@ -54,7 +54,7 @@ export async function POST(req) {
 
     // 6. Create event with Google Meet
     const event = {
-      summary: "Free Consultation Meeting",
+      summary: "Brand Marketing Hub | Free Consultation",
       description: "Discussion about your project requirements",
       start: {
         dateTime: startTime.toISOString(),
@@ -66,7 +66,7 @@ export async function POST(req) {
       },
       attendees: [
         { email: session.user.email,responseStatus: 'accepted' },
-        { email: "jawadgujjar573@gmail.com" } // Add your admin email
+        { email: "hello@brandmarketinghub.com" } // Add your admin email
       ],
       conferenceData: {
         createRequest: {
