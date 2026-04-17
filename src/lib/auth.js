@@ -11,7 +11,7 @@ export const authOptions = {
             'openid',
             'email',
             'profile',
-            'https://www.googleapis.com/auth/calendar',
+            // 'https://www.googleapis.com/auth/calendar',
             'https://www.googleapis.com/auth/calendar.events'
           ].join(' '),
           access_type: 'offline', // Zaroori hai refresh token lene ke liye

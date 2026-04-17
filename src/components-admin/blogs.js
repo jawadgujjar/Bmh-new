@@ -57,13 +57,13 @@ const { Panel } = Collapse;
 const stripHtmlTags = (html) => {
   if (!html) return '';
   return html
-    .replace(/<[^>]*>/g, '') // Remove all HTML tags
-    .replace(/&nbsp;/g, ' ') // Replace &nbsp; with space
-    .replace(/&amp;/g, '&') // Replace &amp; with &
-    .replace(/&lt;/g, '<') // Replace &lt; with <
-    .replace(/&gt;/g, '>') // Replace &gt; with >
-    .replace(/&quot;/g, '"') // Replace &quot; with "
-    .replace(/&#39;/g, "'") // Replace &#39; with '
+    .replace(/<[^>]*>/g, '')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
     .trim();
 };
 
@@ -99,7 +99,7 @@ export default function BlogAdmin() {
   const [editingBlog, setEditingBlog] = useState(null);
   const [form] = Form.useForm();
   const [mounted, setMounted] = useState(false);
-  const [formKey, setFormKey] = useState(0);
+  const [editorKey, setEditorKey] = useState(0);
   const [editorContent, setEditorContent] = useState("");
 
   useEffect(() => {
@@ -152,7 +152,6 @@ export default function BlogAdmin() {
     try {
       const values = await form.validateFields();
       
-      // ✅ FIX: Ensure slug doesn't have /blogs/ prefix
       let slug = values.slug;
       if (slug.startsWith('/')) {
         slug = slug.substring(1);
@@ -161,10 +160,8 @@ export default function BlogAdmin() {
         slug = slug.substring(6);
       }
       
-      // Clean table of contents (remove HTML tags)
       const cleanTOC = cleanTableOfContents(values.tableOfContents || []);
       
-      // If no TOC provided, try to auto-generate from content
       let finalTOC = cleanTOC;
       if (cleanTOC.length === 0 && editorContent) {
         const autoHeadings = extractHeadingsFromContent(editorContent);
@@ -174,7 +171,6 @@ export default function BlogAdmin() {
         }));
       }
       
-      // Prepare SEO data as per your model
       const seoData = {
         metaTitle: values.metaTitle || '',
         metaDescription: values.metaDescription || '',
@@ -189,11 +185,9 @@ export default function BlogAdmin() {
         category: values.category,
         description: values.description,
         fullContent: editorContent,
-        tableOfContents: finalTOC, // Use cleaned TOC
+        tableOfContents: finalTOC,
         seo: seoData
       };
-
-      console.log("Saving blog with cleaned TOC:", finalValues);
 
       let url = "/api/blogs";
       let method = "POST";
@@ -252,69 +246,104 @@ export default function BlogAdmin() {
     setEditingBlog(null);
     form.resetFields();
     setEditorContent("");
-    setFormKey(prev => prev + 1);
+    setEditorKey(prev => prev + 1);
   };
 
-  // Edit blog function
+  // Edit blog function - FULLY FIXED
   const handleEdit = async (record) => {
     console.log("Editing blog data:", record);
     
+    // Close modal if open
     if (isModalOpen) {
-      handleModalClose();
-      await new Promise(resolve => setTimeout(resolve, 100));
+      setIsModalOpen(false);
+      await new Promise(resolve => setTimeout(resolve, 300));
     }
     
+    // Set editing blog and content
     setEditingBlog(record);
-    setFormKey(prev => prev + 1);
+    const blogContent = record.fullContent || "";
+    setEditorContent(blogContent);
+    
+    // Open modal
     setIsModalOpen(true);
     
+    // Wait for modal to fully render and set form values
     setTimeout(() => {
-      // ✅ FIX: Ensure slug doesn't have /blogs/ prefix when editing
-      let slug = record.slug || "";
-      if (slug.startsWith('/')) {
-        slug = slug.substring(1);
+      try {
+        // Prepare slug
+        let slug = record.slug || "";
+        if (slug.startsWith('/')) slug = slug.substring(1);
+        if (slug.startsWith('blogs/')) slug = slug.substring(6);
+        
+        // Prepare SEO
+        const seo = record.seo || {};
+        
+        // Prepare TOC
+        const cleanExistingTOC = record.tableOfContents ? 
+          record.tableOfContents.map(item => ({
+            ...item,
+            title: stripHtmlTags(item.title)
+          })) : [];
+        
+        // Set ALL form values at once
+        const formValues = {
+          title: record.title || "",
+          slug: slug,
+          category: record.category || "tech",
+          description: record.description || "",
+          fullContent: blogContent,
+          tableOfContents: cleanExistingTOC,
+          metaTitle: seo.metaTitle || "",
+          metaDescription: seo.metaDescription || "",
+          metaKeywords: seo.metaKeywords ? seo.metaKeywords.join(', ') : "",
+          schemaMarkup: seo.schemaMarkup || ""
+        };
+        
+        console.log("Setting form values:", formValues);
+        form.setFieldsValue(formValues);
+        
+        // Force editor re-render
+        setEditorKey(prev => prev + 1);
+        
+      } catch (error) {
+        console.error("Error setting form values:", error);
       }
-      if (slug.startsWith('blogs/')) {
-        slug = slug.substring(6);
-      }
-      
-      // Get SEO data from record
-      const seo = record.seo || {};
-      
-      // Clean existing TOC for display (remove HTML tags)
-      const cleanExistingTOC = record.tableOfContents ? 
-        record.tableOfContents.map(item => ({
-          ...item,
-          title: stripHtmlTags(item.title)
-        })) : [];
-      
-      form.setFieldsValue({
-        title: record.title || "",
-        slug: slug,
-        category: record.category || "tech",
-        description: record.description || "",
-        fullContent: record.fullContent || "",
-        tableOfContents: cleanExistingTOC,
-        // SEO fields
-        metaTitle: seo.metaTitle || "",
-        metaDescription: seo.metaDescription || "",
-        metaKeywords: seo.metaKeywords ? seo.metaKeywords.join(', ') : "",
-        schemaMarkup: seo.schemaMarkup || ""
-      });
-      
-      setEditorContent(record.fullContent || "");
     }, 300);
   };
 
   // Add new blog
   const handleAddNew = () => {
-    handleModalClose();
-    setTimeout(() => {
+    if (isModalOpen) {
+      setIsModalOpen(false);
+      setTimeout(() => {
+        setEditingBlog(null);
+        setEditorContent("");
+        setIsModalOpen(true);
+        
+        setTimeout(() => {
+          form.resetFields();
+          form.setFieldsValue({
+            title: "",
+            slug: "",
+            category: "tech",
+            description: "",
+            fullContent: "",
+            tableOfContents: [],
+            metaTitle: "",
+            metaDescription: "",
+            metaKeywords: "",
+            schemaMarkup: ""
+          });
+          setEditorKey(prev => prev + 1);
+        }, 100);
+      }, 100);
+    } else {
       setEditingBlog(null);
+      setEditorContent("");
       setIsModalOpen(true);
-      setFormKey(prev => prev + 1);
       
       setTimeout(() => {
+        form.resetFields();
         form.setFieldsValue({
           title: "",
           slug: "",
@@ -322,15 +351,14 @@ export default function BlogAdmin() {
           description: "",
           fullContent: "",
           tableOfContents: [],
-          // SEO defaults
           metaTitle: "",
           metaDescription: "",
           metaKeywords: "",
           schemaMarkup: ""
         });
-        setEditorContent("");
+        setEditorKey(prev => prev + 1);
       }, 100);
-    }, 100);
+    }
   };
 
   // Handle editor content change
@@ -537,10 +565,8 @@ export default function BlogAdmin() {
             } 
           }}
           destroyOnClose={true}
-          forceRender={true}
         >
           <Form 
-            key={formKey}
             form={form} 
             layout="vertical" 
             preserve={false}
@@ -639,6 +665,7 @@ export default function BlogAdmin() {
               />
             </Form.Item>
 
+            {/* TipTap Editor with key for force re-render */}
             <Form.Item
               label="Full Content"
               name="fullContent"
@@ -649,7 +676,8 @@ export default function BlogAdmin() {
             >
               <div style={{ marginBottom: '16px' }}>
                 <TipTapEditor 
-                  content={editorContent}
+                  key={editorKey}
+                  value={editorContent}
                   onChange={handleEditorChange}
                 />
               </div>
@@ -767,7 +795,7 @@ export default function BlogAdmin() {
                             flex: 1, 
                             marginBottom: 0 
                           }}
-                          normalize={(value) => stripHtmlTags(value)} // Clean input
+                          normalize={(value) => stripHtmlTags(value)}
                         >
                           <Input 
                             placeholder="Heading Title (without HTML tags)"

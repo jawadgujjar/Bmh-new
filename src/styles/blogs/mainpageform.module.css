@@ -30,7 +30,7 @@
 .formCard :global(.ant-select-focused .ant-select-selector),
 .formCard :global(.ant-input-affix-wrapper-focused),
 .formCard :global(.ant-input-textarea-focused) {
-  border-color: #FD7E14 !important; /* orange on focus */
+  border-color: #FD7E14 !important;  
   box-shadow: 0 0 0 2px rgba(253, 126, 20, 0.2);
 }
 
@@ -51,7 +51,7 @@
 }
 
 .submitBtn:hover {
-  background-color: #e86f0f;
+  background-color: #e86f0f !important;
   border-color: #e86f0f;
 }
 
