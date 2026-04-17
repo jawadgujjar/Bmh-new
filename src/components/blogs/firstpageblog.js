@@ -14,29 +14,20 @@ const FirstPageBlog = () => {
   const [blogPosts, setBlogPosts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState(""); // Search term state
 
   const ORANGE_COLOR = "#FD7E14";
   const ORANGE_LIGHT = "#FFA94D";
 
-  // ================= FETCH BLOGS =================
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
         const res = await fetch("/api/blogs");
-
-        if (!res.ok) {
-          throw new Error("Failed to fetch blogs");
-        }
-
+        if (!res.ok) throw new Error("Failed to fetch blogs");
         const data = await res.json();
-
-        // ensure array
         const blogsArray = Array.isArray(data) ? data : [];
-
         setBlogPosts(blogsArray);
 
-        // extract categories
         const categoryMap = {};
         blogsArray.forEach((blog) => {
           if (blog?.category) {
@@ -48,39 +39,42 @@ const FirstPageBlog = () => {
           name: cat,
           count: categoryMap[cat],
         }));
-
         setCategories(categoryArray);
       } catch (error) {
         console.error("Blog API error:", error);
-        setBlogPosts([]);
-        setCategories([]);
       } finally {
         setLoading(false);
       }
     };
-
     fetchBlogs();
   }, []);
+
+  // ================= SEARCH FILTER LOGIC =================
+  // Yeh function har baar chalega jab searchTerm ya blogPosts change honge
+  const filteredBlogs = blogPosts.filter((post) => {
+    const title = post?.title?.toLowerCase() || "";
+    const description = post?.description?.toLowerCase() || "";
+    const search = searchTerm.toLowerCase();
+    return title.includes(search) || description.includes(search);
+  });
+
+  const handleSearch = (value) => {
+    setSearchTerm(value); // Input ki value ko state mein save karein
+  };
 
   const handleReadMore = (post) => {
     if (!post?.slug) return;
     router.push(`/blogs/${post.slug}`);
   };
 
-  const handleSearch = (value) => {
-    if (value.trim()) {
-      // You can implement search functionality here
-      // For now, just logging
-      console.log("Searching for:", value);
-      // router.push(`/blogs?search=${encodeURIComponent(value)}`);
-    }
-  };
-
   const handleCategoryClick = (category) => {
-    router.push(`/blogs?category=${encodeURIComponent(category)}`);
+    // Agar aap chahte hain ke category click karne par bhi filter ho, 
+    // toh aap searchTerm ko category name set kar sakte hain:
+    setSearchTerm(category);
+    // Ya purana router.push wala tareeka:
+    // router.push(`/blogs?category=${encodeURIComponent(category)}`);
   };
 
-  // ================= LOADING =================
   if (loading) {
     return <p style={{ padding: 40, textAlign: "center" }}>Loading blogs...</p>;
   }
@@ -90,10 +84,12 @@ const FirstPageBlog = () => {
       <Row gutter={[40, 0]}>
         {/* ================= LEFT COLUMN ================= */}
         <Col xs={24} md={16} lg={17}>
-          <h2 className={styles.sectionTitle}>Recent Posts</h2>
+          <h2 className={styles.sectionTitle}>
+            {searchTerm ? `Results for: ${searchTerm}` : "Recent Posts"}
+          </h2>
 
-          {/* ===== NO BLOGS FOUND ===== */}
-          {blogPosts.length === 0 ? (
+          {/* ===== CHECK FILTERED BLOGS LENGTH ===== */}
+          {filteredBlogs.length === 0 ? (
             <Card
               style={{
                 textAlign: "center",
@@ -102,63 +98,43 @@ const FirstPageBlog = () => {
               }}
             >
               <h3 style={{ color: ORANGE_COLOR }}>No blogs found 😕</h3>
-              <p>No Blogs Published Yet</p>
+              <p>Try searching with a different keyword.</p>
+              {searchTerm && (
+                <Button onClick={() => setSearchTerm("")}>Clear Search</Button>
+              )}
             </Card>
           ) : (
-            blogPosts.map((post) => (
+            filteredBlogs.map((post) => (
               <Card
                 key={post?._id || post?.slug}
                 className={styles.blogCard}
-                style={{
-                  marginBottom: 24,
-                  borderRadius: 12,
-                }}
+                style={{ marginBottom: 24, borderRadius: 12 }}
               >
-                {/* META */}
                 <div className={styles.cardMeta}>
-                  <Tag
-                    style={{
-                      backgroundColor: ORANGE_COLOR,
-                      color: "#fff",
-                      border: "none",
-                    }}
-                  >
+                  <Tag style={{ backgroundColor: ORANGE_COLOR, color: "#fff", border: "none" }}>
                     {post?.category || "Uncategorized"}
                   </Tag>
-
                   <span className={styles.postDate}>
-                    <CalendarOutlined />{" "}
-                    {post?.date
-                      ? new Date(post.date).toLocaleDateString()
-                      : "No date"}
+                    <CalendarOutlined /> {post?.date ? new Date(post.date).toLocaleDateString() : "No date"}
                   </span>
                 </div>
 
-                {/* TITLE */}
                 <h3
                   className={styles.postTitle}
                   onClick={() => handleReadMore(post)}
-                  style={{
-                    cursor: "pointer",
-                    transition: "color 0.3s ease",
-                  }}
+                  style={{ cursor: "pointer" }}
                 >
                   {post?.title || "Untitled Blog"}
                 </h3>
 
-                {/* DESCRIPTION */}
                 <p className={styles.postDescription}>
                   {post?.description || "No description available."}
                 </p>
 
-                {/* BUTTON */}
                 <Button
                   type="primary"
                   onClick={() => handleReadMore(post)}
-                  style={{
-                    backgroundColor: ORANGE_COLOR,
-                    borderColor: ORANGE_COLOR,
-                  }}
+                  style={{ backgroundColor: ORANGE_COLOR, borderColor: ORANGE_COLOR }}
                 >
                   Read Full Article
                 </Button>
@@ -169,7 +145,6 @@ const FirstPageBlog = () => {
 
         {/* ================= RIGHT SIDEBAR ================= */}
         <Col xs={24} md={8} lg={7}>
-          {/* SEARCH - Fixed Button */}
           <Card
             title={<span style={{ color: ORANGE_COLOR }}>Search Blog</span>}
             style={{ marginBottom: 24 }}
@@ -178,6 +153,7 @@ const FirstPageBlog = () => {
               placeholder="Search articles..."
               allowClear
               onSearch={handleSearch}
+              onChange={(e) => setSearchTerm(e.target.value)} // Real-time search ke liye
               enterButton={
                 <Button
                   type="primary"
@@ -197,7 +173,6 @@ const FirstPageBlog = () => {
             />
           </Card>
 
-          {/* CATEGORIES - Clickable */}
           <Card title={<span style={{ color: ORANGE_COLOR }}>Categories</span>}>
             {categories.length === 0 ? (
               <p style={{ textAlign: "center" }}>No categories</p>
@@ -209,21 +184,9 @@ const FirstPageBlog = () => {
                     style={{ cursor: "pointer" }}
                     onClick={() => handleCategoryClick(item.name)}
                   >
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        width: "100%",
-                      }}
-                    >
+                    <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
                       <span>{item.name}</span>
-                      <Tag
-                        style={{
-                          backgroundColor: ORANGE_LIGHT,
-                          border: "none",
-                          color: "#000",
-                        }}
-                      >
+                      <Tag style={{ backgroundColor: ORANGE_LIGHT, border: "none", color: "#000" }}>
                         {item.count}
                       </Tag>
                     </div>
