@@ -157,38 +157,37 @@ export default function BlogDetailPage() {
             </Card>
           </div>
           <div className={styles.stickyFormWrapper}>
-           <Card title={<span style={{ color: ORANGE_COLOR }}>Search Blog</span>} style={{ marginBottom: 24 }}>
-  <Search
-    placeholder="Search articles..."
-    allowClear
-    // Direct main page par search query bhej raha hai
-    onSearch={(v) => v && router.push(`/blogs?search=${encodeURIComponent(v)}`)}
-    enterButton={
-      <Button style={{ backgroundColor: ORANGE_COLOR, borderColor: ORANGE_COLOR, color: '#fff' }}>
-        Search
-      </Button>
-    }
-  />
-</Card>
+            <Card title={<span style={{ color: ORANGE_COLOR }}>Search Blog</span>} style={{ marginBottom: 24 }}>
+              <Search
+                placeholder="Search articles..."
+                allowClear
+                // Direct main page par search query bhej raha hai
+                onSearch={(v) => v && router.push(`/blogs?search=${encodeURIComponent(v)}`)}
+                enterButton={
+                  <Button style={{ backgroundColor: ORANGE_COLOR, borderColor: ORANGE_COLOR, color: '#fff' }}>
+                    Search
+                  </Button>
+                }
+              />
+            </Card>
 
- 
-<Card title={<span style={{ color: ORANGE_COLOR }}>Categories</span>} style={{ marginBottom: 24 }}>
-  <List
-    dataSource={categories}
-    renderItem={(item) => (
-      <List.Item 
-        style={{ cursor: 'pointer' }} 
-        // Jab category click ho toh main page par search query ki tarah jaye
-        onClick={() => router.push(`/blogs?search=${encodeURIComponent(item.name)}`)}
-      >
-        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-          <span>{item.name}</span>
-          <Tag style={{ backgroundColor: ORANGE_LIGHT, border: 'none', color: '#000' }}>{item.count}</Tag>
-        </div>
-      </List.Item>
-    )}
-  />
-</Card>
+            <Card title={<span style={{ color: ORANGE_COLOR }}>Categories</span>} style={{ marginBottom: 24 }}>
+              <List
+                dataSource={categories}
+                renderItem={(item) => (
+                  <List.Item
+                    style={{ cursor: 'pointer' }}
+                    // Jab category click ho toh main page par search query ki tarah jaye
+                    onClick={() => router.push(`/blogs?search=${encodeURIComponent(item.name)}`)}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                      <span>{item.name}</span>
+                      <Tag style={{ backgroundColor: ORANGE_LIGHT, border: 'none', color: '#000' }}>{item.count}</Tag>
+                    </div>
+                  </List.Item>
+                )}
+              />
+            </Card>
             <MainpageForm />
           </div>
         </div>

@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState, useRef } from "react";
 import {
   Table as AntTable,
@@ -17,6 +18,7 @@ import {
   Row,
   Col,
   Collapse,
+  Upload,
 } from "antd";
 import {
   PlusOutlined,
@@ -25,6 +27,7 @@ import {
   MinusCircleOutlined,
   GlobalOutlined,
   InfoCircleOutlined,
+  UploadOutlined,
 } from "@ant-design/icons";
 
 // Dynamically import TipTap to avoid SSR
@@ -89,6 +92,97 @@ const extractHeadingsFromContent = (content) => {
   }
   
   return headings;
+};
+
+// ============ Image Upload Component (Matching your reference) ============
+const BlogImageUpload = ({ value, onChange, label }) => {
+  const [imageUrl, setImageUrl] = useState('');
+
+  useEffect(() => {
+    if (value) {
+      setImageUrl(value);
+    }
+  }, [value]);
+
+  // Custom upload handler
+  const handleCustomUpload = async (file) => {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        message.success("Image uploaded successfully");
+        setImageUrl(data.url);
+        onChange(data.url);
+        return data.url;
+      } else {
+        message.error(data.error || "Failed to upload image");
+        return false;
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      message.error("Error uploading image");
+      return false;
+    }
+  };
+
+  const handleBeforeUpload = async (file) => {
+    const url = await handleCustomUpload(file);
+    return false; // Prevent default upload
+  };
+
+  const handleRemove = () => {
+    setImageUrl('');
+    onChange('');
+  };
+
+  return (
+    <div>
+      <div style={{ marginBottom: 8 }}>
+        <Upload
+          name="image"
+          listType="picture"
+          showUploadList={false}
+          beforeUpload={handleBeforeUpload}
+          accept="image/*"
+        >
+          <Button icon={<UploadOutlined />}>Upload {label}</Button>
+        </Upload>
+      </div>
+      
+      {imageUrl && (
+        <div style={{ marginTop: 8 }}>
+          <img 
+            src={imageUrl} 
+            alt={label}
+            style={{ 
+              width: 200, 
+              height: 120, 
+              objectFit: 'cover',
+              borderRadius: 6,
+              border: '1px solid #d9d9d9'
+            }} 
+          />
+          <div style={{ marginTop: 4 }}>
+            <Button 
+              type="link" 
+              danger 
+              size="small" 
+              onClick={handleRemove}
+            >
+              Remove Image
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };
 
 // ============ Main BlogAdmin Component ============
@@ -176,7 +270,7 @@ export default function BlogAdmin() {
         metaDescription: values.metaDescription || '',
         metaKeywords: values.metaKeywords ? 
           values.metaKeywords.split(',').map(k => k.trim()).filter(k => k) : [],
-        schemaMarkup: values.schemaMarkup || null
+        schemaMarkup: values.schemaMarkup ? JSON.parse(values.schemaMarkup) : null
       };
 
       const finalValues = {
@@ -184,6 +278,7 @@ export default function BlogAdmin() {
         slug: slug,
         category: values.category,
         description: values.description,
+        image: values.image || '', // Using 'image' field as per your schema
         fullContent: editorContent,
         tableOfContents: finalTOC,
         seo: seoData
@@ -249,7 +344,7 @@ export default function BlogAdmin() {
     setEditorKey(prev => prev + 1);
   };
 
-  // Edit blog function - FULLY FIXED
+  // Edit blog function
   const handleEdit = async (record) => {
     console.log("Editing blog data:", record);
     
@@ -291,12 +386,13 @@ export default function BlogAdmin() {
           slug: slug,
           category: record.category || "tech",
           description: record.description || "",
+          image: record.image || "", // Using 'image' field
           fullContent: blogContent,
           tableOfContents: cleanExistingTOC,
           metaTitle: seo.metaTitle || "",
           metaDescription: seo.metaDescription || "",
           metaKeywords: seo.metaKeywords ? seo.metaKeywords.join(', ') : "",
-          schemaMarkup: seo.schemaMarkup || ""
+          schemaMarkup: seo.schemaMarkup ? JSON.stringify(seo.schemaMarkup, null, 2) : ""
         };
         
         console.log("Setting form values:", formValues);
@@ -327,6 +423,7 @@ export default function BlogAdmin() {
             slug: "",
             category: "tech",
             description: "",
+            image: "",
             fullContent: "",
             tableOfContents: [],
             metaTitle: "",
@@ -349,6 +446,7 @@ export default function BlogAdmin() {
           slug: "",
           category: "tech",
           description: "",
+          image: "",
           fullContent: "",
           tableOfContents: [],
           metaTitle: "",
@@ -391,6 +489,39 @@ export default function BlogAdmin() {
 
   // Table columns
   const columns = [
+    { 
+      title: "Image", 
+      dataIndex: "image", 
+      key: "image",
+      render: (image) => (
+        image ? (
+          <img 
+            src={image} 
+            alt="blog" 
+            style={{ 
+              width: 50, 
+              height: 50, 
+              objectFit: 'cover', 
+              borderRadius: 6 
+            }} 
+          />
+        ) : (
+          <div style={{ 
+            width: 50, 
+            height: 50, 
+            background: '#f0f0f0', 
+            borderRadius: 6,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: 12,
+            color: '#999'
+          }}>
+            No Image
+          </div>
+        )
+      )
+    },
     { 
       title: "Title", 
       dataIndex: "title", 
@@ -575,6 +706,7 @@ export default function BlogAdmin() {
               slug: "",
               category: "tech",
               description: "",
+              image: "",
               fullContent: "",
               tableOfContents: [],
               metaTitle: "",
@@ -662,6 +794,19 @@ export default function BlogAdmin() {
                 maxLength={200}
                 showCount
                 size="middle"
+              />
+            </Form.Item>
+
+            {/* Image Upload - Using 'image' field to match your schema */}
+            <Form.Item 
+              label="Blog Image" 
+              name="image"
+              extra="Upload a hero/featured image for the blog post"
+            >
+              <BlogImageUpload 
+                value={form.getFieldValue('image')}
+                onChange={(url) => form.setFieldsValue({ image: url })}
+                label="Blog Image"
               />
             </Form.Item>
 
