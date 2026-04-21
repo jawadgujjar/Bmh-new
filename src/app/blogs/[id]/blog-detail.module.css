@@ -1,18 +1,22 @@
 /* Header */
 .blogHeader {
   position: relative;
-  min-height: 520px;
-  background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
-    url('/images/hero.jpg') center/cover no-repeat;
+  min-height: 480px;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
   color: white;
   padding: 50px 20px;
   margin-bottom: 50px;
+  display: flex;
+  align-items: center;
 }
 
 .headerContent {
   max-width: 1200px;
-  margin: 80px auto 0;
-  padding: 0 20px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 80px 20px 20px;
 }
 
 .headerBreadcrumbs {
@@ -61,7 +65,6 @@
   max-width: 1400px;
   margin: 0 auto;
   padding: 40px 20px 100px;
-  /* min-height: 100vh; */
 }
 /* Grid for left article + right sticky */
 .layoutGrid {
@@ -71,9 +74,6 @@
   align-items: stretch;
 }
 
-/* .leftArea {}
-.rightArea { position: relative; } */
-
 /* Sticky form */
 .stickyFormWrapper {
   position: sticky;
@@ -82,10 +82,10 @@
   width: 100%;
 }
 
-/* Row Layout – IMPORTANT FIX */
+/* Row Layout */
 .contentRow {
   display: flex;
-  align-items: flex-start; /* 🔥 STICKY FIX */
+  align-items: flex-start;
   position: relative;
 }
 
@@ -172,7 +172,7 @@
 /* ================= STICKY FORM (FINAL FIX) ================= */
 .stickyFormWrapper {
   position: sticky;
-  top: 120px; /* navbar height + gap */
+  top: 120px;
   width: 100%;
   align-self: flex-start;
 }
@@ -222,24 +222,20 @@
   margin: 0 auto 20px;
 }
 /* breadcrumb */
-/* Breadcrumb container */
 .custom-breadcrumb {
   margin-bottom: 16px;
 }
 
-/* Text color */
 .custom-breadcrumb .ant-breadcrumb-link,
 .custom-breadcrumb .ant-breadcrumb-link span {
   color: #fff !important;
   cursor: pointer;
 }
 
-/* Separator "/" */
 .custom-breadcrumb .ant-breadcrumb-separator {
   color: #fff !important;
 }
 
-/* Hover color */
 .custom-breadcrumb .ant-breadcrumb-link:hover,
 .custom-breadcrumb .ant-breadcrumb-link span:hover {
   color: #FD7E14 !important;
@@ -254,11 +250,6 @@
 
 /* ================= RESPONSIVE ================= */
 @media (max-width: 992px) {
-  /* .stickyFormWrapper {
-    position: static;  
-    margin-top: 40px;
-  } */
-
   .leftColumn {
     padding-right: 0;
   }
@@ -274,9 +265,11 @@
   .contentRow {
     flex-direction: column;
   }
-   .layoutGrid {
+
+  .layoutGrid {
     grid-template-columns: 1fr;
   }
+
   .stickyFormWrapper {
     position: static;
     margin-top: 40px;
@@ -285,12 +278,20 @@
 
 @media (max-width: 768px) {
   .blogHeader {
-    min-height: 420px;
-    padding: 40px 15px;
+    min-height: 320px;
+    padding: 20px 15px;
+  }
+
+  .headerContent {
+    padding: 60px 15px 15px;
   }
 
   .headerTitle {
-    font-size: 32px;
+    font-size: 28px;
+  }
+
+  .headerDescription {
+    font-size: 16px;
   }
 
   .articleContent {
@@ -300,10 +301,25 @@
   .articleContent h2 {
     font-size: 24px;
   }
- 
+
   .stickyFormWrapper {
     position: static;
     margin-top: 40px;
   }
- 
+}
+
+@media (max-width: 480px) {
+  .blogHeader {
+    min-height: 200px;
+    
+    padding: 15px 12px;
+  }
+
+  .headerTitle {
+    font-size: 22px;
+  }
+
+  .headerDescription {
+    font-size: 14px;
+  }
 }

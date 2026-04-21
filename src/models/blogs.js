@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// --- SEO Schema (Sub-document) ---
 const seoSchema = new mongoose.Schema(
   {
     metaTitle: { type: String },
@@ -10,10 +11,18 @@ const seoSchema = new mongoose.Schema(
   { _id: false } // prevent extra _id for sub-doc
 );
 
+// --- Main Blog Schema ---
 const blogSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     slug: { type: String, required: true, unique: true },
+    
+    // ✅ Image field for Frontend Background/Hero Image
+    image: {
+      type: String,
+      default: "",
+    },
+
     description: { type: String, required: true },
     fullContent: { type: String, required: true },
     category: { type: String, required: true },
@@ -26,10 +35,13 @@ const blogSchema = new mongoose.Schema(
       },
     ],
 
-    // ✅ SEO Object Added
+    // ✅ SEO Object
     seo: seoSchema,
   },
-  { timestamps: true }
+  { 
+    timestamps: true // Creates 'createdAt' and 'updatedAt' automatically
+  }
 );
 
+// Model export
 export default mongoose.models.Blog || mongoose.model("Blog", blogSchema);

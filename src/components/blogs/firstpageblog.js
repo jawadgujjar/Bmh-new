@@ -1,23 +1,34 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import { Row, Col, Card, Input, Button, List, Tag } from "antd";
-import { SearchOutlined, CalendarOutlined } from "@ant-design/icons";
-import { useRouter } from "next/navigation";
-import styles from "../../styles/blogs/firstpageblog.module.css";
+import React, { useEffect, useState, Suspense } from 'react'; // Suspense add kiya Next.js requirements ke liye
+import { Row, Col, Card, Input, Button, List, Tag, Spin } from 'antd';
+import { SearchOutlined, CalendarOutlined } from '@ant-design/icons';
+import { useRouter, useSearchParams } from 'next/navigation'; // useSearchParams add kiya
+import styles from '../../styles/blogs/firstpageblog.module.css';
+import MainpageForm from './mainpageform';
 
 const { Search } = Input;
 
-const FirstPageBlog = () => {
+// Search params read karne ke liye logic
+const BlogListContent = () => {
   const router = useRouter();
-
+  const searchParams = useSearchParams();
   const [blogPosts, setBlogPosts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState(""); // Search term state
+  const [searchTerm, setSearchTerm] = useState("");
 
   const ORANGE_COLOR = "#FD7E14";
-  const ORANGE_LIGHT = "#FFA94D";
+
+  // URL se search query uthana (Jab detail page se wapas aayein)
+  useEffect(() => {
+    const query = searchParams.get('search');
+    if (query) {
+      setSearchTerm(query);
+    } else {
+      setSearchTerm(""); // Agar query nahi hai toh search clear kar dein
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -49,91 +60,70 @@ const FirstPageBlog = () => {
     fetchBlogs();
   }, []);
 
-  // ================= SEARCH FILTER LOGIC =================
-  // Yeh function har baar chalega jab searchTerm ya blogPosts change honge
   const filteredBlogs = blogPosts.filter((post) => {
     const title = post?.title?.toLowerCase() || "";
     const description = post?.description?.toLowerCase() || "";
+    const category = post?.category?.toLowerCase() || "";
     const search = searchTerm.toLowerCase();
-    return title.includes(search) || description.includes(search);
+    return title.includes(search) || description.includes(search) || category.includes(search);
   });
 
   const handleSearch = (value) => {
-    setSearchTerm(value); // Input ki value ko state mein save karein
+    setSearchTerm(value);
+    // URL ko bhi update kar dein taake search bookmarkable ho jaye
+    router.push(`/blogs?search=${value}`);
   };
 
-  const handleReadMore = (post) => {
-    if (!post?.slug) return;
-    router.push(`/blogs/${post.slug}`);
-  };
-
-  const handleCategoryClick = (category) => {
-    // Agar aap chahte hain ke category click karne par bhi filter ho, 
-    // toh aap searchTerm ko category name set kar sakte hain:
-    setSearchTerm(category);
-    // Ya purana router.push wala tareeka:
-    // router.push(`/blogs?category=${encodeURIComponent(category)}`);
-  };
+  const handleReadMore = (post) => post?.slug && router.push(`/blogs/${post.slug}`);
+  const handleCategoryClick = (category) => handleSearch(category);
 
   if (loading) {
-    return <p style={{ padding: 40, textAlign: "center" }}>Loading blogs...</p>;
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh', flexDirection: 'column' }}>
+        <Spin size="large" />
+        <p style={{ marginTop: 20 }}>Loading blogs...</p>
+      </div>
+    );
   }
 
   return (
     <div className={styles.antdBlogContainer}>
-      <Row gutter={[40, 0]}>
-        {/* ================= LEFT COLUMN ================= */}
-        <Col xs={24} md={16} lg={17}>
+      <Row gutter={[32, 32]}>
+        <Col xs={24} lg={16} xl={16}>
           <h2 className={styles.sectionTitle}>
             {searchTerm ? `Results for: ${searchTerm}` : "Recent Posts"}
           </h2>
 
-          {/* ===== CHECK FILTERED BLOGS LENGTH ===== */}
           {filteredBlogs.length === 0 ? (
-            <Card
-              style={{
-                textAlign: "center",
-                padding: "50px 20px",
-                borderRadius: 12,
-              }}
-            >
+            <Card style={{ textAlign: "center", padding: "50px 20px", borderRadius: 12 }}>
               <h3 style={{ color: ORANGE_COLOR }}>No blogs found 😕</h3>
-              <p>Try searching with a different keyword.</p>
-              {searchTerm && (
-                <Button onClick={() => setSearchTerm("")}>Clear Search</Button>
-              )}
+              <Button onClick={() => handleSearch("")}>Clear Search</Button>
             </Card>
           ) : (
             filteredBlogs.map((post) => (
               <Card
                 key={post?._id || post?.slug}
+                hoverable
                 className={styles.blogCard}
-                style={{ marginBottom: 24, borderRadius: 12 }}
+                style={{ marginBottom: 32, borderRadius: 12, overflow: "hidden" }}
+                cover={
+                  <div onClick={() => handleReadMore(post)} className={styles.responsiveImageWrapper}>
+                    <img src={post?.image || "/images/hero.jpg"} alt={post?.title} className={styles.blogMainImage} />
+                  </div>
+                }
               >
                 <div className={styles.cardMeta}>
-                  <Tag style={{ backgroundColor: ORANGE_COLOR, color: "#fff", border: "none" }}>
-                    {post?.category || "Uncategorized"}
-                  </Tag>
+                  <Tag color={ORANGE_COLOR}>{post?.category || "Uncategorized"}</Tag>
                   <span className={styles.postDate}>
-                    <CalendarOutlined /> {post?.date ? new Date(post.date).toLocaleDateString() : "No date"}
+                    <CalendarOutlined style={{ marginRight: 5 }} />
+                    {post?.date ? new Date(post.date).toLocaleDateString() : "No date"}
                   </span>
                 </div>
-
-                <h3
-                  className={styles.postTitle}
-                  onClick={() => handleReadMore(post)}
-                  style={{ cursor: "pointer" }}
-                >
-                  {post?.title || "Untitled Blog"}
-                </h3>
-
-                <p className={styles.postDescription}>
-                  {post?.description || "No description available."}
-                </p>
-
-                <Button
-                  type="primary"
-                  onClick={() => handleReadMore(post)}
+                <h3 className={styles.postTitle} onClick={() => handleReadMore(post)}>{post?.title}</h3>
+                <p className={styles.postDescription}>{post?.description}</p>
+                <Button 
+                  type="primary" 
+                  onClick={() => handleReadMore(post)} 
                   style={{ backgroundColor: ORANGE_COLOR, borderColor: ORANGE_COLOR }}
                 >
                   Read Full Article
@@ -143,62 +133,45 @@ const FirstPageBlog = () => {
           )}
         </Col>
 
-        {/* ================= RIGHT SIDEBAR ================= */}
-        <Col xs={24} md={8} lg={7}>
-          <Card
-            title={<span style={{ color: ORANGE_COLOR }}>Search Blog</span>}
-            style={{ marginBottom: 24 }}
-          >
-            <Search
-              placeholder="Search articles..."
-              allowClear
-              onSearch={handleSearch}
-              onChange={(e) => setSearchTerm(e.target.value)} // Real-time search ke liye
-              enterButton={
-                <Button
-                  type="primary"
-                  icon={<SearchOutlined />}
-                  style={{
-                    backgroundColor: ORANGE_COLOR,
-                    borderColor: ORANGE_COLOR,
-                    height: "32px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  Search
-                </Button>
-              }
-            />
-          </Card>
+        <Col xs={24} lg={8} xl={8}>
+          <div className={styles.sidebarWrapper}>
+            <Card title={<span style={{ color: ORANGE_COLOR }}>Search Blog</span>} style={{ marginBottom: 24, borderRadius: 12 }}>
+              <Search
+                placeholder="Search articles..."
+                allowClear
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onSearch={handleSearch}
+                enterButton={<Button type="primary" icon={<SearchOutlined />} style={{ backgroundColor: ORANGE_COLOR, borderColor: ORANGE_COLOR }}>Search</Button>}
+              />
+            </Card>
 
-          <Card title={<span style={{ color: ORANGE_COLOR }}>Categories</span>}>
-            {categories.length === 0 ? (
-              <p style={{ textAlign: "center" }}>No categories</p>
-            ) : (
+            <Card title={<span style={{ color: ORANGE_COLOR }}>Categories</span>} style={{ marginBottom: 24, borderRadius: 12 }}>
               <List
                 dataSource={categories}
                 renderItem={(item) => (
-                  <List.Item
-                    style={{ cursor: "pointer" }}
-                    onClick={() => handleCategoryClick(item.name)}
-                  >
-                    <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
-                      <span>{item.name}</span>
-                      <Tag style={{ backgroundColor: ORANGE_LIGHT, border: "none", color: "#000" }}>
-                        {item.count}
-                      </Tag>
+                  <List.Item className={styles.categoryItem} onClick={() => handleCategoryClick(item.name)}>
+                    <div className={styles.categoryLink} style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                      <span className={styles.categoryName}>{item.name}</span>
+                      <Tag className={styles.categoryCount}>{item.count}</Tag>
                     </div>
                   </List.Item>
                 )}
               />
-            )}
-          </Card>
+            </Card>
+            <MainpageForm />
+          </div>
         </Col>
       </Row>
     </div>
   );
 };
 
-export default FirstPageBlog;
+// Next.js mein useSearchParams ko hamesha Suspense mein wrap karna chahiye
+export default function FirstPageBlog() {
+  return (
+    <Suspense fallback={<Spin size="large" />}>
+      <BlogListContent />
+    </Suspense>
+  );
+}
