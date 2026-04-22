@@ -1,6 +1,7 @@
 // app/page.js
 "use client";
 
+import Faqform from "@/components/landing/formfaq/formfaq";
 // import Calltoaction from "@/components/landing/calltoaction";
  
  
@@ -29,17 +30,20 @@ export default function Home() {
       <Forwhom />
       <Services/>
       <Seocontent1/>
-      <SeoIndustries/>
+      
       {/* <Calltoaction/> */}
       <WebCalltoaction/>
       <Webcontent1/>
       {/* <WebIndustries/> */}
       <WhyChooseUs/>
+      <SeoIndustries/>
       <Carousel />
-      <Reward/>
+      
       {/* <ProposalForm/> */}
-      <Form1 />
-      <FAQ />
+      {/* <Form1 />
+      <FAQ /> */}
+      <Faqform/>
+      <Reward/>
 
     </>
   );

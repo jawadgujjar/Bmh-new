@@ -1,0 +1,33 @@
+.sectionWrapper {
+  background-color: #ffffff;
+  padding: 60px 0;
+  width: 100%;
+}
+
+.container {
+  max-width: 1250px; /* Standarad width for 50/50 layout */
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
+.faqWrapper, .formWrapper {
+  width: 100%;
+}
+
+.formWrapper {
+  /* Form hamesha visible rahe jab banda FAQ read kare */
+  position: sticky;
+  top: 30px;
+}
+
+/* Jab screen choti ho (Tablets/Mobile) */
+@media (max-width: 768px) {
+  .sectionWrapper {
+    padding: 40px 0;
+  }
+  
+  .formWrapper {
+    position: static;
+    margin-top: 30px;
+  }
+}
