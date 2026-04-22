@@ -17,7 +17,6 @@ const blogSchema = new mongoose.Schema(
     title: { type: String, required: true },
     slug: { type: String, required: true, unique: true },
     
-    // ✅ Image field for Frontend Background/Hero Image
     image: {
       type: String,
       default: "",
