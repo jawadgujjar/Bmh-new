@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import AliceCarousel from "react-alice-carousel";
-import { Avatar, Rate, Modal } from "antd"; // Modal add kiya
+import { Avatar, Rate, Modal } from "antd"; 
 import { CheckCircleFilled } from "@ant-design/icons";
 import "react-alice-carousel/lib/alice-carousel.css";
 import styles from "../../styles/carousel.module.css";
@@ -9,24 +9,21 @@ import styles from "../../styles/carousel.module.css";
 const carouselItems = [
   {
     name: "olive",
-    review:
-      "Deuxième session réussie pour moi et mon collègue, toujours aussi bien organisé pour Budapest, la clinique parfaite, le personnel au petits soins, on ne pense pas qu'il y aurait autant de confort. Je recommande vivement l'expérience pour tous ceux qui hésitent encore.",
+    review: "Deuxième session réussie pour moi et mon collègue, toujours aussi bien organisé pour Budapest, la clinique parfaite, le personnel au petits soins, on ne pense pas qu'il y aurait autant de confort. Je recommande vivement l'expérience pour tous ceux qui hésitent encore.",
   },
   {
     name: "Francis Hughes",
-    review:
-      "I cannot recommend the team at HairPalace enough... they really went above and beyond, and made me feel exceptionally comfortable. Big thanks to the doctors and the coordinators for making this a smooth journey.",
+    review: "I cannot recommend the team at HairPalace enough... they really went above and beyond, and made me feel exceptionally comfortable. Big thanks to the doctors and the coordinators for making this a smooth journey.",
   },
   {
     name: "Mainsail WebDesign",
-    review:
-      "We just signed up for the service and so far so good. I like that they don't stop improving and there seem to be a lot of options. It will take time to figure it all out, but the support has been top-notch.",
+    review: "We just signed up for the service and so far so good. I like that they don't stop improving and there seem to be a lot of options. It will take time to figure it all out, but the support has been top-notch.",
   },
 ];
 
 const Carousel = () => {
   const [isClient, setIsClient] = useState(false);
-  const [selectedReview, setSelectedReview] = useState(null); // Modal data state
+  const [selectedReview, setSelectedReview] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -57,8 +54,7 @@ const Carousel = () => {
             <Rate
               disabled
               defaultValue={5}
-              className={styles.ratingStars}
-              style={{ color: "#ffb400" }}
+              style={{ color: "#ffb400", fontSize: "14px" }}
             />
             <span className={styles.blueTick}>
               <CheckCircleFilled />
@@ -101,7 +97,6 @@ const Carousel = () => {
         </div>
       </div>
 
-      {/* --- Review Modal --- */}
       <Modal
         open={isModalOpen}
         onCancel={handleCancel}
@@ -121,21 +116,19 @@ const Carousel = () => {
               <Rate
                 disabled
                 defaultValue={5}
-                className={styles.ratingStars}
-                style={{ color: "#ffb400" }}
+                style={{ color: "#ffb400", fontSize: "14px" }}
               />
               <span className={styles.blueTick}>
                 <CheckCircleFilled />
               </span>
             </div>
-            <p style={{ fontSize: "1rem", lineHeight: "1.6", color: "#333" }}>
+            {/* Class apply kar di gai hai readability fix karne ke liye */}
+            <p className={styles.modalReviewText}>
               {selectedReview.review}
             </p>
           </div>
         )}
       </Modal>
-
-      <div className={styles.divider}></div>
     </div>
   );
 };

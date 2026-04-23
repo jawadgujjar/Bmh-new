@@ -9,11 +9,12 @@
     margin-bottom: 3rem;
 }
 
+/* --- TITLES & TEXT --- */
 .mainTitle {
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 1rem;
-    color: #333;
+    color: #333; /* Light Mode Default */
 }
 
 .highlight {
@@ -22,45 +23,37 @@
 
 .subTitle {
     font-size: 1.2rem;
-    color: #666;
+    color: #666; /* Light Mode Default */
     margin-bottom: 1.5rem;
 }
 
-.ctaButton {
-    background-color: #ff8c00;
-    color: white;
-    border: none;
-    padding: 0.8rem 2rem;
-    font-size: 1rem;
-    border-radius: 2rem;
-    transition: all 0.3s ease;
-    margin-bottom: 2rem;
+.cardTitle {
+    padding: 1.5rem;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333; /* Light Mode Default */
+    margin: 0;
 }
 
-.ctaButton:hover {
-    background-color: #e67e00;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.scrollIndicator {
-    color: #ff8c00;
-    font-size: 2rem;
-    animation: bounce 2s infinite;
-}
-
-@keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0);
+/* --- DARK MODE FIXES (Automatic) --- */
+@media (prefers-color-scheme: dark) {
+    .mainTitle {
+        color: #ffffff !important;
     }
-    40% {
-        transform: translateY(-10px);
+    .subTitle {
+        color: #bbbbbb !important;
     }
-    60% {
-        transform: translateY(-5px);
+    .cardTitle {
+        color: #ffffff !important;
+    }
+    .serviceCard {
+        background-color: #1a1a1a !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6) !important;
     }
 }
 
+/* --- SERVICE CARDS --- */
 .serviceCard {
     position: relative;
     border-radius: 1rem;
@@ -68,6 +61,7 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     height: 100%;
+    background-color: #fff;
 }
 
 .serviceCard:hover {
@@ -93,14 +87,15 @@
     transform: scale(1.05);
 }
 
+/* --- OVERLAY & BUTTON --- */
 .cardOverlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
+    background: rgba(0, 0, 0, 0.75);
+    color: white !important;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -118,96 +113,55 @@
     text-align: center;
     margin-bottom: 1.5rem;
     font-size: 0.95rem;
+    color: #ffffff !important;
 }
 
 .viewButton {
-    background-color: #ff8c00;
-    color: white;
-    border: none;
+    background-color: #ff8c00 !important;
+    color: white !important;
+    border: none !important;
     padding: 0.5rem 1.5rem;
     border-radius: 2rem;
-    font-weight: 500;
+    font-weight: 600;
     transition: all 0.3s ease;
 }
 
+/* Button Hover: Orange background, Black text */
 .viewButton:hover {
-    background-color: #e67e00;
+    background-color: #ff8c00 !important;
+    color: #000000 !important;
     transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
-.cardTitle {
-    padding: 1.5rem;
-    text-align: center;
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #333;
-    margin: 0;
+/* --- OTHER ELEMENTS --- */
+.scrollIndicator {
+    color: #ff8c00;
+    font-size: 2rem;
+    animation: bounce 2s infinite;
 }
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
 .divider {
     height: 1px;
     background: linear-gradient(90deg, transparent, #FF8C00, transparent);
     margin: 60px auto 0;
     width: 80%;
-    max-width: 800px;
 }
 
-/* Responsive Styles */
+/* --- RESPONSIVE ADJUSTMENTS --- */
 @media (max-width: 992px) {
-    .mainTitle {
-        font-size: 2rem;
-    }
-    
-    .subTitle {
-        font-size: 1rem;
-    }
-    
-    .cardImage {
-        height: 200px;
-    }
-    .divider {
-        margin: 50px auto 0;
-        width: 90%;
-    }
+    .mainTitle { font-size: 2rem; }
+    .cardImage { height: 200px; }
 }
 
 @media (max-width: 768px) {
-    .servicesContainer {
-        padding: 1.5rem;
-    }
-    
-    .mainTitle {
-        font-size: 1.8rem;
-    }
-    
-    .cardTitle {
-        padding: 1rem;
-        font-size: 1.1rem;
-    }
-    .divider {
-        margin: 40px auto 0;
-        width: 95%;
-    }
-}
-
-@media (max-width: 576px) {
-    .servicesContainer {
-        padding: 1rem;
-    }
-    
-    .mainTitle {
-        font-size: 1.5rem;
-    }
-    
-    .cardImage {
-        height: 180px;
-    }
-    
-    .cardDescription {
-        font-size: 0.85rem;
-    }
-    
-    .viewButton {
-        padding: 0.4rem 1.2rem;
-        font-size: 0.85rem;
-    }
+    .mainTitle { font-size: 1.8rem; }
+    .servicesContainer { padding: 1.5rem; }
+    .cardTitle { font-size: 1.1rem; }
 }

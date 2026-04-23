@@ -1,6 +1,6 @@
 .container {
   margin-top: 3rem;
-  padding: 0 1rem;
+  padding: 0 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -9,148 +9,112 @@
   margin-right: auto;
 }
 
+/* Content Heading */
 .text1 {
-  font-size: 1.8rem;
-  font-weight: 700;
+  font-size: 2.2rem;
+  font-weight: 800;
   text-align: center;
-  color: #333;
-  margin-bottom: 0.5rem;
+  color: #1a1a1a; /* Light mode color */
+  margin-bottom: 1rem;
+  line-height: 1.2;
 }
 
+/* Content Body Text */
 .text2 {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   text-align: center;
-  color: #666;
-  margin-bottom: 2rem;
-  /* max-width: 800px; */
+  color: #444; /* Light mode color */
+  margin-bottom: 3.5rem;
+  max-width: 950px;
+  line-height: 1.8;
 }
 
 .cardsContainer {
   width: 100%;
-  margin-top: 1.5rem;
 }
 
 .card {
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 15px;
+  transition: all 0.3s ease;
   height: 100%;
   padding: 1.5rem;
-}
-
-.cardBlack {
-  background-color: #4b4a4a;
-}
-
-.cardWhite {
-  background-color: #fff;
-  border: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transform: translateY(-10px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
 }
 
-.cardHeader {
-  display: flex;
-  align-items: center;
+/* Card Backgrounds */
+.cardBlack {
+  background-color: #1a1a1a !important;
+}
+
+.cardWhite {
+  background-color: #ffffff !important;
+  border: 1px solid #eee;
+}
+
+/* Card Titles */
+.cardTitleBlack {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #ff6b35; /* Orange accent */
   margin-bottom: 1rem;
 }
 
-.cardTitleBlack {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #ff6b35;
-  margin-left: 0.5rem;
-  margin-bottom: 0;
-}
-
 .cardTitleWhite {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #333;
-  margin-left: 0.5rem;
-  margin-bottom: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 1rem;
 }
 
+/* Card Description Content */
 .cardDescriptionBlack {
-  color: #fff;
-  text-align: left;
+  color: #e0e0e0;
   line-height: 1.6;
 }
 
 .cardDescriptionWhite {
   color: #555;
-  text-align: left;
   line-height: 1.6;
 }
 
-.iconBlack {
-  font-size: 1.5rem;
-  color: #ff6b35;
+/* --- DARK MODE SETTINGS --- */
+@media (prefers-color-scheme: dark) {
+  .text1 {
+    color: #ffffff !important; /* Force white in dark mode */
+  }
+
+  .text2 {
+    color: #bbbbbb !important; /* Light grey for readability */
+  }
+
+  .cardWhite {
+    background-color: #222222 !important; /* Dark grey instead of pure white */
+    border: 1px solid #333;
+  }
+
+  .cardTitleWhite {
+    color: #ffffff !important;
+  }
+
+  .cardDescriptionWhite {
+    color: #aaaaaa !important;
+  }
+
+  .cardBlack {
+    background-color: #111111 !important;
+    border: 1px solid #222;
+  }
 }
 
-.iconWhite {
-  font-size: 1.5rem;
-  color: #333;
-}
-
-.buttonContainer {
-  display: flex;
-  justify-content: center;
-  margin-top: 3rem;
-  margin-bottom: 3rem;
-}
-
-.proposalButton {
-  color: white;
-  background-color: #ff6b35;
-  border: none;
-  font-size: 1rem;
-  font-weight: 600;
-  height: 3rem;
-  width: 22rem;
-  border-radius: 6px;
-  transition: all 0.3s ease;
-}
-
-.proposalButton:hover {
-  color: #ff6b35 !important;
-  background-color: white !important;
-  border: 2px solid #ff6b35 !important;
-  transform: translateY(-2px);
-}
-
+/* Responsive Fixes */
 @media (max-width: 768px) {
-  .text1 {
-    font-size: 1.5rem;
-  }
-
-  .text2 {
-    font-size: 1rem;
-  }
-
-  .proposalButton {
-    width: 100%;
-    max-width: 22rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .text1 {
-    font-size: 1.3rem;
-  }
-
-  .text2 {
-    font-size: 0.9rem;
-  }
-
-  .cardTitleBlack, .cardTitleWhite {
-    font-size: 1.1rem;
-  }
-
-  .cardDescriptionBlack, .cardDescriptionWhite {
-    font-size: 0.9rem;
-  }
+  .text1 { font-size: 1.6rem; }
+  .text2 { font-size: 1rem; margin-bottom: 2rem; }
+  .container { padding: 0 1rem; }
 }
