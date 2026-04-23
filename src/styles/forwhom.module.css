@@ -10,8 +10,9 @@
   padding: 20px;
 }
 
+/* SubTitle Fix: Dark mode mein color change hoga */
 .subTitle {
-  color: #222;
+  color: #222; /* Default Light Mode */
   font-size: 32px;
   margin-bottom: 25px;
   font-weight: 700;
@@ -19,8 +20,9 @@
   text-transform: uppercase;
 }
 
+/* Description Fix: Dark mode mein light grey hoga */
 .description {
-  color: #555;
+  color: #555; /* Default Light Mode */
   line-height: 1.8;
   margin-bottom: 30px;
   font-size: 16px;
@@ -36,11 +38,11 @@
   padding: 20px;
 }
 
-/* Individual Cards */
+/* Individual Cards: Dark mode mein background dark hoga */
 .card {
   height: 180px;
   border-radius: 10px;
-  background-color: #e6f0fa;
+  background-color: #e6f0fa; /* Default Light Blue */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
   border: none;
@@ -49,12 +51,39 @@
   overflow: hidden;
 }
 
+.cardTitle {
+  color: #000; /* Default Light Mode Title */
+  font-size: 18px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+/* --- DARK MODE SPECIFIC STYLES --- */
+@media (prefers-color-scheme: dark) {
+  .subTitle {
+    color: #ffffff !important; /* Heading pure white ho jayegi */
+  }
+
+  .description {
+    color: #cccccc !important; /* Text light grey readable ho jayega */
+  }
+
+  .card {
+    background-color: #1a1a1a !important; /* Card ka blue color dark grey ho jayega */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  }
+
+  .cardTitle {
+    color: #ffffff !important; /* Card ke andar ka text white ho jayega */
+  }
+}
+
+/* --- REST OF THE STYLES (Keep as is) --- */
 .card:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Card Content Wrapper */
 .cardContentWrapper {
   display: flex;
   flex-direction: column;
@@ -62,7 +91,6 @@
   height: 100%;
 }
 
-/* Card Icons */
 .cardIconContainer {
   margin: 10px 0;
 }
@@ -76,42 +104,44 @@
   padding: 5px;
 }
 
-/* Card Text */
-.cardTitle {
-  color: #000;
-  font-size: 18px;
-  margin-bottom: 10px;
-  font-weight: 600;
-}
-
-.cardContent {
-  color: #666;
-  font-size: 14px;
-  line-height: 1.5;
-  margin-top: 10px;
-}
-
-/* Quote Button */
+/* Quote Button - Default State */
 .quoteButton {
-  background: linear-gradient(135deg, #FF8C00, #e67e00);
-  border: none;
+  background: linear-gradient(135deg, #FF8C00, #e67e00) !important;
+  border: none !important;
   height: 50px;
   padding: 0 30px;
   font-weight: 600;
   font-size: 16px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(255, 140, 0, 0.3);
-  transition: all 0.3s;
-  color: white;
+  transition: all 0.3s ease;
+  color: white !important; /* Shuru mein text white hoga */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+/* Hover State Fix: Blue hone se rokne ke liye */
 .quoteButton:hover {
-  background: linear-gradient(135deg, #e67e00, #d17100);
+  /* Background wahi orange gradient rahega jo aapne chaha */
+  background: linear-gradient(135deg, #FF8C00, #e67e00) !important;
+  
+  /* Text color black ho jayega hover par */
+  color: #000000 !important; 
+  
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(255, 140, 0, 0.4);
+  border: none !important;
 }
 
-/* Divider Line */
+/* Ant Design focus/active state fix (takke click par bhi blue na ho) */
+.quoteButton:focus, .quoteButton:active {
+  background: linear-gradient(135deg, #FF8C00, #e67e00) !important;
+  color: #000000 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
 .divider {
   height: 1px;
   background: linear-gradient(90deg, transparent, #FF8C00, transparent);
@@ -120,56 +150,13 @@
   max-width: 800px;
 }
 
-/* Responsive Adjustments */
+/* Responsive Adjustments (Keep original) */
 @media (max-width: 992px) {
-  .container {
-    padding: 40px 20px;
-  }
-  
-  .subTitle {
-    font-size: 28px;
-  }
-  
-  .card {
-    height: 170px;
-  }
-  
-  .divider {
-    margin: 50px auto 0;
-    width: 90%;
-  }
+  .subTitle { font-size: 28px; }
+  .card { height: 170px; }
 }
 
 @media (max-width: 768px) {
-  .contentSection, .cardsContainer {
-    padding: 10px;
-  }
-  
-  .subTitle {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  
-  .description {
-    font-size: 15px;
-  }
-  
-  .quoteButton {
-    width: 100%;
-    margin-bottom: 20px;
-  }
-  
-  .card {
-    height: 160px;
-  }
-  
-  .cardIcon {
-    width: 50px;
-    height: 50px;
-  }
-  
-  .divider {
-    margin: 40px auto 0;
-    width: 95%;
-  }
+  .subTitle { font-size: 24px; }
+  .quoteButton { width: 100%; }
 }

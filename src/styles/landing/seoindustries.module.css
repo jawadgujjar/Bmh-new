@@ -1,170 +1,202 @@
 .carouselContainer {
-  padding: 4rem 0;
-  background-color: #f9fafb;
-  width: 100%;
-  max-width: 1300px;
-  margin: 0 auto;
-  overflow: hidden;
+    padding: 4rem 0;
+    background-color: #f9fafb; /* Light mode default */
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    overflow: hidden;
+    transition: background-color 0.3s ease;
+}
+
+/* --- DARK MODE FIXES --- */
+@media (prefers-color-scheme: dark) {
+    .carouselContainer {
+        background-color: #000000 !important; /* Pure black to match your site */
+    }
+
+    .carouselTitle {
+        color: #ffffff !important;
+    }
+
+    .carouselSubtitle {
+        color: #bbbbbb !important;
+    }
+
+    .portfolioCardImageWrapper {
+        background: #111 !important; /* Darker card base */
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8) !important;
+    }
+
+    .indicator {
+        background: #444 !important;
+    }
+
+    .activeIndicator {
+        background: #ff8c00 !important; /* Match your orange theme */
+    }
 }
 
 .carouselTitle {
-  font-size: 1.8rem;
-  font-weight: 800;
-  color: #1a202c;
-  text-align: center;
-  margin-bottom: 0.5rem;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #1a202c;
+    text-align: center;
+    margin-bottom: 0.5rem;
 }
 
 .carouselSubtitle {
-  font-size: 1rem;
-  color: #4a5568;
-  text-align: center;
-  margin-bottom: 3rem;
+    font-size: 1rem;
+    color: #4a5568;
+    text-align: center;
+    margin-bottom: 3rem;
 }
 
 .carouselWrapper {
-  position: relative;
-  width: 100%;
+    position: relative;
+    width: 100%;
 }
 
 .carouselTrack {
-  display: flex;
-  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-  /* justify-content dynamic handle ho raha hai JS se */
+    display: flex;
+    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .carouselSlide {
-  padding: 15px 10px;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: center;
+    padding: 15px 10px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
 }
 
 .portfolioCard {
-  position: relative;
-  width: 280px;
-  height: 400px;
-  cursor: pointer;
+    position: relative;
+    width: 280px;
+    height: 400px;
+    cursor: pointer;
 }
 
 .portfolioCardInner {
-  position: relative;
-  width: 100%;
-  height: 100%;
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
 
 .portfolioCardImageWrapper {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  transition: all 0.4s ease;
-  border-radius: 18px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  background: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    border-radius: 18px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    position: relative;
 }
 
 .websitePreviewImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top center;
-  transition: transform 0.5s ease;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform 0.5s ease;
 }
 
 .portfolioCard:hover .portfolioCardImageWrapper {
-  transform: translateY(-10px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
 .portfolioCard:hover .websitePreviewImage {
-  transform: scale(1.05);
+    transform: scale(1.05);
 }
 
+/* Gradient Overlay Fix */
 .portfolioCardContent {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 30px 15px 20px 15px;
-  text-align: center;
-  color: white;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 0.7) 60%,
-    rgba(0, 0, 0, 0) 100%
-  );
-  z-index: 5;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 30px 15px 20px 15px;
+    text-align: center;
+    color: white;
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.95) 0%,
+        rgba(0, 0, 0, 0.7) 50%,
+        rgba(0, 0, 0, 0) 100%
+    );
+    z-index: 5;
 }
 
 .portfolioCardContent h3 {
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 6px;
-  color: #fff;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #fff;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .portfolioCardContent p {
-  font-size: 12px;
-  opacity: 0.9;
-  line-height: 1.4;
-  margin-bottom: 15px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+    font-size: 12px;
+    opacity: 0.9;
+    line-height: 1.4;
+    margin-bottom: 15px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .viewProjectBtn {
-  display: inline-block;
-  background: #ff8c00;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  transition: all 0.3s ease;
-  border: none;
+    display: inline-block;
+    background: #ff8c00 !important;
+    color: white !important;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    border: none;
 }
 
-.portfolioCard:hover .viewProjectBtn {
-  background: #3b82f6;
+.viewProjectBtn:hover {
+    background: #e67e00 !important;
+    color: #000000 !important; /* Button text black on hover */
 }
 
 .carouselIndicators {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 2.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 2.5rem;
 }
 
 .indicator {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #cbd5e0;
-  border: none;
-  cursor: pointer;
-  padding: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #cbd5e0;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.3s ease;
 }
 
 .activeIndicator {
-  background: #3b82f6;
-  width: 20px;
-  border-radius: 10px;
+    background: #3b82f6; /* Default Blue */
+    width: 20px;
+    border-radius: 10px;
 }
 
 @media (max-width: 768px) {
-  .portfolioCard {
-    width: 260px;
-    height: 380px;
-  }
+    .portfolioCard {
+        width: 260px;
+        height: 380px;
+    }
 }
