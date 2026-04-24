@@ -9,10 +9,6 @@ import { FaFire } from "react-icons/fa";
 const Webdevelopment1 = () => {
   return (
     <section id="about" className={styles.section}>
-      {/* <div className={styles.headerWrapper}>
-                <h1 className={styles.brand}>Website Development</h1>
-            </div> */}
-
       <div className={styles.container}>
         <div className={styles.textContent}>
           <h2>
@@ -36,12 +32,13 @@ const Webdevelopment1 = () => {
         </div>
         <div className={styles.imageContent}>
           <Image
-            src="images/web-development/Professional Website Development Company in USA.webp"
+            src="/images/web-development/Professional Website Development Company in USA.webp"
             alt="Web development services"
             width={500}
             height={450}
             className={styles.image}
             quality={100}
+            priority
           />
         </div>
       </div>
@@ -71,10 +68,11 @@ const Webdevelopment1 = () => {
           </div>
           <p className={styles.infoText}>Built Around You</p>
           <p className={styles.infoText1}>
-            We don’t follow fixed templates. Everything we do is based on your business, your audience, and what will genuinely work for you.y.
+            We don’t follow fixed templates. Everything we do is based on your business, your audience, and what will genuinely work for you.
           </p>
         </div>
       </div>
+
       <div className={styles.container}>
         <div className={styles.textContent}>
           <h2>
@@ -109,6 +107,7 @@ const Webdevelopment1 = () => {
           />
         </div>
       </div>
+
       <div style={{ textAlign: "center", padding: "3%" }}>
         <h2>
           <span className={styles.span}>Web Development Consulting </span> Based
@@ -128,6 +127,7 @@ const Webdevelopment1 = () => {
           effectively supports your business strategy.
         </p>
       </div>
+
       <div className={styles.point}>
         <div className={styles.imageContent1}>
           <Image
@@ -141,7 +141,7 @@ const Webdevelopment1 = () => {
         </div>
         <div className={styles.pointsList}>
           <p className={styles.pointsTextx}>
-            Why Brand Marketing Hub Is the Right Choice !
+            Why Brand Marketing Hub Is the Right Choice!
           </p>
           <p>
             Brand Marketing Hub combines experience, expertise, and user-first
@@ -152,34 +152,6 @@ const Webdevelopment1 = () => {
             values quality, usability, and long-term growth, Brand Marketing Hub
             is here to support your journey with confidence and clarity.
           </p>
-          {/* <ul className={styles.featuresList}>
-            <li className={styles.featureItem}>
-              <span className={styles.featureTitle}>
-                User Experience (UX) Design:
-              </span>{" "}
-              Focus on creating a user-friendly interface that ensures easy
-              navigation and a seamless experience for visitors.
-            </li>
-            <li className={styles.featureItem}>
-              <span className={styles.featureTitle}>Responsive Design:</span>{" "}
-              Develop your website to be fully functional and visually appealing
-              across various devices and screen sizes.
-            </li>
-            <li className={styles.featureItem}>
-              <span className={styles.featureTitle}>
-                Search Engine Optimization (SEO):
-              </span>{" "}
-              Implement on-page SEO best practices to improve your website's
-              visibility in search engine results.
-            </li>
-            <li className={styles.featureItem}>
-              <span className={styles.featureTitle}>
-                Security and Performance:
-              </span>{" "}
-              Ensure your website is secure and performs efficiently by
-              implementing HTTPS and regular updates.
-            </li>
-          </ul> */}
           <div className={styles.ctaButtons}>
             <Link href="/getaquote" className={styles.ctaButton}>
               Get Started

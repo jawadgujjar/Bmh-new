@@ -41,7 +41,7 @@
   font-weight: 800;
   color: #0f172a;
   margin-bottom: 15px;
-  text-align: left; /* Image ke sath hamesha left hi acha lagta hai */
+  text-align: left;
 }
 
 .sideDescription {
@@ -52,7 +52,7 @@
 }
 
 .centeredContent {
-  text-align: center; /* Desktop par center hi rahega */
+  text-align: center;
   max-width: 800px;
   margin: 0 auto;
 }
@@ -62,26 +62,28 @@
   font-weight: 800;
   color: #0f172a;
   margin-bottom: 15px;
-  text-align: center; /* Desktop par center */
+  text-align: center;
 }
 
 .mainDescription {
   font-size: 17px;
   line-height: 1.6;
   color: #475569;
-  text-align: center; /* Desktop par center */
+  text-align: center;
 }
 
-/* CTA BANNER SECTION (Desktop - Centered) */
+/* CTA BANNER SECTION - Fixed Spacing */
 .fullWidthCtaWrapper {
   width: 100%;
-  padding: 10px 0 50px 0;
+  /* Bottom padding kam kar di hai taaki niche extra space na ho */
+  padding: 10px 0 20px 0; 
 }
 
 .ctaContainer {
   background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   border-radius: 20px;
-  padding: 3rem 2rem;
+  /* Padding 3rem se kam kar k top-bottom 2rem kar di hai */
+  padding: 2rem 2rem; 
   color: white;
   max-width: 1100px;
   margin: 0 auto;
@@ -116,13 +118,13 @@
   font-size: 1.8rem;
   font-weight: 700;
   color: #fff;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.2rem; /* Thora space kam kiya */
 }
 
 .quoteButton {
   background: linear-gradient(135deg, #fd7e14 0%, #f59e0b 100%);
   color: white;
-  padding: 1rem 2rem;
+  padding: 0.8rem 2rem; /* Height adjust ki button ki */
   border: none;
   border-radius: 10px;
   font-weight: 600;
@@ -130,16 +132,20 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
+  transition: transform 0.2s;
 }
 
-/* --- MOBILE VIEW ONLY (Left Aligned) --- */
+.quoteButton:hover {
+  transform: scale(1.03);
+}
+
+/* --- MOBILE VIEW ONLY --- */
 @media (max-width: 768px) {
   .flexRow {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  /* Force Left Alignment on Mobile */
   .centeredContent {
     text-align: left;
     margin: 0;
@@ -165,14 +171,13 @@
     text-align: left;
   }
 
-  /* Mobile Inline Button alignment fix */
   .centeredContent div[style*="text-align: center"] {
     text-align: left !important;
   }
 
-  /* CTA Banner Mobile - Left Align */
+  /* Mobile CTA Adjustments */
   .ctaContainer {
-    padding: 2.5rem 1.5rem;
+    padding: 1.8rem 1.5rem;
     text-align: left;
     margin: 0 15px;
   }
@@ -184,10 +189,16 @@
   .ctaDescriptionText {
     font-size: 1.3rem;
     text-align: left;
+    margin-bottom: 1.2rem;
   }
 
   .quoteButton {
     padding: 0.8rem 1.4rem;
     font-size: 14px;
   }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
 }

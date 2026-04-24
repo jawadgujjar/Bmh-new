@@ -3,37 +3,35 @@
     margin-top: 2rem;
     padding: 0 2rem;
 }
-/* .container{
-    margin-top: -4rem;
-} */
-.headerWrapper {
-    text-align: center;
-    margin-bottom: 3rem;
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-bottom: 4rem;
 }
 
-.brand {
-    font-weight: bold;
-    font-size: 3.5rem;
-    color: #222;
-    margin-bottom: 1rem;
-}
-
-.textContent {
-    font-size: 1rem;
-}
-
-.textContent h2 {
-    font-size: 2.2rem;
-    text-align: left;
-    margin-bottom: 1.5rem;
+/* Typography Colors (Light Mode Default) */
+.textContent h2, .pointsTextx, .infoText, .featureTitle {
     color: #333;
 }
 
-.textContent h3 {
-    font-size: 1.1rem;
-    text-align: left;
-    line-height: 1.6;
+.textContent h3, .infoText1, .featureItem, .section p {
     color: #555;
+    font-weight: normal;
+}
+
+/* DARK MODE COLORS - Alignment wesi hi rahegi */
+@media (prefers-color-scheme: dark) {
+    .textContent h2, .pointsTextx, .infoText, .featureTitle {
+        color: #ffffff; /* White for dark mode */
+    }
+    .textContent h3, .infoText1, .featureItem, .section p {
+        color: #cccccc; /* Light gray for readability */
+    }
+    .infoRow {
+        border-color: #444 !important;
+    }
 }
 
 .span {
@@ -41,27 +39,32 @@
     font-weight: bold;
 }
 
+.textContent h2 {
+    font-size: 2.2rem;
+    text-align: left;
+    margin-bottom: 1.5rem;
+}
+
+.textContent h3 {
+    font-size: 1.1rem;
+    text-align: left;
+    line-height: 1.6;
+}
+
 .image {
     border-radius: 8px;
-    /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); */
     object-fit: cover;
 }
 
-/* Responsive styles for larger screens */
+/* Responsive Alignment for Desktop */
 @media (min-width: 992px) {
     .container {
-        display: flex;
+        flex-direction: row;
         align-items: center;
         justify-content: space-between;
         gap: 4rem;
-        margin-bottom: 4rem;
     }
-
-    .textContent {
-        flex: 1;
-    }
-
-    .imageContent {
+    .textContent, .imageContent {
         flex: 1;
     }
 }
@@ -101,16 +104,13 @@
 
 .infoText {
     font-size: 1.3rem;
-    color: #333;
     font-weight: 600;
     margin-bottom: 1rem;
 }
 
 .infoText1 {
     font-size: 1rem;
-    color: #666;
     line-height: 1.6;
-    font-weight: normal;
 }
 
 /* Point section styling */
@@ -130,45 +130,16 @@
 
 .pointsTextx {
     font-size: 2rem;
-    color: #333;
     font-weight: 700;
     margin-bottom: 1.5rem;
-}
-
-.featuresList {
-    list-style: none;
-    padding: 0;
-}
-
-.featureItem {
-    font-size: 1rem;
-    color: #555;
-    line-height: 1.7;
-    margin-bottom: 1.5rem;
-    padding-left: 1.5rem;
-    position: relative;
-}
-
-.featureItem:before {
-    content: "•";
-    color: rgb(253, 126, 20);
-    font-size: 1.5rem;
-    position: absolute;
-    left: 0;
-    top: -2px;
-}
-
-.featureTitle {
-    font-weight: 600;
-    color: #333;
 }
 
 .imageContent, .imageContent1 {
     flex: 1;
     min-width: 300px;
-    display: flex;          /* Add this */
-    justify-content: center; /* Add this */
-    align-items: center;     /* Add this */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* CTA buttons styling */
@@ -182,12 +153,10 @@
     font-weight: 600;
     color: #fff;
     background-color: rgb(253, 126, 20);
-    border: none;
     border-radius: 6px;
     text-decoration: none;
     display: inline-block;
     transition: all 0.3s ease;
-    cursor: pointer;
 }
 
 .ctaButton:hover {
@@ -196,40 +165,14 @@
     box-shadow: 0 4px 12px rgba(253, 126, 20, 0.2);
 }
 
-/* Responsive adjustments */
-@media (max-width: 991px) {
-    .brand {
-        font-size: 2.5rem;
-    }
-    
-    .infoRow {
-        flex-direction: column;
-        gap: 2rem;
-    }
-    
-    .infoColumn {
-        padding: 1rem 0;
-    }
-}
-
+/* Mobile adjustments */
 @media (max-width: 768px) {
-    .section {
-    margin-top: 0rem;
-}
-    .container {
-        flex-direction: column;
-    }
-    
+    .section { margin-top: 0rem; }
+    .container { flex-direction: column; }
     .imageContent, .imageContent1 {
         order: -1;
         margin-bottom: 2rem;
     }
-    
-    .textContent h2 {
-        font-size: 1.8rem;
-    }
-    
-    .pointsTextx {
-        font-size: 1.8rem;
-    }
+    .textContent h2, .pointsTextx { font-size: 1.8rem; }
+    .infoRow { flex-direction: column; gap: 2rem; }
 }
