@@ -272,6 +272,39 @@
     transform: translateX(100%);
   }
 }
+.mainOrangeButton {
+  padding: 14px 32px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff !important;
+  /* Gradient ko thora bara rakha hai transitions ke liye */
+  background: linear-gradient(135deg, #fd7e14 0%, #f59e0b 100%) !important;
+  background-size: 200% auto !important; 
+  border: none;
+  border-radius: 6px;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(253, 126, 20, 0.2);
+  
+  /* Smooth transitions */
+  transition: all 0.4s ease-in-out !important;
+}
+
+.mainOrangeButton:hover {
+  /* Background shift karne se blink nahi hota aur color change ho jata hai */
+  background-position: right center !important;
+  background-color: #ff7f50 !important; /* Fallback */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(253, 126, 20, 0.4);
+}
+
+/* Ensure container adjustments for the bottom section */
+.pointsList .ctaButtons {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-start;
+}
 
 /* --- Responsive Adjustments --- */
 @media (max-width: 768px) {
@@ -298,6 +331,13 @@
   }
   .modalOverlay {
     padding: 20px 10px;
+  }
+  /*  */
+  .pointsList .ctaButtons {
+    justify-content: center; /* Center on mobile */
+  }
+  .mainOrangeButton {
+    width: 100%; /* Mobile par full width (optional) */
   }
 }
 
