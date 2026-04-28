@@ -1,9 +1,26 @@
-/* General styling */
+/* --- CSS Variables for Theme Support --- */
 .section {
+  --text-main: #222222;       /* Headings color */
+  --text-secondary: #444444;  /* Sub-headings color */
+  --text-body: #555555;       /* Paragraph color */
+  --border-color: #eeeeee;    /* Border lines color */
+  --accent-color: rgb(253, 126, 20); /* Orange color */
+  
   margin-top: 2rem;
   padding: 0 2rem;
 }
 
+/* --- Dark Mode Auto-Detection --- */
+@media (prefers-color-scheme: dark) {
+  .section {
+    --text-main: #f8f9fa;      /* White for dark theme */
+    --text-secondary: #e9ecef; /* Light gray */
+    --text-body: #ced4da;      /* Muted gray */
+    --border-color: #333333;   /* Darker borders */
+  }
+}
+
+/* --- General Styling --- */
 .headerWrapper {
   text-align: center;
   margin-bottom: 3rem;
@@ -12,7 +29,7 @@
 .brand {
   font-weight: bold;
   font-size: 3.5rem;
-  color: #222;
+  color: var(--text-main);
   margin-bottom: 1rem;
 }
 
@@ -24,28 +41,28 @@
   font-size: 2.2rem;
   text-align: left;
   margin-bottom: 1.5rem;
-  color: #333;
+  color: var(--text-main);
 }
 
 .textContent h3 {
   font-size: 1.1rem;
   text-align: left;
   line-height: 1.6;
-  color: #555;
+  color: var(--text-body);
+  font-weight: normal; /* Para style in H3 */
 }
 
 .span {
-  color: rgb(253, 126, 20);
+  color: var(--accent-color);
   font-weight: bold;
 }
 
 .image {
   border-radius: 8px;
-  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); */
   object-fit: cover;
 }
 
-/* Responsive styles for larger screens */
+/* --- Responsive Layout for Top Section --- */
 @media (min-width: 992px) {
   .container {
     display: flex;
@@ -64,15 +81,15 @@
   }
 }
 
-/* Info row styling */
+/* --- Info Row (The 3 Columns) --- */
 .infoRow {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   padding: 3rem 0;
   margin: 3rem 0;
-  border-top: 1px solid #eee;
-  border-bottom: 1px solid #eee;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .infoColumn {
@@ -94,24 +111,24 @@
 
 .infoIcon {
   font-size: 1.8rem;
-  color: rgb(253, 126, 20);
+  color: var(--accent-color);
 }
 
 .infoText {
   font-size: 1.3rem;
-  color: #333;
+  color: var(--text-main);
   font-weight: 600;
   margin-bottom: 1rem;
 }
 
 .infoText1 {
   font-size: 1rem;
-  color: #666;
+  color: var(--text-body);
   line-height: 1.6;
   font-weight: normal;
 }
 
-/* Point section styling */
+/* --- Bottom Section (Points & CTA) --- */
 .point {
   display: flex;
   flex-wrap: wrap;
@@ -121,6 +138,14 @@
   margin-top: 2rem;
 }
 
+.point h2 {
+  color: var(--text-main);
+}
+
+.point p {
+  color: var(--text-body);
+}
+
 .pointsList {
   flex: 1;
   min-width: 300px;
@@ -128,49 +153,26 @@
 
 .pointsTextx {
   font-size: 2rem;
-  color: #333;
+  color: var(--text-main);
   font-weight: 700;
   margin-bottom: 1.5rem;
 }
 
 .featuresList {
-  list-style: none;
-  padding: 0;
-}
-
-.featureItem {
-  font-size: 1rem;
-  color: #555;
+  color: var(--text-body);
   line-height: 1.7;
-  margin-bottom: 1.5rem;
-  padding-left: 1.5rem;
-  position: relative;
-}
-
-.featureItem:before {
-  content: "•";
-  color: rgb(253, 126, 20);
-  font-size: 1.5rem;
-  position: absolute;
-  left: 0;
-  top: -2px;
-}
-
-.featureTitle {
-  font-weight: 600;
-  color: #333;
 }
 
 .imageContent,
 .imageContent1 {
   flex: 1;
   min-width: 300px;
-  display: flex;          /* Add this */
-    justify-content: center; /* Add this */
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* CTA buttons styling */
+/* --- CTA Button --- */
 .ctaButtons {
   margin-top: 2rem;
 }
@@ -180,7 +182,7 @@
   font-size: 1rem;
   font-weight: 600;
   color: #fff;
-  background-color: rgb(253, 126, 20);
+  background-color: var(--accent-color);
   border: none;
   border-radius: 6px;
   text-decoration: none;
@@ -195,7 +197,7 @@
   box-shadow: 0 4px 12px rgba(253, 126, 20, 0.2);
 }
 
-/* Responsive adjustments */
+/* --- Tablet & Mobile Responsiveness --- */
 @media (max-width: 991px) {
   .brand {
     font-size: 2.5rem;
@@ -212,27 +214,31 @@
 }
 
 @media (max-width: 768px) {
-  .pointsList{
+  .pointsList {
     text-align: center !important;
   }
+  
   .section {
-  margin-top: 0rem
-}
+    margin-top: 0rem;
+    padding: 0 1rem;
+  }
+  
   .container {
     flex-direction: column;
   }
 
   .imageContent,
   .imageContent1 {
-    order: -1;
+    order: -1; /* Image comes first on mobile */
     margin-bottom: 2rem;
   }
 
-  .textContent h2 {
+  .textContent h2, .pointsTextx {
     font-size: 1.8rem;
+    text-align: center;
   }
-
-  .pointsTextx {
-    font-size: 1.8rem;
+  
+  .textContent h3 {
+    text-align: center;
   }
 }

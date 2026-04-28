@@ -26,7 +26,7 @@ function Calltoactionportfolio({ cta }) {
             </div>
           </a>
           
-          <a href="#contact" className={styles.secondaryButton}>
+          <a href="/contactus" className={styles.secondaryButton}>
             <span>Start Your Project</span>
             <FaArrowRight className={styles.arrowIcon} />
           </a>

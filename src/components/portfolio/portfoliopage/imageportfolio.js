@@ -6,12 +6,15 @@ import Link from 'next/link';
 import styles from '../../../styles/portfolio-page/imageportfolio.module.css';
 
 const Imageportfolio = ({ middleSection }) => {
+  if (!middleSection) return null;
+
   return (
     <section id="about" className={styles.section}>
       <div className={styles.headerWrapper}>
         <h1 className={styles.brand}>Why Choose Us?</h1>
       </div>
 
+      {/* Section 1: Text Left, Image Right */}
       <div className={styles.container}>
         <div className={styles.textContent}>
           <h2>
@@ -33,11 +36,13 @@ const Imageportfolio = ({ middleSection }) => {
               height={400}
               className={styles.image}
               quality={100}
+              priority
             />
           )}
         </div>
       </div>
 
+      {/* Section 2: Image Left, Text Right (Order Fixed) */}
       <div className={styles.point}>
         <div className={styles.imageContent1}>
           {middleSection.image2 && (
@@ -51,17 +56,13 @@ const Imageportfolio = ({ middleSection }) => {
             />
           )}
         </div>
+        
         <div className={styles.pointsList}>
-          <p className={styles.pointsTextx}>How We Work!</p>
+          <h2 className={styles.pointsTextx}>How We Work!</h2>
 
-          {/* ✅ Show description2 here */}
           {middleSection.description2 && (
             <p className={styles.subDescription}>{middleSection.description2}</p>
           )}
-
-          <ul className={styles.featuresList}>
-            {/* Add dynamic features if needed */}
-          </ul>
 
           <div className={styles.ctaButtons}>
             <Link href="/getaquote" className={styles.ctaButton}>

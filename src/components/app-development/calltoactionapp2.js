@@ -113,7 +113,7 @@ function Calltoactionapp2() {
             {/* Modal Trigger 2 */}
             <button
               onClick={() => setIsModalOpen(true)}
-              className={styles1.ctaButton}
+              className={styles.mainOrangeButton}
             >
               Get Started
             </button>
