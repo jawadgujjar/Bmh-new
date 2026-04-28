@@ -1,113 +1,178 @@
-/* --- Original Light Mode Styling --- */
-.section {
-    margin-top: 8rem;
-    padding: 0 2rem;
+.mainSection {
+    background-color: #ffffff;
+    padding: 80px 0;
+    overflow: hidden;
 }
 
-.headerWrapper {
-    text-align: center;
-    margin-bottom: 3rem;
-}
-
-.brand {
-    font-weight: bold;
-    font-size: 3.5rem;
-    color: #222;
-    margin-bottom: 1rem;
-}
-
-.textContent h2 {
-    font-size: 2.5rem;
-    text-align: left;
-    margin-bottom: 1.5rem;
-    color: #333;
-}
-
-.span {
-    color: rgb(253, 126, 20);
-    font-weight: bold;
-}
-
-.bulletList {
-    list-style-type: disc;
-    color: #000;
-    padding-left: 20px;
-    font-size: 1.1rem;
-    line-height: 1.6;
-}
-
-.pointsTextx {
-    font-size: 2.5rem;
-    color: #333;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-}
-
-.subDescription {
-    color: #555;
-    font-size: 1.1rem;
-    line-height: 1.7;
-    margin-bottom: 2rem;
-}
-
-.image {
-    border-radius: 8px;
-    object-fit: cover;
-    width: 100%;
-    height: auto;
-}
-
-/* --- Layout Logic --- */
-.container, .point {
+.parallaxContainer {
     max-width: 1200px;
-    margin: 0 auto 6rem auto;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.creativeHeader {
+    margin-bottom: 60px;
+}
+
+.badge {
+    color: #FD7E14;
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: 3px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.bigTitle {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 1.1;
+    font-weight: 900;
+    color: #111;
+}
+
+.textOutline {
+    color: transparent;
+    -webkit-text-stroke: 1px #111;
+}
+
+/* --- Floating Cards --- */
+.floatingGrid {
+    position: relative;
     display: flex;
-    flex-direction: column;
-    gap: 4rem;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-bottom: 100px;
+}
+
+.floatCard {
+    background: #fff;
+    padding: 40px;
+    flex: 1;
+    min-width: 280px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+    border-top: 5px solid #FD7E14;
+    transition: 0.4s ease;
+    border-radius: 4px;
+}
+
+@media (min-width: 1024px) {
+    .floatingGrid { height: 400px; display: block; }
+    .floatCard { position: absolute; width: 320px; }
+    .card1 { top: 0; left: 0; z-index: 3; }
+    .card2 { top: 60px; left: 33%; z-index: 2; }
+    .card3 { top: 120px; left: 66%; z-index: 1; }
+}
+
+.cardIndex {
+    font-size: 14px;
+    font-weight: 800;
+    color: #FD7E14;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.floatCard h3 { font-size: 20px; margin-bottom: 10px; font-weight: 700; }
+.floatCard p { color: #666; font-size: 15px; line-height: 1.6; }
+
+/* --- Dynamic Experience (Images Fix) --- */
+.dynamicExperience {
+    margin-top: 50px;
+}
+
+.splitRow {
+    display: flex;
     align-items: center;
+    margin-bottom: 120px;
+    position: relative;
+}
+
+.imageBox {
+    flex: 1.3;
+    height: 500px;
+    width: 100%; /* Important for mobile */
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f0f0f0;
+    display: block; /* Ensure visibility */
+}
+
+.actualImg { 
+    object-fit: cover; 
+}
+
+.contentBox {
+    flex: 1;
+    background: #fff;
+    padding: 60px;
+    z-index: 5;
+    box-shadow: 25px 25px 50px rgba(0,0,0,0.06);
+    border-radius: 4px;
 }
 
 @media (min-width: 992px) {
-    .container, .point {
-        flex-direction: row; /* Desktop: First section (Text Left), Second (Image Left) */
-        justify-content: space-between;
+    .contentBox { margin-left: -80px; }
+    .rowReverse { flex-direction: row-reverse; }
+    .rowReverse .contentBox { margin-left: 0; margin-right: -80px; }
+}
+
+/* --- Tablet & Mobile Fixes --- */
+@media (max-width: 991px) {
+    .splitRow, .rowReverse {
+        flex-direction: column;
+        margin-bottom: 80px;
+        display: block; /* Stack blocks */
     }
-    .textContent, .pointsList, .imageContent, .imageContent1 {
-        flex: 1;
+    .imageBox { 
+        width: 100%; 
+        height: 350px; /* Force height on mobile */
+        margin-bottom: 20px;
+    }
+    .contentBox {
+        width: 100%;
+        margin: 0 !important;
+        padding: 30px;
     }
 }
 
-/* --- Dark Mode Specific Fixes --- */
-@media (prefers-color-scheme: dark) {
-    .brand, .textContent h2, .pointsTextx {
-        color: #ffffff !important;
-    }
-    .bulletList, .subDescription {
-        color: #cccccc !important;
-    }
+@media (max-width: 767px) {
+    .imageBox { height: 250px; }
+    .bigTitle { font-size: 2.2rem; }
+    .techCloud span { font-size: 18px !important; }
 }
 
-/* --- CTA Button --- */
-.ctaButton {
-    padding: 14px 32px;
-    font-size: 1rem;
-    font-weight: 600;
+.miniLine { width: 40px; height: 3px; background: #FD7E14; margin-bottom: 15px; }
+.sectionLabel { font-size: 12px; font-weight: 900; color: #999; letter-spacing: 2px; }
+.descriptionText { font-size: 18px; line-height: 1.7; color: #333; }
+
+/* --- Action Zone (Tech Stack Black) --- */
+.actionZone { text-align: center; padding: 60px 0; }
+.techCloud { 
+    margin-bottom: 30px; 
+    display: flex; 
+    justify-content: center; 
+    flex-wrap: wrap; 
+    gap: 20px; 
+}
+.techCloud span { 
+    font-weight: 800; 
+    color: #111 !important; /* Tech stack changed to Black */
+    font-size: 24px; 
+    opacity: 0.9;
+}
+
+.magneticButton {
+    background: #FD7E14;
     color: #fff;
-    background-color: rgb(253, 126, 20);
-    border-radius: 6px;
+    padding: 20px 45px;
+    font-weight: 700;
     text-decoration: none;
+    border-radius: 4px;
     display: inline-block;
-    transition: all 0.3s ease;
+    transition: 0.3s ease;
 }
 
-.ctaButton:hover {
-    background-color: #FF7F50;
-    transform: translateY(-2px);
-}
-
-/* Mobile Adjustments */
-@media (max-width: 768px) {
-    .brand { font-size: 2.2rem; }
-    .textContent h2, .pointsTextx { font-size: 1.8rem; }
-    .imageContent, .imageContent1 { order: -1; }
+.magneticButton:hover {
+    background: #000;
+    transform: translateY(-3px);
 }

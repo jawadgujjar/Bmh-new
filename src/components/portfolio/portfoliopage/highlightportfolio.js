@@ -8,7 +8,7 @@ function Highlightportfolio({ highlights }) {
   return (
     <div className={styles.highlightContainer}>
       <div className={styles.highlightContent}>
-        <h2 className={styles.title}>See the Highlights of This Website</h2>
+        <h2 className={styles.title}>Project Gallery</h2>
 
         <div className={styles.imageGrid}>
           {highlights && highlights.map((highlight, index) => (
