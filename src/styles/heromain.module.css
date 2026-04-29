@@ -1,6 +1,3 @@
-/* Global styles - these should be in your global.css */
-
-/* Background container for video */
 .back {
     position: relative;
     width: 100%;
@@ -9,41 +6,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #0b011d; /* Image background color */
 }
 
-/* Text Styling */
-.affordableText {
-    color: white;
-    font-size: 3rem;
-    font-weight: bold;
-    position: absolute;
-    top: 25%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    z-index: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    animation: 
-        typing 3.5s steps(30, end) 1s infinite, 
-        blinkCaret 0.75s step-end infinite;
-    border-right: 2px solid white; /* Added for the caret effect */
-}
-
-/* Typewriter animation */
-@keyframes typing {
-    0% { width: 0; }
-    50% { width: 100%; }
-    100% { width: 0; }
-}
-
-/* Caret blinking effect */
-@keyframes blinkCaret {
-    50% { border-color: transparent; }
-    100% { border-color: white; }
-}
-
-/* Video styling */
+/* Video - Desktop & Tablets (768px+) */
 .video {
     position: absolute;
     top: 50%;
@@ -52,24 +18,72 @@
     height: 100%;
     transform: translate(-50%, -50%);
     object-fit: cover;
-    z-index: -1;
+    z-index: 1;
+    display: block;
 }
 
-/* Media Queries for responsiveness */
-@media (max-width: 1024px) {
+/* Mobile Image - Below 768px */
+.mobileImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: fill; /* Narrow screens par full dikhane ke liye */
+    z-index: 1;
+    display: none;
+}
+
+/* Typing Text - Only for Video View */
+.affordableText {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: bold;
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 10;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: 
+        typing 4s steps(30, end) 1s infinite, 
+        blinkCaret 0.75s step-end infinite;
+    border-right: 2px solid white;
+}
+
+@keyframes typing {
+    0% { width: 0; }
+    50% { width: 100%; }
+    100% { width: 0; }
+}
+
+@keyframes blinkCaret {
+    50% { border-color: transparent; }
+    100% { border-color: white; }
+}
+
+/* --- RESPONSIVE LOGIC --- */
+
+@media (max-width: 767px) {
+    /* Hide Video & Text */
+    .video {
+        display: none;
+    }
     .affordableText {
-        font-size: 3rem;
+        display: none !important;
+    }
+    
+    /* Show Image */
+    .mobileImage {
+        display: block;
     }
 }
 
-@media (max-width: 768px) {
+/* Tablets (768px) par text size fix */
+@media (min-width: 769px) and (max-width: 1024px) {
     .affordableText {
-        font-size: 2rem;
-    }
-}
-
-@media (max-width: 576px) {
-    .affordableText {
-        font-size: 1.8rem;
+        font-size: 2.2rem;
     }
 }
