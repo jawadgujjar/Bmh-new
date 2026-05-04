@@ -13,8 +13,8 @@ export async function GET(req, context) {
     await dbConnect();
 
     const { params } = await context;
-    const { id } = params;
-
+    const { id } = await params;
+    
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
         { success: false, message: "Invalid page ID format" },

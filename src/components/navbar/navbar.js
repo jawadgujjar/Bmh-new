@@ -438,7 +438,7 @@ function NavbarBmh() {
           <div className={styles.actions}>
             <button className={styles.searchBtn} onClick={handleSearchOpen}>
               <CiSearch size={20} />
-            </button>
+            </button> 
 
             <a href="tel:+18132140535" className={styles.phoneLink}>
               <CiMobile3 size={20} />
