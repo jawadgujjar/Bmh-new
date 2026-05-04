@@ -27,15 +27,20 @@ function Login() {
         throw new Error(data.message || 'Login failed. Please try again.');
       }
 
-      // ✅ Role Validation: Check if selected role matches DB role
+      // Role Validation
       if (data.user.role !== values.role) {
         throw new Error(`Unauthorized! You are not registered as ${values.role}`);
       }
 
-      // Store user data
+      // ✅ Login Session & Expiry Logic
+      // 1. Permanent data (jab tak 24 hours pure na hon)
       localStorage.setItem('username', data.user.name);
       localStorage.setItem('role', data.user.role);
       localStorage.setItem('userData', JSON.stringify(data.user));
+      localStorage.setItem('loginTimestamp', new Date().getTime().toString());
+
+      // 2. Temporary data (Browser/Tab close hote hi khatam ho jaye)
+      sessionStorage.setItem('isSessionActive', 'true');
 
       message.success(`Welcome ${data.user.name}! Redirecting...`);
       setTimeout(() => router.push('/admin'), 1500);
@@ -76,7 +81,6 @@ function Login() {
               <Input.Password placeholder="Password" size="large" className={styles.formInput} />
             </Form.Item>
 
-            {/* ✅ NEW ROLE SELECTION */}
             <Form.Item
               name="role"
               rules={[{ required: true, message: 'Please select your role!' }]}

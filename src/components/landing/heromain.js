@@ -20,7 +20,7 @@ function HeroMain() {
 
             {/* Mobile Image - Hidden on Desktop */}
             <img 
-                src="/images/home-page/landing image main.png" 
+                src="/images/home-page/landing image main 1.png" 
                 alt="Digital Marketing" 
                 className={styles.mobileImage} 
             />

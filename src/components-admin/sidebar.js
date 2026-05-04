@@ -7,14 +7,38 @@ export default function AdminSidebar({ active, setActive }) {
 
   useEffect(() => {
     const userData = localStorage.getItem("userData");
-    if (userData) setIsLoggedIn(true);
+    const loginTimestamp = localStorage.getItem("loginTimestamp");
+    const sessionActive = sessionStorage.getItem("isSessionActive");
+
+    // 1. Agar session active nahi hai (Tab close karke dobara khola) 
+    // Ya phir 24 ghante guzar chuke hain
+    if (!userData || !sessionActive) {
+      handleLogout();
+      return;
+    }
+
+    if (loginTimestamp) {
+      const currentTime = new Date().getTime();
+      const oneDayInMs = 24 * 60 * 60 * 1000; // 24 Hours logic
+
+      if (currentTime - parseInt(loginTimestamp) > oneDayInMs) {
+        handleLogout();
+      } else {
+        setIsLoggedIn(true);
+      }
+    }
   }, []);
 
   const handleLogout = () => {
+    // Sab kuch clear karein
     localStorage.removeItem("userData");
     localStorage.removeItem("username");
     localStorage.removeItem("role");
-    window.location.reload();
+    localStorage.removeItem("loginTimestamp");
+    sessionStorage.removeItem("isSessionActive");
+    
+    setIsLoggedIn(false);
+    window.location.reload(); // Page reload karke login par bhej dega
   };
 
   if (!isLoggedIn) return null;
@@ -29,8 +53,6 @@ export default function AdminSidebar({ active, setActive }) {
     { id: "calltoactionquote", label: "Call-to-Action Quote" },
     { id: "blogs", label: "Blogs" },
     { id: "ctas", label: "Call-To-Actions" },
-
-    // ✅ NEW ADD
     { id: "newsletter", label: "Newsletter" },
     { id: "contactus", label: "Contact Us" }
   ];

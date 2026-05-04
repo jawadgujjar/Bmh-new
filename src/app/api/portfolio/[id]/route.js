@@ -6,7 +6,7 @@ import Keyword from "@/models/portfolio";
 export async function GET(req, { params }) {
   try {
     await dbConnect();
-    const keyword = await Keyword.findById(params.id).lean();
+    const keyword = await Keyword.findById(id).lean();
 
     if (!keyword) {
       return NextResponse.json({ success: false, error: "Not found" }, { status: 404 });
