@@ -14,6 +14,9 @@ import {
   Upload,
   Collapse,
   Tag,
+  Image,
+  Row,
+  Col,
 } from "antd";
 import {
   PlusOutlined,
@@ -25,6 +28,7 @@ import {
   InfoCircleOutlined,
   ExpandOutlined,
   CompressOutlined,
+  PictureOutlined,
 } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
@@ -68,6 +72,145 @@ const SafeTableImage = ({ src, alt, width = 35, height = 35 }) => {
   );
 };
 
+// ✅ New Component: Multiple Image Upload for Web Highlights
+const WebHighlightsUploader = ({ value = [], onChange, disabled = false }) => {
+  const [uploading, setUploading] = useState(false);
+  const [imageList, setImageList] = useState(value || []);
+
+  const handleUpload = async (file) => {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      setUploading(true);
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        const newImageList = [...imageList, data.url];
+        setImageList(newImageList);
+        onChange(newImageList);
+        message.success(`${file.name} uploaded successfully`);
+      } else {
+        message.error(data.error || "Failed to upload image");
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      message.error("Error uploading image");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleRemove = (index) => {
+    const newImageList = imageList.filter((_, i) => i !== index);
+    setImageList(newImageList);
+    onChange(newImageList);
+    message.success("Image removed");
+  };
+
+  const beforeUpload = (file) => {
+    const isImage = file.type.startsWith('image/');
+    if (!isImage) {
+      message.error('You can only upload image files!');
+      return false;
+    }
+    
+    const isLt5M = file.size / 1024 / 1024 < 5;
+    if (!isLt5M) {
+      message.error('Image must be smaller than 5MB!');
+      return false;
+    }
+    
+    handleUpload(file);
+    return false;
+  };
+
+  return (
+    <div>
+      <Upload
+        listType="picture-card"
+        showUploadList={false}
+        beforeUpload={beforeUpload}
+        disabled={disabled || uploading}
+        accept="image/*"
+      >
+        <div>
+          <PlusOutlined />
+          <div style={{ marginTop: 8 }}>Upload</div>
+        </div>
+      </Upload>
+      
+      {uploading && (
+        <div style={{ marginTop: 16, color: '#1890ff' }}>
+          <UploadOutlined spin /> Uploading...
+        </div>
+      )}
+      
+      {imageList.length > 0 && (
+        <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
+          {imageList.map((url, index) => (
+            <Col key={index} xs={24} sm={12} md={8} lg={6}>
+              <div style={{ position: 'relative' }}>
+                <Image
+                  src={url}
+                  alt={`Web highlight ${index + 1}`}
+                  style={{
+                    width: '100%',
+                    height: 150,
+                    objectFit: 'cover',
+                    borderRadius: 8,
+                    border: '1px solid #d9d9d9'
+                  }}
+                  preview={{
+                    mask: <PictureOutlined style={{ fontSize: 22 }} />
+                  }}
+                />
+                {!disabled && (
+                  <Button
+                    type="primary"
+                    danger
+                    size="small"
+                    icon={<DeleteOutlined />}
+                    onClick={() => handleRemove(index)}
+                    style={{
+                      position: 'absolute',
+                      top: 8,
+                      right: 8,
+                      borderRadius: '50%',
+                      width: 28,
+                      height: 28,
+                      padding: 0,
+                    }}
+                  />
+                )}
+              </div>
+            </Col>
+          ))}
+        </Row>
+      )}
+      
+      {imageList.length === 0 && !uploading && (
+        <div style={{ 
+          marginTop: 16, 
+          padding: 20, 
+          textAlign: 'center', 
+          background: '#fafafa',
+          borderRadius: 8,
+          border: '1px dashed #d9d9d9',
+          color: '#999'
+        }}>
+          <PictureOutlined style={{ fontSize: 24 }} />
+          <div>No images uploaded yet</div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 export default function Portfolio() {
   const [loading, setLoading] = useState(false);
   const [portfolios, setPortfolios] = useState([]);
@@ -101,7 +244,7 @@ export default function Portfolio() {
     fetchPortfolios();
   }, []);
 
-  // ✅ Custom upload handler
+  // ✅ Custom upload handler for other images
   const handleCustomUpload = async (file, fieldPath) => {
     const formData = new FormData();
     formData.append("image", file);
@@ -148,7 +291,7 @@ export default function Portfolio() {
     }
   };
 
-  // ✅ Upload Field Component
+  // ✅ Upload Field Component for Single Images
   const SimpleUploadField = ({ name, label, required = false }) => {
     const [imageUrl, setImageUrl] = useState('');
 
@@ -264,6 +407,8 @@ export default function Portfolio() {
           ...website,
           portfolioPage: {
             ...portfolioPage,
+            // ✅ Ensure webHighlights is array of strings (image URLs)
+            webHighlights: Array.isArray(portfolioPage.webHighlights) ? portfolioPage.webHighlights : [],
             seo: {
               metaTitle: seoData.metaTitle || portfolioPage.header?.title || '',
               metaDescription: seoData.metaDescription || portfolioPage.header?.description || '',
@@ -357,7 +502,8 @@ export default function Portfolio() {
               image2: portfolioPage.middleSection?.image2 || "",
               description2: portfolioPage.middleSection?.description2 || "",
             },
-            webHighlights: portfolioPage.webHighlights || [],
+            // ✅ webHighlights as array of strings (image URLs)
+            webHighlights: Array.isArray(portfolioPage.webHighlights) ? portfolioPage.webHighlights : [],
             cta1: {
               heading: portfolioPage.cta1?.heading || "",
               description: portfolioPage.cta1?.description || "",
@@ -366,7 +512,6 @@ export default function Portfolio() {
               heading: portfolioPage.cta2?.heading || "",
               description: portfolioPage.cta2?.description || "",
             },
-            // ✅ SEO Fields
             seo: {
               metaTitle: portfolioPage.seo?.metaTitle || "",
               metaDescription: portfolioPage.seo?.metaDescription || "",
@@ -515,7 +660,7 @@ export default function Portfolio() {
         onCancel={handleModalClose}
         onOk={handleOk}
         okText="Save"
-        width={900}
+        width={1000}
         style={{ maxHeight: '80vh', overflowY: 'auto' }}
         okButtonProps={{ size: 'middle' }}
         cancelButtonProps={{ size: 'middle' }}
@@ -624,30 +769,17 @@ export default function Portfolio() {
                           </Form.Item>
                         </Panel>
 
-                        {/* Web Highlights */}
-                        <Panel header="Web Highlights" key={`highlights-${name}`}>
-                          <Form.List name={[name, "portfolioPage", "webHighlights"]}>
-                            {(highlightFields, { add: addHighlight, remove: removeHighlight }) => (
-                              <>
-                                {highlightFields.map(({ key: highlightKey, name: highlightName, ...restHighlightField }) => (
-                                  <Space key={highlightKey} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
-                                    <Form.Item
-                                      {...restHighlightField}
-                                      name={[highlightName]}
-                                      rules={[{ required: true, message: "Enter web highlight URL" }]}
-                                      style={{ flex: 1 }}
-                                    >
-                                      <Input placeholder="https://example.com/highlight.jpg" />
-                                    </Form.Item>
-                                    <MinusCircleOutlined onClick={() => removeHighlight(highlightName)} />
-                                  </Space>
-                                ))}
-                                <Button type="dashed" onClick={() => addHighlight()} block icon={<PlusOutlined />}>
-                                  Add Web Highlight
-                                </Button>
-                              </>
-                            )}
-                          </Form.List>
+                        {/* ✅ Web Highlights with Multiple Image Upload */}
+                        <Panel header="Web Highlights (Images)" key={`highlights-${name}`}>
+                          <Form.Item
+                            label="Upload Multiple Images"
+                            name={[name, "portfolioPage", "webHighlights"]}
+                            getValueFromEvent={(e) => e}
+                            valuePropName="value"
+                            extra="Upload multiple images for web highlights (drag & drop supported)"
+                          >
+                            <WebHighlightsUploader />
+                          </Form.Item>
                         </Panel>
 
                         {/* CTA Sections */}
@@ -681,7 +813,7 @@ export default function Portfolio() {
                           </Form.Item>
                         </Panel>
 
-                        {/* ✅ SEO Section */}
+                        {/* SEO Section */}
                         <Panel 
                           header={
                             <Space>
