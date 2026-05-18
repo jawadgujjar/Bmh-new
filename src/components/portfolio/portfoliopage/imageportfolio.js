@@ -9,9 +9,9 @@ const Imageportfolio = ({ middleSection }) => {
   if (!middleSection) return null;
 
   const premiumServices = [
-    { id: '01', title: 'SEO Mastery', desc: 'Dominating search engines with data-driven keyword strategies and technical optimization.' },
-    { id: '02', title: 'Digital Marketing', desc: 'Scaling brands through high-converting ad campaigns and strategic social growth.' },
-    { id: '03', title: 'Luxury UI/UX', desc: 'Crafting high-end visual identities that resonate with premium audiences globally.' }
+    { id: '01', title: 'SEO Intelligence', desc: 'Smart optimization strategies designed to increase visibility and long-term organic traffic.' },
+    { id: '02', title: 'Growth Marketing', desc: 'Performance-driven campaigns crafted to maximize reach, engagement, and conversions.' },
+    { id: '03', title: 'Elite UI/UX Design', desc: 'Luxury-inspired digital interfaces focused on clarity, elegance, and user interaction.' }
   ];
 
   return (
@@ -22,11 +22,12 @@ const Imageportfolio = ({ middleSection }) => {
         <div className={styles.heroHeader}>
           <div className={styles.topBadge}>
             <span className={styles.line}></span>
-            STRATEGIC DIGITAL SOLUTIONS
+            Building Digital Experiences That Perform
           </div>
           <h2 className={styles.luxuryTitle}>
-            Architecting <span className={styles.orangeText}>Results-Driven</span> <br /> 
-            Digital Ecosystems.
+            Designing <span className={styles.orangeText}>Digital</span> <br /> 
+               Systems For Brand Growth
+ 
           </h2>
         </div>
 
