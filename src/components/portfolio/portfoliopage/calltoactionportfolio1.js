@@ -73,12 +73,14 @@ function Calltoactionportfolio1({ cta }) {
           <div className={styles.titleWrapper}>
             <div className={styles.circle}></div>
             <h2 className={styles.ctaTitle}>
-              {cta.heading || "Let's Build Your Mobile App"}
+              {/* cta?.heading use kiya hai taake crash na ho */}
+              {cta?.heading || "Let's Build Your Mobile App"}
             </h2>
             <div className={styles.circle}></div>
           </div>
           <p className={styles.ctaSubtitle}>
-            {cta.description ||
+            {/* cta?.description use kiya hai */}
+            {cta?.description ||
               "Enter your email to schedule a free consultation with our mobile app development experts."}
           </p>
 

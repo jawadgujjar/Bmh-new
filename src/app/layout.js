@@ -2,7 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./globals.css";
 import ClientLayoutWrapper from "./ClientLayoutWrapper";
-import Script from "next/script"; // 1. Script import kiya
+import Script from "next/script";
 
 export const dynamic = "force-dynamic";
 
@@ -44,7 +44,7 @@ export default function RootLayout({ children }) {
           {children}
         </ClientLayoutWrapper>
 
-        {/* 2. Tawk.to Live Chat Script yahan add kiya */}
+        {/*  chat is here */}
         <Script id="tawk-chat-script" strategy="afterInteractive">
           {`
             var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
