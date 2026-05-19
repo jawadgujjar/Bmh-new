@@ -97,9 +97,9 @@ function Login() {
               </Button>
             </Form.Item>
 
-            <div className={styles.signupLink}>
+            {/* <div className={styles.signupLink}>
               Don't have an account? <Link href="/auth/signin">Sign up here</Link>
-            </div>
+            </div> */}
           </Form>
         </Col>
       </Row>
