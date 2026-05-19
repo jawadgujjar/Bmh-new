@@ -2,7 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./globals.css";
 import ClientLayoutWrapper from "./ClientLayoutWrapper";
-import Script from "next/script"; // 1. Script import kiya
+import Script from "next/script";
 
 export const dynamic = "force-dynamic";
 
@@ -19,10 +19,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: {
-    default: "Luxury Digital Branding & Marketing Solutions in USA | BMH",
-    template: "%s | BMH App Name",
-  },
+  // Isko simple string bana dein, template hata dein
+  title: "Luxury Digital Branding & Marketing Solutions in USA | BMH",
   description: "Transform your business with premium digital branding and marketing solutions in the USA. Stand out, attract clients, and grow with BMH. Get started now.",
   robots: {
     index: false,
@@ -44,7 +42,7 @@ export default function RootLayout({ children }) {
           {children}
         </ClientLayoutWrapper>
 
-        {/* 2. Tawk.to Live Chat Script yahan add kiya */}
+        {/*  chat is here */}
         <Script id="tawk-chat-script" strategy="afterInteractive">
           {`
             var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
