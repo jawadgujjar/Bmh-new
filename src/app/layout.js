@@ -19,10 +19,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: {
-    default: "Luxury Digital Branding & Marketing Solutions in USA | BMH",
-    template: "%s | BMH App Name",
-  },
+  // Isko simple string bana dein, template hata dein
+  title: "Luxury Digital Branding & Marketing Solutions in USA | BMH",
   description: "Transform your business with premium digital branding and marketing solutions in the USA. Stand out, attract clients, and grow with BMH. Get started now.",
   robots: {
     index: false,
