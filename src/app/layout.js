@@ -1,7 +1,9 @@
+// app/layout.js
 import { Geist, Geist_Mono } from "next/font/google";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./globals.css";
 import ClientLayoutWrapper from "./ClientLayoutWrapper";
+import QueryProvider from "@/components/query-provider/queryprovider";
 import Script from "next/script";
 
 export const dynamic = "force-dynamic";
@@ -19,7 +21,6 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  // Isko simple string bana dein, template hata dein
   title: "Luxury Digital Branding & Marketing Solutions in USA | BMH",
   description: "Transform your business with premium digital branding and marketing solutions in the USA. Stand out, attract clients, and grow with BMH. Get started now.",
   robots: {
@@ -38,11 +39,13 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable}`}
         suppressHydrationWarning
       >
-        <ClientLayoutWrapper>
-          {children}
-        </ClientLayoutWrapper>
+        <QueryProvider>
+          <ClientLayoutWrapper>
+            {children}
+          </ClientLayoutWrapper>
+        </QueryProvider>
 
-        {/*  chat is here */}
+        {/* Chat script */}
         <Script id="tawk-chat-script" strategy="afterInteractive">
           {`
             var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
