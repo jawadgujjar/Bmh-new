@@ -20,13 +20,13 @@ function Calltoactionportfolio({ cta = {} }) {
         <p className={styles.ctaSubtitle}>{descriptionText}</p>
         
         <div className={styles.ctaActions}>
-          <a href="/portfolio" className={styles.ctaButton}>
+          {/* <a href="/portfolio" className={styles.ctaButton}>
             <div className={styles.buttonContent}>
               <FaEye className={styles.portfolioIcon} />
               <span>View My Portfolio</span>
               <div className={styles.buttonHoverEffect}></div>
             </div>
-          </a>
+          </a> */}
           
           <a href="/contactus" className={styles.secondaryButton}>
             <span>Start Your Project</span>

@@ -35,8 +35,6 @@ export default async function ProjectPage({ params }) {
 
   const portfolio = website.portfolioPage;
   
-  // ✅ **IMPORTANT: Database میں stored SEO ڈیٹا use کریں**
-  // اگر database میں SEO ڈیٹا ہے تو وہ use کریں، نہیں تو default بنائیں
   const seoData = portfolio.seo || {
     metaTitle: portfolio.header?.title ? 
       `${portfolio.header.title} - ${categoryMatch.keyword} Project | YourCompany` : 
@@ -49,18 +47,19 @@ export default async function ProjectPage({ params }) {
       'project',
       'case study',
       portfolio.header?.title
-    ].filter(Boolean) // null values remove کریں
+    ].filter(Boolean)  
   };
 
   return (
     <main>
-      {/* ✅ Project page کے لیے SEO */}
+      
       <SEO seo={seoData} />
       
       <Heroportfolio header={portfolio.header} />
-      <Imageportfolio middleSection={portfolio.middleSection} />
-      <Calltoactionportfolio1 cta={portfolio.cta1} />
       <Highlightportfolio highlights={portfolio.webHighlights} />
+      <Imageportfolio middleSection={portfolio.middleSection} />
+      {/* <Calltoactionportfolio1 cta={portfolio.cta1} /> */}
+        
       <Calltoactionportfolio cta={portfolio.cta2} />
     </main>
   );
