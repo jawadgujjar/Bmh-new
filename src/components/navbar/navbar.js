@@ -28,7 +28,7 @@ const fetchNavbarData = async () => {
     "web-development",
     "app-development",
   ];
-  
+
   try {
     // STEP 1: Sirf basic lists fetch karein (No heavy detail requests!)
     const [subResults, blogsRes, portfolioRes] = await Promise.all([
@@ -90,7 +90,7 @@ const fetchNavbarData = async () => {
           excerpt: sub.description || "",
           content: sub.description || sub.keywords || sub.name,
         });
-        
+
         const pages = tempPages[sub._id] || [];
         for (const page of pages) {
           content.push({
@@ -130,10 +130,10 @@ const fetchNavbarData = async () => {
       });
     }
 
-    return { 
-      subcategories: tempSubcats, 
+    return {
+      subcategories: tempSubcats,
       allPages: tempPages,
-      searchableContent: content 
+      searchableContent: content
     };
   } catch (error) {
     console.error("Error fetching navbar data:", error);
@@ -176,7 +176,7 @@ function NavbarBmh() {
     handleResize();
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("resize", handleResize);
-    
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleResize);
@@ -189,18 +189,18 @@ function NavbarBmh() {
       setSearchResults([]);
       return;
     }
-    
+
     const term = searchTerm.toLowerCase();
     const results = allSearchableContent.filter((item) => {
       if (!item) return false;
-      
+
       const title = item.title ? item.title.toLowerCase() : "";
       const parent = item.parent ? item.parent.toLowerCase() : "";
       const category = item.category ? item.category.toLowerCase() : "";
       const excerpt = item.excerpt ? item.excerpt.toLowerCase() : "";
       const content = item.content ? item.content.toLowerCase() : "";
       const description = item.description ? item.description.toLowerCase() : "";
-      
+
       return (
         title.includes(term) ||
         parent.includes(term) ||
@@ -210,23 +210,23 @@ function NavbarBmh() {
         description.includes(term)
       );
     });
-    
+
     const sorted = results.sort((a, b) => {
       const aTitle = a.title ? a.title.toLowerCase() : "";
       const bTitle = b.title ? b.title.toLowerCase() : "";
       const termLower = term;
-      
+
       const aExact = aTitle === termLower ? 1 : 0;
       const bExact = bTitle === termLower ? 1 : 0;
       if (aExact !== bExact) return bExact - aExact;
-      
+
       const aTitleMatch = aTitle.includes(termLower) ? 1 : 0;
       const bTitleMatch = bTitle.includes(termLower) ? 1 : 0;
       if (aTitleMatch !== bTitleMatch) return bTitleMatch - aTitleMatch;
-      
+
       return 0;
     });
-    
+
     setSearchResults(sorted.slice(0, 12));
   }, [searchTerm, allSearchableContent]);
 
@@ -295,7 +295,7 @@ function NavbarBmh() {
   const highlightText = (text, term) => {
     if (!text || !term) return text;
     const regex = new RegExp(`(${term})`, "gi");
-    return text.split(regex).map((part, i) => 
+    return text.split(regex).map((part, i) =>
       regex.test(part) ? <mark key={i} className={styles.highlight}>{part}</mark> : part
     );
   };
@@ -304,18 +304,18 @@ function NavbarBmh() {
     const contentToSearch = (item.content || item.excerpt || item.description || "").toLowerCase();
     const termLower = term.toLowerCase();
     const index = contentToSearch.indexOf(termLower);
-    
+
     if (index === -1) {
       const excerpt = (item.excerpt || item.content || item.description || "").substring(0, 120);
       return highlightText(excerpt, term);
     }
-    
+
     const start = Math.max(0, index - 40);
     const end = Math.min(contentToSearch.length, index + termLower.length + 80);
     let excerpt = (item.content || item.excerpt || item.description || "").substring(start, end);
     if (start > 0) excerpt = "..." + excerpt;
     if (end < (item.content || "").length) excerpt = excerpt + "...";
-    
+
     return highlightText(excerpt, term);
   };
 
@@ -417,7 +417,7 @@ function NavbarBmh() {
           <div className={styles.actions}>
             <button className={styles.searchBtn} onClick={handleSearchOpen}>
               <CiSearch size={20} />
-            </button> 
+            </button>
 
             <a href="tel:+18132140535" className={styles.phoneLink}>
               <CiMobile3 size={20} />
