@@ -30,7 +30,7 @@ const fetchNavbarData = async () => {
   ];
   
   try {
-    // STEP 1: Pehli stage me categories, blogs, aur portfolio ki main list ek sath parallel fetch karein
+    // STEP 1: Sirf basic lists fetch karein (No heavy detail requests!)
     const [subResults, blogsRes, portfolioRes] = await Promise.all([
       Promise.all(
         categories.map((cat) =>
@@ -66,91 +66,10 @@ const fetchNavbarData = async () => {
     let blogsData = Array.isArray(blogsRes) ? blogsRes : blogsRes?.data || [];
     let portfolioData = Array.isArray(portfolioRes) ? portfolioRes : portfolioRes?.data || [];
 
-    // STEP 2: Ab saare blogs, portfolios aur single pages ke details ka aik BARA PROMISE ARRAY banayein
-    const detailPromises = [];
+    // 🔴 CRITICAL SPEED FIX: 
+    // Humne woh saare heavy fetch loop (/api/blogs/id, /api/page/id) bilkul khatam kar diye hain
+    // jo MBs ke hisab se content download kar ke network ko block kar rahe the.
 
-    // Blogs detail requests push karein
-    blogsData.forEach((blog, index) => {
-      detailPromises.push(
-        fetch(`/api/blogs/${blog.slug || blog._id}`)
-          .then((res) => res.json())
-          .then((data) => ({ type: "blog", index, data: data?.data || data }))
-          .catch(() => ({ type: "blog", index, data: null }))
-      );
-    });
-
-    // Portfolio detail requests push karein
-    portfolioData.forEach((item, index) => {
-      detailPromises.push(
-        fetch(`/api/portfolio/${item.slug || item._id}`)
-          .then((res) => res.json())
-          .then((data) => ({ type: "portfolio", index, data: data?.data || data }))
-          .catch(() => ({ type: "portfolio", index, data: null }))
-      );
-    });
-
-    // Pages detail requests push karein
-    for (const [catKey, subs] of Object.entries(tempSubcats)) {
-      for (const sub of subs) {
-        const pages = tempPages[sub._id] || [];
-        pages.forEach((page) => {
-          detailPromises.push(
-            fetch(`/api/page/${page._id}`)
-              .then((res) => res.json())
-              .then((data) => ({ type: "page", id: page._id, data: data?.data || data }))
-              .catch(() => ({ type: "page", id: page._id, data: null }))
-          );
-        });
-      }
-    }
-
-    // STEP 3: SARE DETAILS AIK HI BAAR ME PARALLEL FETCH HONGE (No more sequential blocking!)
-    const allDetailResults = await Promise.all(detailPromises);
-
-    const fullPageContent = {};
-
-    // Process parallel results back into their structures safely
-    allDetailResults.forEach((result) => {
-      if (!result.data) return;
-
-      if (result.type === "blog") {
-        const blogContent = result.data;
-        blogsData[result.index].fullContent = blogContent?.content || blogContent?.body || blogContent?.description || "";
-        blogsData[result.index].fullExcerpt = blogContent?.excerpt || blogContent?.description || "";
-      } 
-      else if (result.type === "portfolio") {
-        const portfolioContent = result.data;
-        portfolioData[result.index].fullContent = portfolioContent?.content || portfolioContent?.description || "";
-        portfolioData[result.index].fullExcerpt = portfolioContent?.excerpt || portfolioContent?.description || "";
-        portfolioData[result.index].fullDescription = portfolioContent?.description || "";
-      } 
-      else if (result.type === "page") {
-        const pageContent = result.data;
-        fullPageContent[result.id] = {
-          content: pageContent?.content || pageContent?.description || pageContent?.body || "",
-          excerpt: pageContent?.excerpt || pageContent?.description || "",
-          description: pageContent?.description || "",
-        };
-      }
-    });
-
-    // Fallbacks set karein agar koi request fail hui ho
-    blogsData.forEach((blog) => {
-      if (!blog.fullContent) {
-        blog.fullContent = blog.content || blog.description || "";
-        blog.fullExcerpt = blog.excerpt || blog.description || "";
-      }
-    });
-
-    portfolioData.forEach((item) => {
-      if (!item.fullContent) {
-        item.fullContent = item.content || item.description || "";
-        item.fullExcerpt = item.excerpt || item.description || "";
-        item.fullDescription = item.description || "";
-      }
-    });
-
-    // STEP 4: Build searchable content array (Microseconds client-side map)
     const content = [];
 
     content.push(
@@ -169,24 +88,19 @@ const fetchNavbarData = async () => {
           type: "Category",
           parent: catName,
           excerpt: sub.description || "",
-          content: sub.description || sub.keywords || "",
+          content: sub.description || sub.keywords || sub.name,
         });
         
         const pages = tempPages[sub._id] || [];
         for (const page of pages) {
-          const fullContent = fullPageContent[page._id] || {
-            content: page.description || page.excerpt || "",
-            excerpt: page.excerpt || "",
-            description: page.description || "",
-          };
           content.push({
             title: page.title,
             path: `/${sub.slug}/${page.slug}`,
             type: "Page",
             parent: sub.name,
             category: catName,
-            excerpt: page.excerpt || fullContent.excerpt || "",
-            content: fullContent.content || page.content || page.description || "",
+            excerpt: page.excerpt || page.description || "",
+            content: page.title + " " + (page.description || ""),
           });
         }
       }
@@ -198,8 +112,8 @@ const fetchNavbarData = async () => {
         path: `/blogs/${blog.slug || blog._id}`,
         type: "Blog",
         parent: "Blogs",
-        excerpt: blog.fullExcerpt || blog.excerpt || (blog.fullContent?.substring(0, 200) || ""),
-        content: blog.fullContent || blog.content || blog.description || "",
+        excerpt: blog.excerpt || blog.description || "",
+        content: blog.title + " " + (blog.excerpt || blog.description || ""),
       });
     }
 
@@ -210,9 +124,9 @@ const fetchNavbarData = async () => {
         type: "Portfolio",
         parent: "Portfolio",
         category: item.category || "",
-        excerpt: item.fullExcerpt || item.excerpt || (item.fullContent?.substring(0, 200) || ""),
-        content: item.fullContent || item.content || item.description || "",
-        description: item.fullDescription || item.description || "",
+        excerpt: item.excerpt || item.description || "",
+        content: item.title + " " + (item.category || "") + " " + (item.description || ""),
+        description: item.description || "",
       });
     }
 
