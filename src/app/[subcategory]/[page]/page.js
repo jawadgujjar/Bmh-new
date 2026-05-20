@@ -43,7 +43,6 @@ async function getSubCategoryBySlug(slug) {
       cache: "no-store",
     });
     const response = await res.json();
-    // Handle both {success: true, data: {}} and direct {}
     return response?.success ? response.data : response;
   } catch (error) {
     console.error("Error fetching subcategory:", error);
@@ -51,8 +50,27 @@ async function getSubCategoryBySlug(slug) {
   }
 }
 
+// 🔥 1. Next.js Dynamic Metadata Implementation (Server-Side SEO)
+export async function generateMetadata({ params }) {
+  const { page } = await params;
+  const pageData = await getPageBySlug(page);
+
+  if (!pageData || !pageData.seo) {
+    return {}; // Default fallbacks carry on honge agar data ya seo object na ho
+  }
+
+  const { seo } = pageData;
+
+  return {
+    title: seo.metaTitle || pageData.title || "Brand Marketing Hub",
+    description: seo.metaDescription || "",
+    keywords: Array.isArray(seo.metaKeywords) 
+      ? seo.metaKeywords.join(", ") 
+      : seo.metaKeywords || "",
+  };
+}
+
 export default async function UniversalPageRoute({ params }) {
-  // Params ko await karna Next.js 15+ mein zaroori hai
   const { subcategory, page } = await params;
 
   // Donon data calls parallel chalti hain
@@ -65,11 +83,23 @@ export default async function UniversalPageRoute({ params }) {
 
   // Subcategory data structure fix
   const subcategoryData = subcategoryRaw?.data || subcategoryRaw;
-
   const hasDynamicSections = pageData.sections && pageData.sections.length > 0;
+
+  // Schema markup extract kar rahe hain pageData ke seo object se
+  const schemaMarkup = pageData.seo?.schemaMarkup;
 
   return (
     <main className="flex flex-col w-full p-0 m-0 overflow-x-hidden">
+      
+      {/* 🔥 2. Schema Markup Injection (Structured Data for Google Bot) */}
+      {schemaMarkup && (
+        <script
+          type="application/ld+json"
+          id={`schema-${pageData.slug || "page"}`}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaMarkup) }}
+        />
+      )}
+
       {/* 1. Hero Section */}
       <SubHeroDigitalMarketing
         backgroundImage={
