@@ -5,55 +5,82 @@ import Heroportfolio from "@/components/portfolio/portfoliopage/heroportfolio";
 import Imageportfolio from "@/components/portfolio/portfoliopage/imageportfolio";
 import Highlightportfolio from "@/components/portfolio/portfoliopage/highlightportfolio";
 import Calltoactionportfolio from "@/components/portfolio/portfoliopage/calltoactionportfolio";
-import Calltoactionportfolio1 from "@/components/portfolio/portfoliopage/calltoactionportfolio1";
-import SEO from "@/components/seo/seo"; // ✅ SEO component
 import { notFound } from "next/navigation";
+import { cache } from "react";
 
 const slugify = (str = "") =>
   str.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]+/g, "");
 
-export default async function ProjectPage({ params }) {
-  await mongoose.connect(process.env.MONGODB_URI);
-
-  const { category: categorySlug, slug: projectSlug } = await params;
+// 🔹 Database connection aur nested project matching ko optimize karne ke liye cache helper
+const getProjectData = cache(async (categorySlug, projectSlug) => {
+  if (mongoose.connection.readyState !== 1) {
+    await mongoose.connect(process.env.MONGODB_URI);
+  }
 
   const keywords = await Keyword.find().lean();
   const safeKeywords = JSON.parse(JSON.stringify(keywords));
 
-  // 🔹 Match category
+  // Match category
   const categoryMatch = safeKeywords.find(
     (item) => slugify(item.keyword) === categorySlug
   );
-  if (!categoryMatch) notFound();
+  if (!categoryMatch) return null;
 
-  // 🔹 Match project inside category (slug-safe)
+  // Match nested project inside category
   const website = (categoryMatch.websites || []).find(
-    (site) =>
-      slugify(site?.portfolioPage?.header?.title) === projectSlug
+    (site) => slugify(site?.portfolioPage?.header?.title) === projectSlug
   );
-  if (!website) notFound();
+  if (!website) return null;
 
-  const portfolio = website.portfolioPage;
-  
-  const seoData = portfolio.seo || {
-    metaTitle: portfolio.header?.title ? 
-      `${portfolio.header.title} - ${categoryMatch.keyword} Project | YourCompany` : 
-      `${categoryMatch.keyword} Project | YourCompany`,
-    metaDescription: portfolio.header?.description || 
-      `Detailed showcase of our ${categoryMatch.keyword} project. See our work, process, and results.`,
-    metaKeywords: [
-      categoryMatch.keyword,
-      'portfolio',
-      'project',
-      'case study',
-      portfolio.header?.title
-    ].filter(Boolean)  
+  return {
+    categoryKeyword: categoryMatch.keyword,
+    portfolio: website.portfolioPage,
   };
+});
+
+// ✅ 1. Professional Metadata Engine & Dynamic Nested Canonical URL Handler
+export async function generateMetadata({ params }) {
+  const { category: categorySlug, slug: projectSlug } = await params;
+  const projectData = await getProjectData(categorySlug, projectSlug);
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://brandmarketinghub.com';
+
+  if (!projectData) return {};
+
+  const { portfolio, categoryKeyword } = projectData;
+
+  // Database se dynamic custom SEO fetch karein, ya backup defaults apply karein
+  const metaTitle = portfolio.seo?.metaTitle || 
+    (portfolio.header?.title ? `${portfolio.header.title} - ${categoryKeyword} Project | BMH` : `${categoryKeyword} Project | BMH`);
+    
+  const metaDescription = portfolio.seo?.metaDescription || 
+    portfolio.header?.description || `Detailed showcase of our ${categoryKeyword} project. See our work, process, and results.`;
+
+  const metaKeywords = portfolio.seo?.metaKeywords || 
+    [categoryKeyword, 'portfolio', 'project', 'case study', portfolio.header?.title].filter(Boolean);
+
+  return {
+    title: metaTitle,
+    description: metaDescription,
+    keywords: metaKeywords,
+    // 🔹 Nested Dynamic Pages ka professional structured URL automatic link hoga
+    alternates: {
+      canonical: `${siteUrl}/portfolio/${categorySlug}/${projectSlug}`,
+    },
+  };
+}
+
+// 2. Main Page Render Component
+export default async function ProjectPage({ params }) {
+  const { category: categorySlug, slug: projectSlug } = await params;
+  const projectData = await getProjectData(categorySlug, projectSlug);
+
+  if (!projectData) notFound();
+
+  const { portfolio } = projectData;
 
   return (
     <main>
-      
-      <SEO seo={seoData} />
+      {/* ⚠️ <SEO /> component ki ab zaroorat nahi hai, Next.js metadata system isse inject kar raha hai */}
       
       <Heroportfolio header={portfolio.header} />
       <Highlightportfolio highlights={portfolio.webHighlights} />

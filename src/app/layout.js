@@ -21,8 +21,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
+  // 1. Base URL config jo auto-canonical handles karega
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://brandmarketinghub.com'),
+  
   title: "Luxury Digital Branding & Marketing Solutions in USA | BMH",
   description: "Transform your business with premium digital branding and marketing solutions in the USA. Stand out, attract clients, and grow with BMH. Get started now.",
+  
+  // 2. Automatic Canonical Tag Injection
+  alternates: {
+    canonical: '/', 
+  },
+
+  // Note: Agar production live karni ho to index aur follow ko true kar dijiyega
   robots: {
     index: false,
     follow: false,

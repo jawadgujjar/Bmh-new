@@ -50,13 +50,20 @@ async function getSubCategoryBySlug(slug) {
   }
 }
 
-// 🔥 1. Next.js Dynamic Metadata Implementation (Server-Side SEO)
+// 🔥 1. Next.js Dynamic Metadata Implementation (Server-Side SEO with Auto-Canonical Engine)
 export async function generateMetadata({ params }) {
-  const { page } = await params;
+  const { subcategory, page } = await params;
   const pageData = await getPageBySlug(page);
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://brandmarketinghub.com";
 
   if (!pageData || !pageData.seo) {
-    return {}; // Default fallbacks carry on honge agar data ya seo object na ho
+    return {
+      title: pageData?.title || "Brand Marketing Hub",
+      alternates: {
+        // Fallback exact path matching rule
+        canonical: `${siteUrl}/${subcategory}/${page}`,
+      },
+    };
   }
 
   const { seo } = pageData;
@@ -67,6 +74,12 @@ export async function generateMetadata({ params }) {
     keywords: Array.isArray(seo.metaKeywords) 
       ? seo.metaKeywords.join(", ") 
       : seo.metaKeywords || "",
+    
+    // ✅ Yeh block aap ka complete nested dynamic path code injector canonical engine me run karega
+    alternates: {
+      // Is se dynamic perfect layout generate hoga: https://brandmarketinghub.com/subcategory/page
+      canonical: `${siteUrl}/${subcategory}/${page}`,
+    },
   };
 }
 

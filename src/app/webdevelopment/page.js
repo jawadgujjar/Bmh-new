@@ -9,7 +9,6 @@ import Heroweb1 from "@/components/web-development/heroweb";
 import Keywordsweb from "@/components/web-development/keywordsweb";
 import Webservices1 from "@/components/web-development/servicesweb";
 import Webdevelopment1 from "@/components/web-development/webdevelopment";
-import SEO from "@/components/seo/seo"; // ✅ IMPORT ADD
 import Alice from "@/components/landing/alicecarousel";
 
 // ✅ Web Development SEO Data
@@ -41,17 +40,42 @@ const webDevelopmentSEO = {
   },
 };
 
+// 🔥 1. Next.js Server-Side Metadata Engine (Web Dev Canonical Fixed)
+export async function generateMetadata() {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://brandmarketinghub.com";
+  
+  return {
+    title: webDevelopmentSEO.metaTitle,
+    description: webDevelopmentSEO.metaDescription,
+    keywords: webDevelopmentSEO.metaKeywords.join(", "),
+    
+    // ✅ Yeh block header me automated clean canonical link inject karega
+    alternates: {
+      // Is se dynamic check clear hoga: https://brandmarketinghub.com/web-development
+      canonical: `${siteUrl}/web-development`,
+    },
+  };
+}
+
+// 2. Main Page Component
 export default function WebdevelopmentPage() {
   return (
     <main>
-      {/* ✅ SEO ADD */}
-      <SEO seo={webDevelopmentSEO} />
+      {/* 🔥 3. Schema Markup Script Injection (Structured Data for Google Bot) */}
+      {webDevelopmentSEO.schemaMarkup && (
+        <script
+          type="application/ld+json"
+          id="web-development-schema"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(webDevelopmentSEO.schemaMarkup) }}
+        />
+      )}
+
+      {/* ⚠️ Purana <SEO /> tag completely removed */}
 
       <Heroweb1 />
-       <Alice/>
+      <Alice />
       {/* <Heroform/> */}
       <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-       
         <Webdevelopment1 />
         <Keywordsweb />
         <Calltoactionweb1 />

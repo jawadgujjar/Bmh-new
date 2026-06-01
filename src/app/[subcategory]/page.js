@@ -31,13 +31,20 @@ async function getSubCategoryData(slug) {
   }
 }
 
-// 🔥 3. Next.js Dynamic Metadata Function (Yeh Server par chalega aur SEO automatic set karega)
+// 🔥 3. Next.js Dynamic Metadata Function (Auto-Canonical Fixed)
 export async function generateMetadata({ params }) {
   const { subcategory } = await params;
   const subcategoryData = await getSubCategoryData(subcategory);
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://brandmarketinghub.com";
 
   if (!subcategoryData || !subcategoryData.seo) {
-    return {}; // Agar data na mile toh empty object return karega (default meta tags use honge)
+    return {
+      title: subcategoryData?.name || "Subcategory",
+      alternates: {
+        // Fallback safe canonical injection
+        canonical: `${siteUrl}/${subcategory}`,
+      },
+    }; 
   }
 
   const { seo } = subcategoryData;
@@ -46,7 +53,12 @@ export async function generateMetadata({ params }) {
     title: seo.metaTitle || subcategoryData.name,
     description: seo.metaDescription || "",
     keywords: Array.isArray(seo.metaKeywords) ? seo.metaKeywords.join(", ") : seo.metaKeywords || "",
-    // Agar koi extra tags chahiye hon toh yahan add kar sakte hain
+    
+    // ✅ Yeh block aap ka exact dynamic subcategory path canonical tag me push karega
+    alternates: {
+      // Is se dynamic banyega: https://brandmarketinghub.com/your-subcategory-slug
+      canonical: `${siteUrl}/${subcategory}`, 
+    },
   };
 }
 
