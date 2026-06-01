@@ -10,7 +10,6 @@ import Alice from "@/components/landing/alicecarousel";
 import Carousel from "@/components/landing/carousel";
 import Form1 from "@/components/landing/getaquote";
 import Heroform from "@/components/landing/heroform";
-import SEO from "@/components/seo/seo"; // ✅ ADD
 
 // ✅ App Development SEO Data
 const appDevelopmentSEO = {
@@ -41,14 +40,40 @@ const appDevelopmentSEO = {
   },
 };
 
+// 🔥 1. Next.js Server-Side Metadata Engine (App Dev Canonical Fixed)
+export async function generateMetadata() {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://brandmarketinghub.com";
+  
+  return {
+    title: appDevelopmentSEO.metaTitle,
+    description: appDevelopmentSEO.metaDescription,
+    keywords: appDevelopmentSEO.metaKeywords.join(", "),
+    
+    // ✅ Yeh block head tag me automated clean canonical link inject karega
+    alternates: {
+      // Is se route structure clear ho jayega: https://brandmarketinghub.com/app-development
+      canonical: `${siteUrl}/app-development`,
+    },
+  };
+}
+
+// 2. Main Page Component
 export default function AppdevelopmentPage() {
   return (
     <main>
-      {/* ✅ SEO ADD */}
-      <SEO seo={appDevelopmentSEO} />
+      {/* 🔥 3. Schema Markup Script Injection (Structured Data for Google Bot) */}
+      {appDevelopmentSEO.schemaMarkup && (
+        <script
+          type="application/ld+json"
+          id="app-development-schema"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(appDevelopmentSEO.schemaMarkup) }}
+        />
+      )}
+
+      {/* ⚠️ Purana <SEO /> tag completely removed */}
 
       <Heroapp1 />
-       <Alice/>
+      <Alice />
       <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
         {/* <Heroform/> */}
         <Appdevelopment1 />

@@ -3,44 +3,57 @@ import mongoose from "mongoose";
 import Keyword from "@/models/portfolio";
 import PortfolioRemain from "@/components/portfolio/portfolioremaining";
 import Herofirstportfolio1 from "@/components/portfolio/herofirstportfolio";
-import SEO from "@/components/seo/seo"; // ✅ SEO component
 import { notFound } from "next/navigation";
+import { cache } from "react";
 
 // Slug بنانے کا function
 const slugify = (str = "") =>
   str.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]+/g, "");
 
-export default async function CategoryPage({ params }) {
-  await mongoose.connect(process.env.MONGODB_URI);
-
-  // 🔹 Next.js 14 fix: await params destructuring
-  const { category: categorySlug } = await params;
-
+// 🔹 Database connect karne aur category find karne ka optimization helper
+const getCategoryData = cache(async (categorySlug) => {
+  if (mongoose.connection.readyState !== 1) {
+    await mongoose.connect(process.env.MONGODB_URI);
+  }
   const keywords = await Keyword.find().lean();
   const safeKeywords = JSON.parse(JSON.stringify(keywords));
+  
+  return safeKeywords.find((item) => slugify(item.keyword) === categorySlug);
+});
 
-  // 🔹 Match category
-  const categoryMatch = safeKeywords.find(
-    (item) => slugify(item.keyword) === categorySlug
-  );
+// ✅ 1. Professional Next.js Metadata & Auto-Canonical Handler
+export async function generateMetadata({ params }) {
+  const { category: categorySlug } = await params;
+  const categoryMatch = await getCategoryData(categorySlug);
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://brandmarketinghub.com';
 
-  if (!categoryMatch) notFound();
+  if (!categoryMatch) return {};
 
-  // ✅ اس category کے لیے SEO ڈیٹا بنائیں
-  const seoData = {
-    metaTitle: `${categoryMatch.keyword} Portfolio - Our Work Examples | YourCompany`,
-    metaDescription: `Browse our ${categoryMatch.keyword} portfolio showcasing successful projects, case studies, and client work.`,
-    metaKeywords: [
+  return {
+    title: `${categoryMatch.keyword} Portfolio - Our Work Examples | BMH`,
+    description: `Browse our ${categoryMatch.keyword} portfolio showcasing successful projects, case studies, and client work.`,
+    keywords: [
       `${categoryMatch.keyword} portfolio`,
       `${categoryMatch.keyword} examples`,
       `${categoryMatch.keyword} case studies`
-    ]
+    ],
+    // 🔹 Yeh automatic dynamic canonical URL handle karega
+    alternates: {
+      canonical: `${siteUrl}/portfolio/${categorySlug}`,
+    },
   };
+}
+
+// 2. Main Page Component
+export default async function CategoryPage({ params }) {
+  const { category: categorySlug } = await params;
+  const categoryMatch = await getCategoryData(categorySlug);
+
+  if (!categoryMatch) notFound();
 
   return (
     <main>
-      {/* ✅ Category page کے لیے SEO */}
-      <SEO seo={seoData} />
+      {/* ⚠️ Ab yahan purane <SEO /> component ki zaroorat nahi kyun k upar generateMetadata sab handle kar raha hai */}
       
       <Herofirstportfolio1
         header={{

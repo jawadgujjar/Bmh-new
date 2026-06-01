@@ -1,11 +1,10 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { Card, Button, Tag, Input, List, Spin } from 'antd';
-import { HomeOutlined, CalendarOutlined, SearchOutlined } from '@ant-design/icons';
+import { CalendarOutlined } from '@ant-design/icons';
 import { useRouter, useParams } from 'next/navigation';
 import styles from '../[id]/blog-detail.module.css';
 import MainpageForm from '@/components/blogs/mainpageform';
-import SEO from '@/components/seo/seo';
 
 const stripHtmlTags = (html) => {
   if (!html) return '';
@@ -21,7 +20,7 @@ const { Search } = Input;
 
 export default function BlogDetailPage() {
   const router = useRouter();
-  const { id } = useParams();
+  const { id } = useParams(); // 👈 Yeh aap ka exact dynamic slug ya id hai
   const [post, setPost] = useState(null);
   const [tocItems, setTocItems] = useState([]);
   const [activeSection, setActiveSection] = useState('');
@@ -31,6 +30,27 @@ export default function BlogDetailPage() {
   const ORANGE_COLOR = '#FD7E14';
   const ORANGE_LIGHT = '#FFA94D';
 
+  // ✅ 1. Client Component k liye 100% working Canonical URL Fix
+  useEffect(() => {
+    if (!id) return;
+
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://brandmarketinghub.com';
+    // Yeh line aap ka exact slug url banayegi: https://brandmarketinghub.com/blogs/your-blog-slug
+    const cleanCanonicalUrl = `${siteUrl}/blogs/${id}`;
+
+    // Head me pehle se mojood canonical check karein ya naya create karein
+    let link = document.querySelector("link[rel='canonical']");
+    if (!link) {
+      link = document.createElement('link');
+      link.setAttribute('rel', 'canonical');
+      document.head.appendChild(link);
+    }
+    // Sahi dynamic slug path inject ho raha hai
+    link.setAttribute('href', cleanCanonicalUrl);
+
+  }, [id]);
+
+  // Fetch Categories
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -47,6 +67,7 @@ export default function BlogDetailPage() {
     fetchCategories();
   }, []);
 
+  // Fetch Blog Data
   useEffect(() => {
     if (!id) return;
     const fetchBlog = async () => {
@@ -76,6 +97,7 @@ export default function BlogDetailPage() {
     fetchBlog();
   }, [id, router]);
 
+  // Intersection Observer for TOC
   useEffect(() => {
     if (!post || !tocItems.length) return;
     const observer = new IntersectionObserver((entries) => {
@@ -100,9 +122,12 @@ export default function BlogDetailPage() {
 
   return (
     <>
-      {post.seo && <SEO seo={post.seo} />}
+      {/* ✅ 2. Dynamic Browser Title & Description Fix */}
+      <title>{post.seo?.metaTitle || `${post.title} | BMH Blog`}</title>
+      <meta name="description" content={post.seo?.metaDescription || post.description} />
+      
+      {/* ⚠️ Purana <SEO /> component yahan se remove kar diya hai */}
 
-      {/* ✅ Black overlay (linear-gradient) removed — pure image dikhegi */}
       <div
         className={styles.blogHeader}
         style={{
@@ -161,7 +186,6 @@ export default function BlogDetailPage() {
               <Search
                 placeholder="Search articles..."
                 allowClear
-                // Direct main page par search query bhej raha hai
                 onSearch={(v) => v && router.push(`/blogs?search=${encodeURIComponent(v)}`)}
                 enterButton={
                   <Button style={{ backgroundColor: ORANGE_COLOR, borderColor: ORANGE_COLOR, color: '#fff' }}>
@@ -177,7 +201,6 @@ export default function BlogDetailPage() {
                 renderItem={(item) => (
                   <List.Item
                     style={{ cursor: 'pointer' }}
-                    // Jab category click ho toh main page par search query ki tarah jaye
                     onClick={() => router.push(`/blogs?search=${encodeURIComponent(item.name)}`)}
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
