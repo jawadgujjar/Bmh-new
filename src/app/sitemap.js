@@ -29,7 +29,7 @@ export default async function sitemap() {
     return str.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]+/g, "");
   };
 
-  // Universal Bulletproof Network Requester (Aligned perfectly with your page frontend)
+  // Universal Network Requester for APIs
   const fetchData = async (vpsUrl, localPath) => {
     try {
       const primaryUrl = isLocal ? `http://localhost:3000${localPath}` : vpsUrl;
@@ -41,7 +41,6 @@ export default async function sitemap() {
 
       if (res.ok) {
         const parsed = await res.json();
-        // Structural standard handler (success wrapper vs direct clean database array mapping)
         return parsed?.success ? parsed.data : (parsed.data || parsed);
       }
     } catch (e) {
@@ -59,17 +58,60 @@ export default async function sitemap() {
     return null;
   };
 
+  // Sets to handle duplicate entries smoothly
+  const uniqueCategories = new Set();
   const uniqueSubcategories = new Set();
 
   // ========================================================
-  // 2. Exact Subcategory Unified Fetch Engine (Web, App, Marketing)
+  // 2. Main Categories Initialization (Fallback Guard Layer)
   // ========================================================
-  // FIXED: Hit targeted directly at '/api/subcategories' matching your code fetch architecture
+  const masterCategories = [
+    "digital-marketing",
+    "web-development",
+    "app-development"
+  ];
+
+  masterCategories.forEach((catSlug) => {
+    if (!uniqueCategories.has(catSlug)) {
+      uniqueCategories.add(catSlug);
+      dynamicRoutes.push({
+        url: `${BASE_URL}/${catSlug}`,
+        lastModified: new Date('2026-05-24'),
+        changeFrequency: 'weekly',
+        priority: 0.9,
+      });
+    }
+  });
+
+  // ========================================================
+  // 3. Subcategory & Parent Category Dynamic Fetch Engine
+  // ========================================================
   const subcategoryData = await fetchData('https://api.brandmarketinghub.com/subcategories', '/api/subcategories');
 
   if (subcategoryData && Array.isArray(subcategoryData)) {
     subcategoryData.forEach((subItem) => {
       if (subItem) {
+        
+        // --- A. Dynamic Parent Categories Process ---
+        let rawCategory = subItem.category;
+        if (typeof rawCategory === 'object' && rawCategory !== null) {
+          rawCategory = rawCategory.title || rawCategory.name || rawCategory.slug;
+        }
+        
+        if (rawCategory) {
+          const catSlug = slugify(String(rawCategory).trim());
+          if (catSlug && !uniqueCategories.has(catSlug)) {
+            uniqueCategories.add(catSlug);
+            dynamicRoutes.push({
+              url: `${BASE_URL}/${catSlug}`,
+              lastModified: new Date(subItem.updatedAt || subItem.createdAt || Date.now()),
+              changeFrequency: 'weekly',
+              priority: 0.9,
+            });
+          }
+        }
+
+        // --- B. Subcategories Process ---
         let subName = subItem.slug || subItem.title || subItem.name;
         const subSlug = slugify(String(subName).trim());
 
@@ -87,7 +129,7 @@ export default async function sitemap() {
   }
 
   // ========================================================
-  // 3. Dynamic Pages Engine (Child inner pages handler)
+  // 4. Dynamic Pages Engine (Child inner pages handler)
   // ========================================================
   const pagesData = await fetchData('https://api.brandmarketinghub.com/pages', '/api/page'); 
   
@@ -104,7 +146,6 @@ export default async function sitemap() {
         const pageSlug = slugify(String(pageItem.slug).trim());             
 
         if (subcategoryFolder) {
-          // Guard layer: Agar koi subcategory model api loop se reh gayi thi, toh uska link create ho jaye
           if (!uniqueSubcategories.has(subcategoryFolder)) {
             uniqueSubcategories.add(subcategoryFolder);
             dynamicRoutes.push({
@@ -115,7 +156,6 @@ export default async function sitemap() {
             });
           }
 
-          // Dynamic structural clean nested path injection (Format: domain/subcategory/page-slug)
           dynamicRoutes.push({
             url: `${BASE_URL}/${subcategoryFolder}/${pageSlug}`,
             lastModified: new Date(pageItem.updatedAt || pageItem.createdAt || Date.now()),
@@ -128,7 +168,7 @@ export default async function sitemap() {
   }
 
   // ========================================================
-  // 4. Portfolio Nested Engine
+  // 5. Portfolio Nested Engine
   // ========================================================
   const portfolioData = await fetchData('https://api.brandmarketinghub.com/portfolio', '/api/portfolio');
   
@@ -165,7 +205,7 @@ export default async function sitemap() {
   }
 
   // ========================================================
-  // 5. Blogs Dynamic Engine
+  // 6. Blogs Dynamic Engine
   // ========================================================
   const blogsData = await fetchData('https://api.brandmarketinghub.com/posts', '/api/blogs');
   if (blogsData && Array.isArray(blogsData)) {
@@ -179,7 +219,7 @@ export default async function sitemap() {
       }));
   }
 
-  // 6. Final Output Compilation
+  // 7. Final Output Compilation
   return [
     ...staticPages,
     ...dynamicRoutes,
