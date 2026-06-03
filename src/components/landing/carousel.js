@@ -8,16 +8,32 @@ import styles from "../../styles/carousel.module.css";
 
 const carouselItems = [
   {
-    name: "olive",
-    review: "Deuxième session réussie pour moi et mon collègue, toujours aussi bien organisé pour Budapest, la clinique parfaite, le personnel au petits soins, on ne pense pas qu'il y aurait autant de confort. Je recommande vivement l'expérience pour tous ceux qui hésitent encore.",
+    name: "Marcus Vance",
+    review: "Our Google Merchant Center feed was a mess with constant policy disapproval errors, and we were losing serious e-commerce revenue. The team at Brand Marketing Hub sorted out the technical data issues within two weeks. Our product visibility in the US market is now back on track. Extremely professional and direct communication.",
   },
   {
-    name: "Francis Hughes",
-    review: "I cannot recommend the team at HairPalace enough... they really went above and beyond, and made me feel exceptionally comfortable. Big thanks to the doctors and the coordinators for making this a smooth journey.",
+    name: "Sarah Jenkins ",
+    review: "We hired Brand Marketing Hub to handle our site migration and fix our drop in organic rankings. They didn't just give us generic advice; they delivered a solid technical audit and fixed our crawl budget issues. Our organic traffic is up by 40% over the last two quarters. Highly competent team.",
   },
   {
-    name: "Mainsail WebDesign",
-    review: "We just signed up for the service and so far so good. I like that they don't stop improving and there seem to be a lot of options. It will take time to figure it all out, but the support has been top-notch.",
+    name: "David K.",
+    review: "Finding a marketing partner that understands B2B search intent is rare. Most agencies just chase empty traffic numbers. Brand Marketing Hub built a content and search strategy that targets high-value buyers. The quality of inbound leads coming through our landing pages has completely shifted.",
+  },
+   {
+    name: "Elena Rostova",
+    review: " Working with Brand Marketing Hub has been a smooth experience. They took over our entire digital footprint, from search optimization to targeted ad spend. What I appreciate most is their transparent reporting—no vanity metrics or fluff, just clear data showing our monthly growth and ROI.",
+  },
+   {
+    name: "Robert Lawson",
+    review: "As a manufacturing business, we needed our website to establish industry authority. They helped us restructure our site architecture and clean up our technical SEO. The workflow is very structured, and they always deliver on deadlines without needing constant follow-ups.",
+  },
+   {
+    name: "Chloe Miller",
+    review: "Our old website was slow, outdated, and failing to convert mobile traffic. Brand Marketing Hub completely redesigned and rebuilt our platform from scratch. They didn't just build a pretty site; they focused heavily on clean code, fast loading speeds, and an intuitive user flow. The new platform handles our traffic spikes smoothly and has significantly improved our user engagement metrics.",
+  },
+   {
+    name: "Jonathan Cruz",
+    review: "Our field operations team needed a custom mobile tracking app that could sync with our central database in real time. Brand Marketing Hub built a highly stable cross-platform application that completely streamlined our workflow. The backend integration is flawless, and the application handles offline data storage without any glitches. Excellent technical execution.",
   },
 ];
 
