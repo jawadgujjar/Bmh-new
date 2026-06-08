@@ -45,7 +45,7 @@ const Carousel = () => {
   useEffect(() => {
     setIsClient(true);
   }, []);
-
+[]
   const showModal = (item) => {
     setSelectedReview(item);
     setIsModalOpen(true);
