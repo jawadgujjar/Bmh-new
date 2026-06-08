@@ -34,8 +34,8 @@ export const metadata = {
 
   // Note: Agar production live karni ho to index aur follow ko true kar dijiyega
   robots: {
-    index: false,
-    follow: false,
+    index: true,
+    follow: true,
   },
   icons: {
     icon: '/BMG_Favicon.png',
