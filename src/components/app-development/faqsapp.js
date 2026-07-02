@@ -11,48 +11,28 @@ import styles2 from '../../styles/app-development/appdevelopment.module.css';
 const Faqapp1 = () => {
   const [openIndex, setOpenIndex] = useState(null);
 
-  const faqs = [
+const faqs = [
     {
-      question: "What is custom application development?",
-      answer:
-        " Custom application development means creating software designed specifically to meet a business’s unique needs and workflows, rather than using generic off-the-shelf tools."
-    },
-    {
-      question: "Why do businesses in the USA invest in custom apps?",
-      answer:
-        " Businesses invest in custom applications because tailored solutions help improve operational efficiency and better match how teams and customers interact with technology."
+        question: "What is the difference between off-the-shelf software and custom application development?",
+        answer: "Off-the-shelf software is a generic, pre-built solution designed for the mass market, which often forces your team to adapt to its limitations. Custom app development, however, is built entirely around your specific workflows, business logic, and scaling needs—acting as a competitive asset rather than an ongoing operational headache."
     },
     {
-      question: "How large is the application development market in the USA?",
-      answer:
-        " The USA application market is substantial, with strong growth driven by consumer demand and enterprise adoption across sectors like finance, healthcare, and entertainment."
+        question: "Why should a US business choose cross-platform app development over native development?",
+        answer: "Cross-platform development allows you to build your application for iOS, Android, and web using a single, maintainable codebase. For US businesses, this means significantly reduced development costs, faster time-to-market, and simplified long-term maintenance, all without sacrificing native-like performance and user experience."
     },
     {
-      question: "What types of applications are most in demand?",
-      answer:
-        " In the USA, demand spans enterprise systems, mobile apps for iOS and Android, web-based solutions, and cross-platform applications that work across devices."
+        question: "Which industries does Brand Marketing Hub specialize in?",
+        answer: "While our engineering standards remain consistent, we have successfully delivered custom applications for a diverse range of industries across the USA, including professional services, healthcare providers, logistics companies, fintech startups, and e-commerce brands."
     },
     {
-      question: "Does custom development improve user engagement?",
-      answer:
-        " Yes. Studies show that custom apps tailored to business and user needs often deliver higher efficiency and better user satisfaction compared to generic solutions."
-    },
-     {
-      question: "Is the custom software market growing?",
-      answer:
-        "Yes. The custom software development market is expanding rapidly, with North America holding a major share and continued growth expected through the next decade."
-    },
-     {
-      question: "What role does scalability play in custom app development?",
-      answer:
-        " Scalability is critical because applications must support business growth and handle increasing users and data without performance issues."
+        question: "How do you handle post-launch support and application maintenance?",
+        answer: "We don't just build and disappear. Long-term accountability is built into our engagement model. After launch, our team provides continuous performance monitoring, bug resolution, security updates, and feature evolution to ensure your application scales smoothly alongside your business."
     },
     {
-      question: "How does cross-platform development benefit businesses?",
-      answer:
-        " Cross-platform development allows an app to run on multiple devices with a consistent user experience, reducing development time and cost compared to building separate native apps. "
+        question: "How do we get started, and what does your discovery process look like?",
+        answer: "Getting started is simple—just reach out through our contact form. Our process begins with a deep-dive Discovery phase where we analyze your business goals, map user journeys, and define technical requirements. This ensures we align on a clear architectural roadmap and budget before a single line of code is written."
     }
-  ];
+];
 
   const toggleAnswer = (index) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -63,15 +43,16 @@ const Faqapp1 = () => {
       <div className={styles2.point}>
         <div style={{ textAlign: "center", padding: "0%" }}>
           <h2>
-            <span className={styles.span}>Trusted by Businesses</span>  Looking for Real Solutions
+            <span className={styles.span}> </span>  Ready to Build an Application That Gives Your Business a Real Edge?
           </h2>
           <p>
-            As a top application development company, Brand Marketing Hub focuses on delivering solutions that work in real environments. Businesses trust us because we avoid unnecessary complexity and focus on what actually matters.
-            Our approach is transparent and practical. We communicate clearly, deliver what we promise, and build systems that businesses can rely on daily. This has helped us work with companies that need dependable applications without the risk of frequent issues or costly changes.
+            The right application, built the right way, becomes one of the most valuable assets your business owns. It runs your workflows, serves your customers, and scales with your growth — without the limitations of software that was never designed for your specific needs.
+            Brand Marketing Hub is the custom application development partner for US businesses that are serious about what they build. Get in touch today and let's talk about what your application needs to do — and how we build it to do exactly that.
+
 
           </p>
         </div>
-        <div className={styles2.imageContent1}>
+        {/* <div className={styles2.imageContent1}>
           <Image
             src={appImage2}
             alt="Mobile development workflow"
@@ -93,7 +74,7 @@ const Faqapp1 = () => {
 
           </p>
 
-        </div>
+        </div> */}
       </div>
 
 

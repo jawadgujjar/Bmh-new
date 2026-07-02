@@ -34,25 +34,15 @@ function Whydigital() {
           xl={10} // Slightly narrower on extra large screens
         >
           <div className={styles.para}>
-          <p className={styles.provenTextDigital}>
-            A Top Digital Marketing Agency USA Startups Can Rely On
-          </p>
-          {/* <p className={styles.allTextDigital}>Convey <span className={styles.specialText}>a unified brand message </span>and <span className={styles.specialText}>drive consistent leads</span> across locations with franchise digital marketing.</p> */}
-          <p className={styles.allTextDigital}>
-            Finding the right marketing partner is one of the most important
-            decisions a startup can make. Brand Marketing Hub is trusted by
-            founders and small business owners because we focus on outcomes, not
-            assumptions. As a top digital marketing agency USA businesses choose
-            for sustainable growth, we bring clarity to digital marketing by
-            aligning strategy with execution. We operate as a digital marketing
-            consultancy as much as a service provider. That means we guide
-            businesses on what channels matter, how budgets should be allocated,
-            and how success should be measured. Our strategies are built for the
-            US market, taking into account competition, customer expectations,
-            and industry benchmarks. Transparency, accountability, and long-term
-            thinking define how we work. Every campaign is designed to support
-            business growth, not just short-term visibility.
-          </p>
+            <p className={styles.provenTextDigital}>
+              Why Startups Across the USA Choose BMH Over Bigger Agencies
+            </p>
+            {/* <p className={styles.allTextDigital}>Convey <span className={styles.specialText}>a unified brand message </span>and <span className={styles.specialText}>drive consistent leads</span> across locations with franchise digital marketing.</p> */}
+            <p className={styles.allTextDigital}>
+              Big agencies take big retainers and assign you to a junior team. BMH gives every client a senior-level strategy from the first call. We are recognized as one of the top digital marketing company in USA because we treat startup budgets with the same seriousness as enterprise spend — just with faster decisions and zero bureaucracy.
+              Our team brings fractional CMO capabilities to brands that are not ready for a full-time hire. You get the strategic depth of a seasoned digital marketing consultancy combined with the execution speed of a hands-on specialized team.
+
+            </p>
           </div>
           {/* <p className={styles.allTextDigital}>Partner with Thrive today to get a holistic, full-service approach to all your digital marketing needs.
                     </p> */}
@@ -61,7 +51,7 @@ function Whydigital() {
       <div className={styles.callactionButton}>
         <Link href="/getaquote" passHref>
           <Button className={styles.proposalButton}>
-            UNLOCK YOUR FRANCHISE'S POTENTIAL
+              See What Sets BMH Apart  → 
           </Button>
         </Link>
       </div>

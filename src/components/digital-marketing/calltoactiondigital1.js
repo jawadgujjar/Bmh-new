@@ -46,8 +46,8 @@ function Calltoactiondigital1() {
       } else {
         // Improved error handling
         const errorMessage = data.error || "Something went wrong. Please try again.";
-        setError(errorMessage.includes("validation failed") 
-          ? "Please fill out all required fields correctly." 
+        setError(errorMessage.includes("validation failed")
+          ? "Please fill out all required fields correctly."
           : errorMessage);
       }
     } catch (err) {
@@ -74,14 +74,14 @@ function Calltoactiondigital1() {
         <div className={styles.initialStep}>
           <div className={styles.titleWrapper}>
             <div className={styles.circle}></div>
-            <h2 className={styles.ctaTitle}>Premium Digital Marketing Analysis</h2>
+            <h2 className={styles.ctaTitle}>Not Sure Where Your Marketing Is Leaking Revenue?</h2>
             <div className={styles.circle}></div>
           </div>
-          <p className={styles.ctaSubtitle}>Transform Your Online Presence With Expert Strategy</p>
+          <p className={styles.ctaSubtitle}>  Claim Your Free Premium Digital Audit  </p>
           <p className={styles.ctaDescription}>
-            Get a comprehensive SEO analysis and personalized consultation to elevate your digital marketing.
+            No commitment. No sales pitch on the first call. Just a clear, honest breakdown of your biggest growth opportunities and what it would take to close them.
           </p>
-          
+
           <button onClick={handleGetQuote} className={styles.quoteButton}>
             Get Instant Quote
             <span className={styles.arrowIcon}>→</span>
@@ -95,7 +95,7 @@ function Calltoactiondigital1() {
             <h3 className={styles.formTitle}>Request Your Custom Quote</h3>
             <p className={styles.formSubtitle}>Complete the form below and we'll prepare your personalized strategy</p>
           </div>
-          
+
           <form onSubmit={handleSubmit} className={styles.quoteForm}>
             <div className={styles.formRow}>
               <div className={styles.inputGroup}>
@@ -111,7 +111,7 @@ function Calltoactiondigital1() {
                   required
                 />
               </div>
-              
+
               <div className={styles.inputGroup}>
                 <label htmlFor="emailAddress" className={styles.inputLabel}>Email Address</label>
                 <input
@@ -126,7 +126,7 @@ function Calltoactiondigital1() {
                 />
               </div>
             </div>
-            
+
             <div className={styles.formRow}>
               <div className={styles.inputGroup}>
                 <label htmlFor="phoneNumber" className={styles.inputLabel}>Phone Number</label>
@@ -142,7 +142,7 @@ function Calltoactiondigital1() {
                 />
               </div>
             </div>
-            
+
             <div className={styles.inputGroup}>
               <label htmlFor="goalsAndRequirements" className={styles.inputLabel}>Your Goals & Requirements</label>
               <textarea
@@ -158,7 +158,7 @@ function Calltoactiondigital1() {
             </div>
 
             {error && <p className={styles.errorMessage}>{error}</p>}
-            
+
             <div className={styles.formActions}>
               <button type="button" onClick={handleReset} className={styles.backButton}>
                 Back
@@ -182,7 +182,7 @@ function Calltoactiondigital1() {
           </div>
           <h3 className={styles.successTitle}>Request Received!</h3>
           <p className={styles.successMessage}>
-            Thank you for your interest. Our digital marketing experts will analyze your requirements 
+            Thank you for your interest. Our digital marketing experts will analyze your requirements
             and contact you within 24 hours with a customized strategy.
           </p>
           <button onClick={handleReset} className={styles.newRequestButton}>
@@ -190,7 +190,7 @@ function Calltoactiondigital1() {
           </button>
         </div>
       )}
-      
+
       <div className={styles.animatedLine}></div>
     </div>
   );

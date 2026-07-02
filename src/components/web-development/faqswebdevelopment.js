@@ -8,27 +8,27 @@ const Faqwebdevelopment1 = () => {
     const [openIndex, setOpenIndex] = useState(null);
 
     const faqs = [
-        {
-            question: "How much does it cost to pay someone to build my website?",
-            answer: "The cost of building a website in the USA varies depending on complexity, design, and functionality. A simple small business website can cost around $1,500 – $5,000, while a custom or e-commerce website can range from $5,000 – $25,000 or more. Professional agencies, like Brand Marketing Hub, offer solutions tailored to your needs, ensuring quality, performance, and scalability."
-        },
-        {
-            question: "Can AI redesign an existing website?",
-            answer: "Yes, AI tools can help analyze website structure, suggest design improvements, and even generate layouts. However, AI cannot fully replace human expertise. A professional website redesign service combines AI recommendations with human creativity, technical knowledge, and user-experience optimization to deliver a website that is visually appealing, functional, and aligned with business goals."
-        },
-        {
-            question: "What are the key elements of a successful website?",
-            answer: "Key elements include User Experience (UX): Intuitive design and easy navigation. Responsive Design: Compatibility across devices and screen sizes. SEO Optimization: Effective use of keywords and meta tags. Performance: Fast loading times and reliable functionality. Security: Measures like HTTPS and data protection."
-        },
-        {
-            question: "How do I choose the right content management system (CMS) for my website?",
-            answer: "Choose a CMS based on your specific needs, such as: Ease of Use: For non-technical users, consider user-friendly options like WordPress or Squarespace. Functionality: Ensure the CMS supports the features you need, like e-commerce or blogging. Customization: Check for flexibility in design and plugins. Support and Community: Look for a CMS with good support and an active user community."
-        },
-        {
-            question: "How can I ensure my website is secure?",
-            answer: "Ensure website security by: Using HTTPS: Encrypt data transmitted between the server and users. Regular Updates: Keep software, plugins, and frameworks updated. Implementing Security Measures: Use firewalls, secure login protocols, and regular security audits. Backups: Regularly back up your website data to recover from potential breaches or data loss."
-        }
-    ];
+    {
+        question: "What is the difference between a template and a custom website?",
+        answer: "A template is pre-made, hard to customize, and often suffers from slow loading speeds due to bloated code. A custom website is built entirely from scratch to match your specific business goals, workflow, and unique brand identity. It grants you 100% code ownership, robust security, and super-fast loading times that a generic template simply cannot deliver."
+    },
+    {
+        question: "How long does it take to build a custom website?",
+        answer: "The project timeline depends entirely on the overall scope, features, and specific requirements of your business. A standard custom website build or a comprehensive design overhaul typically takes anywhere from 4 to 8 weeks to complete. For highly complex projects featuring custom back-end integrations or advanced applications, it may take 10 to 12+ weeks."
+    },
+    {
+        question: "Which CMS platform do you use for website development?",
+        answer: "We do not rely on a single tool; instead, we recommend the platform that best fits your actual content workflows and business needs. Our team specializes in developing custom solutions across modern platforms like WordPress, Webflow, Sanity, and Contentful. We configure your CMS to be incredibly user-friendly so your team can easily update content without needing a developer."
+    },
+    {
+        question: "Will our website be mobile-friendly and optimized for SEO?",
+        answer: "Yes, every single website we build is 100% mobile-responsive and engineered to perform flawlessly across all screen sizes. We optimize the underlying code to strictly align with Google’s Core Web Vitals and modern SEO benchmarks. This ensures your website ranks much higher on search engines and effectively turns organic traffic into paying customers."
+    },
+    {
+        question: "Do you provide ongoing maintenance and support after the launch?",
+        answer: "Yes, we provide continuous post-launch support to keep your digital asset secure, optimized, and fully operational. Our Website Management Services cover proactive security monitoring, performance optimization, and seamless content updates as your business grows. We also deliver clear, jargon-free monthly reports so you can easily track your site's performance."
+    }
+];
 
     const toggleAnswer = (index) => {
         setOpenIndex(openIndex === index ? null : index);

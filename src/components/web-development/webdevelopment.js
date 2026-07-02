@@ -12,22 +12,14 @@ const Webdevelopment1 = () => {
       <div className={styles.container}>
         <div className={styles.textContent}>
           <h2>
-            <span className={styles.span}>Professional Website </span>{" "}
-            Development Company in USA
+            <span className={styles.span}>Custom Website Development </span>{" "}
+            Company That Builds Websites With a Purpose
+
           </h2>
           <h3>
-            Brand Marketing Hub is a reliable and growth-focused custom website
-            development company serving businesses across the USA. We help
-            brands build strong digital foundations by creating websites that
-            are practical, visually balanced, and designed for real users. In
-            today’s competitive online space, a website must do more than look
-            good — it should communicate trust, support user intent, and
-            contribute directly to business goals. Our team understands how
-            users interact with websites in the US market. That is why we focus
-            on clarity, usability, and long-term performance rather than
-            shortcuts or temporary trends. Every website we develop is built
-            with purpose, backed by experience, and aligned with modern web
-            standards.
+            Your website is not a digital brochure. It is the most active salesperson your business has — working around the clock, making first impressions, qualifying leads, and converting visitors into customers. For US-based businesses competing in one of the most digital-savvy markets in the world, that distinction matters more than ever in 2026. A full stack development services team backs every project we take on, which means the websites we build are not just visually strong — they are architecturally sound, technically reliable, and built to perform under real American business conditions.
+            As a custom website development company, we do not sell templates dressed up as custom work. Every project starts with your business goals, your audience, and the outcomes you need. From there, we build — thoughtfully, precisely, and with a long-term view of what your digital presence needs to do for you.
+
           </h3>
         </div>
         <div className={styles.imageContent}>
@@ -76,24 +68,14 @@ const Webdevelopment1 = () => {
       <div className={styles.container}>
         <div className={styles.textContent}>
           <h2>
-            <span className={styles.span}>Custom Website Development </span>{" "}
-            Built Around Real Business Needs
+            <span className={styles.span}>  </span>{" "}
+            What Makes a Website Truly Custom — And Why It Matters
           </h2>
           <h3>
-            As a professional custom website development company, Brand
-            Marketing Hub creates solutions that are tailored, not templated. We
-            believe every business has a unique story, audience, and objective,
-            and your website should reflect that clearly. Our development
-            process starts with understanding your goals, industry, and users
-            before moving into design and technical execution. We provide custom
-            web development services usa that focus on scalability, performance,
-            and ease of use. Whether you are launching a new business or
-            expanding an existing one, our approach ensures your website can
-            grow with you without technical limitations. Being a trusted custom
-            web development agency, we pay close attention to structure,
-            navigation, and content flow so visitors can find what they need
-            without confusion. This improves engagement, builds credibility, and
-            supports better search visibility over time.
+            Most US businesses outgrow their website before they realize it. A template built for a general use case cannot reflect the specific way your business operates, the specific customers you serve, or the specific conversions you need to drive. In a market where American consumers make snap judgments about brand credibility based on website quality, that gap between what your website is and what your business needs it to be costs you leads, credibility, and revenue every single day.
+            Custom website development closes that gap. When your site is built around your actual workflows, your actual customer journey, and your actual brand identity, every element has a reason to exist. Front end web development services at Brand Marketing Hub focus on exactly this — creating interfaces that are not just attractive but intuitive, fast, and aligned with how your target audience thinks and behaves online.
+            A custom-built website also gives you ownership. You are not locked into a platform's limitations, a theme developer's update schedule, or a page builder's structural constraints. You own the code, the architecture, and the direction and that ownership compounds in value as your business grows.
+
           </h3>
         </div>
         <div className={styles.imageContent}>
@@ -110,21 +92,13 @@ const Webdevelopment1 = () => {
 
       <div style={{ textAlign: "center", padding: "3%" }}>
         <h2>
-          <span className={styles.span}>Web Development Consulting </span> Based
-          on Experience
+          <span className={styles.span}>The Web Development Consultant  </span> US Businesses Keep Coming Back To
         </h2>
         <p>
-          Choosing the right technical direction can be challenging without
-          expert guidance. That is why we offer web development consulting to
-          help businesses make informed decisions. As experienced website
-          development consultants, we provide clear advice based on real project
-          experience, not generic suggestions. Our web development consulting
-          services cover planning, platform selection, performance improvements,
-          and future scalability. Whether you need a second opinion or long-term
-          technical guidance, our consulting approach is transparent, practical,
-          and focused on your goals. Working with a professional website
-          development consultant helps reduce risks and ensures your website
-          effectively supports your business strategy.
+          Choosing a web development consultant is not just about finding someone who can write code. It's about finding a partner who understands your business well enough to make decisions that serve your goals — not just decisions that are technically correct.
+          That is exactly the standard Brand Marketing Hub holds itself to. Every engagement starts with discovery. We ask the questions that matter: Who are your customers? What do you need them to do on your website? What does success look like in six months? What has not worked before and why? That discovery process shapes everything that follows — the architecture, the design, the content structure, and the technical decisions that bring it all together.
+          Our clients are US-based businesses that take their digital presence seriously. They range from professional service firms and healthcare providers to e-commerce brands and SaaS startups — all of them with one thing in common: they have outgrown DIY solutions, they understand that good development is an investment, and they want a team that is accountable for results — not just deliverables.
+
         </p>
       </div>
 
@@ -141,16 +115,12 @@ const Webdevelopment1 = () => {
         </div>
         <div className={styles.pointsList}>
           <p className={styles.pointsTextx}>
-            Why Brand Marketing Hub Is the Right Choice!
+            Serving USA Businesses Nationwide — Coast to Coast
           </p>
           <p>
-            Brand Marketing Hub combines experience, expertise, and user-first
-            thinking. We do not believe in over-promising or under-delivering.
-            Our work reflects transparency, consistency, and a deep
-            understanding of what makes a website successful in the US market.
-            If you are looking for a custom website development company that
-            values quality, usability, and long-term growth, Brand Marketing Hub
-            is here to support your journey with confidence and clarity.
+            Whether you are a startup in Austin, a professional services firm in New York, or a growing e-commerce brand in Los Angeles, Brand Marketing Hub operates as a trusted website development company in USA with the capability to serve businesses nationwide. As a responsive website development company, our development standards are aligned with Google's 2026 Core Web Vitals benchmarks, ADA accessibility requirements, and the performance expectations of the US market.
+            We build websites that rank, convert, and hold up technically — because a beautiful website that nobody finds or that loads slowly on a 4G connection is not doing its job.
+
           </p>
           <div className={styles.ctaButtons}>
             <Link href="/getaquote" className={styles.ctaButton}>

@@ -19,8 +19,8 @@ function Heroapp1() {
             </div>
 
             <div className={styles.mainHerodigital}>
-                <h1 className={styles.heroFirstText}>Custom Application Development Services in USA That Fit Your Business</h1>
-                <p className={styles.growText}>App development services focused on building simple, reliable, and scalable applications that support your business operations and improve user experience without unnecessary complexity.</p>
+                <h1 className={styles.heroFirstText}>Custom Application Development — Brand Marketing Hub</h1>
+                <p className={styles.growText}>Brand Marketing Hub delivers custom application development for US businesses. From cross-platform apps to enterprise solutions — built for performance and real business growth.</p>
                 <div className={styles.formDigital}>
                     <Link href="/getaquote" passHref>
                         <Button className={styles.proposalButton}>Get My Free Proposal</Button>
