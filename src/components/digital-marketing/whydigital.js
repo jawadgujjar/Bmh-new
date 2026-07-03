@@ -44,17 +44,18 @@ function Whydigital() {
 
             </p>
           </div>
+          <div className={styles.callactionButton}>
+            <Link href="/getaquote" passHref>
+              <Button className={styles.proposalButton}>
+                See What Sets BMH Apart  →
+              </Button>
+            </Link>
+          </div>
           {/* <p className={styles.allTextDigital}>Partner with Thrive today to get a holistic, full-service approach to all your digital marketing needs.
                     </p> */}
         </Col>
       </Row>
-      <div className={styles.callactionButton}>
-        <Link href="/getaquote" passHref>
-          <Button className={styles.proposalButton}>
-              See What Sets BMH Apart  → 
-          </Button>
-        </Link>
-      </div>
+
     </div>
   );
 }

@@ -76,7 +76,7 @@ const Appdevelopment1 = () => {
       </div>
 
       <div className={styles.point}>
-        <div style={{ textAlign: "center", padding: "3%" }}>
+        <div style={{ textAlign: "left" }}>
           <h2>
             <span className={styles.span}> Custom Application Development </span>That Solves Real Business Problems
           </h2>

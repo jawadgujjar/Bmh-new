@@ -33,7 +33,7 @@ const digitalMarketingSEO = {
   }
 };
 
-// 🔥 1. Next.js Server-Side Metadata Engine (Auto-Canonical & Meta Fixed)
+// 1. Next.js Server-Side Metadata Engine (Auto-Canonical & Meta Fixed)
 export async function generateMetadata() {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://brandmarketinghub.com";
   
@@ -42,7 +42,7 @@ export async function generateMetadata() {
     description: digitalMarketingSEO.metaDescription,
     keywords: digitalMarketingSEO.metaKeywords.join(", "),
     
-    // ✅ Yeh line layout ka perfect main slug canonical tag me automatic inject karegi
+    //  Yeh line layout ka perfect main slug canonical tag me automatic inject karegi
     alternates: {
       canonical: `${siteUrl}/digital-marketing`,
     },
@@ -62,7 +62,6 @@ export default function DigitalmarketingPage() {
         />
       )}
       
-      {/* ⚠️ Purana <SEO /> client token element completely removed */}
       
       <HeroDigitalMarketing/>
       <Heroform/>
