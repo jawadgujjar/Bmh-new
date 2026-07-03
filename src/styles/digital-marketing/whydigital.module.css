@@ -28,7 +28,7 @@
 
 .callactionButton {
     display: flex;
-    justify-content: center;
+    justify-content: left;
     margin-top: 3rem;
     margin-bottom: 3rem;
 }

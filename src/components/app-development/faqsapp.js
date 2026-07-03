@@ -49,7 +49,6 @@ const faqs = [
             The right application, built the right way, becomes one of the most valuable assets your business owns. It runs your workflows, serves your customers, and scales with your growth — without the limitations of software that was never designed for your specific needs.
             Brand Marketing Hub is the custom application development partner for US businesses that are serious about what they build. Get in touch today and let's talk about what your application needs to do — and how we build it to do exactly that.
 
-
           </p>
         </div>
         {/* <div className={styles2.imageContent1}>
@@ -76,7 +75,6 @@ const faqs = [
 
         </div> */}
       </div>
-
 
       <section id="faq" className={styles.faqSection}>
         <div className={styles.faqContainer}>

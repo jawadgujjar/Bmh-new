@@ -90,7 +90,7 @@ const Webdevelopment1 = () => {
         </div>
       </div>
 
-      <div style={{ textAlign: "center", padding: "3%" }}>
+      <div style={{ textAlign: "left", padding: "3%" }}>
         <h2>
           <span className={styles.span}>The Web Development Consultant  </span> US Businesses Keep Coming Back To
         </h2>
