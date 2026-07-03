@@ -13,34 +13,43 @@ function FAQdigital() {
     setActiveIndex(activeIndex === index ? null : index);
   };
 
-  const faqData = [
-    {
-      question: "How much does a digital marketing agency charge in the USA?",
-      answer:
-        "In the USA, digital marketing agency pricing varies based on services, business size, and goals. On average, small businesses and startups can expect to pay between $1,500 to $5,000 per month for ongoing digital marketing services. More comprehensive strategies that include SEO, paid advertising, and social media management typically range from $5,000 to $15,000 per month. Enterprise-level or highly competitive campaigns can exceed this range. Many agencies also offer project-based pricing, which usually starts from $3,000 to $10,000 depending on scope.",
-    },
-    {
-      question: "Can a digital marketing agency be a startup?",
-      answer:
-        "Yes, a digital marketing agency can absolutely be a startup in the USA. In fact, many successful marketing agencies started as small teams or solo consultancies. Startups often choose newer agencies because they offer flexibility, focused attention, and performance-driven strategies. What matters most in the US market is not how old the agency is, but its experience, results, and understanding of customer behavior. A startup digital marketing agency with proven expertise and clear strategy can compete effectively with established firms.",
-    },
-    {
-      question: "What is the 70 20 10 rule in digital marketing?",
-      answer:
-        "The 70 20 10 rule in digital marketing is a strategic framework used by many US-based marketers to balance risk and innovation. It suggests allocating 70% of the marketing budget to proven strategies that consistently deliver results, 20% to new or growing channels that show potential, and 10% to experimental tactics that test innovative ideas. This approach helps businesses in the USA maintain stable performance while continuously exploring new growth opportunities without risking the entire budget.",
-    },
-    {
-      question: "What are the Big 4 agencies in marketing?",
-      answer:
-        "In the USA, the term “Big 4” in marketing typically refers to the largest global advertising and marketing holding companies. These are WPP, Omnicom Group, Publicis Groupe, and Interpublic Group (IPG). These companies manage multiple well-known agencies and serve global brands with large-scale budgets. While they dominate enterprise-level marketing, they are usually not the best fit for startups or small businesses due to high costs and complex structures.",
-    },
-    {
-      question:
-        "What is the average marketing cost for a small business in the USA?",
-      answer:
-        "The average small business in the USA spends around 7% to 10% of its annual revenue on marketing. For many small businesses, this translates to $2,000 to $10,000 per month, depending on growth goals and competition. Startups and early-stage businesses often begin with smaller budgets and scale as they see results. The key in the US market is spending strategically on channels that deliver measurable return rather than spreading budgets too thin.",
-    },
-  ];
+const faqData = [
+  {
+    question: "What does a digital marketing agency for startups actually do?",
+    answer:
+      "A digital marketing agency for startups builds and executes growth strategies designed for limited budgets and fast timelines. From high-intent SEO to hyper-targeted PPC campaigns, we handle the full acquisition funnel so your team can stay focused on the product.",
+  },
+  {
+    question: "Is BMH a good marketing agency for small business owners?",
+    answer:
+      "Yes. BMH was built specifically for startups and small businesses that need real ROI without enterprise-level overhead. We offer flexible retainer options and transparent reporting metrics so you always know exactly where your budget is going.",
+  },
+  {
+    question: "How long before I see results from digital marketing?",
+    answer:
+      "PPC and paid campaigns can generate leads within the first week. SEO typically shows measurable traction in 60 to 90 days. We set clear milestones from day one so you are never left guessing about progress.",
+  },
+  {
+    question: "What makes BMH different from other top digital marketing agency USA?",
+    answer:
+      "We focus on measurable business outcomes, not vanity metrics. Every strategy is built around your CAC targets, your market stage, and your growth timeline. We act as a dedicated marketing team, not just an outsourced vendor.",
+  },
+  {
+    question: "Do you offer custom digital marketing solutions for niche industries?",
+    answer:
+      "Yes. We build custom strategies based on your industry, competition, and growth goals. Whether you are in SaaS, e-commerce, professional services, or local markets, we put together a multi-channel plan that fits your specific situation.",
+  },
+  {
+    question: "Can I get a free audit before committing to a plan?",
+    answer:
+      "Yes. We offer a complimentary digital marketing audit with zero obligation. Submit the proposal form on this page and our team will respond within 24 hours with a full breakdown of your growth opportunities.",
+  },
+  {
+    question: "What is your process after I submit the proposal form?",
+    answer:
+      "Our three-step process starts with a deep audit and strategy session. From there, we move into agile execution across your chosen channels. Finally, we scale what is working and report every result in clear, easy-to-read dashboards.",
+  },
+];
 
   return (
     <div>
@@ -71,32 +80,36 @@ function FAQdigital() {
             lg={10} // Slightly narrower on large screens
             xl={10} // Slightly narrower on extra large screens
           >
-            <div className={styles.para} style={{ marginTop: "2rem" }}>
-              <p className={styless.provenTextDigital}>
-                Supporting Startups and Small Businesses Across the USA
+            {/* <div style={{ display: "flex", alignItems: "flex-start", gap: "30px", marginTop: "0", marginBottom: "0" }}> */}
+
+
+
+            {/* Text Section */}
+            <div style={{ flex: "1" }}>
+              <h3 style={{ marginTop: "0", marginBottom: "15px", fontSize: "24px" }}>Supporting Startups at Every Stage of the Growth Curve</h3>
+
+              <p style={{ fontSize: "16px", lineHeight: "1.5", marginBottom: "20px" }}>
+                From pre-revenue proof of concept to scaling past market validation, BMH has helped startups at every stage figure out their go-to-market strategy. We understand bootstrapped budgets. We understand the urgency that comes with seed funding. And we know how to build momentum without wasting your runway. BMH is also the go-to digital marketing agency for small business owners who want a real strategy partner, not just a vendor running ads in the background.
               </p>
-              {/* <p className={styles.allTextDigital}>Convey <span className={styles.specialText}>a unified brand message </span>and <span className={styles.specialText}>drive consistent leads</span> across locations with franchise digital marketing.</p> */}
-              <p className={styless.allTextDigital}>
-                Brand Marketing Hub proudly works with startups and small
-                businesses across the USA. Whether you are launching a new
-                venture or scaling an existing business, our digital marketing
-                solutions are designed to support your growth journey. We
-                understand the pressure to move fast while building something
-                that lasts. As a digital marketing agency for small business
-                success, we focus on creating systems that deliver consistent
-                results over time. Our strategies are built to grow with you,
-                adapting to changes in market demand and business goals.
-              </p>
+
+              <h4 style={{ marginBottom: "10px" }}>How It Works</h4>
+              <ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>
+                <li style={{ marginBottom: "15px", fontSize: "15px", lineHeight: "1.5" }}>
+                  <strong>1. Audit and Strategy</strong> — We analyze your current digital presence, your competitors, and your market position. From there, we build custom digital marketing solutions aligned to your goals and timeline.
+                </li>
+                <li style={{ marginBottom: "15px", fontSize: "15px", lineHeight: "1.5" }}>
+                  <strong>2. Execute and Optimize</strong> — Campaigns go live. Our team monitors, tests, and improves every element in real time. No set-and-forget. Just continuous, agile optimization across every active channel.
+                </li>
+                <li style={{ marginBottom: "15px", fontSize: "15px", lineHeight: "1.5" }}>
+                  <strong>3. Scale and Report</strong> — We double down on what works and report every metric in plain language. Growth becomes repeatable, and you always know exactly what is driving it.
+                </li>
+              </ul>
             </div>
-            {/* <p className={styles.allTextDigital}>Partner with Thrive today to get a holistic, full-service approach to all your digital marketing needs.
-                    </p> */}
+            {/* </div> */}
+
           </Col>
         </Row>
-        {/* <div className={styless.callactionButton}>
-                <Link href="/getaquote" passHref>
-                    <Button className={styless.proposalButton}>UNLOCK YOUR FRANCHISE'S POTENTIAL</Button>
-                </Link>
-            </div> */}
+
       </div>
       <div className={styless.aboutdigitalMain}>
         <Row justify="center" gutter={[24, 24]}>
@@ -109,18 +122,14 @@ function FAQdigital() {
           >
             <div className={styles.para} style={{ marginTop: "2rem" }}>
               <p className={styless.provenTextDigital}>
-                Grow with Brand Marketing Hub
+                The Right Digital Marketing Agency for Startups Ready to Grow
               </p>
               {/* <p className={styles.allTextDigital}>Convey <span className={styles.specialText}>a unified brand message </span>and <span className={styles.specialText}>drive consistent leads</span> across locations with franchise digital marketing.</p> */}
               <p className={styless.allTextDigital}>
-                If you are looking for a digital marketing agency for startups
-                that understands the US market and delivers measurable outcomes,
-                Brand Marketing Hub is ready to help. From strategic guidance to
-                hands-on execution, we provide the expertise and support needed
-                to grow confidently in a competitive digital landscape. Work
-                with Brand Marketing Hub and partner with a top digital
-                marketing agency USA startups and small businesses trust for
-                clarity, performance, and sustainable growth.
+                Growth does not happen by accident. It happens when the right strategy meets consistent execution. BMH brings both. We are not here to run your ads and send you a report — we are here to help you build a brand that wins in its market.
+                If you are a startup or small business that needs a real marketing partner — one that understands your constraints, speaks in outcomes, and moves fast — this is where to start.
+                Our social media optimization services are already helping brands like yours build real audiences that convert. The next step is yours.
+
               </p>
             </div>
             {/* <p className={styles.allTextDigital}>Partner with Thrive today to get a holistic, full-service approach to all your digital marketing needs.

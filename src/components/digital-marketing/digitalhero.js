@@ -18,11 +18,13 @@ function HeroDigitalMarketing() {
                 />
             </div>
             <div className={styles.mainHerodigital}>
-                <h1 className={styles.heroFirstText}>Digital Marketing Services</h1>
-                <p className={styles.growText}>Expand your client base with targeted, data-driven strategies that boost visibility, build lasting trust, and deliver measurable results for your business.</p>
+                <h1 className={styles.heroFirstText}>The Digital Marketing Agency for Startups That Actually Moves the Needle</h1>
+                <p className={styles.growText}>Real growth strategies for early-stage companies ready to scale past their first bottleneck.
+ BMH is a digital marketing agency for startups built differently — every decision is tied to a measurable business outcome, not a monthly report full of charts.
+</p>
                 <div className={styles.formDigital}>
                     <Link href="/getaquote" passHref>
-                        <Button className={styles.proposalButton}>Get My Free Proposal</Button>
+                        <Button className={styles.proposalButton}>  Get Your Free Growth Audit </Button>
                     </Link>
                 </div>
             </div>

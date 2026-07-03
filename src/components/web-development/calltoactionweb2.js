@@ -24,7 +24,7 @@ function Calltoactionweb2() {
 
   return (
     <div>
-      <section className={styless.section}>
+      {/* <section className={styless.section}>
         <div className={styless.container} style={{ marginTop: "2rem" }}>
           <div className={styless.textContent}>
             <h2>
@@ -47,9 +47,9 @@ function Calltoactionweb2() {
             />
           </div>
         </div>
-      </section>
+      </section> */}
 
-      <div style={{ textAlign: "center", padding: "3%" }}>
+      {/* <div style={{ textAlign: "center", padding: "3%" }}>
         <h2>
           <span className={styless.span}>Responsive Website Development </span>{" "}
           for Modern Users
@@ -57,7 +57,7 @@ function Calltoactionweb2() {
         <p>
           Today, users access websites from multiple devices, and consistency matters. As a responsive website development company, we ensure your website performs smoothly on mobile phones, tablets, and desktops. Our designs adapt naturally to different screen sizes while maintaining usability and visual balance. Brand Marketing Hub is also recognised as a responsive web design company that prioritizes accessibility, loading speed, and clean layouts. These elements not only improve user satisfaction but also align with search engine expectations for quality websites in the USA market. Responsive design is not just a feature — it is a requirement for businesses that want to stay competitive and relevant online.
         </p>
-      </div>
+      </div> */}
 
       <div className={styles.ctaContainer}>
         <div className={styles.ctaContent}>

@@ -28,13 +28,12 @@ export default function Digitalservices1({ category }) {
     <section className={styles.container}>
       {/* Aapka Content - Title */}
       <h2 className={styles.text1}>
-        Custom Digital Marketing Solutions for Startups and Small Businesses
+        A Full-Service Digital Suite for Every Growth Stage
       </h2>
 
       {/* Aapka Content - Full Paragraph */}
       <p className={styles.text2}>
-        Startups and small businesses require flexibility and precision. Brand Marketing Hub delivers custom digital marketing solutions that adapt as your business grows. We do not push pre-built packages or unnecessary services. Instead, we analyze your market position, growth stage, and objectives before designing a strategy that fits. 
-        As an affordable digital marketing agency, we help startups compete intelligently without overspending. Our focus is on building strong digital foundations that support scalability, whether through organic growth, paid acquisition, or brand positioning. This makes us a reliable marketing agency for small business owners who want clarity and control over their marketing investment.
+        From visibility to conversion, BMH covers the entire acquisition funnel under one roof. Here is what we deliver for startups and growing businesses:
       </p>
 
       <div className={styles.cardsContainer}>

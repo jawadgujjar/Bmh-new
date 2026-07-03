@@ -32,7 +32,6 @@ export const metadata = {
     canonical: '/', 
   },
 
-  // Note: Agar production live karni ho to index aur follow ko true kar dijiyega
   robots: {
     index: true,
     follow: true,

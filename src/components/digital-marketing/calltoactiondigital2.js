@@ -30,17 +30,16 @@ function Calltoactiondigital2() {
           <div className={styles.titleWrapper}>
             <span className={styles.circle}></span>
             <h2 className={styles.ctaTitle}>
-              Ready To Transform Your Digital Presence?
+              Ready to Stop Guessing and Start Growing?
             </h2>
             <span className={styles.circle}></span>
           </div>
 
           <h3 className={styles.ctaSubtitle}>
-            Let's Create Something Extraordinary Together
+            Your Brand Deserves to Be #1 on Google
           </h3>
           <p className={styles.ctaDescription}>
-            Our team of digital experts is ready to elevate your brand with
-            tailored strategies that deliver exceptional results.
+            We build digital strategies that turn clicks into customers — guaranteed ROI or we work for free.
           </p>
 
           <div className={styles.ctaActions}>
@@ -111,11 +110,31 @@ function Calltoactiondigital2() {
           <Col xs={18} sm={18} md={12} lg={10} xl={10}>
             <div className={styles.para}>
               <p className={styless.provenTextDigital}>
-                Why Brand Marketing Hub Is the Right Partner
+                What Makes BMH a Different Kind of Marketing Partner
               </p>
-              <p className={styless.allTextDigital}>
-                Brand Marketing Hub stands out as a digital marketing agency for startups because we understand early-stage challenges. We know that resources are limited, competition is high, and every decision matters. Our role is to simplify digital marketing while delivering results that support long-term success. We bring experience working with startups and small businesses across different industries in the USA. This allows us to identify opportunities quickly and avoid strategies that waste time or budget. As a top digital marketing company in USA for growing businesses, we focus on execution that is practical, measurable, and aligned with real business needs. Trust is built through consistency and results. That is why we emphasize clear communication, realistic expectations, and performance tracking in everything we do.
-              </p>
+              <div className={styless.allTextDigital}>
+                <p>Most agencies sell you a package. BMH builds you a strategy. Here is what that actually looks like:</p>
+
+                <div>
+                  <h4>We Work as an Extension of Your Team</h4>
+                  <p>You get a dedicated marketing team that knows your product, your market, and your goals. No account manager relay. No communication delays. Direct access to the people doing the work.</p>
+                </div>
+
+                <div>
+                  <h4>Transparent Reporting You Can Actually Use</h4>
+                  <p>Every week, you see exactly what is working and what is being adjusted. Our transparent reporting metrics are built for founders and business owners, not marketing analysts. Plain numbers, clear context, honest conclusions.</p>
+                </div>
+
+                <div>
+                  <h4>Strategy That Matches Your Stage</h4>
+                  <p>Seed-stage startups need different tactics than Series B companies. We design ROI-driven growth plans that match your current runway, your proof-of-concept stage, and your next growth milestone.</p>
+                </div>
+
+                <div>
+                  <h4>No Long-Term Lock-ins</h4>
+                  <p>We offer flexible retainer options because we believe in earning your business every month. Our clients stay because the results justify it, not because a contract forces it.</p>
+                </div>
+              </div>
             </div>
           </Col>
         </Row>
@@ -126,11 +145,42 @@ function Calltoactiondigital2() {
           <Col xs={18} sm={18} md={12} lg={10} xl={10}>
             <div className={styles.para}>
               <p className={styless.provenTextDigital}>
-                Performance-Driven Marketing Built for the US Market
+                Performance-Driven Marketing With Numbers to Back It Up
               </p>
-              <p className={styless.allTextDigital}>
-                Brand Marketing Hub operates with a performance-first mindset. As a performance based marketing agency, we measure success through meaningful metrics such as qualified leads, conversions, and growth trends. Every strategy is reviewed and optimized based on data and user behavior. This approach allows startups and small businesses to scale confidently. Instead of guessing what works, you gain insight into what drives results and where to invest next. In a competitive US market, this clarity is essential for sustainable growth.
-              </p>
+             <div style={{ padding: "20px", fontFamily: "sans-serif", maxWidth: "1000px", margin: "0 auto" }}>
+  
+  <p style={{ textAlign: "left", marginBottom: "30px", fontSize: "18px", lineHeight: "1.6" }}>
+    We are a performance based marketing agency in every sense. That means campaigns are built around conversion goals and revenue targets, not impressions or follower counts. Every dollar you invest is tracked against a real business outcome.
+  </p>
+
+  {/* Stats Grid */}
+  <div style={{ display: "flex", border: "1px solid #1a365d" }}>
+    {[
+      { val: "50+", label: "Startups Scaled" },
+      { val: "3x", label: "Average ROI in 90 Days" },
+      { val: "40%", label: "Avg. CAC Reduction" },
+      { val: "24hr", label: "Response Guarantee" }
+    ].map((item, index) => (
+      <div 
+        key={index} 
+        style={{ 
+          flex: 1, 
+          backgroundColor: "#1a365d", // Dark Blue (Jaisa image mein tha)
+          padding: "30px 20px", 
+          textAlign: "center", 
+          borderRight: index !== 3 ? "1px solid #ffffff" : "none" 
+        }}
+      >
+        <h3 style={{ color: "#f67727", margin: "0", fontSize: "40px", fontWeight: "bold" }}>{item.val}</h3>
+        <p style={{ color: "#ffffff", margin: "10px 0 0 0", fontSize: "16px" }}>{item.label}</p>
+      </div>
+    ))}
+  </div>
+
+  <p style={{ marginTop: "30px", fontSize: "18px", lineHeight: "1.6" }}>
+    Our best <a href="#" style={{ color: "#1a365d", fontWeight: "bold", textDecoration: "none" }}>search engine marketing company</a> which provides services is a core part of how we drive fast, measurable results for startups across competitive markets.
+  </p>
+</div>
             </div>
           </Col>
           <Col xs={22} sm={22} md={10} lg={10} xl={10}>

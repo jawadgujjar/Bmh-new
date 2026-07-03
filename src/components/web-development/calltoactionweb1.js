@@ -241,37 +241,19 @@ function Calltoactionweb1() {
         <div className={styless.point}>
           <div className={styless.pointsList}>
             <p className={styless.pointsTextx}>
-              Website Management Services for Long-Term Stability{" "}
+              Our Process — Straightforward, Transparent, and Built Around You
             </p>
-            <p>
-              A successful website requires ongoing care. We provide website
-              management services to keep your site secure, up to date, and
-              running smoothly. Regular maintenance helps prevent issues before
-              they affect users or performance. Our management support includes:
-            </p>
-            <ul className={styless.featuresList}>
-              <li className={styless.featureItem}>
-                <span className={styless.featureTitle}>
-                  Regular updates and performance checks
-                </span>{" "}
-              </li>
-              <li className={styless.featureItem}>
-                <span className={styless.featureTitle}>
-                  Responsive Design:
-                </span>{" "}
-              </li>
-              <li className={styless.featureItem}>
-                <span className={styless.featureTitle}>
-                  Security monitoring and issue resolution
-                </span>{" "}
-              </li>
-              <li className={styless.featureItem}>
-                <span className={styless.featureTitle}>
-                  Ongoing technical support from a dedicated web development
-                  consultant
-                </span>{" "}
-              </li>
+            <p>Every project at Brand Marketing Hub follows a clear process designed for US businesses that need predictable timelines, transparent communication, and zero surprises. Here is how we work:</p>
+
+            <ul>
+              <li><strong>Discovery</strong> — We learn your business, your goals, and your current digital situation in detail before a single line of code is written.</li>
+              <li><strong>Strategy & Architecture</strong> — We map the site structure, define the conversion paths, and make the technical decisions that will shape the entire build.</li>
+              <li><strong>Design</strong> — Visual design that reflects your brand identity and is built with your target user's experience at the center of every decision.</li>
+              <li><strong>Development</strong> — Clean, well-documented code built to your approved design. Front end, back end, and CMS layers all built and tested in parallel.</li>
+              <li><strong>Launch & Handover</strong> — We handle deployment, run pre-launch QA, and provide full handover documentation so your team knows exactly how to manage the site going forward.</li>
+              <li><strong>Ongoing Support</strong> — We stay available after launch because real websites need real ongoing attention.</li>
             </ul>
+
           </div>
           <div className={styless.imageContent1}>
             <Image
