@@ -76,8 +76,15 @@ function Calltoactionapp2() {
           </h2>
           <p>
             Clients choose Brand Marketing Hub because they want the standards of a top application development company without the overhead of a large agency that treats their project as one of hundreds. Every application we build is treated as the business-critical investment it actually is — with dedicated project management, transparent timelines, and a direct line to the people doing the work.
-            We have built applications for professional services firms, healthcare providers, logistics companies, fintech startups, and e-commerce brands across the USA. The industries are different but the standard is consistent — applications that work reliably, scale cleanly, and deliver measurable value to the business from day one. Custom website development company engagements often run in parallel with application builds, giving clients a unified digital presence that works together across web and app platforms.
-
+            <br /><br />
+            We have built applications for professional services firms, healthcare providers, logistics companies, fintech startups, and e-commerce brands across the USA. The industries are different but the standard is consistent — applications that work reliably, scale cleanly, and deliver measurable value to the business from day one. {' '}
+            <a
+              href="https://brandmarketinghub.com/web-development"
+              style={{ color: '#FF8400', textDecoration: 'none' }}
+            >
+              Custom website development company
+            </a>{' '}
+            engagements often run in parallel with application builds, giving clients a unified digital presence that works together across web and app platforms.
           </p>
         </div>
 
@@ -97,28 +104,28 @@ function Calltoactionapp2() {
           <div className={styles1.featuresList}>
             <p>A cross platform app development company is only as good as the applications it has shipped and the clients who would recommend it. Our track record in the USA market is built on delivered projects, maintained relationships, and applications that continue to perform long after launch day.</p>
 
-           <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'sans-serif', margin: '20px 0', border: '1px solid #e0e0e0' }}>
-  <thead>
-    <tr style={{ backgroundColor: '#f4f4f4' }}>
-      <th style={{ padding: '16px', border: '1px solid #e0e0e0', textAlign: 'left', fontWeight: '700', color: '#333' }}>What We Deliver</th>
-      <th style={{ padding: '16px', border: '1px solid #e0e0e0', textAlign: 'left', fontWeight: '700', color: '#333' }}>How It Benefits Your Business</th>
-    </tr>
-  </thead>
-  <tbody>
-    {[
-      { title: 'Single Codebase, Every Platform', desc: 'Reduces development cost and maintenance overhead without compromising performance on iOS, Android, or web.' },
-      { title: 'Faster Time to Market', desc: 'Cross platform builds ship faster than native-per-platform builds — getting your application in front of users sooner.' },
-      { title: 'Consistent User Experience', desc: 'Your app looks, feels, and performs the same across every device your customers use.' },
-      { title: 'Post-Launch Support', desc: 'We stay involved after launch — monitoring performance, resolving issues, and evolving the application as your business grows.' },
-      { title: 'Long-Term Accountability', desc: 'For US businesses making a significant development investment, ongoing accountability is not a nice-to-have — it is a requirement we build into every engagement.' }
-    ].map((item, index) => (
-      <tr key={index} style={{ borderBottom: '1px solid #e0e0e0' }}>
-        <td style={{ padding: '16px', border: '1px solid #e0e0e0', fontWeight: '600', color: '#1a1a1a' }}>{item.title}</td>
-        <td style={{ padding: '16px', border: '1px solid #e0e0e0', color: '#555', lineHeight: '1.6' }}>{item.desc}</td>
-      </tr>
-    ))}
-  </tbody>
-</table>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'sans-serif', margin: '20px 0', border: '1px solid #e0e0e0' }}>
+              <thead>
+                <tr style={{ backgroundColor: '#f4f4f4' }}>
+                  <th style={{ padding: '16px', border: '1px solid #e0e0e0', textAlign: 'left', fontWeight: '700', color: '#333' }}>What We Deliver</th>
+                  <th style={{ padding: '16px', border: '1px solid #e0e0e0', textAlign: 'left', fontWeight: '700', color: '#333' }}>How It Benefits Your Business</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { title: 'Single Codebase, Every Platform', desc: 'Reduces development cost and maintenance overhead without compromising performance on iOS, Android, or web.' },
+                  { title: 'Faster Time to Market', desc: 'Cross platform builds ship faster than native-per-platform builds — getting your application in front of users sooner.' },
+                  { title: 'Consistent User Experience', desc: 'Your app looks, feels, and performs the same across every device your customers use.' },
+                  { title: 'Post-Launch Support', desc: 'We stay involved after launch — monitoring performance, resolving issues, and evolving the application as your business grows.' },
+                  { title: 'Long-Term Accountability', desc: 'For US businesses making a significant development investment, ongoing accountability is not a nice-to-have — it is a requirement we build into every engagement.' }
+                ].map((item, index) => (
+                  <tr key={index} style={{ borderBottom: '1px solid #e0e0e0' }}>
+                    <td style={{ padding: '16px', border: '1px solid #e0e0e0', fontWeight: '600', color: '#1a1a1a' }}>{item.title}</td>
+                    <td style={{ padding: '16px', border: '1px solid #e0e0e0', color: '#555', lineHeight: '1.6' }}>{item.desc}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
 
           <div className={styles1.ctaButtons}>
