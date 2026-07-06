@@ -13,43 +13,43 @@ function FAQdigital() {
     setActiveIndex(activeIndex === index ? null : index);
   };
 
-const faqData = [
-  {
-    question: "What does a digital marketing agency for startups actually do?",
-    answer:
-      "A digital marketing agency for startups builds and executes growth strategies designed for limited budgets and fast timelines. From high-intent SEO to hyper-targeted PPC campaigns, we handle the full acquisition funnel so your team can stay focused on the product.",
-  },
-  {
-    question: "Is BMH a good marketing agency for small business owners?",
-    answer:
-      "Yes. BMH was built specifically for startups and small businesses that need real ROI without enterprise-level overhead. We offer flexible retainer options and transparent reporting metrics so you always know exactly where your budget is going.",
-  },
-  {
-    question: "How long before I see results from digital marketing?",
-    answer:
-      "PPC and paid campaigns can generate leads within the first week. SEO typically shows measurable traction in 60 to 90 days. We set clear milestones from day one so you are never left guessing about progress.",
-  },
-  {
-    question: "What makes BMH different from other top digital marketing agency USA?",
-    answer:
-      "We focus on measurable business outcomes, not vanity metrics. Every strategy is built around your CAC targets, your market stage, and your growth timeline. We act as a dedicated marketing team, not just an outsourced vendor.",
-  },
-  {
-    question: "Do you offer custom digital marketing solutions for niche industries?",
-    answer:
-      "Yes. We build custom strategies based on your industry, competition, and growth goals. Whether you are in SaaS, e-commerce, professional services, or local markets, we put together a multi-channel plan that fits your specific situation.",
-  },
-  {
-    question: "Can I get a free audit before committing to a plan?",
-    answer:
-      "Yes. We offer a complimentary digital marketing audit with zero obligation. Submit the proposal form on this page and our team will respond within 24 hours with a full breakdown of your growth opportunities.",
-  },
-  {
-    question: "What is your process after I submit the proposal form?",
-    answer:
-      "Our three-step process starts with a deep audit and strategy session. From there, we move into agile execution across your chosen channels. Finally, we scale what is working and report every result in clear, easy-to-read dashboards.",
-  },
-];
+  const faqData = [
+    {
+      question: "What does a digital marketing agency for startups actually do?",
+      answer:
+        "A digital marketing agency for startups builds and executes growth strategies designed for limited budgets and fast timelines. From high-intent SEO to hyper-targeted PPC campaigns, we handle the full acquisition funnel so your team can stay focused on the product.",
+    },
+    {
+      question: "Is BMH a good marketing agency for small business owners?",
+      answer:
+        "Yes. BMH was built specifically for startups and small businesses that need real ROI without enterprise-level overhead. We offer flexible retainer options and transparent reporting metrics so you always know exactly where your budget is going.",
+    },
+    {
+      question: "How long before I see results from digital marketing?",
+      answer:
+        "PPC and paid campaigns can generate leads within the first week. SEO typically shows measurable traction in 60 to 90 days. We set clear milestones from day one so you are never left guessing about progress.",
+    },
+    {
+      question: "What makes BMH different from other top digital marketing agency USA?",
+      answer:
+        "We focus on measurable business outcomes, not vanity metrics. Every strategy is built around your CAC targets, your market stage, and your growth timeline. We act as a dedicated marketing team, not just an outsourced vendor.",
+    },
+    {
+      question: "Do you offer custom digital marketing solutions for niche industries?",
+      answer:
+        "Yes. We build custom strategies based on your industry, competition, and growth goals. Whether you are in SaaS, e-commerce, professional services, or local markets, we put together a multi-channel plan that fits your specific situation.",
+    },
+    {
+      question: "Can I get a free audit before committing to a plan?",
+      answer:
+        "Yes. We offer a complimentary digital marketing audit with zero obligation. Submit the proposal form on this page and our team will respond within 24 hours with a full breakdown of your growth opportunities.",
+    },
+    {
+      question: "What is your process after I submit the proposal form?",
+      answer:
+        "Our three-step process starts with a deep audit and strategy session. From there, we move into agile execution across your chosen channels. Finally, we scale what is working and report every result in clear, easy-to-read dashboards.",
+    },
+  ];
 
   return (
     <div>
@@ -127,9 +127,10 @@ const faqData = [
               {/* <p className={styles.allTextDigital}>Convey <span className={styles.specialText}>a unified brand message </span>and <span className={styles.specialText}>drive consistent leads</span> across locations with franchise digital marketing.</p> */}
               <p className={styless.allTextDigital}>
                 Growth does not happen by accident. It happens when the right strategy meets consistent execution. BMH brings both. We are not here to run your ads and send you a report — we are here to help you build a brand that wins in its market.
+                <br /><br />
                 If you are a startup or small business that needs a real marketing partner — one that understands your constraints, speaks in outcomes, and moves fast — this is where to start.
-                Our social media optimization services are already helping brands like yours build real audiences that convert. The next step is yours.
-
+                <br /><br />
+                Our <a href="https://brandmarketinghub.com/smm-services" style={{ color: '#FF8400', textDecoration: 'none' }}>social media optimization services</a> are already helping brands like yours build real audiences that convert. The next step is yours.
               </p>
             </div>
             {/* <p className={styles.allTextDigital}>Partner with Thrive today to get a holistic, full-service approach to all your digital marketing needs.

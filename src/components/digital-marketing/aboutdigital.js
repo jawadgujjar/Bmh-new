@@ -34,7 +34,14 @@ function Aboutdigital() {
               </ul>
 
               <p>
-                Want to see what your growth potential looks like? Our international SEO services are a strong starting point for startups targeting global reach.
+                Want to see what your growth potential looks like? Our{' '}
+                <a
+                  href="https://brandmarketinghub.com/seo-services"
+                  style={{ color: '#FF8400', textDecoration: 'none' }}
+                >
+                  international SEO services
+                </a>{' '}
+                are a strong starting point for startups targeting global reach.
               </p>
             </div>
           </div>

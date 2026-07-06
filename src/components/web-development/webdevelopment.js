@@ -17,9 +17,16 @@ const Webdevelopment1 = () => {
 
           </h2>
           <h3>
-            Your website is not a digital brochure. It is the most active salesperson your business has — working around the clock, making first impressions, qualifying leads, and converting visitors into customers. For US-based businesses competing in one of the most digital-savvy markets in the world, that distinction matters more than ever in 2026. A full stack development services team backs every project we take on, which means the websites we build are not just visually strong — they are architecturally sound, technically reliable, and built to perform under real American business conditions.
+            Your website is not a digital brochure. It is the most active salesperson your business has — working around the clock, making first impressions, qualifying leads, and converting visitors into customers. For US-based businesses competing in one of the most digital-savvy markets in the world, that distinction matters more than ever in 2026. A {' '}
+            <a
+              href="https://brandmarketinghub.com/full-stack-development-services"
+              style={{ color: '#FF8400', textDecoration: 'none' }}
+            >
+              full stack development services
+            </a>{' '}
+            team backs every project we take on, which means the websites we build are not just visually strong — they are architecturally sound, technically reliable, and built to perform under real American business conditions.
+            <br /><br />
             As a custom website development company, we do not sell templates dressed up as custom work. Every project starts with your business goals, your audience, and the outcomes you need. From there, we build — thoughtfully, precisely, and with a long-term view of what your digital presence needs to do for you.
-
           </h3>
         </div>
         <div className={styles.imageContent}>
@@ -73,9 +80,17 @@ const Webdevelopment1 = () => {
           </h2>
           <h3>
             Most US businesses outgrow their website before they realize it. A template built for a general use case cannot reflect the specific way your business operates, the specific customers you serve, or the specific conversions you need to drive. In a market where American consumers make snap judgments about brand credibility based on website quality, that gap between what your website is and what your business needs it to be costs you leads, credibility, and revenue every single day.
-            Custom website development closes that gap. When your site is built around your actual workflows, your actual customer journey, and your actual brand identity, every element has a reason to exist. Front end web development services at Brand Marketing Hub focus on exactly this — creating interfaces that are not just attractive but intuitive, fast, and aligned with how your target audience thinks and behaves online.
+            <br /><br />
+            Custom website development closes that gap. When your site is built around your actual workflows, your actual customer journey, and your actual brand identity, every element has a reason to exist. {' '}
+            <a
+              href="https://brandmarketinghub.com/front-end-development-services"
+              style={{ color: '#FF8400', textDecoration: 'none' }}
+            >
+              Front end web development services
+            </a>{' '}
+            at Brand Marketing Hub focus on exactly this — creating interfaces that are not just attractive but intuitive, fast, and aligned with how your target audience thinks and behaves online.
+            <br /><br />
             A custom-built website also gives you ownership. You are not locked into a platform's limitations, a theme developer's update schedule, or a page builder's structural constraints. You own the code, the architecture, and the direction and that ownership compounds in value as your business grows.
-
           </h3>
         </div>
         <div className={styles.imageContent}>

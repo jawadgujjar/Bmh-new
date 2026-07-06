@@ -21,9 +21,16 @@ const Appdevelopment1 = () => {
             <span className={styles.span}>Custom Application Development  </span>  Services Built for US Businesses That Are Ready to Scale
           </h2>
           <h3>
-            Every business reaches a point where off-the-shelf software stops being enough. The workflows are too specific, the integrations too complex, the user experience too important to leave to a generic solution. That is the moment custom application development becomes not just an option but a necessity. At this stage, the right development partner makes everything and digital branding solutions are often what tie the application experience back to the brand identity that drives customer trust. We build applications that are shaped entirely around your business logic, your users, and the outcomes that matter most to you.
+            Every business reaches a point where off-the-shelf software stops being enough. The workflows are too specific, the integrations too complex, the user experience too important to leave to a generic solution. That is the moment custom application development becomes not just an option but a necessity. At this stage, the right development partner makes everything and {' '}
+            <a
+              href="https://brandmarketinghub.com/"
+              style={{ color: '#FF8400', textDecoration: 'none' }}
+            >
+              digital branding solutions
+            </a>{' '}
+            are often what tie the application experience back to the brand identity that drives customer trust. We build applications that are shaped entirely around your business logic, your users, and the outcomes that matter most to you.
+            <br /><br />
             As a purpose-driven custom application development services company, we do not start with a technology stack and work backwards. We start with your business problem, define the right solution, and build it with the precision and accountability that US businesses expect from a long-term development partner.
-
           </h3>
         </div>
         <div className={styles.imageContent}>
@@ -87,7 +94,16 @@ const Appdevelopment1 = () => {
             <li><strong>Custom Applications Remove That Ceiling</strong> — Built around your exact needs, it becomes a competitive asset that scales with your business.</li>
           </ul>
 
-          <p>When your application is built around your exact processes and users, it becomes a growth driver — not a cost. Digital marketing agency for startups partners often find a well-built custom app becomes the foundation their entire digital strategy runs on.</p>
+          <p>
+            When your application is built around your exact processes and users, it becomes a growth driver — not a cost. {' '}
+            <a
+              href="https://brandmarketinghub.com/digital-marketing"
+              style={{ color: '#FF8400', textDecoration: 'none' }}
+            >
+              Digital marketing agency for startups
+            </a>{' '}
+            partners often find a well-built custom app becomes the foundation their entire digital strategy runs on.
+          </p>
         </div>
         <div className={styles.imageContent1}>
           <Image
