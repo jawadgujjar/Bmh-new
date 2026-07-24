@@ -27,7 +27,7 @@ export default function Appservices1({ category }) {
 
   return (
     <div className={styles.container}>
-      <p className={styles.text1}>Application Development Services — End-to-End, From Concept to Launch</p>
+      {/* <p className={styles.text1}>Application Development Services — End-to-End, From Concept to Launch</p>
       <p className={styles.text2}>
         The difference between a good application and one that actually gets used comes down to how well the development process handles the full picture. Our services cover every stage with absolute care, focusing purely on high-impact deliverables.
       </p>
@@ -48,7 +48,7 @@ export default function Appservices1({ category }) {
         <li>
           <strong>Launch & Ongoing Support</strong> — We deliver live server deployment, App Store/Google Play publishing, and continuous monitoring. You receive ongoing security patches, performance optimization updates, and SLA-backed technical assistance.
         </li>
-      </ul>
+      </ul> */}
 
       <div className={styles.cardsContainer}>
         {!services.length ? (

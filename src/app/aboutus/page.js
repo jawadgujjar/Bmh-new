@@ -1,5 +1,14 @@
 import AboutContent from '@/components/aboutus/aboutus';
+import Certifications from '@/components/aboutus/certifications';
+import Global from '@/components/aboutus/Global';
 import Heroabout1 from '@/components/aboutus/heroabout';
+import HowWork from '@/components/aboutus/HowWork';
+import NewHero from '@/components/aboutus/newheroabout';
+import OurStory from '@/components/aboutus/ourstory';
+import Quote from '@/components/aboutus/Quote';
+import Trust from '@/components/aboutus/Trust';
+import WhatWeDo from '@/components/aboutus/WhatWeDo';
+import WhyChoose from '@/components/aboutus/WhyChoose';
 
 // ✅ About Page SEO Data
 const aboutSEO = {
@@ -31,9 +40,9 @@ export async function generateMetadata() {
     description: aboutSEO.metaDescription,
     keywords: aboutSEO.metaKeywords.join(", "),
     
-    // ✅ Yeh block head tag me automated clean canonical link inject karega
+     
     alternates: {
-      // Is se route structure clear ho jayega: https://brandmarketinghub.com/about
+      
       canonical: `${siteUrl}/aboutus`,
     },
   };
@@ -43,7 +52,7 @@ export async function generateMetadata() {
 export default function getaquotePage() {
   return (
     <main>
-      {/* 🔥 3. Schema Markup Script Injection (Structured Data for Google Bot) */}
+      {/*  Schema Markup Script Injection (Structured Data for Google Bot) */}
       {aboutSEO.schemaMarkup && (
         <script
           type="application/ld+json"
@@ -52,10 +61,18 @@ export default function getaquotePage() {
         />
       )}
 
-      {/* ⚠️ Purana <SEO /> tag completely removed */}
+      {/* <Heroabout1 />
+      <AboutContent /> */}
+        <NewHero/>
+        <OurStory/>
+        <Certifications/>
+        <WhatWeDo/>
+        <HowWork/>
+        <Trust/>
+        <WhyChoose/>
+        <Global/>
+        <Quote/>
 
-      <Heroabout1 />
-      <AboutContent />
     </main>
   );
 } 

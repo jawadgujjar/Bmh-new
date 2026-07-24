@@ -1,0 +1,166 @@
+/* styles/about-us/newhero.module.css */
+
+.aboutSection {
+    background-color: #161921;
+    color: #FFFFFF;
+    padding: 80px 50px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.container {
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Ensures vertical alignment between content and image */
+    gap: 60px;
+    margin-top: 5rem;  
+}
+/* Left Column Styles */
+.leftColumn {
+    flex: 1;
+    max-width: 550px;
+}
+
+.label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #FF7A00;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+}
+
+.line {
+    width: 30px;
+    height: 2px;
+    background-color: #FF7A00;
+}
+
+.heading {
+    font-size: 52px;
+    line-height: 1.1;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+.orangeText {
+    color: #FF7A00;
+}
+
+.description {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #A1A7B3;
+    margin-bottom: 30px;
+}
+
+.locationBadge {
+    border: 1px solid #2B2F3B;
+    color: #A1A7B3;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-size: 14px;
+    display: inline-block;
+}
+
+/* Right Column Styles */
+.rightColumn {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.imageContainer {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin-top: 0; /* Reseted margin to keep top levels equal */
+}
+
+.heroImage {
+    border-radius: 20px;
+    display: block;
+    width: 100%;
+    height: auto;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.experienceCard {
+    position: absolute;
+    bottom: -40px; 
+    left: -40px; 
+    background-color: #FFFFFF;
+    color: #161921;
+    border-radius: 15px;
+    padding: 15px 25px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.star {
+    font-size: 24px;
+    line-height: 1;
+}
+
+.years {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 2px;
+}
+
+.expText {
+    font-size: 12px;
+    color: #5C6370;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .leftColumn {
+        max-width: 100%;
+    }
+
+    .label {
+        justify-content: center;
+    }
+
+    .rightColumn {
+        justify-content: center;
+        width: 100%;
+        margin-top: 50px;
+    }
+}
+
+@media (max-width: 600px) {
+    .aboutSection {
+        padding: 60px 20px;
+    }
+    
+    .heading {
+        font-size: 36px;
+    }
+
+    .experienceCard {
+        padding: 10px 20px;
+        bottom: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;
+        justify-content: center;
+    }
+}

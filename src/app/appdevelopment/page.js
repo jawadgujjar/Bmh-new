@@ -1,9 +1,11 @@
 import Appdevelopment1 from "@/components/app-development/appdevelopment";
 import Calltoactionapp1 from "@/components/app-development/calltoactionapp1";
 import Calltoactionapp2 from "@/components/app-development/calltoactionapp2";
+import Counter from "@/components/app-development/counter";
 import Faqapp1 from "@/components/app-development/faqsapp";
 import Heroapp1 from "@/components/app-development/heroapp";
 import Keywordsapp from "@/components/app-development/keywordsapp";
+import Process1 from "@/components/app-development/processsection";
 import Appservices1 from "@/components/app-development/servicesapp";
 import Digitalservices1 from "@/components/digital-marketing/servicesdigital";
 import Alice from "@/components/landing/alicecarousel";
@@ -77,9 +79,11 @@ export default function AppdevelopmentPage() {
       <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
         {/* <Heroform/> */}
         <Appdevelopment1 />
+        <Process1/>
+        <Counter/>
         <Keywordsapp />
         <Calltoactionapp1 />
-        <Appservices1 category="app-development" />
+        {/* <Appservices1 category="app-development" /> */}
         <Calltoactionapp2 />
         <Form1 />
         <Carousel />

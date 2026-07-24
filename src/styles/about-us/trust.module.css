@@ -1,0 +1,125 @@
+/* styles/about-us/trust.module.css */
+
+.trustSection {
+    background-color: #0b0d12;
+    color: #FFFFFF;
+    padding: 100px 20px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.container {
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Header Styles */
+.headerWrapper {
+    text-align: center;
+    max-width: 700px;
+    margin-bottom: 60px;
+}
+
+.label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: #FF7A00;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-bottom: 15px;
+}
+
+.line {
+    width: 25px;
+    height: 2px;
+    background-color: #FF7A00;
+}
+
+.heading {
+    font-size: 42px;
+    line-height: 1.2;
+    font-weight: 800;
+    color: #FFFFFF;
+}
+
+/* Grid Layout (2 Columns x 2 Rows) */
+.gridContainer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    width: 100%;
+}
+
+.trustCard {
+    background-color: #151922;
+    border: 1px solid #222736;
+    border-radius: 20px;
+    padding: 40px;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.trustCard:hover {
+    border-color: #FF7A00;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.iconBox {
+    background-color: #241C17;
+    border: 1px solid #3D291E;
+    border-radius: 12px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 24px;
+}
+
+.cardTitle {
+    font-size: 20px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin-bottom: 12px;
+}
+
+.cardDescription {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #9CA3AF;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .gridContainer {
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .trustSection {
+        padding: 60px 15px;
+    }
+
+    .heading {
+        font-size: 32px;
+    }
+
+    .gridContainer {
+        grid-template-columns: 1fr; /* Mobile screens par single column layout */
+    }
+
+    .trustCard {
+        padding: 30px 20px;
+    }
+}

@@ -1,0 +1,148 @@
+/* styles/about-us/whychoose.module.css */
+
+.whyChooseSection {
+    background-color: #FFFFFF;
+    color: #161921;
+    padding: 100px 20px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.container {
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 60px;
+}
+
+/* Left Column Styles */
+.leftColumn {
+    flex: 1;
+    max-width: 580px;
+}
+
+.label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #FF7A00;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-bottom: 15px;
+}
+
+.line {
+    width: 25px;
+    height: 2px;
+    background-color: #FF7A00;
+}
+
+.heading {
+    font-size: 42px;
+    line-height: 1.2;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 35px;
+}
+
+/* Points List */
+.pointsList {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.pointItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.checkIcon {
+    color: #FF7A00;
+    font-size: 16px;
+    font-weight: 800;
+    margin-top: 2px;
+    flex-shrink: 0;
+    background-color: #FFF7ED;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #FFEDD5;
+}
+
+.pointText {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #4B5563;
+    font-weight: 500;
+}
+
+/* Right Column Styles */
+.rightColumn {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.imageContainer {
+    position: relative;
+    width: 100%;
+    max-width: 550px;
+}
+
+.chooseImage {
+    border-radius: 24px;
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+        text-align: left;
+    }
+
+    .leftColumn {
+        max-width: 100%;
+    }
+
+    .rightColumn {
+        justify-content: center;
+        width: 100%;
+        margin-top: 40px;
+    }
+    
+    .imageContainer {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 640px) {
+    .whyChooseSection {
+        padding: 60px 15px;
+    }
+
+    .heading {
+        font-size: 32px;
+        margin-bottom: 25px;
+    }
+
+    .pointText {
+        font-size: 15px;
+    }
+}
