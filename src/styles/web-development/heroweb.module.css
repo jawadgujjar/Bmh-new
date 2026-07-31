@@ -1,131 +1,321 @@
-/* digitalhero.module.css */
-.backheroDigital {
-    position: relative;
-    height: 70vh;
+/* Container & Base Layout with Professional Spacing */
+.heroSection {
+    background-color: #0b0f19;
+    padding: 7rem 2rem 6rem 2rem; /* Professional top/bottom padding */
+    min-height: 80vh;
     display: flex;
-    justify-content: center;
     align-items: center;
-    text-align: center;
+    color: #ffffff;
     overflow: hidden;
 }
 
-.backgroundImage {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-}
-
-.backgroundImage::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%; /* Changed to cover full height */
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 1;
-}
-
-.mainHerodigital {
-    z-index: 5;
-    color: white;
-    position: relative;
-    width: 90%;
-    max-width: auto;
+.heroContainer {
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 0 1rem;
-    margin-top: 4rem;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr; /* Balanced width distribution */
+    gap: 3.5rem;
+    align-items: center;
+    width: 100%;
+    margin-top: 2rem; /* Professional top offset */
 }
 
-.heroFirstText {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
+/* --- Left Column Styles --- */
+.heroLeft {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
-.growText {
-    color: rgb(253, 126, 20);
-    /* color: aliceblue; */
-    font-size: 1.3rem;
+.badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: rgba(253, 126, 20, 0.1);
+    border: 1px solid rgba(253, 126, 20, 0.2);
+    padding: 0.4rem 0.9rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #fd7e14;
+    margin-bottom: 1.5rem;
+}
+
+.badgeDot {
+    width: 6px;
+    height: 6px;
+    background-color: #fd7e14;
+    border-radius: 50%;
+}
+
+.heroTitle {
+    font-size: 2.7rem; /* Reduced font size for a cleaner look */
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1.25rem;
+    color: #ffffff;
+}
+
+.orangeText {
+    color: #fd7e14;
+}
+
+.heroDescription {
+    font-size: 1rem; /* Perfectly adjusted body text size */
+    color: #94a3b8;
+    line-height: 1.65;
     margin-bottom: 2rem;
+    max-width: 95%;
 }
 
-.formDigital {
+/* Buttons */
+.ctaGroup {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+}
+
+.primaryBtn {
+    background-color: #fd7e14;
+    color: #ffffff;
+    padding: 0.85rem 1.75rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+.primaryBtn:hover {
+    background-color: #e56d05;
+}
+
+.secondaryBtn {
+    background-color: transparent;
+    color: #ffffff;
+    padding: 0.85rem 1.75rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: 1px solid #334155;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.secondaryBtn:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: #475569;
+}
+
+/* Social Proof */
+.socialProof {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.avatars {
+    display: flex;
+    align-items: center;
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: white;
+    border: 2px solid #0b0f19;
+    margin-left: -8px;
+}
+
+.avatar:first-child {
+    margin-left: 0;
+}
+
+.avatar1 { background-color: #fd7e14; }
+.avatar2 { background-color: #3b82f6; }
+.avatar3 { background-color: #22c55e; }
+.avatar4 { background-color: #a855f7; }
+
+.reviews {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.stars {
+    color: #fbbf24;
+    font-size: 0.85rem;
+    display: flex;
+    gap: 2px;
+}
+
+.reviewText {
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+
+/* --- Right Column Styles (Slightly smaller image container) --- */
+.heroRight {
+    position: relative;
+    width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: 2rem;
-    background-color: rgba(255, 255, 255, 0.2);
-    padding: 1.5rem;
+    align-items: center;
+}
+
+.imageWrapper {
+    position: relative;
+    width: 100%;
+    max-width: 520px; /* Controlled width to make the image slightly smaller & neat */
+    height: 440px;    /* Reduced height */
+    border-radius: 14px;
+    overflow: visible;
+}
+
+.mainImage {
+    object-fit: cover;
+    border-radius: 14px;
+}
+
+/* Floating Stats Card */
+.statsCard {
+    position: absolute;
+    bottom: -25px;
+    left: 4%;
+    right: 4%;
+    background-color: rgba(30, 41, 59, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 1.15rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+}
+
+.statsLeft {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+.iconBox {
+    background-color: #fd7e14;
+    width: 38px;
+    height: 38px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 100%; /* Full width of parent */
-    max-width: 600px; /* Maximum width */
-    margin-left: auto;
-    margin-right: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.proposalButton {
+.statsIcon {
     color: white;
-    background-color: rgb(253, 126, 20);
-    border: none;
-    font-size: large;
-    font-weight: bold;
-    height: 3rem;
-    width: 100%; /* Button takes full width of form */
-    max-width: 300px; /* But has a maximum width */
+    font-size: 1.1rem;
 }
 
-.proposalButton:hover {
-    color: rgb(253, 126, 20) !important;
-    background-color: white !important;
-    border: 2px solid rgb(253, 126, 20) !important;
+.statsTextLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
-/* Media Queries */
+.statsHeading {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.statsSub {
+    font-size: 0.78rem;
+    color: #fd7e14;
+    font-weight: 500;
+}
+
+.statsRight {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+    gap: 1px;
+}
+
+.statsValue {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.statsLabel {
+    font-size: 0.78rem;
+    color: #94a3b8;
+}
+
+
+/* --- Responsive Media Queries --- */
+@media (max-width: 1024px) {
+    .heroTitle { font-size: 2.3rem; }
+    .heroContainer { gap: 2rem; }
+    .imageWrapper { height: 380px; max-width: 100%; }
+}
+
 @media (max-width: 768px) {
-    .backheroDigital {
-        height: auto;
-        padding-bottom: 1rem;
-    }
-    
-    .mainHerodigital {
-        padding-top: 2rem;
+    .heroSection {
+        padding: 5rem 1.25rem 4rem 1.25rem;
     }
 
-    .heroFirstText {
-        font-size: 1.8rem;
+    .heroContainer {
+        grid-template-columns: 1fr;
+        gap: 3.5rem;
+        margin-top: 1rem;
+        text-align: center;
     }
 
-    .growText {
-        font-size: 0.8rem;
+    .heroLeft {
+        align-items: center;
     }
-    
-    .formDigital {
-        padding: 1rem;
-        margin-top: 1.5rem;
+
+    .heroDescription {
+        margin: 0 auto 1.75rem auto;
+    }
+
+    .ctaGroup {
+        justify-content: center;
+    }
+
+    .imageWrapper {
+        height: 340px;
+        max-width: 450px;
+        margin: 0 auto;
+    }
+
+    .statsCard {
+        flex-direction: column;
+        gap: 0.85rem;
+        bottom: -45px;
+        text-align: center;
+    }
+
+    .statsRight {
+        align-items: center;
     }
 }
 
-@media (max-width: 576px) {
-    .heroFirstText {
-        font-size: 1.5rem;
-    }
-
-    .growText {
-        font-size: 0.8rem;
-        margin-bottom: 1.5rem;
-    }
-    
-    .formDigital {
-        width: 100%;
-        padding: 1rem;
-    }
-    
-    .proposalButton {
-        font-size: medium;
-        height: 2.8rem;
-    }
+@media (max-width: 480px) {
+    .heroTitle { font-size: 1.9rem; }
+    .ctaGroup { flex-direction: column; width: 100%; }
+    .primaryBtn, .secondaryBtn { width: 100%; justify-content: center; }
+    .imageWrapper { height: 280px; }
 }

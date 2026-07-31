@@ -47,13 +47,12 @@ function Calltoactionweb1() {
         console.log("Form submitted:", data);
         setStep(2); // success step
       } else {
-        // Improved error handling
         const errorMessage =
           data.error || "Something went wrong. Please try again.";
         setError(
           errorMessage.includes("validation failed")
             ? "Please fill out all required fields correctly."
-            : errorMessage,
+            : errorMessage
         );
       }
     } catch (err) {
@@ -236,34 +235,86 @@ function Calltoactionweb1() {
 
         <div className={styles.animatedLine}></div>
       </div>
-      <section className={styless.section}>
-        {" "}
-        <div className={styless.point}>
-          <div className={styless.pointsList}>
-            <p className={styless.pointsTextx}>
+
+      {/* Process Section Styled Professionally as per reference image */}
+      <section className={styless.processSection}>
+        <div className={styless.processContainer}>
+          <div className={styless.processHeader}>
+            <span className={styless.processBadge}>HOW WE WORK</span>
+            <h2 className={styless.processMainTitle}>
               Our Process — Straightforward, Transparent, and Built Around You
+            </h2>
+            <p className={styless.processSubTitle}>
+              Every project at Brand Marketing Hub follows a clear process designed for US businesses that need predictable timelines, transparent communication, and zero surprises.
             </p>
-            <p>Every project at Brand Marketing Hub follows a clear process designed for US businesses that need predictable timelines, transparent communication, and zero surprises. Here is how we work:</p>
-
-            <ul>
-              <li><strong>Discovery</strong> — We learn your business, your goals, and your current digital situation in detail before a single line of code is written.</li>
-              <li><strong>Strategy & Architecture</strong> — We map the site structure, define the conversion paths, and make the technical decisions that will shape the entire build.</li>
-              <li><strong>Design</strong> — Visual design that reflects your brand identity and is built with your target user's experience at the center of every decision.</li>
-              <li><strong>Development</strong> — Clean, well-documented code built to your approved design. Front end, back end, and CMS layers all built and tested in parallel.</li>
-              <li><strong>Launch & Handover</strong> — We handle deployment, run pre-launch QA, and provide full handover documentation so your team knows exactly how to manage the site going forward.</li>
-              <li><strong>Ongoing Support</strong> — We stay available after launch because real websites need real ongoing attention.</li>
-            </ul>
-
           </div>
-          <div className={styless.imageContent1}>
-            <Image
-              src={webImage2}
-              alt="Digital agency services"
-              width={500}
-              height={450}
-              className={styless.image}
-              quality={100}
-            />
+
+          <div className={styless.processGrid}>
+            <div className={styless.processCard}>
+              <div className={styless.cardTop}>
+                <span className={styless.cardNumBadge}>01</span>
+                <span className={styless.cardNumBackground}>01</span>
+              </div>
+              <h3 className={styless.cardTitle}>Discovery</h3>
+              <p className={styless.cardDesc}>
+                We learn your business, your goals, and your current digital situation in detail before a single line of code is written.
+              </p>
+            </div>
+
+            <div className={styless.processCard}>
+              <div className={styless.cardTop}>
+                <span className={styless.cardNumBadge}>02</span>
+                <span className={styless.cardNumBackground}>02</span>
+              </div>
+              <h3 className={styless.cardTitle}>Strategy & Architecture</h3>
+              <p className={styless.cardDesc}>
+                We map the site structure, define the conversion paths, and make the technical decisions that will shape the entire build.
+              </p>
+            </div>
+
+            <div className={styless.processCard}>
+              <div className={styless.cardTop}>
+                <span className={styless.cardNumBadge}>03</span>
+                <span className={styless.cardNumBackground}>03</span>
+              </div>
+              <h3 className={styless.cardTitle}>Design</h3>
+              <p className={styless.cardDesc}>
+                Visual design that reflects your brand identity and is built with your target user's experience at the center of every decision.
+              </p>
+            </div>
+
+            <div className={styless.processCard}>
+              <div className={styless.cardTop}>
+                <span className={styless.cardNumBadge}>04</span>
+                <span className={styless.cardNumBackground}>04</span>
+              </div>
+              <h3 className={styless.cardTitle}>Development</h3>
+              <p className={styless.cardDesc}>
+                Clean, well-documented code built to your approved design. Front end, back end, and CMS layers all built and tested in parallel.
+              </p>
+            </div>
+
+            <div className={styless.processCard}>
+              <div className={styless.cardTop}>
+                <span className={styless.cardNumBadge}>05</span>
+                <span className={styless.cardNumBackground}>05</span>
+              </div>
+              <h3 className={styless.cardTitle}>Launch & Handover</h3>
+              <p className={styless.cardDesc}>
+                We handle deployment, run pre-launch QA, and provide full handover documentation so your team knows exactly how to manage the site going forward.
+              </p>
+            </div>
+
+            <div className={styless.processCard}>
+              <div className={styless.cardTop}>
+                <span className={styless.cardNumBadge}>06</span>
+                <span className={styless.cardNumBackground}>06</span>
+              </div>
+              <h3 className={styless.cardTitle}>Ongoing Support</h3>
+              <p className={styless.cardDesc}>
+                We stay available after launch because real websites need real ongoing attention to keep performing at their peak.
+              </p>
+            </div>
           </div>
         </div>
       </section>
