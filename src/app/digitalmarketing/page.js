@@ -4,6 +4,7 @@ import Calltoactiondigital2 from "@/components/digital-marketing/calltoactiondig
 import HeroDigitalMarketing from "@/components/digital-marketing/digitalhero";
 import FAQdigital from "@/components/digital-marketing/faqsdigital";
 import Keywordsdigital from "@/components/digital-marketing/keywordsdigital";
+import Ourbifference from "@/components/digital-marketing/ourdifference";
 import Digitalservices1 from "@/components/digital-marketing/servicesdigital";
 import Whydigital from "@/components/digital-marketing/whydigital";
 import Alice from "@/components/landing/alicecarousel";
@@ -67,10 +68,12 @@ export default function DigitalmarketingPage() {
       <Alice/>
       <Aboutdigital/>
       <Whydigital/>
-      <Keywordsdigital/>
-      <Calltoactiondigital1/>
       <Digitalservices1 category="digital-marketing" />
+      <Keywordsdigital/>
+      {/* <Calltoactiondigital1/> */}
+      
       <Calltoactiondigital2/>
+      {/* <Ourbifference/> */}
       <Form1/>
       <Carousel/>
       <FAQdigital/>

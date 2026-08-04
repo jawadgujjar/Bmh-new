@@ -160,6 +160,7 @@
 /* Responsive Media Queries */
 @media (max-width: 992px) {
   .heroContainer {
+    margin-top: 1.6rem;
     grid-template-columns: 1fr;
     gap: 3rem;
     text-align: center;

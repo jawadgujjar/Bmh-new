@@ -1,12 +1,14 @@
 /* digitalhero.module.css */
 .backheroDigital {
   position: relative;
-  height: 70vh;
+  min-height: 80vh;
   display: flex;
-  justify-content: center;
   align-items: center;
-  text-align: center;
+  justify-content: center;
   overflow: hidden;
+  background-color: #0b0f19;
+  padding: 80px 20px 60px 20px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .backgroundImage {
@@ -18,14 +20,13 @@
   z-index: 0;
 }
 
-.backgroundImage::after {
-  content: "";
+.darkOverlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%; /* Changed to cover full height */
-  background: rgba(0, 0, 0, 0.6);
+  height: 100%;
+  background: radial-gradient(circle at 70% 30%, rgba(17, 24, 39, 0.8) 0%, rgba(11, 15, 25, 0.95) 100%);
   z-index: 1;
 }
 
@@ -33,97 +34,352 @@
   z-index: 5;
   color: white;
   position: relative;
-  width: 90%;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0 1rem;
+  width: 100%;
+  max-width: 1250px;
+  margin: 40px auto 0 auto;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 40px;
+  align-items: center;
+}
+
+/* Left Content Styles */
+.heroLeftContent {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(249, 115, 22, 0.1);
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #f97316;
+  width: fit-content;
+  margin-bottom: 20px;
+  letter-spacing: 0.5px;
+}
+
+.badgeDot {
+  width: 6px;
+  height: 6px;
+  background-color: #f97316;
+  border-radius: 50%;
+  margin-right: 8px;
 }
 
 .heroFirstText {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
+  font-size: 38px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #ffffff;
+  margin-bottom: 18px;
+}
+
+.highlightText {
+  color: #f97316;
 }
 
 .growText {
-  color: rgb(253, 126, 20);
-  font-size: 1.3rem;
-  margin-bottom: 2rem;
+  color: #94a3b8;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 25px;
+  max-width: 520px;
 }
 
-.formDigital {
+.heroButtonsRow {
   display: flex;
-  justify-content: center;
-  margin-top: 2rem;
-  background-color: rgba(255, 255, 255, 0.2);
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 100%; /* Full width of parent */
-  max-width: 600px; /* Maximum width */
-  margin-left: auto;
-  margin-right: auto;
+  gap: 15px;
+  margin-bottom: 35px;
 }
 
 .proposalButton {
-  color: white;
-  background-color: rgb(253, 126, 20);
-  border: none;
-  font-size: large;
-  font-weight: bold;
-  height: 3rem;
-  width: 100%; /* Button takes full width of form */
-  max-width: 300px; /* But has a maximum width */
+  color: white !important;
+  background-color: #f97316 !important;
+  border: none !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  height: 44px !important;
+  padding: 0 24px !important;
+  border-radius: 8px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  box-shadow: 0 4px 14px rgba(249, 115, 22, 0.3);
+  transition: all 0.3s ease;
 }
 
 .proposalButton:hover {
-  color: rgb(253, 126, 20) !important;
-  background-color: white !important;
-  border: 2px solid rgb(253, 126, 20) !important;
+  background-color: #ea580c !important;
+  transform: translateY(-2px);
 }
 
-/* Media Queries */
+.secondaryButton {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  height: 44px !important;
+  padding: 0 24px !important;
+  border-radius: 8px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.3s ease;
+}
+
+.secondaryButton:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: #ffffff !important;
+}
+
+/* Trust Proof Row */
+.trustProofRow {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.avatarGroup {
+  display: flex;
+  margin-left: 5px;
+}
+
+.avatarCircle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: bold;
+  color: #fff;
+  border: 2px solid #0b0f19;
+  margin-left: -8px;
+}
+
+.av1 { background-color: #f97316; }
+.av2 { background-color: #3b82f6; }
+.av3 { background-color: #10b981; }
+.av4 { background-color: #8b5cf6; }
+
+.ratingDetails {
+  display: flex;
+  flex-direction: column;
+}
+
+.stars {
+  color: #f59e0b;
+  font-size: 13px;
+  letter-spacing: 2px;
+  margin-bottom: 2px;
+}
+
+.reviewText {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+/* Right Content & Image Styling */
+.heroRightContent {
+  position: relative;
+  display: flex;
+  justify-content: flex-end; /* Image ko right side par properly align karne ke liye */
+  align-items: center;
+  margin-top: 25px;
+  padding-bottom: 35px; 
+}
+
+.imageWrapperCard {
+  position: relative;
+  width: 100%;
+  max-width: 500px; /* Screenshot ke mutabiq width ko balance kiya hai */
+  border-radius: 16px;
+  overflow: visible;
+}
+
+.mainFeatureImage {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+  background: #111827;
+}
+
+.laptopImg {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}
+
+.floatingMetricCard {
+  position: absolute;
+  bottom: -25px;
+  left: 15px;
+  right: 15px;
+  background: rgba(17, 24, 39, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 14px 20px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+}
+
+.metricLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.metricIconBox {
+  width: 32px;
+  height: 32px;
+  background-color: #f97316;
+  color: white;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.metricTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 2px 0;
+}
+
+.metricSub {
+  font-size: 11px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.metricRight {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+}
+
+.metricPercent {
+  font-size: 16px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.1;
+}
+
+.metricLabel {
+  font-size: 10px;
+  color: #94a3b8;
+}
+
+/* ========================================= */
+/* Responsive Design / Mobile Optimization   */
+/* ========================================= */
+
+@media (max-width: 1024px) {
+  .mainHerodigital {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+    margin-top: 20px;
+  }
+  .heroLeftContent {
+    align-items: center;
+  }
+  .heroBadge {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .heroButtonsRow {
+    justify-content: center;
+  }
+  .trustProofRow {
+    justify-content: center;
+  }
+  .growText {
+    max-width: 100%;
+  }
+  .heroRightContent {
+    justify-content: center; /* Tablet/Mobile par center align rahega */
+  }
+}
+
 @media (max-width: 768px) {
   .backheroDigital {
-    height: 70vh;
+    padding-top: 60px; 
+    padding-bottom: 80px;
   }
-
-  .mainHerodigital {
-    margin-top: 2rem;
-  }
-
   .heroFirstText {
-    font-size: 1.8rem;
-    padding-top: 3rem;
+    font-size: 32px;
   }
-
-  .growText {
-    font-size: 1.1rem;
+  .heroButtonsRow {
+    width: 100%;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0 10px;
   }
-
-  .formDigital {
-    padding: 1rem;
-    margin-top: 1.5rem;
+  .proposalButton, .secondaryButton {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  .heroRightContent {
+    margin-top: 30px;
   }
 }
 
-@media (max-width: 576px) {
+@media (max-width: 480px) {
   .heroFirstText {
-    font-size: 1.5rem;
+    font-size: 26px;
+    line-height: 1.3;
   }
-
   .growText {
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
+    font-size: 14px;
+    padding: 0 10px;
+  }
+  
+  .floatingMetricCard {
+    padding: 10px 12px;
+    bottom: -20px;
+    left: 10px;
+    right: 10px;
+  }
+  
+  .metricTitle {
+    font-size: 11px;
+  }
+  
+  .metricSub {
+    font-size: 9px;
   }
 
-  .formDigital {
-    width: 100%;
-    padding: 1rem;
+  .metricPercent {
+    font-size: 14px;
   }
 
-  .proposalButton {
-    font-size: medium;
-    height: 2.8rem;
+  .metricLabel {
+    font-size: 9px;
+  }
+
+  .metricIconBox {
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
   }
 }

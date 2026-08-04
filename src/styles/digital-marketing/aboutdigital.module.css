@@ -1,38 +1,227 @@
+/* aboutdigital.module.css */
 .aboutdigitalMain {
-    margin-top: 1rem;
-    margin-bottom: 3rem;
+  margin-top: 2rem;
+  margin-bottom: 4rem;
+  padding: 0 30px;
+  max-width: 1300px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  
+  /* Default Dark Mode Background */
+  background-color: #0b0f19;
+}
+
+/* Light Mode Adaptation */
+@media (prefers-color-scheme: light) {
+  .aboutdigitalMain {
+    background-color: #ffffff;
+  }
+  .provenTextDigital {
+    color: #111827 !important;
+  }
+  .allTextDigital {
+    color: #4b5563 !important;
+  }
+  .featureList li {
+    color: #374151 !important;
+  }
+  .imageContainer {
+    background: #f3f4f6 !important;
+    border: 1px solid #e5e7eb !important;
+  }
+}
+
+.para {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top Badge */
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(249, 115, 22, 0.1);
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  padding: 5px 14px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #f97316;
+  width: fit-content;
+  margin-bottom: 16px;
 }
 
 .provenTextDigital {
-    font-size: 1.7rem;
-    font-weight: bolder;
-}
-
-.specialText {
-    font-weight: bolder;
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1.25;
+  color: #ffffff;
+  margin-bottom: 20px;
 }
 
 .allTextDigital {
-    font-size: 1.1rem;
-    
+  font-size: 15px;
+  color: #94a3b8;
+  line-height: 1.6;
 }
-/* .para{
-    margin-top: 2.3rem;
-} */
+
+.allTextDigital p {
+  margin-bottom: 16px;
+}
+
+/* Inline Link Styling (Underline Removed) */
+.inlineLink {
+  color: #EA580C !important;
+  font-weight: 700;
+  text-decoration: none !important;
+  transition: opacity 0.2s ease;
+}
+
+.inlineLink:hover {
+  text-decoration: none !important;
+  opacity: 0.85;
+}
+
+/* Custom Checkmark List */
+.featureList {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 25px 0;
+}
+
+.featureList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #e2e8f0;
+  margin-bottom: 12px;
+}
+
+.checkIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background: rgba(249, 115, 22, 0.2);
+  color: #f97316;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: bold;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Button Styles */
+.buttonWrapper {
+  margin-top: 10px;
+}
+
+.proposalButton {
+  color: white !important;
+  background-color: #f97316 !important;
+  border: none !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  height: 46px !important;
+  padding: 0 24px !important;
+  border-radius: 8px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  box-shadow: 0 4px 14px rgba(249, 115, 22, 0.3);
+  transition: all 0.3s ease;
+}
+
+.proposalButton:hover {
+  background-color: #ea580c !important;
+  transform: translateY(-2px);
+}
+
+.arrowIcon {
+  font-size: 16px;
+}
+
+/* Image Container Wrapper (Adjusted for Left Side placement) */
+.imageContainerWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 580px;
+  margin-right: auto;
+  margin-left: 0;
+}
 
 .imageContainer {
-    position: relative;
-    width: 100%;
-    height: auto;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #111827;
 }
 
-/* You can add responsive styles if needed */
-@media (max-width: 768px) {
-    .provenTextDigital {
-        font-size: 1.4rem;
-    }
-    
-    .allTextDigital {
-        font-size: 1rem;
-    }
+.featureImg {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+  border-radius: 16px;
+}
+
+/* Floating Metric Card (Adjusted positioning for left-side image) */
+.floatingMetricCard {
+  position: absolute;
+  bottom: -22px;
+  right: -20px; /* Switched from left to right side of the image */
+  background: #ffffff;
+  padding: 18px 24px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  min-width: 150px;
+}
+
+.metricNumber {
+  font-size: 26px;
+  font-weight: 900;
+  color: #111827;
+  margin: 0 0 2px 0;
+  line-height: 1;
+}
+
+.metricLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .imageContainerWrapper {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+  }
+  .provenTextDigital {
+    font-size: 26px;
+  }
+  .floatingMetricCard {
+    right: 15px;
+    bottom: -15px;
+  }
+}
+
+@media (max-width: 576px) {
+  .floatingMetricCard {
+    padding: 12px 18px;
+    right: 10px;
+    bottom: -15px;
+  }
+  .metricNumber {
+    font-size: 22px;
+  }
 }
