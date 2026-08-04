@@ -74,9 +74,9 @@ const SeoIndustries = () => {
       <h2 className={styles.carouselTitle}>
         Completed Projects with Proven Results
       </h2>
-      <p className={styles.carouselSubtitle}>
+      {/* <p className={styles.carouselSubtitle}>
         SEO-driven solutions for growth.
-      </p>
+      </p> */}
 
       <div className={styles.carouselWrapper}>
         <div

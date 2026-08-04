@@ -1,0 +1,172 @@
+/* styles/about-us/howwork.module.css */
+
+.howWorkSection {
+    background-color: #FFFFFF;
+    color: #161921;
+    padding: 100px 20px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.container {
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 60px;
+}
+
+/* Left Column Styles */
+.leftColumn {
+    flex: 1;
+    max-width: 580px;
+}
+
+.label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #FF7A00;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-bottom: 15px;
+}
+
+.line {
+    width: 25px;
+    height: 2px;
+    background-color: #FF7A00;
+}
+
+.heading {
+    font-size: 42px;
+    line-height: 1.2;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 20px;
+}
+
+.description {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #4B5563;
+    margin-bottom: 15px;
+}
+
+.descriptionSecondary {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #4B5563;
+    margin-bottom: 30px;
+}
+
+/* Steps List Container */
+.stepsList {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.stepItem {
+    background-color: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.2s ease-in-out;
+}
+
+.stepItem:hover {
+    border-color: #FF7A00;
+    background-color: #FFFBEB;
+}
+
+.stepNumber {
+    background-color: #FF7A00;
+    color: #FFFFFF;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.stepTitle {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1F2937;
+}
+
+/* Right Column Styles */
+.rightColumn {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.imageContainer {
+    position: relative;
+    width: 100%;
+    max-width: 550px;
+}
+
+.workImage {
+    border-radius: 24px;
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+        text-align: left;
+    }
+
+    .leftColumn {
+        max-width: 100%;
+    }
+
+    .rightColumn {
+        justify-content: center;
+        width: 100%;
+        margin-top: 40px;
+    }
+    
+    .imageContainer {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 640px) {
+    .howWorkSection {
+        padding: 60px 15px;
+    }
+
+    .heading {
+        font-size: 32px;
+    }
+
+    .description, .descriptionSecondary {
+        font-size: 15px;
+    }
+
+    .stepItem {
+        padding: 14px 16px;
+    }
+}

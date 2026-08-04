@@ -8,8 +8,11 @@ import Faqwebdevelopment1 from "@/components/web-development/faqswebdevelopment"
 import Heroweb1 from "@/components/web-development/heroweb";
 import Keywordsweb from "@/components/web-development/keywordsweb";
 import Webservices1 from "@/components/web-development/servicesweb";
-import Webdevelopment1 from "@/components/web-development/webdevelopment";
 import Alice from "@/components/landing/alicecarousel";
+import Customwebsite1 from "@/components/web-development/customwebsite";
+import Builtaround1 from "@/components/web-development/builtaround";
+import Coast1 from "@/components/web-development/coast";
+import SeoIndustries from "@/components/landing/seoindustries";
 
 
 const webDevelopmentSEO = {
@@ -73,11 +76,16 @@ export default function WebdevelopmentPage() {
       <Alice />
       {/* <Heroform/> */}
       <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-        <Webdevelopment1 />
-        <Keywordsweb />
-        <Calltoactionweb1 />
+        {/* <Webdevelopment1 /> */}
+        <Customwebsite1/>
         <Webservices1 category="web-development" />
-        <Calltoactionweb2 />
+        <Builtaround1/>
+        <Coast1/>
+        <Calltoactionweb1 />
+        <SeoIndustries/>
+        {/* <Keywordsweb /> */}
+        
+        {/* <Calltoactionweb2 /> */}
         <Form1 />
         <Carousel />
         <Faqwebdevelopment1 />

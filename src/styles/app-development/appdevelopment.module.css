@@ -1,28 +1,26 @@
 /* --- CSS Variables for Theme Support --- */
 .section {
-  --text-main: #222222;       /* Headings color */
-  --text-secondary: #444444;  /* Sub-headings color */
-  --text-body: #555555;       /* Paragraph color */
-  --border-color: #eeeeee;    /* Border lines color */
-  --accent-color: rgb(253, 126, 20); /* Orange color */
+  --text-main: #222222;       
+  --text-secondary: #444444;  
+  --text-body: #555555;       
+  --border-color: #eeeeee;    
+  --accent-color: rgb(253, 126, 20); 
   
-  margin-top: 2rem;
+  margin-top: 1.5rem; /* Reduced top margin to keep elements tighter */
   padding: 0 2rem;
 }
 
-/* --- Dark Mode Auto-Detection --- */
 @media (prefers-color-scheme: dark) {
   .section {
-    --text-main: #f8f9fa;      /* White for dark theme */
-    --text-secondary: #e9ecef; /* Light gray */
-    --text-body: #ced4da;      /* Muted gray */
-    --border-color: #333333;   /* Darker borders */
+    --text-main: #f8f9fa;       
+    --text-secondary: #e9ecef; 
+    --text-body: #ced4da;      
+    --border-color: #333333;   
   }
 }
 
-/* --- General Styling --- */
 .headerWrapper {
-  text-align: center;
+  text-align: left;
   margin-bottom: 3rem;
 }
 
@@ -35,6 +33,7 @@
 
 .textContent {
   font-size: 1rem;
+  text-align: left;
 }
 
 .textContent h2 {
@@ -49,7 +48,7 @@
   text-align: left;
   line-height: 1.6;
   color: var(--text-body);
-  font-weight: normal; /* Para style in H3 */
+  font-weight: normal;
 }
 
 .span {
@@ -60,9 +59,119 @@
 .image {
   border-radius: 8px;
   object-fit: cover;
+  width: 100%;
+  height: auto;
 }
 
-/* --- Responsive Layout for Top Section --- */
+.topBadgeText {
+  color: #FF8400;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  text-align: left;
+}
+
+.topBadgeTextCenter {
+  color: #FF8400;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.problemCardsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  text-align: left;
+  margin: 2rem 0;
+}
+
+.problemCardRed {
+  background-color: #fdf2f2;
+  border: 1px solid #fde8e8;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+  text-align: left;
+}
+
+.problemCardRed h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.problemCardRed p {
+  font-size: 0.95rem;
+  color: #4b5563;
+  line-height: 1.6;
+  margin: 0;
+  text-align: left;
+}
+
+.crossIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background-color: #fee2e2;
+  color: #dc2626;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.problemCardGreen {
+  background-color: #f0fdf4;
+  border: 1px solid #dcfce7;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+  text-align: left;
+}
+
+.problemCardGreen h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.problemCardGreen p {
+  font-size: 0.95rem;
+  color: #4b5563;
+  line-height: 1.6;
+  margin: 0;
+  text-align: left;
+}
+
+.checkIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background-color: #dcfce7;
+  color: #16a34a;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.cardHeaderRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+
 @media (min-width: 992px) {
   .container {
     display: flex;
@@ -81,143 +190,231 @@
   }
 }
 
-/* --- Info Row (The 3 Columns) --- */
-.infoRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 3rem 0;
-  margin: 3rem 0;
-  border-top: 1px solid var(--border-color);
-  border-bottom: 1px solid var(--border-color);
-}
-
-.infoColumn {
-  text-align: center;
-  flex: 1;
-  padding: 0 1.5rem;
-}
-
-.iconWrapper {
-  background: rgba(253, 126, 20, 0.1);
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 1.5rem;
-}
-
-.infoIcon {
-  font-size: 1.8rem;
-  color: var(--accent-color);
-}
-
-.infoText {
-  font-size: 1.3rem;
-  color: var(--text-main);
-  font-weight: 600;
-  margin-bottom: 1rem;
-}
-
-.infoText1 {
-  font-size: 1rem;
-  color: var(--text-body);
-  line-height: 1.6;
-  font-weight: normal;
-}
-
-/* --- Bottom Section (Points & CTA) --- */
 .point {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   align-items: center;
-  gap: 4rem;
-  padding: 2rem 0;
-  margin-top: 2rem;
+  padding: 1.5rem 0; /* Reduced padding */
+  margin-top: 1rem; /* Reduced top margin */
+  text-align: center;
 }
 
 .point h2 {
   color: var(--text-main);
-}
-
-.point p {
-  color: var(--text-body);
-}
-
-.pointsList {
-  flex: 1;
-  min-width: 300px;
-}
-
-.pointsTextx {
-  font-size: 2rem;
-  color: var(--text-main);
-  font-weight: 700;
+  font-size: 2.3rem;
+  font-weight: 800;
+  line-height: 1.25;
   margin-bottom: 1.5rem;
+  text-align: center;
 }
 
-.featuresList {
+.problemSubTextCenter {
   color: var(--text-body);
   line-height: 1.7;
+  font-size: 1rem;
+  text-align: center;
+  max-width: 850px;
+  margin: 0 auto 1rem auto;
 }
 
-.imageContent,
-.imageContent1 {
-  flex: 1;
-  min-width: 300px;
+.problemFooterTextCenter {
+  color: var(--text-body);
+  line-height: 1.7;
+  font-size: 1rem;
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* --- Cross Platform Section Styles --- */
+.crossPlatformWrapper {
   display: flex;
-  justify-content: center;
+  gap: 3rem;
+  align-items: flex-start;
+  margin-top: 2.5rem; /* Reduced top margin from 4rem to 2.5rem */
+  padding: 1.5rem 0;
+  text-align: left;
+}
+
+.cpLeftColumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 320px;
+}
+
+.cpCleanImageContainer {
+  background: transparent;
+  border-radius: 16px;
+  padding: 0;
+  box-shadow: none;
+}
+
+.cpGridBadges {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.cpBadgeCard {
+  background: #ffffff;
+  border: 1px solid #f3f4f6;
+  padding: 1rem;
+  border-radius: 12px;
+  display: flex;
   align-items: center;
+  gap: 12px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  text-align: left;
 }
 
-/* --- CTA Button --- */
+.cpBadgeCard p {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+  line-height: 1.3;
+  text-align: left;
+}
+
+.cpBadgeIcon {
+  width: 36px;
+  height: 36px;
+  background: #fff5ed;
+  color: #FF8400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  flex-shrink: 0;
+  font-size: 1rem;
+}
+
+.cpRightColumn {
+  flex: 1.2;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  text-align: left;
+}
+
+.cpMainTitle {
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.25;
+  margin: 0;
+  text-align: left;
+}
+
+.cpIntroText {
+  color: var(--text-body);
+  line-height: 1.6;
+  font-size: 0.95rem;
+  margin: 0;
+  text-align: left;
+}
+
+.cpFeatureRows {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 0.2rem;
+}
+
+.cpFeatureCard {
+  background: #ffffff;
+  border: 1px solid #f3f4f6;
+  border-radius: 12px;
+  padding: 1.1rem 1.4rem;
+  display: flex;
+  gap: 1.2rem;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.01);
+  transition: all 0.3s ease;
+  text-align: left;
+}
+
+.cpFeatureCard:hover {
+  border-color: #fed7aa;
+  box-shadow: 0 6px 12px rgba(253, 126, 20, 0.05);
+}
+
+.cpCardIconWrapper {
+  width: 40px;
+  height: 40px;
+  background: #fff5ed;
+  color: #FF8400;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.cpFeatureCard h3 {
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.3rem 0;
+  text-align: left;
+}
+
+.cpFeatureCard p {
+  font-size: 0.85rem;
+  color: #4b5563;
+  line-height: 1.5;
+  margin: 0;
+  text-align: left;
+}
+
+/* Centered CTA Button Styles */
 .ctaButtons {
-  margin-top: 2rem;
+  margin-top: 0.5rem;
+  text-align: center; /* Centered the button horizontally */
+  width: 100%;
 }
 
-.ctaButton {
+.cpCtaButton {
   padding: 14px 32px;
   font-size: 1rem;
   font-weight: 600;
   color: #fff;
   background-color: var(--accent-color);
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   text-decoration: none;
   display: inline-block;
   transition: all 0.3s ease;
   cursor: pointer;
-}
-
-.ctaButton:hover {
-  background-color: #ff7f50;
-  transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(253, 126, 20, 0.2);
 }
 
-/* --- Tablet & Mobile Responsiveness --- */
+.cpCtaButton:hover {
+  background-color: #e07300;
+  transform: translateY(-2px);
+}
+
+/* --- Responsive Media Queries --- */
+@media (max-width: 1024px) {
+  .crossPlatformWrapper {
+    flex-direction: column;
+  }
+}
+
 @media (max-width: 991px) {
   .brand {
     font-size: 2.5rem;
   }
 
-  .infoRow {
-    flex-direction: column;
-    gap: 2rem;
-  }
-
-  .infoColumn {
-    padding: 1rem 0;
+  .problemCardsGrid {
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 768px) {
-  .pointsList {
-    text-align: center !important;
-  }
-  
   .section {
     margin-top: 0rem;
     padding: 0 1rem;
@@ -227,18 +424,21 @@
     flex-direction: column;
   }
 
-  .imageContent,
-  .imageContent1 {
-    order: -1; /* Image comes first on mobile */
+  .imageContent {
+    order: -1;
     margin-bottom: 2rem;
   }
 
-  .textContent h2, .pointsTextx {
+  .point h2, .textContent h2, .cpMainTitle {
     font-size: 1.8rem;
     text-align: center;
   }
   
   .textContent h3 {
-    text-align: center;
+    text-align: left;
+  }
+
+  .cpGridBadges {
+    grid-template-columns: 1fr;
   }
 }

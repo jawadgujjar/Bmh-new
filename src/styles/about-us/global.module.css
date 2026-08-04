@@ -1,0 +1,115 @@
+/* styles/about-us/global.module.css */
+
+.globalSection {
+    background-color: #FFFFFF;
+    color: #161921;
+    padding: 100px 20px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.container {
+    max-width: 1200px; /* Baaki sections ki tarah exact width limit */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.heading {
+    font-size: 42px;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 50px;
+    text-align: center;
+}
+
+.orangeText {
+    color: #FF7A00;
+}
+
+/* 5 Columns Grid with controlled gap */
+.gridContainer {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px; /* Gap ko thoda balance kiya hai taaki overflow na ho */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.countryCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
+.imageWrapper {
+    width: 100%;
+    height: 320px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box;
+}
+
+.countryCard:hover .imageWrapper {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 35px rgba(255, 122, 0, 0.15);
+}
+
+.countryImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.countryName {
+    margin-top: 16px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1F2937;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .gridContainer {
+        grid-template-columns: repeat(3, 1fr); /* Tablet par 3 columns */
+    }
+}
+
+@media (max-width: 768px) {
+    .gridContainer {
+        grid-template-columns: repeat(2, 1fr); /* Chote tablets par 2 columns */
+        gap: 16px;
+    }
+
+    .heading {
+        font-size: 32px;
+        margin-bottom: 35px;
+    }
+
+    .imageWrapper {
+        height: 280px;
+    }
+}
+
+@media (max-width: 480px) {
+    .globalSection {
+        padding: 60px 15px;
+    }
+
+    .gridContainer {
+        grid-template-columns: 1fr; /* Mobile screens par single column */
+    }
+
+    .imageWrapper {
+        height: 320px;
+    }
+}

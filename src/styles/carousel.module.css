@@ -56,6 +56,15 @@
         border: 1px solid #333;
     }
 
+    /* Modal Close Button White Fix */
+    .reviewModal :global(.ant-modal-close) {
+        color: #ffffff !important;
+    }
+
+    .reviewModal :global(.ant-modal-close:hover) {
+        color: #ff8c00 !important;
+    }
+
     /* Modal ka text white ho jaye dark mode mein */
     .modalReviewText {
         color: #ffffff !important;

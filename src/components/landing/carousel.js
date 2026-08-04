@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import AliceCarousel from "react-alice-carousel";
 import { Avatar, Rate, Modal } from "antd"; 
 import { CheckCircleFilled } from "@ant-design/icons";
+import Image from "next/image";
 import "react-alice-carousel/lib/alice-carousel.css";
 import styles from "../../styles/carousel.module.css";
 
@@ -45,7 +46,7 @@ const Carousel = () => {
   useEffect(() => {
     setIsClient(true);
   }, []);
-[]
+
   const showModal = (item) => {
     setSelectedReview(item);
     setIsModalOpen(true);
@@ -59,11 +60,27 @@ const Carousel = () => {
     carouselItems.map((item, index) => (
       <div className={styles.carouselItemContent} key={index}>
         <div className={styles.carouselCard}>
-          <div className={styles.cardHeader}>
-            <Avatar className={styles.avatarReview}>
-              {item.name.charAt(0).toUpperCase()}
-            </Avatar>
-            <h5 className={styles.name}>{item.name}</h5>
+          {/* Card Header with Google Logo on the Right */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
+            <div className={styles.cardHeader} style={{ marginBottom: 0 }}>
+              <Avatar className={styles.avatarReview}>
+                {item.name.charAt(0).toUpperCase()}
+              </Avatar>
+              <h5 className={styles.name}>{item.name}</h5>
+            </div>
+            {/* Google Logo Badge */}
+            <div style={{ display: "flex", alignItems: "center", background: "#ffffff", padding: "4px 10px", borderRadius: "20px", boxShadow: "0 2px 6px rgba(0,0,0,0.08)", border: "1px solid #f1f1f1", minHeight: "28px" }}>
+              <Image 
+                src="https://www.gstatic.com/images/branding/product/1x/googleg_48dp.png" 
+                alt="Google Logo" 
+                width={16} 
+                height={16} 
+                style={{ marginRight: "4px", objectFit: "contain" }} 
+              />
+              <span style={{ fontFamily: "Roboto, sans-serif", fontSize: "12px", fontWeight: "600", color: "#4285F4", letterSpacing: "-0.3px" }}>
+                G<span style={{ color: "#EA4335" }}>o</span><span style={{ color: "#FBBC05" }}>o</span><span style={{ color: "#4285F4" }}>g</span><span style={{ color: "#34A853" }}>l</span><span style={{ color: "#EA4335" }}>e</span>
+              </span>
+            </div>
           </div>
 
           <div className={styles.ratingLine}>
@@ -122,11 +139,25 @@ const Carousel = () => {
       >
         {selectedReview && (
           <div style={{ textAlign: "left", padding: "10px" }}>
-            <div className={styles.cardHeader}>
-              <Avatar className={styles.avatarReview}>
-                {selectedReview.name.charAt(0).toUpperCase()}
-              </Avatar>
-              <h5 className={styles.name}>{selectedReview.name}</h5>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
+              <div className={styles.cardHeader} style={{ marginBottom: 0 }}>
+                <Avatar className={styles.avatarReview}>
+                  {selectedReview.name.charAt(0).toUpperCase()}
+                </Avatar>
+                <h5 className={styles.name}>{selectedReview.name}</h5>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", background: "#ffffff", padding: "4px 10px", borderRadius: "20px", boxShadow: "0 2px 6px rgba(0,0,0,0.08)", border: "1px solid #f1f1f1", minHeight: "28px" }}>
+                <Image 
+                  src="https://www.gstatic.com/images/branding/product/1x/googleg_48dp.png" 
+                  alt="Google Logo" 
+                  width={16} 
+                  height={16} 
+                  style={{ marginRight: "4px", objectFit: "contain" }} 
+                />
+                <span style={{ fontFamily: "Roboto, sans-serif", fontSize: "12px", fontWeight: "600", color: "#4285F4", letterSpacing: "-0.3px" }}>
+                  G<span style={{ color: "#EA4335" }}>o</span><span style={{ color: "#FBBC05" }}>o</span><span style={{ color: "#4285F4" }}>g</span><span style={{ color: "#34A853" }}>l</span><span style={{ color: "#EA4335" }}>e</span>
+                </span>
+              </div>
             </div>
             <div className={styles.ratingLine}>
               <Rate
@@ -138,7 +169,6 @@ const Carousel = () => {
                 <CheckCircleFilled />
               </span>
             </div>
-            {/* Class apply kar di gai hai readability fix karne ke liye */}
             <p className={styles.modalReviewText}>
               {selectedReview.review}
             </p>

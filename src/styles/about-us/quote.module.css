@@ -1,0 +1,126 @@
+/* styles/about-us/quote.module.css */
+
+.quoteSection {
+    background: linear-gradient(135deg, #FF7A00 0%, #E06000 100%);
+    color: #FFFFFF;
+    padding: 100px 20px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.container {
+    max-width: 900px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #FFE5D0;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-bottom: 25px;
+}
+
+.line {
+    width: 25px;
+    height: 2px;
+    background-color: #FFE5D0;
+}
+
+.heading {
+    font-size: 48px;
+    line-height: 1.15;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin-bottom: 25px;
+}
+
+.description {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #FFF2EC;
+    max-width: 650px;
+    margin-bottom: 35px;
+}
+
+.contactInfoWrapper {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.contactItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    transition: opacity 0.2s ease;
+}
+
+.contactItem:hover {
+    opacity: 0.85;
+}
+
+.icon {
+    font-size: 16px;
+}
+
+.buttonWrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.ctaButton {
+    background-color: #FFFFFF;
+    color: #FF7A00;
+    padding: 16px 32px;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.ctaButton:hover {
+    background-color: #FFF9F5;
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .quoteSection {
+        padding: 70px 20px;
+    }
+
+    .heading {
+        font-size: 34px;
+    }
+
+    .description {
+        font-size: 15px;
+    }
+
+    .contactInfoWrapper {
+        flex-direction: column;
+        gap: 15px;
+    }
+}

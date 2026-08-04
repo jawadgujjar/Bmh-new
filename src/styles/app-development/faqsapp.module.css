@@ -1,122 +1,244 @@
-/* FAQ Section Styling */
-.faqSection {
-    padding: 5rem 2rem;
-    background-color: #f9f9f9;
+/* Wrapper to keep sections clean */
+.wrapperContainer {
+    width: 100%;
+    background-color: #f8fafc;
 }
 
-.faqContainer {
-    max-width: 1200px;
+/* --- Top Dark CTA Section Styles --- */
+.ctaDarkSection {
+    background-color: #0f172a;
+    padding: 5rem 2rem 4rem 2rem;
+    text-align: center;
+    color: #ffffff;
+    margin-bottom: 3rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.ctaContainer {
+    max-width: 900px;
     margin: 0 auto;
 }
 
-/* FAQ Columns Styling */
-.faqColumns {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 3rem;
-}
-
-/* Heading Column Styling */
-.faqHeadingCol {
-    flex: 1;
-    min-width: 300px;
-}
-
-.faqTitle {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #333;
+.ctaHeading {
+    font-size: 2.8rem;
+    font-weight: 800;
+    line-height: 1.25;
+    color: #ffffff;
     margin-bottom: 1.5rem;
 }
 
-.frequently {
-    font-size: 2.5rem;
+.orangeHighlight {
+    color: #fd7e14;
+}
+
+.ctaDescription {
+    font-size: 1.05rem;
+    color: #94a3b8;
+    line-height: 1.7;
+    max-width: 780px;
+    margin: 0 auto 2.5rem auto;
+}
+
+.ctaButtonRow {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+}
+
+.primaryBtn {
+    background-color: #fd7e14;
+    color: #ffffff;
+    padding: 0.9rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.3s ease;
+}
+
+.primaryBtn:hover {
+    background-color: #e56d05;
+}
+
+.secondaryBtn {
+    background-color: rgba(30, 41, 59, 0.8);
+    color: #ffffff;
+    border: 1px solid #334155;
+    padding: 0.9rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.secondaryBtn:hover {
+    background-color: #1e293b;
+    border-color: #475569;
+}
+
+.btnIcon, .btnIconPhone {
+    font-size: 1.1rem;
+}
+
+.ctaFooterInfo {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+    color: #94a3b8;
+    font-size: 0.95rem;
+}
+
+.infoItem, .infoItemLink {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #94a3b8;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.infoItemLink:hover {
+    color: #fd7e14;
+}
+
+.infoIcon {
+    color: #fd7e14;
+    font-size: 1.1rem;
+}
+
+/* --- FAQ Section Styling --- */
+.faqSection {
+    padding: 2rem 2rem 5rem 2rem;
+    background-color: #f8fafc;
+}
+
+.faqContainer {
+    max-width: 850px;
+    margin: 0 auto;
+}
+
+.faqHeaderCenter {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.commonQuestionsTag {
+    font-size: 0.85rem;
     font-weight: 700;
-    color: #222;
-    line-height: 1.2;
-    margin-bottom: 1rem;
+    color: #fd7e14;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.75rem;
+}
+
+.frequentlyHeading {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 0.75rem;
 }
 
 .faqSubtitle {
-    font-size: 1.1rem;
-    color: #555;
-    line-height: 1.6;
+    font-size: 1.05rem;
+    color: #64748b;
 }
 
-.span {
-    color: rgb(253, 126, 20);
+.faqListWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
-/* Questions Column Styling */
-.faqQuestionsCol {
-    flex: 2;
-    min-width: 300px;
-}
-
-/* FAQ Item Styling */
 .faqItem {
-    margin-bottom: 1rem;
-    border-radius: 8px;
-    padding: 1.5rem;
-    background-color: #fff;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.25rem 1.75rem;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
 .faqItem:hover {
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-color: #cbd5e1;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
 .faqItem.active {
-    border-left: 4px solid rgb(253, 126, 20);
+    border-color: #fd7e14;
+    box-shadow: 0 4px 15px rgba(253, 126, 20, 0.08);
 }
 
-.faqQuestion {
+.faqQuestionRow {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 1.2rem;
+    gap: 1rem;
+}
+
+.faqQuestionText {
+    font-size: 1.05rem;
     font-weight: 600;
-    color: #333;
+    color: #1e293b;
 }
 
 .faqToggleIcon {
-    font-size: 1rem;
-    color: #4d4e4e;
+    color: #fd7e14;
+    font-size: 0.85rem;
     transition: transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.faqItem.active .faqToggleIcon {
-    color: rgb(253, 126, 20);
+.faqToggleIcon.rotated {
     transform: rotate(180deg);
 }
 
-/* FAQ Answer Styling */
 .faqAnswer {
-    font-size: 1rem;
-    color: #555;
+    font-size: 0.98rem;
+    color: #475569;
     line-height: 1.7;
-    padding-top: 1rem;
     margin-top: 1rem;
-    border-top: 1px solid #eee;
+    padding-top: 1rem;
+    border-top: 1px solid #f1f5f9;
 }
 
-/* Responsive Adjustments */
+/* --- Responsive Media Queries --- */
 @media (max-width: 768px) {
-    .faqSection {
-        padding: 3rem 1.5rem;
+    .ctaDarkSection {
+        padding: 4rem 1.5rem 3rem 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .ctaHeading {
+        font-size: 2.1rem;
     }
     
-    .frequently {
+    .frequentlyHeading {
         font-size: 2rem;
     }
-    
-    .faqQuestion {
-        font-size: 1.1rem;
+
+    .ctaFooterInfo {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .faqItem {
+        padding: 1rem 1.25rem;
     }
     
-    .faqAnswer {
-        font-size: 0.95rem;
+    .faqQuestionText {
+        font-size: 0.98rem;
     }
 }

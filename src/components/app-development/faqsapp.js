@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from 'react';
-import { FaPlus, FaMinus } from 'react-icons/fa';
-import appImage2 from 'public/images/App development/Long-Term Value for Your Business.webp';
-import Image from 'next/image';
+import { FaChevronDown } from 'react-icons/fa';
+import { HiOutlineMail, HiOutlinePhone, HiOutlineLocationMarker } from 'react-icons/hi';
+import { FiArrowRight } from 'react-icons/fi';
 import Link from 'next/link';
 import styles from '../../styles/app-development/faqsapp.module.css';
 import styles2 from '../../styles/app-development/appdevelopment.module.css';
@@ -11,7 +11,7 @@ import styles2 from '../../styles/app-development/appdevelopment.module.css';
 const Faqapp1 = () => {
   const [openIndex, setOpenIndex] = useState(null);
 
-const faqs = [
+  const faqs = [
     {
         question: "What is the difference between off-the-shelf software and custom application development?",
         answer: "Off-the-shelf software is a generic, pre-built solution designed for the mass market, which often forces your team to adapt to its limitations. Custom app development, however, is built entirely around your specific workflows, business logic, and scaling needs—acting as a competitive asset rather than an ongoing operational headache."
@@ -32,82 +32,76 @@ const faqs = [
         question: "How do we get started, and what does your discovery process look like?",
         answer: "Getting started is simple—just reach out through our contact form. Our process begins with a deep-dive Discovery phase where we analyze your business goals, map user journeys, and define technical requirements. This ensures we align on a clear architectural roadmap and budget before a single line of code is written."
     }
-];
+  ];
 
   const toggleAnswer = (index) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
   return (
-    <div>
-      <div className={styles2.point}>
-        <div style={{ textAlign: "center", padding: "0%" }}>
-          <h2>
-            <span className={styles.span}> </span>  Ready to Build an Application That Gives Your Business a Real Edge?
+    <div className={styles.wrapperContainer}>
+      {/* --- Top CTA Section --- */}
+      <div className={styles.ctaDarkSection}>
+        <div className={styles.ctaContainer}>
+          <h2 className={styles.ctaHeading}>
+            Ready to Build an Application That Gives Your Business a <span className={styles.orangeHighlight}>Real Edge?</span>
           </h2>
-          <p>
-            The right application, built the right way, becomes one of the most valuable assets your business owns. It runs your workflows, serves your customers, and scales with your growth — without the limitations of software that was never designed for your specific needs.
-            Brand Marketing Hub is the custom application development partner for US businesses that are serious about what they build. Get in touch today and let's talk about what your application needs to do — and how we build it to do exactly that.
-
+          <p className={styles.ctaDescription}>
+            The right application, built the right way, becomes one of the most valuable assets your business owns. It runs your workflows, serves your customers, and scales with your growth — without the limitations of software never designed for your specific needs.
           </p>
+          
+          <div className={styles.ctaButtonRow}>
+            <Link href="/getaquote" className={styles.primaryBtn}>
+              Get a Free Proposal <FiArrowRight className={styles.btnIcon} />
+            </Link>
+            <a href="tel:+18132140535" className={styles.secondaryBtn}>
+              <HiOutlinePhone className={styles.btnIconPhone} /> Schedule a Call
+            </a>
+          </div>
+
+          <div className={styles.ctaFooterInfo}>
+            <span className={styles.infoItem}>
+              <HiOutlineMail className={styles.infoIcon} /> hello@brandmarketinghub.com
+            </span>
+            <a href="tel:+18132140535" className={styles.infoItemLink}>
+              <HiOutlinePhone className={styles.infoIcon} /> +1 (813) 214-0535
+            </a>
+            <span className={styles.infoItem}>
+              <HiOutlineLocationMarker className={styles.infoIcon} /> United States
+            </span>
+          </div>
         </div>
-        {/* <div className={styles2.imageContent1}>
-          <Image
-            src={appImage2}
-            alt="Mobile development workflow"
-            width={500}
-            height={450}
-            className={styles2.image}
-            quality={100}
-          />
-        </div>
-        <div className={styles2.pointsList}>
-          <p className={styles2.pointsTextx}>
-            Long-Term Value for Your Business
-          </p>
-
-          <p className={styles2.featuresList}>
-            Investing in custom application development is not just about solving immediate challenges. It is about creating a system that becomes a core part of your business operations.
-            A well-built application improves efficiency, reduces manual work, and helps teams stay organized. It also provides better control over data and processes, allowing you to make informed decisions.
-            Over time, this leads to better performance, smoother operations, and stronger business growth.
-
-          </p>
-
-        </div> */}
       </div>
 
+      {/* --- FAQ Section --- */}
       <section id="faq" className={styles.faqSection}>
         <div className={styles.faqContainer}>
-          <div className={styles.faqColumns}>
-            <div className={styles.faqHeadingCol}>
-              <h2 className={styles.faqTitle}>FAQs</h2>
-              <p className={styles.frequently}>
-                <span className={styles.span}>Frequently</span> Asked Questions
-              </p>
-              <p className={styles.faqSubtitle}>Everything You Need to Know About Mobile App Development</p>
-            </div>
+          <div className={styles.faqHeaderCenter}>
+            <span className={styles.commonQuestionsTag}>COMMON QUESTIONS</span>
+            <h2 className={styles.frequentlyHeading}>Frequently Asked Questions</h2>
+            <p className={styles.faqSubtitle}>Everything you need to know about working with Brand Marketing Hub.</p>
+          </div>
 
-            <div className={styles.faqQuestionsCol}>
-              {faqs.map((faq, index) => (
-                <div
-                  key={index}
-                  className={`${styles.faqItem} ${openIndex === index ? styles.active : ''}`}
-                  onClick={() => toggleAnswer(index)}
-                >
-                  <div className={styles.faqQuestion}>
-                    {faq.question}
-                    <span className={styles.faqToggleIcon}>
-                      {openIndex === index ? <FaMinus /> : <FaPlus />}
-                    </span>
-                  </div>
-                  {openIndex === index && (
-                    <div className={styles.faqAnswer}>
-                      {faq.answer}
-                    </div>
-                  )}
+          <div className={styles.faqListWrapper}>
+            {faqs.map((faq, index) => (
+              <div
+                key={index}
+                className={`${styles.faqItem} ${openIndex === index ? styles.active : ''}`}
+                onClick={() => toggleAnswer(index)}
+              >
+                <div className={styles.faqQuestionRow}>
+                  <span className={styles.faqQuestionText}>{faq.question}</span>
+                  <span className={`${styles.faqToggleIcon} ${openIndex === index ? styles.rotated : ''}`}>
+                    <FaChevronDown />
+                  </span>
                 </div>
-              ))}
-            </div>
+                {openIndex === index && (
+                  <div className={styles.faqAnswer}>
+                    {faq.answer}
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </section>

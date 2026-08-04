@@ -1,0 +1,153 @@
+/* ourdifference.module.css */
+.ourdifferenceMain {
+  margin-top: 3rem;
+  margin-bottom: 4rem;
+  padding: 0 30px;
+  max-width: 1300px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #0b0f19; /* Default Dark Mode */
+}
+
+/* Light Mode Adaptation */
+@media (prefers-color-scheme: light) {
+  .ourdifferenceMain {
+    background-color: #ffffff;
+  }
+  .provenTextDigital {
+    color: #111827 !important;
+  }
+  .allTextDigital p {
+    color: #4b5563 !important;
+  }
+  .featureContent h4 {
+    color: #111827 !important;
+  }
+  .featureContent p {
+    color: #6b7280 !important;
+  }
+  .imageContainer {
+    background: #f3f4f6 !important;
+    border: 1px solid #e5e7eb !important;
+  }
+}
+
+.para {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top Badge */
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(249, 115, 22, 0.1);
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  padding: 5px 14px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #f97316;
+  width: fit-content;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+
+.provenTextDigital {
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1.25;
+  color: #ffffff;
+  margin-bottom: 16px;
+}
+
+.allTextDigital {
+  font-size: 15px;
+  color: #94a3b8;
+  line-height: 1.6;
+}
+
+.allTextDigital > p {
+  margin-bottom: 24px;
+  color: #94a3b8;
+}
+
+/* Features List Container */
+.featuresList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.featureItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+/* Orange Icon Box */
+.iconBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background-color: #f97316;
+  color: #ffffff;
+  border-radius: 10px;
+  font-size: 20px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+}
+
+.featureContent h4 {
+  font-size: 17px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 4px 0;
+  line-height: 1.4;
+}
+
+.featureContent p {
+  font-size: 14px;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Image Container Wrapper */
+.imageContainerWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 550px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.imageContainer {
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #111827;
+}
+
+.featureImg {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+  border-radius: 16px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .provenTextDigital {
+    font-size: 26px;
+  }
+  .imageContainerWrapper {
+    margin-bottom: 20px;
+  }
+}

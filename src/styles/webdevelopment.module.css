@@ -1,178 +1,190 @@
-/* General styling */
-.section {
-    margin-top: 2rem;
-    padding: 0 2rem;
+/* Process Section Adaptive Styles for Light/Dark Mode */
+.processSection {
+  background-color: var(--process-bg, #f8fafc); /* Light mode default background */
+  padding: 80px 20px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  color: var(--process-text, #0f172a);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.container {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    margin-bottom: 4rem;
+.processContainer {
+  max-width: 1300px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* Typography Colors (Light Mode Default) */
-.textContent h2, .pointsTextx, .infoText, .featureTitle {
-    color: #333;
+.processHeader {
+  text-align: center;
+  max-width: 800px;
+  margin-bottom: 50px;
 }
 
-.textContent h3, .infoText1, .featureItem, .section p {
-    color: #555;
-    font-weight: normal;
+.processBadge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #f97316;
+  text-transform: uppercase;
+  margin-bottom: 12px;
 }
 
-/* DARK MODE COLORS - Alignment wesi hi rahegi */
+.processMainTitle {
+  font-size: 34px;
+  font-weight: 800;
+  color: var(--process-title, #0f172a); /* Light mode title color */
+  line-height: 1.25;
+  margin-bottom: 15px;
+}
+
+.processSubTitle {
+  font-size: 14px;
+  color: var(--process-subtitle, #475569); /* Light mode subtitle color */
+  line-height: 1.6;
+}
+
+.processGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  width: 100%;
+}
+
+.processCard {
+  background: var(--process-card-bg, #ffffff); /* Light mode card background */
+  border: 1px solid var(--process-card-border, #e2e8f0);
+  border-radius: 16px;
+  padding: 30px 24px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.processCard:hover {
+  transform: translateY(-4px);
+  border-color: rgba(249, 115, 22, 0.4);
+}
+
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.cardNumBadge {
+  background-color: #f97316;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  z-index: 2;
+}
+
+.cardNumBackground {
+  position: absolute;
+  right: -5px;
+  top: -15px;
+  font-size: 64px;
+  font-weight: 900;
+  color: var(--process-num-bg, rgba(0, 0, 0, 0.03));
+  z-index: 1;
+  pointer-events: none;
+  line-height: 1;
+}
+
+.cardTitle {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--process-card-title, #0f172a);
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+
+.cardDesc {
+  font-size: 13px;
+  color: var(--process-card-desc, #475569);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Dark Mode Overrides (Media Query) */
 @media (prefers-color-scheme: dark) {
-    .textContent h2, .pointsTextx, .infoText, .featureTitle {
-        color: #ffffff; /* White for dark mode */
-    }
-    .textContent h3, .infoText1, .featureItem, .section p {
-        color: #cccccc; /* Light gray for readability */
-    }
-    .infoRow {
-        border-color: #444 !important;
-    }
+  .processSection {
+    background-color: #0b0f19;
+    color: #ffffff;
+  }
+  .processMainTitle {
+    color: #ffffff;
+  }
+  .processSubTitle {
+    color: #94a3b8;
+  }
+  .processCard {
+    background: #111827;
+    border-color: #1f2937;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  }
+  .cardNumBackground {
+    color: rgba(255, 255, 255, 0.03);
+  }
+  .cardTitle {
+    color: #ffffff;
+  }
+  .cardDesc {
+    color: #94a3b8;
+  }
 }
 
-.span {
-    color: rgb(253, 126, 20);
-    font-weight: bold;
+/* Dark Mode Overrides (Class Based, e.g., .dark on HTML/Body) */
+.dark .processSection {
+  background-color: #0b0f19;
+  color: #ffffff;
+}
+.dark .processMainTitle {
+  color: #ffffff;
+}
+.dark .processSubTitle {
+  color: #94a3b8;
+}
+.dark .processCard {
+  background: #111827;
+  border-color: #1f2937;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+.dark .cardNumBackground {
+  color: rgba(255, 255, 255, 0.03);
+}
+.dark .cardTitle {
+  color: #ffffff;
+}
+.dark .cardDesc {
+  color: #94a3b8;
 }
 
-.textContent h2 {
-    font-size: 2.2rem;
-    text-align: left;
-    margin-bottom: 1.5rem;
+/* Responsive Media Queries */
+@media (max-width: 1024px) {
+  .processGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-.textContent h3 {
-    font-size: 1.1rem;
-    text-align: left;
-    line-height: 1.6;
-}
-
-.image {
-    border-radius: 8px;
-    object-fit: cover;
-}
-
-/* Responsive Alignment for Desktop */
-@media (min-width: 992px) {
-    .container {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        gap: 4rem;
-    }
-    .textContent, .imageContent {
-        flex: 1;
-    }
-}
-
-/* Info row styling */
-.infoRow {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 3rem 0;
-    margin: 3rem 0;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
-}
-
-.infoColumn {
-    text-align: center;
-    flex: 1;
-    padding: 0 1.5rem;
-}
-
-.iconWrapper {
-    background: rgba(253, 126, 20, 0.1);
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1.5rem;
-}
-
-.infoIcon {
-    font-size: 1.8rem;
-    color: rgb(253, 126, 20);
-}
-
-.infoText {
-    font-size: 1.3rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-}
-
-.infoText1 {
-    font-size: 1rem;
-    line-height: 1.6;
-}
-
-/* Point section styling */
-.point {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 4rem;
-    padding: 2rem 0;
-    margin-top: 2rem;
-}
-
-.pointsList {
-    flex: 1;
-    min-width: 300px;
-}
-
-.pointsTextx {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-}
-
-.imageContent, .imageContent1 {
-    flex: 1;
-    min-width: 300px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* CTA buttons styling */
-.ctaButtons {
-    margin-top: 2rem;
-}
-
-.ctaButton {
-    padding: 14px 32px;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #fff;
-    background-color: rgb(253, 126, 20);
-    border-radius: 6px;
-    text-decoration: none;
-    display: inline-block;
-    transition: all 0.3s ease;
-}
-
-.ctaButton:hover {
-    background-color: #FF7F50;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(253, 126, 20, 0.2);
-}
-
-/* Mobile adjustments */
 @media (max-width: 768px) {
-    .section { margin-top: 0rem; }
-    .container { flex-direction: column; }
-    .imageContent, .imageContent1 {
-        order: -1;
-        margin-bottom: 2rem;
-    }
-    .textContent h2, .pointsTextx { font-size: 1.8rem; }
-    .infoRow { flex-direction: column; gap: 2rem; }
+  .processMainTitle {
+    font-size: 26px;
+  }
+  .processGrid {
+    grid-template-columns: 1fr;
+  }
 }
