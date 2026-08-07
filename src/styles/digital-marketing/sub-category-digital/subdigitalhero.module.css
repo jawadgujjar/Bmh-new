@@ -1,159 +1,231 @@
 .backheroDigital {
   position: relative;
-  height: 80vh; /* Mobile par visibility behtar karne ke liye thora barha diya */
-  min-height: 500px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+  background-color: #0b0f19;
+  color: #ffffff;
+  padding: 60px 20px;
   overflow: hidden;
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  margin-top: 5rem;
 }
 
-.backgroundImage {
-  position: absolute;
-  top: 0;
-  left: 0;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
   width: 100%;
-  height: 100%;
-  z-index: 0;
 }
 
-.backgroundImage::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(
-    0,
-    0,
-    0,
-    0.65
-  ); /* Overlay thora dark kiya taake text clear nazar aaye */
-  z-index: 1;
+/* Grid Layout */
+.heroGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
 }
 
 .mainHerodigital {
-  z-index: 5;
-  color: white;
-  position: relative;
-  width: 95%;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 20px;
-  padding-top: 7rem;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+/* Top Badge */
+.badgeTag {
+  display: inline-flex;
   align-items: center;
+  gap: 8px;
+  background: rgba(253, 126, 20, 0.1);
+  border: 1px solid rgba(253, 126, 20, 0.3);
+  color: #fd7e14;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+.badgeDot {
+  width: 6px;
+  height: 6px;
+  background-color: #fd7e14;
+  border-radius: 50%;
 }
 
 .heroFirstText {
-  font-size: 2rem;
+  font-size: 2.6rem;
   font-weight: 800;
   margin-bottom: 1.2rem;
-  line-height: 1.2;
+  line-height: 1.15;
+  color: #ffffff;
 }
 
 .growText {
-  font-size: 1.2rem;
+  font-size: 1.05rem;
   line-height: 1.6;
-  color: #ffffff;
-  margin-bottom: 30px;
-  max-width: 750px;
+  color: #94a3b8;
+  margin-bottom: 2rem;
+  max-width: 550px;
 }
 
 .herodes {
-  font-size: 1.1rem;
-  opacity: 0.9;
+  margin: 0;
 }
 
+/* Action Buttons */
 .formDigital {
   display: flex;
-  justify-content: center;
-  margin-top: 1rem;
-  background-color: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(5px); /* Modern glassmorphism look */
-  padding: 1.5rem;
-  border-radius: 12px;
+  gap: 15px;
   width: 100%;
-  max-width: 500px;
+  margin-bottom: 2.5rem;
 }
 
 .proposalButton {
-  color: white;
-  background-color: rgb(253, 126, 20);
-  border: none;
-  font-size: 1.1rem;
-  font-weight: bold;
-  height: 3.5rem;
-  width: 100%;
-  border-radius: 6px;
+  color: white !important;
+  background-color: rgb(253, 126, 20) !important;
+  border: none !important;
+  font-size: 1rem;
+  font-weight: 600;
+  height: 3.2rem;
+  padding: 0 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.proposalButton:hover {
+  background-color: #e06d10 !important;
+  transform: translateY(-2px);
+}
+
+.secondaryButton {
+  color: white !important;
+  background-color: transparent !important;
+  border: 1px solid #334155 !important;
+  font-size: 1rem;
+  font-weight: 600;
+  height: 3.2rem;
+  padding: 0 24px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.proposalButton:hover {
-  background-color: white !important;
-  color: rgb(253, 126, 20) !important;
+.secondaryButton:hover {
+  border-color: #fd7e14 !important;
+  color: #fd7e14 !important;
   transform: translateY(-2px);
 }
 
-/* --- Fully Responsive Media Queries --- */
+/* Social Proof Section */
+.socialProof {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
 
-@media (max-width: 768px) {
-    .mainHerodigital{
-    padding-top: 2rem;
-    }
-  .backheroDigital {
-    height: auto;
-    padding: 80px 0; /* Content ke mutabiq height adjust hogi */
-    min-height: 60vh;
+.avatarGroup {
+  display: flex;
+  margin-left: 10px;
+}
+
+.avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.85rem;
+  color: white;
+  margin-left: -10px;
+  border: 2px solid #0b0f19;
+}
+
+.av1 { background-color: #eab308; }
+.av2 { background-color: #3b82f6; }
+.av3 { background-color: #22c55e; }
+.av4 { background-color: #a855f7; }
+
+.ratingInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.stars {
+  color: #fbbf24;
+  font-size: 0.9rem;
+  margin-bottom: 2px;
+}
+
+.ratingText {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+/* Right Side Image */
+.heroImageWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+  height: 420px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+  border: 1px solid #1e293b;
+}
+
+/* --- Responsive Media Queries --- */
+
+@media (max-width: 968px) {
+  .heroGrid {
+    grid-template-columns: 1fr;
+    gap: 50px;
   }
-
-  .heroFirstText {
-    font-size: 1.3rem; /* Mobile par heading ka size readable rakha */
-    margin-top: 0;
+  
+  .mainHerodigital {
+    align-items: center;
+    text-align: center;
   }
 
   .growText {
-    font-size: 1rem;
-    margin-bottom: 20px;
+    max-width: 100%;
   }
 
   .formDigital {
-    padding: 1rem;
-    background-color: transparent; /* Mobile par box hata diya taake clutter kam ho */
-    box-shadow: none;
-  }
-
-  .proposalButton {
-    max-width: 100%;
-    height: 3.2rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .backheroDigital {
-    padding: 60px 15px;
+    justify-content: center;
   }
 
   .heroFirstText {
-    font-size: 1.2rem; /* Choty phones ke liye optimized */
-    margin-bottom: 1rem;
+    font-size: 2.2rem;
   }
 
-  .herodes {
-    font-size: 0.95rem;
-    line-height: 1.4;
+  .heroImageWrapper {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 576px) {
+  .heroFirstText {
+    font-size: 1.8rem;
   }
 
-  .growText {
-    font-size: 0.95rem;
+  .formDigital {
+    flex-direction: column;
   }
 
-  .proposalButton {
-    font-size: 1rem;
-    height: 3rem;
+  .proposalButton, .secondaryButton {
+    width: 100%;
   }
 }
