@@ -14,7 +14,7 @@ function Supportingstartup() {
         <Col xs={24} sm={24} md={12} lg={10} xl={10}>
           <div className={styles.imageContainer}>
             <Image
-              src="/images/digital-marketing/Supporting Startups and Small Businesses Across the USA.webp"
+              src="/images/digital-marketing/new images/How We Work.webp"
               alt="Supporting Startups and Small Businesses Across the USA"
               width={550}
               height={420}
@@ -135,7 +135,7 @@ function Supportingstartup() {
         <Col xs={24} sm={24} md={12} lg={10} xl={10}>
           <div className={styles.imageContainer} style={{ position: "relative" }}>
             <Image
-              src="/images/digital-marketing/Grow with Brand Marketing Hub.webp"
+              src="/images/digital-marketing/new images/The Right Choice.webp"
               alt="Grow with Brand Marketing Hub"
               width={550}
               height={420}

@@ -68,7 +68,7 @@ function HeroDigitalMarketing() {
                     <div className={styles.imageWrapperCard}>
                         <div className={styles.mainFeatureImage}>
                             <Image
-                                src="/images/web-development/Website Management Services for Long-Term Stability.webp"
+                                src="/images/digital-marketing/new images/Digital Marketing Agency for Startups.webp"
                                 alt="Development workspace"
                                 width={540}
                                 height={330}

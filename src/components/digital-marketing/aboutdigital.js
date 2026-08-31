@@ -13,7 +13,7 @@ function Aboutdigital() {
           <div className={styles.imageContainerWrapper}>
             <div className={styles.imageContainer}>
               <Image
-                src="/images/digital-marketing/Digital Marketing Agency for Startups.webp"
+                src="/images/digital-marketing/new images/Built for Startups.webp"
                 alt="about-digital"
                 width={580}
                 height={420}

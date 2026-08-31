@@ -67,7 +67,7 @@ function Whydigital() {
           <div className={styles.imageContainerWrapper}>
             <div className={styles.imageContainer}>
               <Image
-                src="/images/digital-marketing/Digital Marketing Agency USA Startups Can Rely On.webp"
+                src="/images/digital-marketing/new images/NATIONWIDE COVERAGE.webp"
                 alt="about-digital"
                 width={560}
                 height={420}
