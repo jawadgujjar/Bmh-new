@@ -14,7 +14,7 @@ function Supportingstartup() {
         <Col xs={24} sm={24} md={12} lg={10} xl={10}>
           <div className={styles.imageContainer}>
             <Image
-              src="/images/digital-marketing/new images/How We Work.webp"
+              src="/images/digital-marketing/new images/How We Work 2.webp"
               alt="Supporting Startups and Small Businesses Across the USA"
               width={550}
               height={420}
