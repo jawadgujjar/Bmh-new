@@ -13,7 +13,7 @@ function Ourbifference() {
           <div className={styles.imageContainerWrapper}>
             <div className={styles.imageContainer}>
               <Image
-                src="/images/digital-marketing/Why Brand Marketing Hub Is the Right Partner.webp"
+                src="/images/digital-marketing/new images/Our Difference.webp"
                 alt="Why Brand Marketing Hub Is the Right Partner"
                 width={550}
                 height={500}

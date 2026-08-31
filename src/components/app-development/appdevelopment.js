@@ -2,8 +2,8 @@
 
 import React from "react";
 import Image from "next/image";
-import appImage1 from "../../../public/images/App development/App Development images  2/Custom Application Development Services Built for US Businesses That Are Ready to Scale.webp";
-import appImage2 from "../../../public/images/App development/Scalable and Reliable Application Development.webp";
+import appImage1 from "../../../public/images/App development/new 2 images/Custom Application Development .webp";
+import appImage2 from "../../../public/images/App development/new 2 images/Cross Platform App Development.webp";
 import Link from "next/link";
 import styles from "../../styles/app-development/appdevelopment.module.css";
 import { FaCode, FaRocket, FaMobileAlt, FaShieldAlt, FaLayerGroup } from "react-icons/fa";
