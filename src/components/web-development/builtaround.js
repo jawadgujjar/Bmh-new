@@ -21,9 +21,9 @@ export default function Builtaround1() {
             BUILT AROUND YOU
           </div>
 
-          <h1 className={styles.mainTitle}>
+          <h2 className={styles.mainTitle}>
             What Makes a Website Truly Custom — And <span className={styles.highlight}>Why It Matters</span>
-          </h1>
+          </h2>
 
           <div className={styles.descriptionBlock}>
             <p className={styles.description}>

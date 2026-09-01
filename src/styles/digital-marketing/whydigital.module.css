@@ -1,9 +1,9 @@
 /* whydigital.module.css */
 .aboutdigitalMain {
   margin-top: 2rem;
-  margin-bottom: 4rem;
+  /* margin-bottom: 1rem; */
   padding: 0 30px;
-  max-width: 1300px; /* Ab yeh doosre component ke exact barabar max-width par hai */
+  max-width: 1300px;
   margin-left: auto;
   margin-right: auto;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -19,6 +19,9 @@
   }
   .allTextDigital {
     color: #4b5563 !important;
+  }
+  .aboutdigitalMain h4 {
+    color: #111827 !important;
   }
   .statBox {
     background: #f9fafb !important;

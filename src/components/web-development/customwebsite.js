@@ -24,9 +24,9 @@ export default function Customwebsite1() {
             CUSTOM WEBSITE DEVELOPMENT COMPANY
           </div>
 
-          <h1 className={styles.mainTitle}>
+          <h2 className={styles.mainTitle}>
             That Builds Websites With a <span className={styles.highlight}>Purpose</span>
-          </h1>
+          </h2>
 
           <div className={styles.descriptionBlock}>
             <p className={styles.description}>

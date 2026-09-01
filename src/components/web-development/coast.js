@@ -36,9 +36,9 @@ export default function Coast1() {
             NATIONWIDE SERVICE
           </div>
 
-          <h1 className={styles.mainTitle}>
+          <h2 className={styles.mainTitle}>
             Serving USA Businesses Nationwide — <span className={styles.highlight}>Coast to Coast</span>
-          </h1>
+          </h2>
 
           <div className={styles.descriptionBlock}>
             <p className={styles.description}>

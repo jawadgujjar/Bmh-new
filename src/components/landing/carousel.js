@@ -107,9 +107,9 @@ const Carousel = () => {
 
   return (
     <div className={styles.customerDiv}>
-      <h1 className={styles.customers}>
+      <h2 className={styles.customers}>
         <span className={styles.blackText}>What Our </span> Clients Say
-      </h1>
+      </h2>
 
       <div className={styles.carouselWrapper}>
         <div className={styles.carouselContainer}>
