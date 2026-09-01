@@ -57,9 +57,9 @@ export default function Keywordsdigital() {
   return (
     <div className={styles.seoContainer}>
       <div className={styles.headerSection}>
-        <h1 className={styles.mainTitle}>
+        <h2 className={styles.mainTitle}>
           Premium SEO Solutions That Deliver Results
-        </h1>
+        </h2>
         <div className={styles.subTitleContainer}>
           <h2 className={styles.subTitle}>
             Why Trust Our Expertise With Your Digital Growth?

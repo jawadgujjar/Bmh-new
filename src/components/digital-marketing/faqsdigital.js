@@ -54,11 +54,11 @@ function FAQdigital() {
       <Supportingstartup />
 
       {/* FAQ Section with Professional Top/Bottom Padding */}
-      <div className={styles.faqContainer} style={{ padding: "80px 20px", maxWidth: "1000px", margin: "0 auto" }}>
+      <div className={styles.faqContainer} style={{ padding: "40px 20px", maxWidth: "1000px",margin: "0 auto" }}>
         <div className={styles.faqHeader} style={{ textAlign: "center", marginBottom: "50px" }}>
-          <h1>
+          <h2>
             <span className={styles.frequently}>Frequently</span> Asked Questions
-          </h1>
+          </h2>
           <p style={{ color: "#94a3b8", fontSize: "16px", marginTop: "10px" }}>
             Find answers to common questions about our products and services
           </p>
