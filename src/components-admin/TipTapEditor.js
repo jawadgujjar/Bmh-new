@@ -15,6 +15,13 @@ import { Table } from "@tiptap/extension-table";
 import TableRow from "@tiptap/extension-table-row";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
+import {
+  TextStyle,
+  Color,
+  BackgroundColor,
+  FontSize,
+  FontFamily,
+} from "@tiptap/extension-text-style";
 import { Button, Upload, message, Modal, Input, Slider, Space, Dropdown } from "antd";
 import {
   BoldOutlined,
@@ -80,6 +87,47 @@ const CustomImage = Image.extend({
         }),
       },
     };
+  },
+});
+
+// ===== Keep pasted table-cell colors / alignment / borders =====
+const cellStyleAttributes = {
+  backgroundColor: {
+    default: null,
+    parseHTML: (element) =>
+      element.style.backgroundColor ||
+      element.getAttribute("bgcolor") ||
+      null,
+    renderHTML: (attributes) =>
+      attributes.backgroundColor
+        ? { style: `background-color: ${attributes.backgroundColor}` }
+        : {},
+  },
+  textAlign: {
+    default: null,
+    parseHTML: (element) => element.style.textAlign || null,
+    renderHTML: (attributes) =>
+      attributes.textAlign ? { style: `text-align: ${attributes.textAlign}` } : {},
+  },
+  verticalAlign: {
+    default: null,
+    parseHTML: (element) => element.style.verticalAlign || null,
+    renderHTML: (attributes) =>
+      attributes.verticalAlign
+        ? { style: `vertical-align: ${attributes.verticalAlign}` }
+        : {},
+  },
+};
+
+const CustomTableCell = TableCell.extend({
+  addAttributes() {
+    return { ...this.parent?.(), ...cellStyleAttributes };
+  },
+});
+
+const CustomTableHeader = TableHeader.extend({
+  addAttributes() {
+    return { ...this.parent?.(), ...cellStyleAttributes };
   },
 });
 
@@ -573,6 +621,55 @@ const TipTapToolbar = ({ editor }) => {
         />
       </Button.Group>
 
+      <Space size={4} style={{ alignItems: "center" }}>
+        <label
+          title="Text color"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 4,
+            fontSize: 12,
+            cursor: "pointer",
+          }}
+        >
+          A
+          <input
+            type="color"
+            style={{ width: 28, height: 24, padding: 0, border: "none", background: "none" }}
+            value={editor.getAttributes("textStyle").color || "#000000"}
+            onInput={(e) => editor.chain().focus().setColor(e.target.value).run()}
+          />
+        </label>
+        <label
+          title="Highlight color"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 4,
+            fontSize: 12,
+            cursor: "pointer",
+          }}
+        >
+          <HighlightOutlined />
+          <input
+            type="color"
+            style={{ width: 28, height: 24, padding: 0, border: "none", background: "none" }}
+            value={editor.getAttributes("highlight").color || "#ffff00"}
+            onInput={(e) =>
+              editor.chain().focus().toggleHighlight({ color: e.target.value }).run()
+            }
+          />
+        </label>
+        <Button
+          size="small"
+          onClick={() =>
+            editor.chain().focus().unsetColor().unsetHighlight().run()
+          }
+        >
+          Clear color
+        </Button>
+      </Space>
+
       <Button.Group>
         <Button
           icon={<LinkOutlined />}
@@ -613,9 +710,14 @@ const TipTapEditor = ({ value = "", onChange }) => {
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({ codeBlock: false, underline: false }),
       Underline,
       CustomImage,
+      TextStyle,
+      Color,
+      BackgroundColor,
+      FontSize,
+      FontFamily,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       Link.configure({
         openOnClick: false,
@@ -627,14 +729,19 @@ const TipTapEditor = ({ value = "", onChange }) => {
       Placeholder.configure({
         placeholder: "Start writing here...",
       }),
-      Highlight,
+      Highlight.configure({ multicolor: true }),
       CodeBlockLowlight.configure({ lowlight }),
       Table.configure({ resizable: true }),
       TableRow,
-      TableHeader,
-      TableCell,
+      CustomTableHeader,
+      CustomTableCell,
     ],
     content: value || "",
+    editorProps: {
+      // keep original markup when pasting from Word / Google Docs / websites
+      transformPastedHTML: (html) => html,
+    },
+    parseOptions: { preserveWhitespace: "full" },
     onUpdate: ({ editor }) => {
       const html = editor.getHTML();
       onChange?.(html);
@@ -726,6 +833,43 @@ const TipTapEditor = ({ value = "", onChange }) => {
         /* Center images by default */
         .ProseMirror .image-wrapper {
           text-align: center;
+        }
+
+        /* Tables - show borders + pasted cell colors in the editor */
+        .ProseMirror table {
+          border-collapse: collapse;
+          width: 100%;
+          margin: 16px 0;
+          table-layout: fixed;
+          overflow: hidden;
+        }
+        .ProseMirror table td,
+        .ProseMirror table th {
+          border: 1px solid #d0d0d0;
+          padding: 8px 10px;
+          vertical-align: top;
+          position: relative;
+        }
+        .ProseMirror table th {
+          background: #f5f5f5;
+          font-weight: 600;
+          text-align: left;
+        }
+        .ProseMirror table .selectedCell:after {
+          background: rgba(24, 144, 255, 0.15);
+          content: "";
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+        }
+        .ProseMirror table .column-resize-handle {
+          position: absolute;
+          right: -2px;
+          top: 0;
+          bottom: 0;
+          width: 4px;
+          background: #1890ff;
+          pointer-events: none;
         }
       `}</style>
     </>
