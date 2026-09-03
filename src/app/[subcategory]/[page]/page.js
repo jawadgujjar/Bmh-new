@@ -50,6 +50,22 @@ async function getSubCategoryBySlug(slug) {
   }
 }
 
+async function getSubCategoriesByCategory(category) {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+    const res = await fetch(
+      `${baseUrl}/api/subcategories?category=${category}`,
+      { cache: "no-store" },
+    );
+    const response = await res.json();
+    const list = response?.success ? response.data : response;
+    return Array.isArray(list) ? list : [];
+  } catch (error) {
+    console.error("Error fetching sibling subcategories:", error);
+    return [];
+  }
+}
+
 // 🔥 1. Next.js Dynamic Metadata Implementation (Server-Side SEO with Auto-Canonical Engine)
 export async function generateMetadata({ params }) {
   const { subcategory, page } = await params;
@@ -94,9 +110,45 @@ export default async function UniversalPageRoute({ params }) {
 
   if (!pageData) notFound();
 
-  // Subcategory data structure fix
-  const subcategoryData = subcategoryRaw?.data || subcategoryRaw;
+  // Subcategory data structure fix (API can return an array, an object, or {data})
+  const rawSub = subcategoryRaw?.data || subcategoryRaw;
+  const subcategoryData = Array.isArray(rawSub) ? rawSub[0] : rawSub;
   const hasDynamicSections = pageData.sections && pageData.sections.length > 0;
+
+  // Prefer the populated subcategory on the page itself (has category/slug/_id)
+  const pageSubcat =
+    pageData.subcategory && typeof pageData.subcategory === "object"
+      ? pageData.subcategory
+      : null;
+  const servicesCategory = pageSubcat?.category || subcategoryData?.category;
+  const ownSubcatId = pageSubcat?._id || subcategoryData?._id;
+
+  // 🔥 Resolve "services" sections -> sibling subcategory data
+  const hasServicesSection = (pageData.sections || []).some(
+    (s) => s.layoutType === "services",
+  );
+  let serviceMap = {};
+  if (hasServicesSection && servicesCategory) {
+    const siblings = await getSubCategoriesByCategory(servicesCategory);
+    serviceMap = siblings.reduce((acc, s) => {
+      if (s.slug) acc[s.slug] = s;
+      return acc;
+    }, {});
+  }
+
+  const resolveServices = (slugs = []) =>
+    (slugs || [])
+      .map((slug) => serviceMap[slug])
+      .filter((s) => s && String(s._id) !== String(ownSubcatId))
+      .map((s) => ({
+        name: s.name,
+        slug: s.slug,
+        description:
+          s.seo?.metaDescription ||
+          s.keywordsSection?.description ||
+          s.topSection?.description ||
+          "",
+      }));
 
   // Schema markup extract kar rahe hain pageData ke seo object se
   const schemaMarkup = pageData.seo?.schemaMarkup;
@@ -171,6 +223,37 @@ export default async function UniversalPageRoute({ params }) {
                     descriptions={section.descriptions || []}
                     cta={section.cta}
                     {...buttonProps}
+                  />
+                );
+
+              case "image-gallery":
+              case "counter":
+                return (
+                  <SubDynamicSection
+                    key={`section-${index}`}
+                    layoutType={section.layoutType}
+                    heading={section.heading || ""}
+                    description={sanitizeHtml(section.description || "")}
+                    headingAlign={section.headingAlign}
+                    galleryImages={section.galleryImages}
+                    counters={section.counters}
+                    cta={section.cta}
+                    index={index}
+                    {...buttonProps}
+                  />
+                );
+
+              case "services":
+                return (
+                  <SubDynamicSection
+                    key={`section-${index}`}
+                    layoutType="services"
+                    heading={section.heading || ""}
+                    description={sanitizeHtml(section.description || "")}
+                    headingAlign={section.headingAlign}
+                    services={resolveServices(section.services)}
+                    cta={section.cta}
+                    index={index}
                   />
                 );
 

@@ -182,7 +182,7 @@ export default function BlogDetailPage() {
             </Card>
           </div>
           <div className={styles.stickyFormWrapper}>
-            <Card title={<span style={{ color: ORANGE_COLOR }}>Search Blog</span>} style={{ marginBottom: 24 }}>
+            <Card className={styles.sidebarCard} title={<span style={{ color: '#222', fontWeight: 700 }}>Search Blog</span>} style={{ marginBottom: 24 }}>
               <Search
                 placeholder="Search articles..."
                 allowClear
@@ -195,7 +195,7 @@ export default function BlogDetailPage() {
               />
             </Card>
 
-            <Card title={<span style={{ color: ORANGE_COLOR }}>Categories</span>} style={{ marginBottom: 24 }}>
+            <Card className={styles.sidebarCard} title={<span style={{ color: '#222', fontWeight: 700 }}>Categories</span>} style={{ marginBottom: 24 }}>
               <List
                 dataSource={categories}
                 renderItem={(item) => (

@@ -1,3 +1,17 @@
+/* Sidebar cards (Search Blog / Categories) — gray border to match the form below */
+.sidebarCard {
+  border: 2px solid #ccc !important;
+  border-radius: 12px;
+}
+
+.sidebarCard :global(.ant-card-head) {
+  border-bottom: 1px solid #ccc;
+}
+
+.sidebarCard :global(.ant-list-item) {
+  border-bottom: 1px solid #ccc;
+}
+
 /* Header */
 .blogHeader {
   position: relative;

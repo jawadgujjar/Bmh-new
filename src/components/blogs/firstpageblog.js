@@ -135,7 +135,7 @@ const BlogListContent = () => {
 
         <Col xs={24} lg={8} xl={8}>
           <div className={styles.sidebarWrapper}>
-            <Card title={<span style={{ color: ORANGE_COLOR }}>Search Blog</span>} style={{ marginBottom: 24, borderRadius: 12 }}>
+            <Card className={styles.sidebarCard} title={<span style={{ color: '#222', fontWeight: 700 }}>Search Blog</span>} style={{ marginBottom: 24, borderRadius: 12 }}>
               <Search
                 placeholder="Search articles..."
                 allowClear
@@ -146,7 +146,7 @@ const BlogListContent = () => {
               />
             </Card>
 
-            <Card title={<span style={{ color: ORANGE_COLOR }}>Categories</span>} style={{ marginBottom: 24, borderRadius: 12 }}>
+            <Card className={styles.sidebarCard} title={<span style={{ color: '#222', fontWeight: 700 }}>Categories</span>} style={{ marginBottom: 24, borderRadius: 12 }}>
               <List
                 dataSource={categories}
                 renderItem={(item) => (

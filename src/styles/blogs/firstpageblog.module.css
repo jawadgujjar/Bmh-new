@@ -84,6 +84,22 @@
   width: 100%;
 }
 
+/* Sidebar cards (Search Blog / Categories) — gray border to match the form below */
+.sidebarCard {
+  border: 2px solid #ccc !important;
+  border-radius: 12px;
+}
+
+/* Card header divider line */
+.sidebarCard :global(.ant-card-head) {
+  border-bottom: 1px solid #ccc;
+}
+
+/* Category list divider lines */
+.sidebarCard :global(.ant-list-item) {
+  border-bottom: 1px solid #ccc;
+}
+
 .categoryItem {
   cursor: pointer;
   padding: 10px !important;

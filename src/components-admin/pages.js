@@ -100,6 +100,66 @@ const ImageUploadField = ({ value, onChange, label, required = false }) => {
   );
 };
 
+// --- Multi Image Upload (for Image Gallery layout) ---
+// Reuses the proven single ImageUploadField for each slot.
+const MultiImageUploadField = ({ value = [], onChange, label }) => {
+  const list = Array.isArray(value) ? value.filter(Boolean) : [];
+  const [slotCount, setSlotCount] = useState(Math.max(list.length, 1));
+
+  useEffect(() => {
+    if (list.length > slotCount) setSlotCount(list.length);
+  }, [list.length, slotCount]);
+
+  const setAt = (i, url) => {
+    const next = [...list];
+    while (next.length <= i) next.push("");
+    next[i] = url;
+    onChange(next.filter(Boolean));
+  };
+
+  const removeAt = (i) => {
+    onChange(list.filter((_, idx) => idx !== i));
+    setSlotCount((c) => Math.max(c - 1, 1));
+  };
+
+  return (
+    <Form.Item label={label}>
+      <Text type="secondary" style={{ fontSize: 12 }}>
+        Add 4 or 6 images (shown in 2 rows on the site).
+      </Text>
+      <Row gutter={12} style={{ marginTop: 8 }}>
+        {Array.from({ length: slotCount }).map((_, i) => (
+          <Col span={8} key={i}>
+            <ImageUploadField
+              label={`Image ${i + 1}`}
+              value={list[i] || ""}
+              onChange={(url) => setAt(i, url)}
+            />
+            {slotCount > 1 && (
+              <Button
+                size="small"
+                danger
+                icon={<DeleteOutlined />}
+                onClick={() => removeAt(i)}
+              >
+                Remove
+              </Button>
+            )}
+          </Col>
+        ))}
+      </Row>
+      <Button
+        type="dashed"
+        icon={<PlusOutlined />}
+        onClick={() => setSlotCount((c) => c + 1)}
+        style={{ marginTop: 8 }}
+      >
+        Add Image Slot
+      </Button>
+    </Form.Item>
+  );
+};
+
 // CTA Reference Fields Component
 const CTAFields = ({ namePath, label, ctas }) => (
   <Card
@@ -287,7 +347,16 @@ const DescriptionItem = ({ field, index, remove, move, form }) => {
 };
 
 // Section Item Component (Updated with Button Fields)
-const SectionItem = ({ field, index, remove, move, form, ctas }) => {
+const SectionItem = ({
+  field,
+  index,
+  remove,
+  move,
+  form,
+  ctas,
+  subCategories = [],
+  currentSubcategoryId = null,
+}) => {
   const layout = Form.useWatch(["sections", field.name, "layoutType"], form);
   const currentImageUrl = Form.useWatch(
     ["sections", field.name, "image"],
@@ -301,6 +370,26 @@ const SectionItem = ({ field, index, remove, move, form, ctas }) => {
   const showButton = Form.useWatch(
     ["sections", field.name, "showButton"],
     form,
+  );
+  const galleryImages = Form.useWatch(
+    ["sections", field.name, "galleryImages"],
+    form,
+  );
+  const selectedCategory = Form.useWatch(["category"], form);
+  const selectedSubcategory = Form.useWatch(["subcategory"], form);
+
+  const isGallery = layout === "image-gallery";
+  const isCounter = layout === "counter";
+  const isServices = layout === "services";
+  const descRequired = ["image-left", "image-right", "description-only"].includes(
+    layout,
+  );
+
+  // Sibling subcategories of the same category, excluding this page's own subcategory
+  const excludeId = selectedSubcategory || currentSubcategoryId;
+  const serviceOptions = (subCategories || []).filter(
+    (s) =>
+      s.category === selectedCategory && String(s._id) !== String(excludeId),
   );
 
   return (
@@ -352,6 +441,9 @@ const SectionItem = ({ field, index, remove, move, form, ctas }) => {
               <Option value="image-right">Image Right</Option>
               <Option value="description-only">Description Only</Option>
               <Option value="description-and-form">Description & Form</Option>
+              <Option value="image-gallery">Image Gallery (2 rows)</Option>
+              <Option value="counter">Counter / Stats</Option>
+              <Option value="services">Services (Sub-categories)</Option>
             </Select>
           </Form.Item>
         </Col>
@@ -384,10 +476,17 @@ const SectionItem = ({ field, index, remove, move, form, ctas }) => {
           {...field}
           name={[field.name, "description"]}
           label="Description"
-          rules={[
-            { required: true, message: "Description is required" },
-            { min: 10, message: "Description must be at least 10 characters" },
-          ]}
+          rules={
+            descRequired
+              ? [
+                  { required: true, message: "Description is required" },
+                  {
+                    min: 10,
+                    message: "Description must be at least 10 characters",
+                  },
+                ]
+              : []
+          }
         >
           <TiptapEditor
             content={descriptionValue}
@@ -523,6 +622,169 @@ const SectionItem = ({ field, index, remove, move, form, ctas }) => {
             </Col>
           </Row>
         </div>
+      )}
+
+      {/* 🔥 Image Gallery layout controls */}
+      {isGallery && (
+        <Card
+          size="small"
+          title="Image Gallery Settings"
+          style={{ marginBottom: 16, background: "#f6ffed" }}
+        >
+          <Form.Item
+            {...field}
+            label="Heading Alignment"
+            name={[field.name, "headingAlign"]}
+            initialValue="center"
+          >
+            <Select style={{ maxWidth: 220 }}>
+              <Option value="left">Left</Option>
+              <Option value="center">Center</Option>
+              <Option value="right">Right</Option>
+            </Select>
+          </Form.Item>
+          <MultiImageUploadField
+            label="Gallery Images"
+            value={galleryImages}
+            onChange={(urls) =>
+              form.setFieldValue(
+                ["sections", field.name, "galleryImages"],
+                urls,
+              )
+            }
+          />
+        </Card>
+      )}
+
+      {/* 🔥 Counter / Stats layout controls */}
+      {isCounter && (
+        <Card
+          size="small"
+          title="Counter / Stats Settings"
+          style={{ marginBottom: 16, background: "#fff7e6" }}
+        >
+          <Form.Item
+            {...field}
+            label="Heading Alignment"
+            name={[field.name, "headingAlign"]}
+            initialValue="center"
+          >
+            <Select style={{ maxWidth: 220 }}>
+              <Option value="left">Left</Option>
+              <Option value="center">Center</Option>
+              <Option value="right">Right</Option>
+            </Select>
+          </Form.Item>
+          <Form.List name={[field.name, "counters"]}>
+            {(cFields, { add, remove: removeC }) => (
+              <>
+                {cFields.map((cf, ci) => (
+                  <Card
+                    key={cf.key}
+                    size="small"
+                    style={{ marginBottom: 12, background: "#fff" }}
+                    title={`Counter #${ci + 1}`}
+                    extra={
+                      <Button
+                        size="small"
+                        danger
+                        icon={<DeleteOutlined />}
+                        onClick={() => removeC(cf.name)}
+                      />
+                    }
+                  >
+                    <Row gutter={12}>
+                      <Col span={8}>
+                        <Form.Item
+                          {...cf}
+                          label="Value"
+                          name={[cf.name, "value"]}
+                          rules={[{ required: true }]}
+                        >
+                          <Input placeholder="50+" />
+                        </Form.Item>
+                      </Col>
+                      <Col span={16}>
+                        <Form.Item
+                          {...cf}
+                          label="Label"
+                          name={[cf.name, "label"]}
+                          rules={[{ required: true }]}
+                        >
+                          <Input placeholder="Delivered Results" />
+                        </Form.Item>
+                      </Col>
+                      <Col span={24}>
+                        <Form.Item
+                          {...cf}
+                          label="Description"
+                          name={[cf.name, "description"]}
+                        >
+                          <Input placeholder="Clients who trusted us to drive their digital growth" />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                  </Card>
+                ))}
+                <Button
+                  type="dashed"
+                  block
+                  icon={<PlusOutlined />}
+                  onClick={() => add({ value: "", label: "", description: "" })}
+                >
+                  Add Counter
+                </Button>
+              </>
+            )}
+          </Form.List>
+        </Card>
+      )}
+
+      {/* 🔥 Services layout controls */}
+      {isServices && (
+        <Card
+          size="small"
+          title="Services Settings"
+          style={{ marginBottom: 16, background: "#e6f4ff" }}
+        >
+          <Form.Item
+            {...field}
+            label="Heading Alignment"
+            name={[field.name, "headingAlign"]}
+            initialValue="center"
+          >
+            <Select style={{ maxWidth: 220 }}>
+              <Option value="left">Left</Option>
+              <Option value="center">Center</Option>
+              <Option value="right">Right</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            {...field}
+            label="Select Services (Sub-categories)"
+            name={[field.name, "services"]}
+            rules={[{ required: true, message: "Select at least one service" }]}
+          >
+            <Select
+              mode="multiple"
+              placeholder={
+                selectedCategory
+                  ? "Choose sub-categories to show as services"
+                  : "Select a Category first (General Info tab)"
+              }
+              optionFilterProp="label"
+              options={serviceOptions.map((s) => ({
+                label: s.name,
+                value: s.slug,
+              }))}
+              notFoundContent="No other sub-categories in this category"
+            />
+          </Form.Item>
+          <Text type="secondary" style={{ fontSize: 12 }}>
+            Only sub-categories of the same category are listed. This page&apos;s
+            own sub-category is hidden automatically.
+          </Text>
+        </Card>
       )}
 
       {/* Button Section - New Feature */}
@@ -719,12 +981,35 @@ export default function Pages() {
             }
           });
         }
-      } else {
+      } else if (
+        ["image-left", "image-right", "description-only"].includes(
+          section.layoutType,
+        )
+      ) {
         if (!section.description || section.description.trim() === "") {
           errors.push(`❌ Section #${sectionNum}: Description is required`);
         } else if (section.description.trim().length < 10) {
           errors.push(
             `❌ Section #${sectionNum}: Description must be at least 10 characters`,
+          );
+        }
+      }
+
+      // New layouts: minimal validation
+      if (section.layoutType === "services") {
+        if (!section.services || section.services.length === 0) {
+          errors.push(
+            `❌ Section #${sectionNum}: Select at least one service (sub-category)`,
+          );
+        }
+      }
+      if (section.layoutType === "counter") {
+        const valid = (section.counters || []).filter(
+          (c) => c && (c.value || c.label),
+        );
+        if (valid.length === 0) {
+          errors.push(
+            `❌ Section #${sectionNum}: Add at least one counter`,
           );
         }
       }
@@ -794,6 +1079,23 @@ export default function Pages() {
             buttonText: s.buttonText || "Get a Quote",
             buttonLink: s.buttonLink || "/getaquote",
             order: s.order ?? idx,
+            // 🔥 New layout fields (gallery / counter / services)
+            headingAlign: s.headingAlign || "center",
+            galleryImages: Array.isArray(s.galleryImages)
+              ? s.galleryImages.filter(Boolean)
+              : [],
+            counters: Array.isArray(s.counters)
+              ? s.counters
+                  .filter((c) => c && (c.value || c.label))
+                  .map((c) => ({
+                    value: c.value || "",
+                    label: c.label || "",
+                    description: c.description || "",
+                  }))
+              : [],
+            services: Array.isArray(s.services)
+              ? s.services.filter(Boolean)
+              : [],
             cta: s.cta?.ctaId
               ? {
                   ctaId: s.cta.ctaId,
@@ -997,6 +1299,16 @@ export default function Pages() {
         showButton: s.showButton === true,
         buttonText: s.buttonText || "Get a Quote",
         buttonLink: s.buttonLink || "/getaquote",
+        headingAlign: s.headingAlign || "center",
+        galleryImages: Array.isArray(s.galleryImages) ? s.galleryImages : [],
+        counters: Array.isArray(s.counters)
+          ? s.counters.map((c) => ({
+              value: c.value || "",
+              label: c.label || "",
+              description: c.description || "",
+            }))
+          : [],
+        services: Array.isArray(s.services) ? s.services : [],
         cta: {
           ctaId: s.cta?.ctaId?._id || s.cta?.ctaId || "",
           buttonVariant: s.cta?.buttonVariant || "primary",
@@ -1478,6 +1790,11 @@ export default function Pages() {
                               move={move}
                               form={form}
                               ctas={ctas}
+                              subCategories={subCategories}
+                              currentSubcategoryId={
+                                editingPage?.subcategory?._id ||
+                                editingPage?.subcategory
+                              }
                             />
                           ))}
                           <Button
