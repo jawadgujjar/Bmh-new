@@ -2,12 +2,13 @@
   position: relative;
   background-color: #0b0f19;
   color: #ffffff;
-  padding: 60px 20px;
+  /* Top padding accounts for the fixed navbar (65px) + breadcrumb, so the
+     dark background sits flush under the navbar with no white gap. */
+  padding: 120px 20px 60px;
   overflow: hidden;
   min-height: 85vh;
   display: flex;
   align-items: center;
-  margin-top: 5rem;
 }
 
 .container {
@@ -213,6 +214,12 @@
   .heroImageWrapper {
     max-width: 600px;
     margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .backheroDigital {
+    padding-top: 90px;
   }
 }
 

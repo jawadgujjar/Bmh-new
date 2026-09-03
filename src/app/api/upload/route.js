@@ -36,14 +36,42 @@ export async function POST(req) {
 
     // Cloudinary formData
     const cloudinaryFormData = new FormData();
-    cloudinaryFormData.append("file", new Blob([buffer]));
+    cloudinaryFormData.append(
+      "file",
+      new Blob([buffer], { type: file.type }),
+      file.name || "upload.png",
+    );
     cloudinaryFormData.append("upload_preset", uploadPreset);
 
-    // Upload to Cloudinary
-    const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
-      method: "POST",
-      body: cloudinaryFormData,
-    });
+    // Upload to Cloudinary (with retry for transient network failures)
+    const endpoint = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+    let res;
+    let lastErr;
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        res = await fetch(endpoint, {
+          method: "POST",
+          body: cloudinaryFormData,
+          signal: AbortSignal.timeout(30000),
+        });
+        break;
+      } catch (e) {
+        lastErr = e;
+        console.error(`Cloudinary fetch attempt ${attempt} failed:`, e?.message, e?.cause?.message);
+        if (attempt < 3) await new Promise((r) => setTimeout(r, 800 * attempt));
+      }
+    }
+
+    if (!res) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Could not reach Cloudinary",
+          details: lastErr?.cause?.message || lastErr?.message || "network error",
+        },
+        { status: 502 },
+      );
+    }
 
     const data = await res.json();
     console.log("Cloudinary response:", data);
@@ -58,6 +86,9 @@ export async function POST(req) {
     }
   } catch (err) {
     console.error("Upload error:", err);
-    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: err.message, details: err?.cause?.message || null },
+      { status: 500 },
+    );
   }
 }

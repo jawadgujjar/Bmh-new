@@ -31,6 +31,21 @@ async function getSubCategoryData(slug) {
   }
 }
 
+// 2b. Fetch sibling subcategories of a category (for the "services" section)
+async function getSubCategoriesByCategory(category) {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"}/api/subcategories?category=${category}`,
+      { cache: "no-store" },
+    );
+    if (!res.ok) throw new Error("Failed to fetch");
+    const data = await res.json();
+    return Array.isArray(data) ? data : data?.data || [];
+  } catch (error) {
+    return [];
+  }
+}
+
 // 🔥 3. Next.js Dynamic Metadata Function (Auto-Canonical Fixed)
 export async function generateMetadata({ params }) {
   const { subcategory } = await params;
@@ -72,6 +87,33 @@ export default async function SubcategoryPage({ params }) {
   const sortedSections =
     subcategoryData.sections?.sort((a, b) => (a.order || 0) - (b.order || 0)) ||
     [];
+
+  // 🔥 Resolve "services" sections -> actual sibling subcategory data
+  const hasServicesSection = sortedSections.some(
+    (s) => s.layoutType === "services",
+  );
+  let serviceMap = {};
+  if (hasServicesSection) {
+    const siblings = await getSubCategoriesByCategory(subcategoryData.category);
+    serviceMap = siblings.reduce((acc, s) => {
+      if (s.slug) acc[s.slug] = s;
+      return acc;
+    }, {});
+  }
+
+  const resolveServices = (slugs = []) =>
+    slugs
+      .map((slug) => serviceMap[slug])
+      .filter((s) => s && String(s._id) !== String(subcategoryData._id))
+      .map((s) => ({
+        name: s.name,
+        slug: s.slug,
+        description:
+          s.seo?.metaDescription ||
+          s.keywordsSection?.description ||
+          s.topSection?.description ||
+          "",
+      }));
 
   // Schema Markup tayyar karna (JSON-LD)
   const schemaMarkup = subcategoryData.seo?.schemaMarkup;
@@ -124,6 +166,15 @@ export default async function SubcategoryPage({ params }) {
           heading={section.heading}
           description={section.description}
           image={section.image}
+          headingAlign={section.headingAlign}
+          galleryImages={section.galleryImages}
+          counters={section.counters}
+          services={
+            section.layoutType === "services"
+              ? resolveServices(section.services)
+              : []
+          }
+          category={subcategoryData.category}
           cta={section.cta}
           showButton={section.showButton}
           buttonText={section.buttonText}

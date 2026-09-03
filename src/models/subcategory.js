@@ -21,12 +21,28 @@ const ctaRefSchema = new mongoose.Schema(
 /* ================================
    Section Schema (Updated with Inline Button)
 ================================ */
+const counterItemSchema = new mongoose.Schema(
+  {
+    value: { type: String, default: "" },
+    label: { type: String, default: "" },
+    description: { type: String, default: "" },
+  },
+  { _id: false },
+);
+
 const sectionSchema = new mongoose.Schema(
   {
     layoutType: {
       type: String,
       required: true,
-      enum: ["image-left", "image-right", "description-only"],
+      enum: [
+        "image-left",
+        "image-right",
+        "description-only",
+        "image-gallery",
+        "counter",
+        "services",
+      ],
       default: "description-only",
     },
     heading: { type: String, default: "" },
@@ -34,6 +50,29 @@ const sectionSchema = new mongoose.Schema(
     image: {
       type: String,
       default: "",
+    },
+
+    // 🔥 Image Gallery layout fields
+    headingAlign: {
+      type: String,
+      enum: ["left", "center", "right"],
+      default: "center",
+    },
+    galleryImages: {
+      type: [String],
+      default: [],
+    },
+
+    // 🔥 Counter layout fields
+    counters: {
+      type: [counterItemSchema],
+      default: [],
+    },
+
+    // 🔥 Services layout fields (list of sibling subcategory slugs)
+    services: {
+      type: [String],
+      default: [],
     },
 
     // 🔥 Inline Button Fields (For Admin Panel)

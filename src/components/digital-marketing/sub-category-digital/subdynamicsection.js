@@ -37,11 +37,114 @@ function GlobalCTA({ ctaData }) {
   );
 }
 
+function GalleryLayout({ heading, description, headingAlign = "center", images = [] }) {
+  const validImages = (images || []).filter(Boolean);
+  const cols = validImages.length <= 4 ? 2 : 3;
+
+  return (
+    <div className={styles.galleryWrapper} style={{ textAlign: headingAlign }}>
+      {heading && <h2 className={styles.galleryHeading}>{heading}</h2>}
+      {description && (
+        <div
+          className={styles.galleryDescription}
+          dangerouslySetInnerHTML={{ __html: description }}
+        />
+      )}
+      <div
+        className={styles.galleryGrid}
+        style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
+      >
+        {validImages.map((src, i) => (
+          <div key={i} className={styles.galleryItem}>
+            <Image
+              src={src}
+              alt={`${heading || "gallery"} ${i + 1}`}
+              width={400}
+              height={300}
+              className={styles.galleryImg}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CounterLayout({ heading, description, headingAlign = "center", counters = [] }) {
+  const validCounters = (counters || []).filter((c) => c && (c.value || c.label));
+
+  return (
+    <div className={styles.counterWrapper} style={{ textAlign: headingAlign }}>
+      {heading && <h2 className={styles.counterHeading}>{heading}</h2>}
+      {description && (
+        <div
+          className={styles.counterDescription}
+          dangerouslySetInnerHTML={{ __html: description }}
+        />
+      )}
+      <div className={styles.counterGrid}>
+        {validCounters.map((c, i) => (
+          <div key={i} className={styles.counterCard}>
+            <div className={styles.counterValue}>{c.value}</div>
+            <div className={styles.counterLabel}>{c.label}</div>
+            {c.description && (
+              <p className={styles.counterItemDesc}>{c.description}</p>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function stripHtml(html = "") {
+  return String(html)
+    .replace(/<[^>]*>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .trim();
+}
+
+function ServicesLayout({ heading, description, headingAlign = "center", services = [] }) {
+  const validServices = (services || []).filter((s) => s && s.name);
+  if (!validServices.length) return null;
+
+  return (
+    <div className={styles.servicesWrapper} style={{ textAlign: headingAlign }}>
+      {heading && <h2 className={styles.servicesHeading}>{heading}</h2>}
+      {description && (
+        <div
+          className={styles.servicesDescription}
+          dangerouslySetInnerHTML={{ __html: description }}
+        />
+      )}
+      <div className={styles.servicesGrid}>
+        {validServices.map((s, i) => (
+          <Link key={s.slug || i} href={`/${s.slug}`} className={styles.serviceCard}>
+            <h3 className={styles.serviceTitle}>{s.name}</h3>
+            {s.description && (
+              <p className={styles.serviceText}>{stripHtml(s.description)}</p>
+            )}
+            <span className={styles.serviceArrow}>
+              Learn More <ArrowRightOutlined />
+            </span>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function SubDynamicSection({
   layoutType = "description-only",
   heading = "",
   description = "",
   image = "",
+  headingAlign = "center",
+  galleryImages = [],
+  counters = [],
+  services = [],
+  category = "",
   cta = null,
   index = 0,
   showButton = false,
@@ -49,6 +152,63 @@ export default function SubDynamicSection({
   buttonLink = "/getaquote",
 }) {
   const isInlineButtonVisible = showButton === true || showButton === "true";
+
+  if (layoutType === "image-gallery") {
+    return (
+      <div className="w-full">
+        <section
+          className={`${styles.sectionWrapper} ${index % 2 !== 0 ? styles.alternateBg : ""}`}
+        >
+          <div className={styles.mainContainer}>
+            <GalleryLayout
+              heading={heading}
+              description={description}
+              headingAlign={headingAlign}
+              images={galleryImages}
+            />
+          </div>
+        </section>
+        {cta && <GlobalCTA ctaData={cta} />}
+      </div>
+    );
+  }
+
+  if (layoutType === "counter") {
+    return (
+      <div className="w-full">
+        <section className={styles.counterSection}>
+          <div className={styles.mainContainer}>
+            <CounterLayout
+              heading={heading}
+              description={description}
+              headingAlign={headingAlign}
+              counters={counters}
+            />
+          </div>
+        </section>
+        {cta && <GlobalCTA ctaData={cta} />}
+      </div>
+    );
+  }
+
+  if (layoutType === "services") {
+    if (!services || services.length === 0) return null;
+    return (
+      <div className="w-full">
+        <section className={styles.servicesSection}>
+          <div className={styles.mainContainer}>
+            <ServicesLayout
+              heading={heading}
+              description={description}
+              headingAlign={headingAlign}
+              services={services}
+            />
+          </div>
+        </section>
+        {cta && <GlobalCTA ctaData={cta} />}
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">

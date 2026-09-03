@@ -68,6 +68,18 @@ const descriptionItemSchema = new mongoose.Schema(
 );
 
 /* ================================
+   Counter Item Schema
+================================ */
+const counterItemSchema = new mongoose.Schema(
+  {
+    value: { type: String, default: "" },
+    label: { type: String, default: "" },
+    description: { type: String, default: "" },
+  },
+  { _id: false },
+);
+
+/* ================================
    Section Schema - FIXED & ROBUST
 ================================ */
 const sectionSchema = new mongoose.Schema(
@@ -80,6 +92,9 @@ const sectionSchema = new mongoose.Schema(
         "image-right",
         "description-only",
         "description-and-form",
+        "image-gallery",
+        "counter",
+        "services",
       ],
       default: "description-only",
     },
@@ -87,6 +102,26 @@ const sectionSchema = new mongoose.Schema(
     heading: { type: String, default: "" },
     description: { type: String, default: "" },
     image: { type: String, default: "" },
+
+    // 🔥 Image Gallery / Counter / Services shared + specific fields
+    headingAlign: {
+      type: String,
+      enum: ["left", "center", "right"],
+      default: "center",
+    },
+    galleryImages: {
+      type: [String],
+      default: [],
+    },
+    counters: {
+      type: [counterItemSchema],
+      default: [],
+    },
+    // Services layout: list of sibling subcategory slugs
+    services: {
+      type: [String],
+      default: [],
+    },
 
     // 🔥 Inline Button Fields (Fixed for persistence)
     showButton: {
