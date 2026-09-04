@@ -1,7 +1,5 @@
 import React from "react";
 import FirstPageBlog from "@/components/blogs/firstpageblog";
-import dbConnect from "@/lib/mongodb";
-import Blog from "@/models/blogs";
 import "../blogs/blogs.css";
 
 // ✅ 1. Static Metadata for Blogs Listing (Auto-Canonical Injection)
@@ -15,10 +13,7 @@ export const metadata = {
   },
 };
 
-export default async function BlogsPage() {
-  await dbConnect();
-  const blogs = await Blog.find({}).sort({ date: -1 }).lean();
-
+export default function BlogsPage() {
   // ✅ 2. Schema Markup JSON-LD Definition
   const jsonLd = {
     "@context": "https://schema.org",
@@ -44,7 +39,7 @@ export default async function BlogsPage() {
       </header>
 
       <main className="blogs-main-content">
-        <FirstPageBlog blogs={blogs} />
+        <FirstPageBlog />
       </main>
     </div>
   );

@@ -204,7 +204,7 @@ export default function BlogDetailPage() {
                     className={`${styles.categoryItem} ${selectedCategory.toLowerCase() === item.name.toLowerCase() ? styles.categoryItemActive : ''}`}
                     onClick={() => {
                       setSelectedCategory(item.name);
-                      router.push(`/blogs?search=${encodeURIComponent(item.name)}`);
+                      router.push(`/blogs?category=${encodeURIComponent(item.name)}`);
                     }}
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>

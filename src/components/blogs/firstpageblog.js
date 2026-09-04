@@ -17,17 +17,16 @@ const BlogListContent = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   const ORANGE_COLOR = "#FD7E14";
 
-  // URL se search query uthana (Jab detail page se wapas aayein)
+  // URL se search query / category uthana (Jab detail page se wapas aayein)
   useEffect(() => {
     const query = searchParams.get('search');
-    if (query) {
-      setSearchTerm(query);
-    } else {
-      setSearchTerm(""); // Agar query nahi hai toh search clear kar dein
-    }
+    const category = searchParams.get('category');
+    setSearchTerm(query || "");
+    setSelectedCategory(category || "");
   }, [searchParams]);
 
   useEffect(() => {
@@ -61,6 +60,10 @@ const BlogListContent = () => {
   }, []);
 
   const filteredBlogs = blogPosts.filter((post) => {
+    // Category select ho toh sirf usi category ke blogs (exact match)
+    if (selectedCategory) {
+      return (post?.category?.toLowerCase() || "") === selectedCategory.toLowerCase();
+    }
     const title = post?.title?.toLowerCase() || "";
     const description = post?.description?.toLowerCase() || "";
     const category = post?.category?.toLowerCase() || "";
@@ -70,12 +73,17 @@ const BlogListContent = () => {
 
   const handleSearch = (value) => {
     setSearchTerm(value);
+    setSelectedCategory("");
     // URL ko bhi update kar dein taake search bookmarkable ho jaye
     router.push(`/blogs?search=${value}`);
   };
 
   const handleReadMore = (post) => post?.slug && router.push(`/blogs/${post.slug}`);
-  const handleCategoryClick = (category) => handleSearch(category);
+  const handleCategoryClick = (category) => {
+    setSelectedCategory(category);
+    setSearchTerm("");
+    router.push(`/blogs?category=${encodeURIComponent(category)}`);
+  };
 
   if (loading) {
     return (
@@ -91,7 +99,11 @@ const BlogListContent = () => {
       <Row gutter={[32, 32]}>
         <Col xs={24} lg={16} xl={16}>
           <h2 className={styles.sectionTitle}>
-            {searchTerm ? `Results for: ${searchTerm}` : "Recent Posts"}
+            {selectedCategory
+              ? `Category: ${selectedCategory}`
+              : searchTerm
+              ? `Results for: ${searchTerm}`
+              : "Recent Posts"}
           </h2>
 
           {filteredBlogs.length === 0 ? (
@@ -151,7 +163,7 @@ const BlogListContent = () => {
                 dataSource={categories}
                 renderItem={(item) => (
                   <List.Item
-                    className={`${styles.categoryItem} ${searchTerm.toLowerCase() === item.name.toLowerCase() ? styles.categoryItemActive : ''}`}
+                    className={`${styles.categoryItem} ${selectedCategory.toLowerCase() === item.name.toLowerCase() ? styles.categoryItemActive : ''}`}
                     onClick={() => handleCategoryClick(item.name)}
                   >
                     <div className={styles.categoryLink} style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', width: '100%' }}>
