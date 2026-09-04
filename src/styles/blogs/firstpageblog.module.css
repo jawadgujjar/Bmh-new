@@ -111,6 +111,12 @@
   background: #fff5eb;
 }
 
+/* Selected category */
+.categoryItemActive,
+.categoryItemActive:hover {
+  background: #ffe8d6;
+}
+
 .categoryLink {
   display: flex;
   justify-content: space-between;

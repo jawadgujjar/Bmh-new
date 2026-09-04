@@ -26,6 +26,7 @@ export default function BlogDetailPage() {
   const [activeSection, setActiveSection] = useState('');
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('');
 
   const ORANGE_COLOR = '#FD7E14';
   const ORANGE_LIGHT = '#FFA94D';
@@ -200,8 +201,11 @@ export default function BlogDetailPage() {
                 dataSource={categories}
                 renderItem={(item) => (
                   <List.Item
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => router.push(`/blogs?search=${encodeURIComponent(item.name)}`)}
+                    className={`${styles.categoryItem} ${selectedCategory.toLowerCase() === item.name.toLowerCase() ? styles.categoryItemActive : ''}`}
+                    onClick={() => {
+                      setSelectedCategory(item.name);
+                      router.push(`/blogs?search=${encodeURIComponent(item.name)}`);
+                    }}
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
                       <span>{item.name}</span>

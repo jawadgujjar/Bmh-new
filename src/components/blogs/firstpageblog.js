@@ -150,7 +150,10 @@ const BlogListContent = () => {
               <List
                 dataSource={categories}
                 renderItem={(item) => (
-                  <List.Item className={styles.categoryItem} onClick={() => handleCategoryClick(item.name)}>
+                  <List.Item
+                    className={`${styles.categoryItem} ${searchTerm.toLowerCase() === item.name.toLowerCase() ? styles.categoryItemActive : ''}`}
+                    onClick={() => handleCategoryClick(item.name)}
+                  >
                     <div className={styles.categoryLink} style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', width: '100%' }}>
                       <span className={styles.categoryName}>{item.name}</span>
                       <Tag className={styles.categoryCount}>{item.count}</Tag>
