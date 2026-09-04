@@ -12,6 +12,23 @@
   border-bottom: 1px solid #ccc;
 }
 
+/* Category list items — hover + selected state (same as blog main page) */
+.categoryItem {
+  cursor: pointer;
+  padding: 10px !important;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+
+.categoryItem:hover {
+  background: #fff5eb;
+}
+
+.categoryItemActive,
+.categoryItemActive:hover {
+  background: #ffe8d6;
+}
+
 /* Header */
 .blogHeader {
   position: relative;
