@@ -1,18 +1,23 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb'; // apna DB connection
 import Newsletter from '@/models/newsletter';
+import { requireAuth } from '@/lib/apiAuth';
+import { safeError, isEmail, cleanString, rateLimit } from '@/lib/security';
 
 // 📌 POST → Add Email
 export async function POST(req) {
+  const limited = rateLimit(req, { name: 'newsletter', limit: 5, windowMs: 60_000 });
+  if (!limited.ok) return limited.response;
+
   try {
     await connectDB();
 
     const body = await req.json();
-    const { email } = body;
+    const email = cleanString(body.email, 254).toLowerCase();
 
-    if (!email) {
+    if (!email || !isEmail(email)) {
       return NextResponse.json(
-        { success: false, message: 'Email is required' },
+        { success: false, message: 'Please enter a valid email address' },
         { status: 400 }
       );
     }
@@ -27,25 +32,22 @@ export async function POST(req) {
       );
     }
 
-    const newUser = await Newsletter.create({ email });
+    await Newsletter.create({ email });
 
     return NextResponse.json({
       success: true,
       message: 'Subscribed successfully',
-      data: newUser,
     });
-
   } catch (error) {
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 500 }
-    );
+    return safeError(error, { context: 'newsletter.POST', key: 'message' });
   }
 }
 
 
 // 📌 GET → All Emails
-export async function GET() {
+export async function GET(req) {
+  const auth = requireAuth(req);
+  if (!auth.ok) return auth.response;
   try {
     await connectDB();
 
@@ -55,11 +57,7 @@ export async function GET() {
       success: true,
       data: users,
     });
-
   } catch (error) {
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 500 }
-    );
+    return safeError(error, { context: 'newsletter.GET', key: 'message' });
   }
 }

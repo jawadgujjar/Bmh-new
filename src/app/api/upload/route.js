@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
+import { requireAuth } from "@/lib/apiAuth";
 
 export async function POST(req) {
+  const auth = requireAuth(req);
+  if (!auth.ok) return auth.response;
   try {
     const formData = await req.formData();
     const file = formData.get("image");
@@ -18,6 +21,15 @@ export async function POST(req) {
       );
     }
 
+    // Validate file size (max 5 MB)
+    const MAX_BYTES = 5 * 1024 * 1024;
+    if (typeof file.size === "number" && file.size > MAX_BYTES) {
+      return NextResponse.json(
+        { success: false, error: "File is too large. Maximum size is 5 MB." },
+        { status: 400 }
+      );
+    }
+
     // Convert file into buffer
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
@@ -27,7 +39,7 @@ export async function POST(req) {
     const uploadPreset = process.env.CLOUDINARY_UPLOAD_PRESET;
 
     if (!cloudName || !uploadPreset) {
-      console.error("Missing env vars:", { cloudName: !!cloudName, uploadPreset: !!uploadPreset });
+      console.error("[upload] Cloudinary env vars missing");
       return NextResponse.json(
         { success: false, error: "Cloudinary configuration missing" },
         { status: 500 }
@@ -57,37 +69,33 @@ export async function POST(req) {
         break;
       } catch (e) {
         lastErr = e;
-        console.error(`Cloudinary fetch attempt ${attempt} failed:`, e?.message, e?.cause?.message);
+        console.error(`[upload] Cloudinary attempt ${attempt} failed:`, e?.message);
         if (attempt < 3) await new Promise((r) => setTimeout(r, 800 * attempt));
       }
     }
 
     if (!res) {
       return NextResponse.json(
-        {
-          success: false,
-          error: "Could not reach Cloudinary",
-          details: lastErr?.cause?.message || lastErr?.message || "network error",
-        },
+        { success: false, error: "Could not reach the image service. Please try again." },
         { status: 502 },
       );
     }
 
     const data = await res.json();
-    console.log("Cloudinary response:", data);
 
     if (data.secure_url) {
       return NextResponse.json({ success: true, url: data.secure_url });
-    } else {
-      return NextResponse.json(
-        { success: false, error: "Upload failed", details: data.error?.message || data },
-        { status: 400 }
-      );
     }
-  } catch (err) {
-    console.error("Upload error:", err);
+
+    console.error("[upload] Cloudinary rejected upload:", data?.error?.message);
     return NextResponse.json(
-      { success: false, error: err.message, details: err?.cause?.message || null },
+      { success: false, error: "Image upload failed. Please try again." },
+      { status: 400 }
+    );
+  } catch (err) {
+    console.error("[upload]", err?.message || err);
+    return NextResponse.json(
+      { success: false, error: "Image upload failed. Please try again." },
       { status: 500 },
     );
   }

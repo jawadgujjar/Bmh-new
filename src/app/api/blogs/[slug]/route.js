@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import Blog from "@/models/blogs";
+import { requireAuth } from "@/lib/apiAuth";
 
 /* ================= GET ================= */
 export async function GET(req, context) {
@@ -27,6 +28,8 @@ export async function GET(req, context) {
 
 /* ================= PUT ================= */
 export async function PUT(req, context) {
+  const auth = requireAuth(req);
+  if (!auth.ok) return auth.response;
   try {
     const { slug } = await context.params;
     await dbConnect();
@@ -81,6 +84,8 @@ export async function PUT(req, context) {
 
 /* ================= DELETE ================= */
 export async function DELETE(req, context) {
+  const auth = requireAuth(req);
+  if (!auth.ok) return auth.response;
   try {
     const { slug } = await context.params;
     await dbConnect();

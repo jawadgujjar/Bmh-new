@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import SubCategory from "@/models/subcategory";
+import { requireAuth } from "@/lib/apiAuth";
+import { safeError } from "@/lib/security";
 
 export async function POST(request, { params }) {
+  const auth = requireAuth(request);
+  if (!auth.ok) return auth.response;
   try {
     await dbConnect();
     const { identifier } = params;
@@ -44,8 +48,11 @@ export async function POST(request, { params }) {
 
     return NextResponse.json(subcategory.sections, { status: 201 });
   } catch (err) {
-    console.error("Section Push Error:", err);
-    // Agar image missing hui image-left/right mein, toh Mongoose validation error yahan ayegi
-    return NextResponse.json({ error: err.message }, { status: 400 });
+    return safeError(err, {
+      context: "subcategories.sections.POST",
+      status: 400,
+      success: false,
+      message: "Could not add the section. Please check your inputs.",
+    });
   }
 }

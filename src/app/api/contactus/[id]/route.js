@@ -2,9 +2,12 @@ import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Contact from "@/models/contactus";
 import mongoose from "mongoose";
+import { requireAuth } from "@/lib/apiAuth";
 
 /* ================= GET SINGLE ================= */
 export async function GET(req, context) {
+  const auth = requireAuth(req);
+  if (!auth.ok) return auth.response;
   try {
     await connectDB();
 
@@ -31,7 +34,7 @@ export async function GET(req, context) {
 
   } catch (error) {
     return NextResponse.json(
-      { success: false, message: error.message },
+      { success: false, message: "Something went wrong. Please try again." },
       { status: 500 }
     );
   }
@@ -39,6 +42,8 @@ export async function GET(req, context) {
 
 /* ================= DELETE ================= */
 export async function DELETE(req, context) {
+  const auth = requireAuth(req);
+  if (!auth.ok) return auth.response;
   try {
     await connectDB();
 
@@ -68,7 +73,7 @@ export async function DELETE(req, context) {
 
   } catch (error) {
     return NextResponse.json(
-      { success: false, message: error.message },
+      { success: false, message: "Something went wrong. Please try again." },
       { status: 500 }
     );
   }
@@ -76,6 +81,8 @@ export async function DELETE(req, context) {
 
 /* ================= UPDATE ================= */
 export async function PUT(req, context) {
+  const auth = requireAuth(req);
+  if (!auth.ok) return auth.response;
   try {
     await connectDB();
 
@@ -99,7 +106,7 @@ export async function PUT(req, context) {
 
   } catch (error) {
     return NextResponse.json(
-      { success: false, message: error.message },
+      { success: false, message: "Something went wrong. Please try again." },
       { status: 500 }
     );
   }

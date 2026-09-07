@@ -1,6 +1,8 @@
 import dbConnect from "@/lib/mongodb";
 import CTA from "@/models/cta"; // Use absolute path if possible
 import { NextResponse } from "next/server";
+import { requireAuth, escapeRegex } from "@/lib/apiAuth";
+import { safeError } from "@/lib/security";
 
 export async function GET(req) {
   await dbConnect();
@@ -12,29 +14,29 @@ export async function GET(req) {
     let query = {};
     if (isActive !== null) query.isActive = isActive === "true";
     if (search) {
-      query.name = { $regex: search, $options: "i" };
+      query.name = { $regex: escapeRegex(search.slice(0, 100)), $options: "i" };
     }
 
     const ctas = await CTA.find(query).sort({ createdAt: -1 });
     return NextResponse.json({ success: true, data: ctas });
   } catch (error) {
-    return NextResponse.json(
-      { success: false, error: error.message },
-      { status: 400 },
-    );
+    return safeError(error, { context: "ctas.GET" });
   }
 }
 
 export async function POST(req) {
+  const auth = requireAuth(req);
+  if (!auth.ok) return auth.response;
   await dbConnect();
   try {
     const body = await req.json();
     const cta = await CTA.create(body);
     return NextResponse.json({ success: true, data: cta }, { status: 201 });
   } catch (error) {
-    return NextResponse.json(
-      { success: false, error: error.message },
-      { status: 400 },
-    );
+    return safeError(error, {
+      context: "ctas.POST",
+      status: 400,
+      message: "Could not save the CTA. Please check your inputs.",
+    });
   }
 }

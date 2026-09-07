@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import SubCategory from "@/models/subcategory";
 import CTA from "@/models/cta";
+import { requireAuth } from "@/lib/apiAuth";
+import { safeError } from "@/lib/security";
 
 // 1. GET ALL / FILTER
 export async function GET(request) {
@@ -24,13 +26,14 @@ export async function GET(request) {
 
     return NextResponse.json(subcategories || [], { status: 200 });
   } catch (err) {
-    console.error("GET Error:", err);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return safeError(err, { context: "subcategories.GET", success: false });
   }
 }
 
 // 2. CREATE (POST)
 export async function POST(req) {
+  const auth = requireAuth(req);
+  if (!auth.ok) return auth.response;
   try {
     await dbConnect();
     const body = await req.json();
@@ -101,7 +104,11 @@ export async function POST(req) {
 
     return NextResponse.json(populated, { status: 201 });
   } catch (err) {
-    console.error("POST Error:", err);
-    return NextResponse.json({ error: err.message }, { status: 400 });
+    return safeError(err, {
+      context: "subcategories.POST",
+      status: 400,
+      success: false,
+      message: "Could not create the sub-category. Please check your inputs.",
+    });
   }
 }

@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import Keyword from "@/models/portfolio";
+import { requireAuth } from "@/lib/apiAuth";
+import { safeError } from "@/lib/security";
 
 // Get all portfolios
 export async function GET() {
@@ -9,17 +11,17 @@ export async function GET() {
     const data = await Keyword.find({}).lean();
     return NextResponse.json({ success: true, data });
   } catch (error) {
-    console.error("Error fetching portfolios:", error);
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    return safeError(error, { context: "portfolio.GET" });
   }
 }
 
 // Create new keyword + portfolio
 export async function POST(req) {
+  const auth = requireAuth(req);
+  if (!auth.ok) return auth.response;
   try {
     await dbConnect();
     const body = await req.json();
-    console.log("POST body:", body);
 
     if (!body.keyword || body.keyword.trim() === "") {
       return NextResponse.json({ success: false, error: "Keyword is required" }, { status: 400 });
@@ -76,25 +78,28 @@ export async function POST(req) {
     });
 
   } catch (error) {
-    console.error("Error creating portfolio:", error);
-
     if (error.code === 11000) {
-      return NextResponse.json({ 
-        success: false, 
-        error: "Keyword already exists" 
+      return NextResponse.json({
+        success: false,
+        error: "Keyword already exists"
       }, { status: 400 });
     }
 
-    return NextResponse.json({ success: false, error: error.message }, { status: 400 });
+    return safeError(error, {
+      context: "portfolio.POST",
+      status: 400,
+      message: "Could not create the portfolio. Please check your inputs.",
+    });
   }
 }
 
 // Update portfolio
 export async function PUT(req) {
+  const auth = requireAuth(req);
+  if (!auth.ok) return auth.response;
   try {
     await dbConnect();
     const body = await req.json();
-    console.log("PUT body:", body);
 
     const { _id, ...updateData } = body;
 
@@ -172,28 +177,30 @@ export async function PUT(req) {
     });
 
   } catch (error) {
-    console.error("Error updating portfolio:", error);
-
     if (error.code === 11000) {
-      return NextResponse.json({ 
-        success: false, 
-        error: "Keyword already exists" 
+      return NextResponse.json({
+        success: false,
+        error: "Keyword already exists"
       }, { status: 400 });
     }
 
-    return NextResponse.json({ success: false, error: error.message }, { status: 400 });
+    return safeError(error, {
+      context: "portfolio.PUT",
+      status: 400,
+      message: "Could not update the portfolio. Please check your inputs.",
+    });
   }
 }
 
 // Delete portfolio
 export async function DELETE(req) {
+  const auth = requireAuth(req);
+  if (!auth.ok) return auth.response;
   try {
     await dbConnect();
 
     const url = new URL(req.url);
     const id = url.searchParams.get("id");
-
-    console.log("Deleting portfolio with ID:", id);
 
     if (!id) {
       return NextResponse.json({ success: false, error: "Portfolio ID is required" }, { status: 400 });
@@ -212,7 +219,6 @@ export async function DELETE(req) {
     });
 
   } catch (error) {
-    console.error("Error deleting portfolio:", error);
-    return NextResponse.json({ success: false, error: error.message }, { status: 400 });
+    return safeError(error, { context: "portfolio.DELETE", status: 400 });
   }
 }

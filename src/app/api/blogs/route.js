@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import Blog from "@/models/blogs";
+import { requireAuth, escapeRegex } from "@/lib/apiAuth";
+import { safeError } from "@/lib/security";
 
 /* =========================
    GET → All blogs / by slug / by category
@@ -17,14 +19,14 @@ export async function GET(req) {
 
     if (slug) query.slug = slug;
     if (category) {
-      query.category = { $regex: `^${category}$`, $options: "i" };
+      query.category = { $regex: `^${escapeRegex(category)}$`, $options: "i" };
     }
 
     const blogs = await Blog.find(query).sort({ createdAt: -1 });
 
     return NextResponse.json(blogs, { status: 200 });
   } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return safeError(err, { context: "blogs.GET", success: false });
   }
 }
 
@@ -32,6 +34,8 @@ export async function GET(req) {
    POST → Create blog
 ========================= */
 export async function POST(req) {
+  const auth = requireAuth(req);
+  if (!auth.ok) return auth.response;
   try {
     await dbConnect();
     const body = await req.json();
@@ -68,7 +72,12 @@ export async function POST(req) {
 
     return NextResponse.json(blog, { status: 201 });
   } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 400 });
+    return safeError(err, {
+      context: "blogs.POST",
+      status: 400,
+      message: "Could not save the blog. Please check your inputs.",
+      success: false,
+    });
   }
 }
 
@@ -76,6 +85,8 @@ export async function POST(req) {
    PUT → Update blog
 ========================= */
 export async function PUT(req) {
+  const auth = requireAuth(req);
+  if (!auth.ok) return auth.response;
   try {
     await dbConnect();
     const body = await req.json();
@@ -110,7 +121,12 @@ export async function PUT(req) {
 
     return NextResponse.json(updated, { status: 200 });
   } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 400 });
+    return safeError(err, {
+      context: "blogs.PUT",
+      status: 400,
+      message: "Could not update the blog. Please check your inputs.",
+      success: false,
+    });
   }
 }
 
@@ -118,6 +134,8 @@ export async function PUT(req) {
    DELETE → Remove blog
 ========================= */
 export async function DELETE(req) {
+  const auth = requireAuth(req);
+  if (!auth.ok) return auth.response;
   try {
     await dbConnect();
 
@@ -145,6 +163,6 @@ export async function DELETE(req) {
       { status: 200 }
     );
   } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return safeError(err, { context: "blogs.DELETE", success: false });
   }
 }

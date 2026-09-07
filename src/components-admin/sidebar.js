@@ -36,9 +36,13 @@ export default function AdminSidebar({ active, setActive }) {
     localStorage.removeItem("role");
     localStorage.removeItem("loginTimestamp");
     sessionStorage.removeItem("isSessionActive");
-    
+
     setIsLoggedIn(false);
-    window.location.reload(); // Page reload karke login par bhej dega
+
+    // Server-side auth cookie bhi clear karein, phir login par bhej dein
+    fetch("/api/admin/logout", { method: "POST" }).finally(() => {
+      window.location.href = "/auth/login";
+    });
   };
 
   if (!isLoggedIn) return null;
