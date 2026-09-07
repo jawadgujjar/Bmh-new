@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import SelectedPages from "@/models/selectedpages";
+import { requireAuth } from "@/lib/apiAuth";
+import { safeError } from "@/lib/security";
 
 export async function GET(req) {
   try {
@@ -25,10 +27,12 @@ export async function GET(req) {
 
     return NextResponse.json(data.pages, { status: 200 });
   } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return safeError(err, { context: "selected-pages.GET", success: false });
   }
 }
 export async function POST(req) {
+  const auth = requireAuth(req);
+  if (!auth.ok) return auth.response;
   try {
     await dbConnect();
     const body = await req.json();
@@ -50,6 +54,6 @@ export async function POST(req) {
 
     return NextResponse.json({ message: "Selected pages saved", data: updated });
   } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return safeError(err, { context: "selected-pages.POST", success: false });
   }
 }

@@ -2,8 +2,11 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { google } from "googleapis";
+import { requireAuth } from "@/lib/apiAuth";
 
-export async function GET() {
+export async function GET(req) {
+  const auth = requireAuth(req, ["admin"]);
+  if (!auth.ok) return auth.response;
   try {
     const session = await getServerSession(authOptions);
     
@@ -47,9 +50,7 @@ export async function GET() {
     });
     
   } catch (error) {
-    return Response.json({ 
-      error: error.message,
-      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
-    }, { status: 500 });
+    console.error("[debug-token]", error?.message || error);
+    return Response.json({ error: "Could not read token info" }, { status: 500 });
   }
 }

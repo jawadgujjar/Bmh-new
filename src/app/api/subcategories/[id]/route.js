@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import SubCategory from "@/models/subcategory";
 import CTA from "@/models/cta";
+import { requireAuth } from "@/lib/apiAuth";
+import { safeError } from "@/lib/security";
 
 // Helper to check if string is valid MongoDB ID
 const isValidObjectId = (id) => /^[0-9a-fA-F]{24}$/.test(id);
@@ -37,8 +39,7 @@ export async function GET(request, { params }) {
 
     return NextResponse.json(subcategory, { status: 200 });
   } catch (err) {
-    console.error("❌ GET Error:", err);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return safeError(err, { context: "subcategories.GET[id]", success: false });
   }
 }
 
@@ -46,6 +47,8 @@ export async function GET(request, { params }) {
    2. PUT: Update SubCategory (The Main Logic)
    ========================================================== */
 export async function PUT(request, { params }) {
+  const auth = requireAuth(request);
+  if (!auth.ok) return auth.response;
   try {
     await dbConnect();
     const { id } = await params;
@@ -134,11 +137,14 @@ export async function PUT(request, { params }) {
       );
     }
 
-    console.log(`✅ Subcategory ${updated.name} updated with buttons.`);
     return NextResponse.json(updated);
   } catch (err) {
-    console.error("❌ PUT Error:", err);
-    return NextResponse.json({ error: err.message }, { status: 400 });
+    return safeError(err, {
+      context: "subcategories.PUT[id]",
+      status: 400,
+      success: false,
+      message: "Could not update the sub-category. Please check your inputs.",
+    });
   }
 }
 
@@ -146,6 +152,8 @@ export async function PUT(request, { params }) {
    3. DELETE: Remove SubCategory
    ========================================================== */
 export async function DELETE(request, { params }) {
+  const auth = requireAuth(request);
+  if (!auth.ok) return auth.response;
   try {
     await dbConnect();
     const { id } = await params;
@@ -159,7 +167,6 @@ export async function DELETE(request, { params }) {
 
     return NextResponse.json({ message: "Success! SubCategory deleted." });
   } catch (err) {
-    console.error("❌ DELETE Error:", err);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return safeError(err, { context: "subcategories.DELETE[id]", success: false });
   }
 }

@@ -3,8 +3,17 @@ import User from "@/models/user";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
+import { rateLimit } from "@/lib/security";
 
 export async function POST(request) {
+  // Brute-force protection: 10 attempts / 15 min per IP
+  const limited = rateLimit(request, {
+    name: "admin-login",
+    limit: 10,
+    windowMs: 15 * 60_000,
+  });
+  if (!limited.ok) return limited.response;
+
   try {
     await dbConnect();
 
@@ -41,7 +50,7 @@ export async function POST(request) {
     const token = jwt.sign(
       { id: user._id, email: user.email, role: user.role },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "24h" }
     );
 
     const response = NextResponse.json({
@@ -53,7 +62,7 @@ export async function POST(request) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax", // 🔥 strict se lax (Vercel safe)
-      maxAge: 60 * 60,
+      maxAge: 60 * 60 * 24, // 24h — matches the admin panel session
       path: "/",
     });
 

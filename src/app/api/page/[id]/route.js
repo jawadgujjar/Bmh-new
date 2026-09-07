@@ -4,6 +4,8 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import Page from "@/models/page";
 import mongoose from "mongoose";
+import { requireAuth } from "@/lib/apiAuth";
+import { safeError } from "@/lib/security";
 
 /* ==================================================
    GET: Single Page By ID
@@ -74,11 +76,7 @@ export async function GET(req, context) {
       data: page,
     });
   } catch (error) {
-    console.error("Error in GET /api/page/[id]:", error);
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 500 },
-    );
+    return safeError(error, { context: "page.GET[id]", key: "message" });
   }
 }
 
@@ -86,6 +84,8 @@ export async function GET(req, context) {
    PUT: Update Page By ID - FIXED
 ================================================== */
 export async function PUT(req, context) {
+  const auth = requireAuth(req);
+  if (!auth.ok) return auth.response;
   try {
     await dbConnect();
 
@@ -208,11 +208,12 @@ export async function PUT(req, context) {
       message: "Page updated successfully",
     });
   } catch (error) {
-    console.error("Error in PUT /api/page/[id]:", error);
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 400 },
-    );
+    return safeError(error, {
+      context: "page.PUT[id]",
+      status: 400,
+      key: "message",
+      message: "Could not update the page. Please check your inputs.",
+    });
   }
 }
 
@@ -220,6 +221,8 @@ export async function PUT(req, context) {
    DELETE: Soft Delete
 ================================================== */
 export async function DELETE(req, context) {
+  const auth = requireAuth(req);
+  if (!auth.ok) return auth.response;
   try {
     await dbConnect();
     const { params } = await context;
@@ -262,6 +265,8 @@ export async function DELETE(req, context) {
    PATCH: Partial Update - FIXED
 ================================================== */
 export async function PATCH(req, context) {
+  const auth = requireAuth(req);
+  if (!auth.ok) return auth.response;
   try {
     await dbConnect();
     const { params } = await context;
@@ -307,9 +312,11 @@ export async function PATCH(req, context) {
       message: "Page updated successfully",
     });
   } catch (error) {
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 400 },
-    );
+    return safeError(error, {
+      context: "page.PATCH[id]",
+      status: 400,
+      key: "message",
+      message: "Could not update the page. Please check your inputs.",
+    });
   }
 }

@@ -4,6 +4,8 @@ import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 import dbConnect from "@/lib/mongodb";
 import Page from "@/models/page";
+import { requireAuth } from "@/lib/apiAuth";
+import { safeError } from "@/lib/security";
 
 /* ==================================================
    GET: Fetch All Pages OR By Filters OR By Slug
@@ -105,11 +107,7 @@ export async function GET(request) {
       count: pages.length,
     });
   } catch (error) {
-    console.error("Error in GET /api/page:", error);
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 500 },
-    );
+    return safeError(error, { context: "page.GET", key: "message" });
   }
 }
 
@@ -117,6 +115,8 @@ export async function GET(request) {
    POST: Create New Page - FIXED
 ================================================== */
 export async function POST(req) {
+  const auth = requireAuth(req);
+  if (!auth.ok) return auth.response;
   try {
     await dbConnect();
     const body = await req.json();
@@ -194,10 +194,11 @@ export async function POST(req) {
       { status: 201 },
     );
   } catch (error) {
-    console.error("Error in POST /api/page:", error);
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 400 },
-    );
+    return safeError(error, {
+      context: "page.POST",
+      status: 400,
+      key: "message",
+      message: "Could not create the page. Please check your inputs.",
+    });
   }
 }
