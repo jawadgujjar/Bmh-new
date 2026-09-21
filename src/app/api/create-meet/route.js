@@ -1,107 +1,83 @@
-import { google } from "googleapis";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { NextResponse } from "next/server";
+import { getCalendarClient } from "@/lib/googleCalendar";
+import { safeError, isEmail, cleanString, rateLimit } from "@/lib/security";
 
 export async function POST(req) {
-  try {
-    // 1. Get session
-    const session = await getServerSession(authOptions);
+  const limited = rateLimit(req, { name: "create-meet", limit: 5, windowMs: 60_000 });
+  if (!limited.ok) return limited.response;
 
-    if (!session || !session.accessToken) {
-      return Response.json(
-        { error: "Unauthorized - Please login again" },
-        { status: 401 }
+  try {
+    const body = await req.json();
+    const name = cleanString(body.name, 120);
+    const email = cleanString(body.email, 254);
+    const { dateTime, timeZone = "Asia/Karachi" } = body;
+
+    if (!name || !email || !dateTime) {
+      return NextResponse.json(
+        { error: "Name, email and a meeting time are required" },
+        { status: 400 }
+      );
+    }
+    if (!isEmail(email)) {
+      return NextResponse.json({ error: "Please enter a valid email address" }, { status: 400 });
+    }
+
+    const startTime = new Date(dateTime);
+    if (Number.isNaN(startTime.getTime()) || startTime.getTime() < Date.now() - 5 * 60_000) {
+      return NextResponse.json({ error: "Please pick a valid future time" }, { status: 400 });
+    }
+    const endTime = new Date(startTime.getTime() + 30 * 60000); // 30 mins
+
+    const calendar = await getCalendarClient();
+    if (!calendar) {
+      console.error("[create-meet] Google Calendar not connected by admin yet");
+      return NextResponse.json(
+        { error: "Meeting scheduling is temporarily unavailable. Please try again later." },
+        { status: 503 }
       );
     }
 
-    // 2. Get request data
-    const body = await req.json();
-    const { dateTime, timeZone = "Asia/Karachi" } = body;
-
-    if (!dateTime) {
-      return Response.json({ error: "DateTime missing" }, { status: 400 });
-    }
-
-    // 3. Setup OAuth2 client
-    const oauth2Client = new google.auth.OAuth2(
-      process.env.GOOGLE_CLIENT_ID,
-      process.env.GOOGLE_CLIENT_SECRET
-    );
-    
-    oauth2Client.setCredentials({
-      access_token: session.accessToken
-    });
-
-    // 4. Create calendar instance
-    const calendar = google.calendar({ 
-      version: "v3", 
-      auth: oauth2Client 
-    });
-
-    // 5. Prepare event times
-    const startTime = new Date(dateTime);
-    const endTime = new Date(startTime.getTime() + 30 * 60000); // 30 mins
-
-    // 6. Create event with Google Meet
     const event = {
-      summary: "Brand Marketing Hub | Free Consultation",
+      summary: `Brand Marketing Hub | Free Consultation - ${name}`,
       description: "Discussion about your project requirements",
-      start: {
-        dateTime: startTime.toISOString(),
-        timeZone: timeZone,
-      },
-      end: {
-        dateTime: endTime.toISOString(),
-        timeZone: timeZone,
-      },
+      start: { dateTime: startTime.toISOString(), timeZone },
+      end: { dateTime: endTime.toISOString(), timeZone },
       attendees: [
-        { email: session.user.email,responseStatus: 'accepted' },
-        { email: "hello@brandmarketinghub.com" } // Add your admin email
+        { email, displayName: name, responseStatus: "accepted" },
+        ...(process.env.EMAIL_TO ? [{ email: process.env.EMAIL_TO }] : []),
       ],
       conferenceData: {
         createRequest: {
           requestId: `meet-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-          conferenceSolutionKey: { type: "hangoutsMeet" }
-        }
+          conferenceSolutionKey: { type: "hangoutsMeet" },
+        },
       },
       reminders: {
         useDefault: false,
         overrides: [
-          { method: 'email', minutes: 24 * 60 },
-          { method: 'popup', minutes: 10 },
+          { method: "email", minutes: 24 * 60 },
+          { method: "popup", minutes: 10 },
         ],
       },
     };
 
     const response = await calendar.events.insert({
-      calendarId: 'primary',
+      calendarId: "primary",
       resource: event,
       conferenceDataVersion: 1,
-      sendUpdates: 'all',
+      sendUpdates: "all",
     });
 
-    // 7. Send success response
-    return Response.json({
+    return NextResponse.json({
       success: true,
       meetLink: response.data.hangoutLink || response.data.conferenceData?.entryPoints?.[0]?.uri,
       eventId: response.data.id,
       htmlLink: response.data.htmlLink,
     });
-
   } catch (error) {
-    console.error("[create-meet]", error?.message || error);
-
-    // Specific, user-safe error messages
-    const msg = String(error?.message || "");
-    let errorMessage = "Failed to create meeting";
-    if (msg.includes("invalid_grant")) {
-      errorMessage = "Session expired. Please login again.";
-    } else if (msg.includes("insufficient permission")) {
-      errorMessage = "Calendar permissions not granted. Please grant calendar access.";
-    } else if (msg.includes("access_token")) {
-      errorMessage = "Authentication error. Please logout and login again.";
-    }
-
-    return Response.json({ error: errorMessage }, { status: 500 });
+    return safeError(error, {
+      context: "create-meet",
+      message: "Failed to create meeting. Please try again.",
+    });
   }
 }

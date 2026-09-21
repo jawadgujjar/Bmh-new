@@ -58,7 +58,8 @@ export default function AdminSidebar({ active, setActive }) {
     { id: "blogs", label: "Blogs" },
     { id: "ctas", label: "Call-To-Actions" },
     { id: "newsletter", label: "Newsletter" },
-    { id: "contactus", label: "Contact Us" }
+    { id: "contactus", label: "Contact Us" },
+    { id: "meeting-settings", label: "Meeting Settings" }
   ];
 
   return (

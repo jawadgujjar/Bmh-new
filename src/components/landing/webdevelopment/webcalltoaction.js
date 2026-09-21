@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { signIn, useSession, signOut } from "next-auth/react";
 import styles from "../../../styles/landing/webdevelopment/webcalltoaction.module.css";
 
 function WebCalltoaction() {
-  const { data: session, status } = useSession();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [dateTime, setDateTime] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [messageType, setMessageType] = useState("");
   const [isClient, setIsClient] = useState(false);
 
@@ -16,22 +16,13 @@ function WebCalltoaction() {
     setIsClient(true);
   }, []);
 
-  const handleForceLogin = async () => {
-    await signOut({ redirect: false });
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    signIn("google", {
-      prompt: "consent",
-      callbackUrl: window.location.href,
-    });
-  };
-
   const handleScheduleMeeting = async () => {
     setMessage("");
     setMessageType("");
 
-    if (!session) {
-      await handleForceLogin();
+    if (!name.trim() || !email.trim()) {
+      setMessage("❌ Please enter your name and email");
+      setMessageType("warning");
       return;
     }
 
@@ -47,29 +38,23 @@ function WebCalltoaction() {
       const res = await fetch("/api/create-meet", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
+          name,
+          email,
           dateTime,
           timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-          userEmail: session?.user?.email || "",
-          userName: session?.user?.name || session?.user?.email || ""
         }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        if (res.status === 401 || data.error?.includes("insufficient authentication scopes")) {
-          setMessage("⚠️ Authentication issue. Re-login required...");
-          setMessageType("warning");
-          await handleForceLogin();
-          return;
-        }
         throw new Error(data.error || "Failed to create meeting");
       }
 
       setMessage(`
         ✅ Meeting scheduled successfully!
-        • Meeting added to your Google Calendar
+        • A calendar invite with the Google Meet link was sent to ${email}
         • Admin has been notified
       `);
       setMessageType("success");
@@ -79,20 +64,9 @@ function WebCalltoaction() {
       console.error("Error in handleScheduleMeeting:", err);
       setMessage(`❌ ${err.message}`);
       setMessageType("error");
-      
-      if (err.message.includes("insufficient") || err.message.includes("scope")) {
-        await handleForceLogin();
-      }
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleSignOut = async () => {
-    await signOut({ redirect: false });
-    setMessage("");
-    setMessageType("");
-    setDateTime("");
   };
 
   const getMessageClass = () => {
@@ -200,60 +174,34 @@ function WebCalltoaction() {
             Book a 30-minute consultation with our experts
           </p>
 
-          {/* Session Info */}
-          {session ? (
-            <div className={styles.sessionInfo}>
-              <p style={{
-                color: "#fff",
-                fontWeight: "500",
-                marginBottom: "0.5rem"
-              }}>
-                ✅ Logged in as: {session.user?.email || "User"}
-              </p>
-              <div className={styles.buttonGroup}>
-                <button 
-                  onClick={handleForceLogin}
-                  className={styles.secondaryButton}
-                >
-                  Re-login
-                </button>
-                <button 
-                  onClick={handleSignOut}
-                  className={styles.dangerButton}
-                >
-                  Logout
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className={styles.loginPrompt}>
-              <p style={{
-                color: "#fff",
-                fontWeight: "500",
-                marginBottom: "1rem"
-              }}>
-                🔒 Please sign in to schedule a meeting
-              </p>
-              <button 
-                onClick={handleForceLogin}
-                style={{
-                  background: "#f97316",
-                  color: "white",
-                  border: "none",
-                  padding: "0.8rem 1.5rem",
-                  borderRadius: "1rem",
-                  cursor: "pointer",
-                  fontSize: "0.9rem",
-                  fontWeight: "600",
-                  transition: "all 0.3s"
-                }}
-                onMouseEnter={(e) => e.target.style.opacity = "0.8"}
-                onMouseLeave={(e) => e.target.style.opacity = "1"}
-              >
-                Sign In with Google
-              </button>
-            </div>
-          )}
+          {/* Name / Email */}
+          <div className={styles.dateInputWrapper}>
+            <label className={styles.dateLabel}>Your Name:</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
+                setMessage("");
+                setMessageType("");
+              }}
+              className={styles.dateInput}
+            />
+          </div>
+
+          <div className={styles.dateInputWrapper}>
+            <label className={styles.dateLabel}>Your Email:</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setMessage("");
+                setMessageType("");
+              }}
+              className={styles.dateInput}
+            />
+          </div>
 
           {/* Date/Time Picker */}
           <div className={styles.dateInputWrapper}>
@@ -277,12 +225,10 @@ function WebCalltoaction() {
           <div style={{ marginTop: "1.5rem", textAlign: "center" }}>
             <button
               onClick={handleScheduleMeeting}
-              disabled={loading || status === "loading"}
+              disabled={loading}
               className={styles.getStartedButton}
             >
-              {loading ? "Creating Meeting..." : 
-               status === "loading" ? "Checking..." : 
-               "Get Started Now"}
+              {loading ? "Creating Meeting..." : "Get Started Now"}
             </button>
           </div>
 
@@ -311,8 +257,7 @@ function WebCalltoaction() {
           )}
 
           {/* Instructions */}
-          {!session && (
-            <div style={{
+          <div style={{
               marginTop: "1.5rem",
               padding: "1rem",
               backgroundColor: "rgba(255, 255, 255, 0.05)",
@@ -346,9 +291,9 @@ function WebCalltoaction() {
                     fontWeight: "600",
                     fontSize: "0.8rem"
                   }}>1</div>
-                  <span style={{ fontWeight: "500", fontSize: "0.9rem" }}>Sign In</span>
+                  <span style={{ fontWeight: "500", fontSize: "0.9rem" }}>Your Details</span>
                   <p style={{ marginTop: "3px", color: "#a0aec0", fontSize: "0.8rem" }}>
-                    Authenticate with Google
+                    Enter your name & email
                   </p>
                 </div>
                 
@@ -393,7 +338,6 @@ function WebCalltoaction() {
                 </div>
               </div>
             </div>
-          )}
 
           {/* Features */}
           <div className={styles.features}>
