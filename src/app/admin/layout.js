@@ -16,6 +16,7 @@ import CTAManagement from "@/components-admin/calltoactions";
 import NewsletterAdmin from "@/components-admin/newsletter";
 import ContactAdmin from "@/components-admin/contactus";
 import BlogAdmin from "@/components-admin/blogs";
+import MeetingSettings from "@/components-admin/meetingSettings";
 
 export default function AdminLayout() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -35,6 +36,11 @@ export default function AdminLayout() {
     } else {
       setIsAuthenticated(true);
       setUserRole(role);
+
+      // Land back on Meeting Settings after the Google Calendar OAuth redirect
+      if (typeof window !== "undefined" && window.location.search.includes("googleConnect=")) {
+        setActiveComponent("meeting-settings");
+      }
     }
   }, [router]);
 
@@ -44,10 +50,11 @@ export default function AdminLayout() {
   const renderComponent = () => {
     // 🔒 Digital Marketing ke liye restricted components ki list
     const restrictedKeys = [
-      "getaquote", 
-      "calltoactionquote", 
-      "newsletter", 
-      "contactus"
+      "getaquote",
+      "calltoactionquote",
+      "newsletter",
+      "contactus",
+      "meeting-settings"
     ];
 
     // Check agar user digital marketing hai aur restricted component open kar raha hai
@@ -92,6 +99,8 @@ export default function AdminLayout() {
         return <NewsletterAdmin />;
       case "contactus":
         return <ContactAdmin />;
+      case "meeting-settings":
+        return <MeetingSettings />;
       default:
         return <Dashboard />;
     }
