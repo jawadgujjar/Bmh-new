@@ -151,7 +151,8 @@ export default function BlogDetailPage() {
       <div className={styles.mainPageContainer}>
         <div className={styles.layoutGrid}>
           <div className={styles.leftArea}>
-            {tocItems.length > 0 && (
+            {/* Table of Contents hidden per request — set back to `tocItems.length > 0 &&` to re-enable */}
+            {false && tocItems.length > 0 && (
               <Card className={styles.tocCard}>
                 <h3>Table of Contents</h3>
                 {tocItems.map((item, index) => (
