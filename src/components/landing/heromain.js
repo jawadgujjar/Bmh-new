@@ -7,11 +7,13 @@ function HeroMain() {
     return (
         <div className={styles.back}>
             {/* Desktop Video - Hidden on Mobile */}
-            <video 
-                autoPlay 
-                muted 
-                loop 
-                playsInline 
+            <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="auto"
+                poster="/images/home-page/landing image main 1.png"
                 className={styles.video}
             >
                 <source src='/video/hero-section.mp4' type='video/mp4' />
