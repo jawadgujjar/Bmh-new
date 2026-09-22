@@ -13,7 +13,6 @@ function HeroMain() {
                 loop
                 playsInline
                 preload="auto"
-                poster="/images/home-page/landing image main 1.png"
                 className={styles.video}
             >
                 <source src='/video/hero-section.mp4' type='video/mp4' />
