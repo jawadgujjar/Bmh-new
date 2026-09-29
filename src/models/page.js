@@ -314,7 +314,6 @@ const pageSchema = new mongoose.Schema(
 /* ================================
    Indexes
 ================================ */
-pageSchema.index({ slug: 1 });
 pageSchema.index({ category: 1, isActive: 1 });
 pageSchema.index({
   title: "text",

@@ -22,7 +22,15 @@ export async function getCalendarClient() {
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET
   );
-  oauth2Client.setCredentials({ refresh_token: decryptSecret(doc.refreshTokenEnc) });
+  let refreshToken;
+  try {
+    refreshToken = decryptSecret(doc.refreshTokenEnc);
+  } catch {
+    // Happens when NEXTAUTH_SECRET changed after the account was connected.
+    console.error("[googleCalendar] Stored token can't be decrypted (NEXTAUTH_SECRET changed?). Reconnect Google from the admin panel.");
+    return null;
+  }
+  oauth2Client.setCredentials({ refresh_token: refreshToken });
 
   return google.calendar({ version: "v3", auth: oauth2Client });
 }
