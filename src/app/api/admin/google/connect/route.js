@@ -2,6 +2,7 @@ import { google } from "googleapis";
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 import { requireAuth } from "@/lib/apiAuth";
+import { siteOrigin } from "@/lib/googleCalendar";
 
 // Kicks off a ONE-TIME Google consent flow for the admin account. The
 // resulting refresh token is stored server-side and reused for every
@@ -11,7 +12,7 @@ export async function GET(req) {
   if (!auth.ok) return auth.response;
 
   const state = crypto.randomBytes(16).toString("hex");
-  const redirectUri = `${req.nextUrl.origin}/api/admin/google/callback`;
+  const redirectUri = `${siteOrigin(req)}/api/admin/google/callback`;
 
   const oauth2Client = new google.auth.OAuth2(
     process.env.GOOGLE_CLIENT_ID,
