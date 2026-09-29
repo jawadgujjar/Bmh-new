@@ -1,7 +1,7 @@
 import { google } from "googleapis";
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/apiAuth";
-import { saveConnectedAccount } from "@/lib/googleCalendar";
+import { saveConnectedAccount, siteOrigin } from "@/lib/googleCalendar";
 
 export async function GET(req) {
   const auth = requireAuth(req, ["admin"]);
@@ -13,13 +13,13 @@ export async function GET(req) {
   const storedState = req.cookies.get("google_oauth_state")?.value;
 
   const goTo = (status) =>
-    NextResponse.redirect(new URL(`/admin?googleConnect=${status}`, req.nextUrl.origin));
+    NextResponse.redirect(new URL(`/admin?googleConnect=${status}`, siteOrigin(req)));
 
   if (!code || !state || !storedState || state !== storedState) {
     return goTo("error");
   }
 
-  const redirectUri = `${req.nextUrl.origin}/api/admin/google/callback`;
+  const redirectUri = `${siteOrigin(req)}/api/admin/google/callback`;
   const oauth2Client = new google.auth.OAuth2(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,

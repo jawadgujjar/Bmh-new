@@ -60,3 +60,10 @@ export async function disconnectAccount() {
   await dbConnect();
   await GoogleIntegration.deleteOne({ key: INTEGRATION_KEY });
 }
+
+// Public site URL for OAuth redirects. Behind a reverse proxy (nginx on the
+// VPS) req.nextUrl.origin is the internal http://localhost:PORT, which Google
+// rejects, so prefer the configured NEXTAUTH_URL.
+export function siteOrigin(req) {
+  return process.env.NEXTAUTH_URL?.replace(/\/+$/, "") || req.nextUrl.origin;
+}
