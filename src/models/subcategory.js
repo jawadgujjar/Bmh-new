@@ -268,7 +268,6 @@ const subCategorySchema = new mongoose.Schema(
 );
 
 // Indexes
-subCategorySchema.index({ slug: 1 });
 subCategorySchema.index({ category: 1, isActive: 1 });
 subCategorySchema.index({ name: "text", "sections.heading": "text" });
 subCategorySchema.index({ "faqs.question": "text", "faqs.answer": "text" });
