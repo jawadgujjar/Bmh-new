@@ -3,6 +3,7 @@ import styles from "../../../styles/digital-marketing/sub-category-digital/subab
 import { Row, Col, Button } from "antd";
 import Image from "next/image";
 import Link from "next/link";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 function SubAboutdigital({
   layoutType = "image-right",
@@ -75,7 +76,7 @@ function SubAboutdigital({
             <Col xs={24} md={22} lg={20}>
               <div className={styles.allTextDigital}>
                 {renderHtml ? (
-                  <div dangerouslySetInnerHTML={{ __html: description1 }} />
+                  <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(description1) }} />
                 ) : (
                   <p>{description1}</p>
                 )}
@@ -103,7 +104,7 @@ function SubAboutdigital({
               <Col xs={24} md={11}>
                 <div className={styles.allTextDigital}>
                   {renderHtml ? (
-                    <div dangerouslySetInnerHTML={{ __html: description1 }} />
+                    <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(description1) }} />
                   ) : (
                     <p>{description1}</p>
                   )}
@@ -116,7 +117,7 @@ function SubAboutdigital({
               <Col xs={24} md={11}>
                 <div className={styles.allTextDigital}>
                   {renderHtml ? (
-                    <div dangerouslySetInnerHTML={{ __html: description1 }} />
+                    <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(description1) }} />
                   ) : (
                     <p>{description1}</p>
                   )}
@@ -148,7 +149,7 @@ function SubAboutdigital({
             <Col xs={24} md={22} lg={20}>
               <div className={styles.allTextDigital}>
                 {renderHtml ? (
-                  <div dangerouslySetInnerHTML={{ __html: description2 }} />
+                  <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(description2) }} />
                 ) : (
                   <p>{description2}</p>
                 )}

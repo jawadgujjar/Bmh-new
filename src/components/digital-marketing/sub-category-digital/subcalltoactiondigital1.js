@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import styles from '../../../styles/digital-marketing/sub-category-digital/subcalltoactiondigital1.module.css';
+import { sanitizeHtml } from "@/lib/sanitize";
 
 function SubCalltoactiondigital1({ 
   title = "Premium Digital Marketing Analysis",
@@ -85,7 +86,7 @@ function SubCalltoactiondigital1({
           {/* Description with HTML support */}
           <div className={styles.ctaSubtitle}>
             {renderHtml ? (
-              <div dangerouslySetInnerHTML={{ __html: description }} />
+              <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(description) }} />
             ) : (
               <p>{description}</p>
             )}

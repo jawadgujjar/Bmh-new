@@ -5,7 +5,7 @@ import { requireAuth } from "@/lib/apiAuth";
 
 // DELETE - delete single proposal by ID
 export async function DELETE(req, { params }) {
-  const auth = requireAuth(req);
+  const auth = requireAuth(req, ["admin"]); // leads are admin-only
   if (!auth.ok) return auth.response;
   try {
     await dbConnect();

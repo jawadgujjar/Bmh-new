@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { getCalendarClient } from "@/lib/googleCalendar";
 import { safeError, escapeHtml, isEmail, cleanString, rateLimit } from "@/lib/security";
+import { verifyCaptcha } from "@/lib/captcha";
 
 export async function POST(req) {
   const limited = rateLimit(req, { name: "create-meet", limit: 5, windowMs: 60_000 });
@@ -9,6 +10,10 @@ export async function POST(req) {
 
   try {
     const body = await req.json();
+
+    const captcha = await verifyCaptcha(req, body.captchaToken);
+    if (!captcha.ok) return captcha.response;
+
     const name = cleanString(body.name, 120);
     const email = cleanString(body.email, 254);
     const { dateTime, timeZone = "Asia/Karachi" } = body;
@@ -26,6 +31,14 @@ export async function POST(req) {
     const startTime = new Date(dateTime);
     if (Number.isNaN(startTime.getTime()) || startTime.getTime() < Date.now() - 5 * 60_000) {
       return NextResponse.json({ error: "Please pick a valid future time" }, { status: 400 });
+    }
+    if (startTime.getTime() > Date.now() + 90 * 24 * 60 * 60_000) {
+      return NextResponse.json({ error: "Please pick a time within the next 90 days" }, { status: 400 });
+    }
+    try {
+      new Intl.DateTimeFormat("en-US", { timeZone });
+    } catch {
+      return NextResponse.json({ error: "Invalid time zone" }, { status: 400 });
     }
     const endTime = new Date(startTime.getTime() + 30 * 60000); // 30 mins
 

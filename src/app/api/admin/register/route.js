@@ -43,7 +43,7 @@ export async function POST(req) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // First-ever user is forced to admin; after that the role can be chosen.
-    const safeRole = userCount === 0 ? "admin" : role || "admin";
+    const safeRole = userCount === 0 ? "admin" : role || "digital-marketing";
 
     const user = await User.create({
       name,

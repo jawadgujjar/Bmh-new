@@ -4,6 +4,7 @@ import { Row, Col, Card, Breadcrumb, Button, Tag, Form, Input, Spin } from 'antd
 import { HomeOutlined, LeftOutlined, CalendarOutlined, MailOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
 import { useRouter, useParams } from 'next/navigation';
 import styles from '../../styles/blogs/mainpageblog.module.css';
+import { sanitizeHtml } from "@/lib/sanitize";
 
 const MainPageBlog = () => {
   const router = useRouter();
@@ -170,7 +171,7 @@ const MainPageBlog = () => {
             <Card className={styles.fullArticleCard} style={{ borderRadius: '8px' }}>
               <div 
                 className={styles.articleContent}
-                dangerouslySetInnerHTML={{ __html: post.fullContent }}
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.fullContent) }}
               />
             </Card>
           </Col>

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Row, Col, Card, Form, Input, Button, Typography, Divider } from "antd";
 import Link from "next/link";
 import styles from "../../styles/descriptionandform/descriptionform.module.css";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 const { Text } = Typography;
 
@@ -24,7 +25,7 @@ const HTMLContent = ({ content, className = "" }) => {
   return (
     <div
       className={`html-content ${className}`}
-      dangerouslySetInnerHTML={{ __html: cleanContent }}
+      dangerouslySetInnerHTML={{ __html: sanitizeHtml(cleanContent) }}
     />
   );
 };

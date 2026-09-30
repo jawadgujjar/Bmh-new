@@ -2,9 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 import styles from "../../../styles/landing/webdevelopment/webcalltoaction.module.css";
+import Captcha, { RECAPTCHA_SITE_KEY } from "../../captcha/captcha";
 
 function WebCalltoaction() {
   const [loading, setLoading] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState("");
+  const [captchaReset, setCaptchaReset] = useState(0);
   const [message, setMessage] = useState("");
   const [dateTime, setDateTime] = useState("");
   const [name, setName] = useState("");
@@ -32,6 +35,12 @@ function WebCalltoaction() {
       return;
     }
 
+    if (RECAPTCHA_SITE_KEY && !captchaToken) {
+      setMessage("❌ Please complete the captcha");
+      setMessageType("warning");
+      return;
+    }
+
     try {
       setLoading(true);
 
@@ -43,6 +52,7 @@ function WebCalltoaction() {
           email,
           dateTime,
           timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          captchaToken,
         }),
       });
 
@@ -66,6 +76,8 @@ function WebCalltoaction() {
       setMessageType("error");
     } finally {
       setLoading(false);
+      // Captcha tokens are single-use
+      setCaptchaReset((n) => n + 1);
     }
   };
 
@@ -220,6 +232,8 @@ function WebCalltoaction() {
               min={new Date().toISOString().slice(0, 16)}
             />
           </div>
+
+          <Captcha onToken={setCaptchaToken} resetSignal={captchaReset} />
 
           {/* Schedule Button */}
           <div style={{ marginTop: "1.5rem", textAlign: "center" }}>

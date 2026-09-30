@@ -1,6 +1,7 @@
 import React from 'react';
 import { FaPhone, FaArrowRight } from 'react-icons/fa';
 import styles from '../../../styles/digital-marketing/sub-category-digital/subcalltoactiondigital2.module.css';
+import { sanitizeHtml } from "@/lib/sanitize";
 
 function SubCalltoactiondigital2({ 
   title = "Ready To Transform Your Digital Presence?",
@@ -20,7 +21,7 @@ function SubCalltoactiondigital2({
         {/* Description with HTML support */}
         <div className={styles.ctaSubtitle}>
           {renderHtml ? (
-            <div dangerouslySetInnerHTML={{ __html: description }} />
+            <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(description) }} />
           ) : (
             <p>{description}</p>
           )}

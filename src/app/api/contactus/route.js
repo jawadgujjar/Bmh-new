@@ -90,7 +90,7 @@ export async function POST(req) {
 
 /* ================= GET ALL ================= */
 export async function GET(req) {
-  const auth = requireAuth(req);
+  const auth = requireAuth(req, ["admin"]); // leads are admin-only
   if (!auth.ok) return auth.response;
   try {
     await connectDB();

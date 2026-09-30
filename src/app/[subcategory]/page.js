@@ -4,6 +4,7 @@ import SubKeywordsdigital from "@/components/digital-marketing/sub-category-digi
 import Heroform from "@/components/landing/heroform";
 import SubDynamicSection from "@/components/digital-marketing/sub-category-digital/subdynamicsection";
 import SubFaqs from "../../components/digital-marketing/sub-category-digital/subfaqs";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 // 1. HtmlContent Helper Component
 function HtmlContent({ content, className = "" }) {
@@ -11,7 +12,7 @@ function HtmlContent({ content, className = "" }) {
   return (
     <div
       className={`${className} leading-snug`}
-      dangerouslySetInnerHTML={{ __html: content }}
+      dangerouslySetInnerHTML={{ __html: sanitizeHtml(content) }}
     />
   );
 }
@@ -126,7 +127,7 @@ export default async function SubcategoryPage({ params }) {
         <script
           type="application/ld+json"
           id="json-ld-schema"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaMarkup) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaMarkup).replace(/</g, "\\u003c") }}
         />
       )}
 
@@ -138,7 +139,7 @@ export default async function SubcategoryPage({ params }) {
         description={
           <div
             dangerouslySetInnerHTML={{
-              __html: subcategoryData.topSection?.description || "",
+              __html: sanitizeHtml(subcategoryData.topSection?.description || ""),
             }}
           />
         }

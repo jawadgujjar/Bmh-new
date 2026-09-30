@@ -9,7 +9,7 @@ export function getAuthUser(req) {
   try {
     const token = req?.cookies?.get?.("token")?.value;
     if (!token || !process.env.JWT_SECRET) return null;
-    return jwt.verify(token, process.env.JWT_SECRET);
+    return jwt.verify(token, process.env.JWT_SECRET, { algorithms: ["HS256"] });
   } catch {
     return null;
   }
