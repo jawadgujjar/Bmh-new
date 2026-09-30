@@ -57,8 +57,8 @@ export default function AdminLayout() {
       "meeting-settings"
     ];
 
-    // Check agar user digital marketing hai aur restricted component open kar raha hai
-    if (userRole === "digital-marketing" && restrictedKeys.includes(activeComponent)) {
+    // Leads + meeting settings sirf admin ke liye (APIs bhi admin-only hain)
+    if (userRole !== "admin" && restrictedKeys.includes(activeComponent)) {
       return (
         <div style={{ 
           display: "flex", 

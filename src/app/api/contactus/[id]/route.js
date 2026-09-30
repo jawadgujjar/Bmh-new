@@ -6,7 +6,7 @@ import { requireAuth } from "@/lib/apiAuth";
 
 /* ================= GET SINGLE ================= */
 export async function GET(req, context) {
-  const auth = requireAuth(req);
+  const auth = requireAuth(req, ["admin"]); // leads are admin-only
   if (!auth.ok) return auth.response;
   try {
     await connectDB();
@@ -42,7 +42,7 @@ export async function GET(req, context) {
 
 /* ================= DELETE ================= */
 export async function DELETE(req, context) {
-  const auth = requireAuth(req);
+  const auth = requireAuth(req, ["admin"]); // leads are admin-only
   if (!auth.ok) return auth.response;
   try {
     await connectDB();
@@ -81,7 +81,7 @@ export async function DELETE(req, context) {
 
 /* ================= UPDATE ================= */
 export async function PUT(req, context) {
-  const auth = requireAuth(req);
+  const auth = requireAuth(req, ["admin"]); // leads are admin-only
   if (!auth.ok) return auth.response;
   try {
     await connectDB();

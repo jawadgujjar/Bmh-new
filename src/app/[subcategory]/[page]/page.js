@@ -5,15 +5,9 @@ import DescriptionAndFormSection from "@/components/descriptionandformsection/de
 import FaqSection from "@/components/faqspage/faqsection";
 import PageKeywordsdigital from "@/components/digital-marketing/pagekeyword-digital/pagekeywordsdigital";
 import SubDynamicSection from "@/components/digital-marketing/sub-category-digital/subdynamicsection";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 // --- Helpers ---
-const sanitizeHtml = (html) => {
-  if (!html) return "";
-  return html
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
-    .trim();
-};
-
 const stripHtmlTags = (html) => {
   if (!html) return "";
   return html
@@ -161,7 +155,7 @@ export default async function UniversalPageRoute({ params }) {
         <script
           type="application/ld+json"
           id={`schema-${pageData.slug || "page"}`}
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaMarkup) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaMarkup).replace(/</g, "\\u003c") }}
         />
       )}
 

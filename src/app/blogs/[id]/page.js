@@ -5,6 +5,7 @@ import { CalendarOutlined } from '@ant-design/icons';
 import { useRouter, useParams } from 'next/navigation';
 import styles from '../[id]/blog-detail.module.css';
 import MainpageForm from '@/components/blogs/mainpageform';
+import { sanitizeHtml } from "@/lib/sanitize";
 
 const stripHtmlTags = (html) => {
   if (!html) return '';
@@ -173,7 +174,7 @@ export default function BlogDetailPage() {
               </Card>
             )}
             <Card className={styles.fullArticleCard}>
-              <div className={styles.articleContent} dangerouslySetInnerHTML={{ __html: post.fullContent }} />
+              <div className={styles.articleContent} dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.fullContent) }} />
               <Button
                 type="primary"
                 onClick={() => router.push('/blogs')}

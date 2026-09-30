@@ -4,6 +4,7 @@ import Link from 'next/link';
 import styles from '../../../styles/digital-marketing/sub-category-digital/subdigitalhero.module.css';
 import Image from 'next/image';
 import { ArrowRightOutlined, StarFilled } from '@ant-design/icons';
+import { sanitizeHtml } from "@/lib/sanitize";
 
 function SubHeroDigitalMarketing({ 
     backgroundImage = "/images/hero.jpg", 
@@ -26,7 +27,7 @@ function SubHeroDigitalMarketing({
                         {/* Description with HTML support */}
                         <div className={styles.growText}>
                             {renderHtml ? (
-                                <div dangerouslySetInnerHTML={{ __html: description }} />
+                                <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(description) }} />
                             ) : (
                                 <p className={styles.herodes}>{description}</p>
                             )}

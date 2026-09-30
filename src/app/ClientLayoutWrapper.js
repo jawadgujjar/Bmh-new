@@ -1,6 +1,5 @@
 "use client";
 
-import { SessionProvider } from "next-auth/react";
 import { usePathname } from "next/navigation";
  import Breadcrumbs from "src/components/breadcrumbs";
 import Footer from "src/components/footer/footer";
@@ -14,7 +13,7 @@ export default function ClientLayoutWrapper({ children }) {
   const isHomePage = pathname === "/";
 
   return (
-    <SessionProvider>
+    <>
       <div className="site-wrapper" style={{ position: "relative" }}>
         {!isAdminRoute && <NavbarBmh />}
 
@@ -24,6 +23,6 @@ export default function ClientLayoutWrapper({ children }) {
 
         {!isAdminRoute && <Footer />}
       </div>
-    </SessionProvider>
+    </>
   );
 }

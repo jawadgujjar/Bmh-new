@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 import { rateLimit } from "@/lib/security";
+import { verifyCaptcha } from "@/lib/captcha";
 
 export async function POST(request) {
   // Brute-force protection: 10 attempts / 15 min per IP
@@ -17,9 +18,13 @@ export async function POST(request) {
   try {
     await dbConnect();
 
-    const { email, password } = await request.json();
+    const { email, password, captchaToken } = await request.json();
 
-    if (!email || !password) {
+    const captcha = await verifyCaptcha(request, captchaToken);
+    if (!captcha.ok) return captcha.response;
+
+    // Reject non-strings so objects like {"$ne": null} can't reach the query.
+    if (typeof email !== "string" || typeof password !== "string" || !email || !password) {
       return NextResponse.json(
         { message: "Email and password are required" },
         { status: 400 }

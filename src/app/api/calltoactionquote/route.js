@@ -49,7 +49,7 @@ export async function POST(req) {
 
 // ✅ GET - Fetch all quotes
 export async function GET(req) {
-  const auth = requireAuth(req);
+  const auth = requireAuth(req, ["admin"]); // leads are admin-only
   if (!auth.ok) return auth.response;
   try {
     await dbConnect();
@@ -63,7 +63,7 @@ export async function GET(req) {
 
 // ✅ DELETE - Delete quote by id
 export async function DELETE(req) {
-  const auth = requireAuth(req);
+  const auth = requireAuth(req, ["admin"]); // leads are admin-only
   if (!auth.ok) return auth.response;
   try {
     await dbConnect();

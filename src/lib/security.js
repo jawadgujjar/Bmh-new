@@ -104,8 +104,9 @@ export function rateLimit(req, opts = {}) {
 
   try {
     const ip =
-      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      // x-real-ip is set by nginx/Vercel; the first x-forwarded-for entry can be spoofed by the client
       req.headers.get("x-real-ip") ||
+      req.headers.get("x-forwarded-for")?.split(",").pop()?.trim() ||
       "unknown";
 
     const key = `${name}:${ip}`;

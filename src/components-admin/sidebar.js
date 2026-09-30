@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import styles from "../styles/admin/sidebar/sidebar.module.css";
 
-export default function AdminSidebar({ active, setActive }) {
+export default function AdminSidebar({ active, setActive, role }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -62,11 +62,15 @@ export default function AdminSidebar({ active, setActive }) {
     { id: "meeting-settings", label: "Meeting Settings" }
   ];
 
+  // Leads + meeting settings are admin-only (the APIs reject other roles too)
+  const adminOnly = ["getaquote", "calltoactionquote", "newsletter", "contactus", "meeting-settings"];
+  const visibleLinks = role === "admin" ? links : links.filter((l) => !adminOnly.includes(l.id));
+
   return (
     <aside className={styles.sidebar}>
       <h2 className={styles.sidebarTitle}>Admin Panel</h2>
       <ul className={styles.navList}>
-        {links.map((link) => (
+        {visibleLinks.map((link) => (
           <li
             key={link.id}
             className={`${styles.navItem} ${active === link.id ? styles.active : ""}`}

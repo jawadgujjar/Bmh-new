@@ -163,7 +163,7 @@ export default function SubFaqs({
                 text: faq.answer.replace(/<[^>]*>/g, ""),
               },
             })),
-          }),
+          }).replace(/</g, "\\u003c"),
         }}
       />
     </section>

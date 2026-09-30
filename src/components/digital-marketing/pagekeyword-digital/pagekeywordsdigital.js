@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styles from "../../../styles/digital-marketing/sub-category-digital/subkeywordsdigital.module.css";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 function PageKeywordsdigital({
   subcategoryId,
@@ -88,7 +89,7 @@ function PageKeywordsdigital({
                   className={styles.contentText}
                   dangerouslySetInnerHTML={{
                     __html:
-                      page.subcatpagedescr || page.topSection?.description,
+                      sanitizeHtml(page.subcatpagedescr || page.topSection?.description),
                   }}
                 />
                 <button
@@ -120,8 +121,8 @@ function PageKeywordsdigital({
               className={styles.contentText}
               dangerouslySetInnerHTML={{
                 __html:
-                  activePage.subcatpagedescr ||
-                  activePage.topSection?.description,
+                  sanitizeHtml(activePage.subcatpagedescr ||
+                  activePage.topSection?.description),
               }}
             />
             <div className={styles.contentFooter}>

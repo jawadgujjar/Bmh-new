@@ -4,6 +4,7 @@ import styles from "../../../styles/digital-marketing/sub-category-digital/subdy
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightOutlined } from "@ant-design/icons";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 // Global CTA Component (For the big banner CTA)
 function GlobalCTA({ ctaData }) {
@@ -47,7 +48,7 @@ function GalleryLayout({ heading, description, headingAlign = "center", images =
       {description && (
         <div
           className={styles.galleryDescription}
-          dangerouslySetInnerHTML={{ __html: description }}
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(description) }}
         />
       )}
       <div
@@ -79,7 +80,7 @@ function CounterLayout({ heading, description, headingAlign = "center", counters
       {description && (
         <div
           className={styles.counterDescription}
-          dangerouslySetInnerHTML={{ __html: description }}
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(description) }}
         />
       )}
       <div className={styles.counterGrid}>
@@ -115,7 +116,7 @@ function ServicesLayout({ heading, description, headingAlign = "center", service
       {description && (
         <div
           className={styles.servicesDescription}
-          dangerouslySetInnerHTML={{ __html: description }}
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(description) }}
         />
       )}
       <div className={styles.servicesGrid}>
@@ -221,7 +222,7 @@ export default function SubDynamicSection({
               <h2 className={styles.mainHeading}>{heading}</h2>
               <div
                 className={styles.mainDescription}
-                dangerouslySetInnerHTML={{ __html: description }}
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(description) }}
               />
               {/* Inline Button (Small) */}
               {isInlineButtonVisible && (
@@ -255,7 +256,7 @@ export default function SubDynamicSection({
                 <h2 className={styles.sideHeading}>{heading}</h2>
                 <div
                   className={styles.sideDescription}
-                  dangerouslySetInnerHTML={{ __html: description }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(description) }}
                 />
                 {/* Inline Button (Small) */}
                 {isInlineButtonVisible && (

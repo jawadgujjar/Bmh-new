@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Card, Row, Col } from "antd";
 import { useRouter } from "next/navigation";
 import styles from "@/styles/digital-marketing/servicesdigital.module.css";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 export default function Webservices1({ category }) {
   const [services, setServices] = useState([]);
@@ -69,7 +70,7 @@ export default function Webservices1({ category }) {
                           : styles.cardDescriptionWhite
                       }
                       dangerouslySetInnerHTML={{
-                        __html: service.topSection?.description,
+                        __html: sanitizeHtml(service.topSection?.description),
                       }}
                     />
                     {/* {service.topSection?.description}
