@@ -1,0 +1,15 @@
+.card {
+  background: white;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Desktop/tablet: form sticks under the fixed navbar (65px) while the FAQ
+   column scrolls; once the FAQ column ends, the form scrolls away with it. */
+@media (min-width: 768px) {
+  .stickyForm {
+    position: sticky;
+    top: 85px;
+  }
+}

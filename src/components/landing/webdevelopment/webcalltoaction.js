@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { DatePicker, ConfigProvider, theme } from "antd";
 import styles from "../../../styles/landing/webdevelopment/webcalltoaction.module.css";
 import Captcha, { RECAPTCHA_SITE_KEY } from "../../captcha/captcha";
 
@@ -9,7 +10,7 @@ function WebCalltoaction() {
   const [captchaToken, setCaptchaToken] = useState("");
   const [captchaReset, setCaptchaReset] = useState(0);
   const [message, setMessage] = useState("");
-  const [dateTime, setDateTime] = useState("");
+  const [dateTime, setDateTime] = useState(null); // dayjs value from antd DatePicker
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [messageType, setMessageType] = useState("");
@@ -50,7 +51,8 @@ function WebCalltoaction() {
         body: JSON.stringify({
           name,
           email,
-          dateTime,
+          // ISO (UTC) so the server reads the exact moment the user picked
+          dateTime: dateTime.toISOString(),
           timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
           captchaToken,
         }),
@@ -68,7 +70,7 @@ function WebCalltoaction() {
         • Admin has been notified
       `);
       setMessageType("success");
-      setDateTime("");
+      setDateTime(null);
 
     } catch (err) {
       console.error("Error in handleScheduleMeeting:", err);
@@ -220,17 +222,37 @@ function WebCalltoaction() {
             <label className={styles.dateLabel}>
               Select Date & Time:
             </label>
-            <input
-              type="datetime-local"
-              value={dateTime}
-              onChange={(e) => {
-                setDateTime(e.target.value);
-                setMessage("");
-                setMessageType("");
+            <ConfigProvider
+              theme={{
+                algorithm: theme.darkAlgorithm,
+                token: { colorPrimary: "#f97316" },
               }}
-              className={styles.dateInput}
-              min={new Date().toISOString().slice(0, 16)}
-            />
+            >
+              {/* Opens on a click anywhere in the field; OK button closes it */}
+              <DatePicker
+                showTime={{ use12Hours: true, format: "h:mm A", minuteStep: 5 }}
+                format="MM/DD/YYYY h:mm A"
+                needConfirm
+                inputReadOnly
+                placeholder="Select date & time"
+                value={dateTime}
+                onChange={(value) => {
+                  setDateTime(value);
+                  setMessage("");
+                  setMessageType("");
+                }}
+                disabledDate={(current) => {
+                  if (!current) return false;
+                  const startOfToday = new Date();
+                  startOfToday.setHours(0, 0, 0, 0);
+                  // Past days and more than 90 days ahead (server rejects those too)
+                  return current.valueOf() < startOfToday.getTime() ||
+                    current.valueOf() > Date.now() + 90 * 24 * 60 * 60 * 1000;
+                }}
+                className={styles.dateInput}
+                style={{ width: "100%" }}
+              />
+            </ConfigProvider>
           </div>
 
           <Captcha onToken={setCaptchaToken} resetSignal={captchaReset} />
