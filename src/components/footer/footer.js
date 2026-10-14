@@ -3,7 +3,6 @@ import React, { useState } from "react"; // useState add kiya
 import { Row, Col, Input, Button, message } from "antd"; // Input, Button, message add kiya
 import {
   FacebookOutlined,
-  TwitterOutlined,
   InstagramOutlined,
   LinkedinOutlined,
   PhoneOutlined,
@@ -69,9 +68,6 @@ function Footer() {
                   className={styles.socialIcon}
                 >
                   <FacebookOutlined />
-                </a>
-                <a href="#" className={styles.socialIcon}>
-                  <TwitterOutlined />
                 </a>
                 <a
                   href="https://www.instagram.com/brandmarketinghub_official/"
