@@ -32,25 +32,7 @@ export default function BlogDetailPage() {
   const ORANGE_COLOR = '#FD7E14';
   const ORANGE_LIGHT = '#FFA94D';
 
-  // ✅ 1. Client Component k liye 100% working Canonical URL Fix
-  useEffect(() => {
-    if (!id) return;
-
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://brandmarketinghub.com';
-    // Yeh line aap ka exact slug url banayegi: https://brandmarketinghub.com/blogs/your-blog-slug
-    const cleanCanonicalUrl = `${siteUrl}/blogs/${id}`;
-
-    // Head me pehle se mojood canonical check karein ya naya create karein
-    let link = document.querySelector("link[rel='canonical']");
-    if (!link) {
-      link = document.createElement('link');
-      link.setAttribute('rel', 'canonical');
-      document.head.appendChild(link);
-    }
-    // Sahi dynamic slug path inject ho raha hai
-    link.setAttribute('href', cleanCanonicalUrl);
-
-  }, [id]);
+  // Canonical URL ab server side ./layout.js (generateMetadata) se set hota hai
 
   // Fetch Categories
   useEffect(() => {
