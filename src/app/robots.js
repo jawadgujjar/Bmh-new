@@ -6,8 +6,8 @@ export default function robots() {
       userAgent: '*',
       allow: '/',
       disallow: [
-        '/_next/', 
-        '/api/', 
+        // '/_next/', 
+        // '/api/', 
         '/admin/', 
         '/dashboard/'
       ],
